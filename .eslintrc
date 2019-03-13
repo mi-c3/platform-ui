@@ -1,0 +1,54 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "plugins": [
+    "jsx-a11y",
+    "react"
+  ],
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true,
+    "jest": true
+  },
+  "globals": {
+    "__DEV__": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "modules": true,
+      "restParams": true,
+      "spread": true,
+      "jsx": true
+    },
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": require('./package.json').dependencies.react,
+    },
+  },
+  "rules": {
+    "quotes": [ "warn", "single", { "allowTemplateLiterals": true }],
+    "indent": [ "warn", 4, { "SwitchCase": 1 } ],
+    "max-len": ["warn", 160, {
+      "ignoreComments": true,
+      "ignoreStrings": true,
+      "ignoreRegExpLiterals": true,
+      "ignoreTemplateLiterals": true,
+      "ignoreTrailingComments": true,
+      "ignoreUrls": true
+    }],
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "prefer-const": "warn",
+    "semi": "warn",
+    "no-unused-vars": "warn",
+    "react/prop-types": [0],
+    "react/display-name": [0]
+  }
+}

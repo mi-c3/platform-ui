@@ -1,0 +1,25 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+            "chrome": "69",
+            "firefox": "48",
+        }
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    ["module-resolver", {
+        "root": ["./src"],
+        "alias": {
+          "components": "./src/components",
+          "styles": "./src/styles",
+          "utils": "./src/utils"
+        }
+    }]
+  ]
+}
