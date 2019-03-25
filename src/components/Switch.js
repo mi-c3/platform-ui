@@ -1,25 +1,31 @@
 
-import React, { useCallback } from 'react';
+import React, { PureComponent } from 'react';
 import MuiSwitch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import { createEvent } from 'utils/http/event';
 
-const Switch = ({ labelPlacement, color, value,  ...restProps }) => {
-    const onChange = useCallback((event) => {
+class Switch extends PureComponent {
+
+    onChange = (event) => {
+        const { onChange } = this.props;
         const { name, checked } = event.target;
-        restProps.onChange && restProps.onChange(createEvent('change', { target: { name, value: checked, checked } }));
-    }, [value]);
-    return (
-        <FormControlLabel
-            {...restProps}
-            checked={value || false}
-            onChange={onChange}
-            control={<MuiSwitch color={color} />}
-            labelPlacement={labelPlacement || 'end'}
-        />
-    );
-};
+        onChange && onChange(createEvent('change', { target: { name, value: checked, checked } }));
+    }
+
+    render() {
+        const { labelPlacement, color, value,  ...restProps } = this.props;
+        return (
+            <FormControlLabel
+                {...restProps}
+                checked={value || false}
+                onChange={this.onChange}
+                control={<MuiSwitch color={color} />}
+                labelPlacement={labelPlacement || 'end'}
+            />
+        );
+    }
+}
 
 Switch.defaultProps = {
     color: 'primary',

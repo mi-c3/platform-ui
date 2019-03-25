@@ -8,6 +8,10 @@ import {
     MuiThemeProvider,
     withStyles,
     withTheme,
+    styled,
+    makeStyles,
+    ThemeProvider,
+    install,
 } from '@material-ui/core/styles';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -133,7 +137,7 @@ import Location from 'components/Location/Location';
 import LocationForm from 'components/Location/LocationForm';
 import LocationSwitch from 'components/Location/LocationSwitch';
 import PuiProvider from 'components/PuiProvider';
-import styled from 'components/styled';
+import styledRoot from 'components/styledRoot';
 
 export {
 
@@ -143,7 +147,7 @@ export {
     Checkbox,
     MdiIcon,
     Radio,
-    styled,
+    styledRoot,
     TextField,
     MdiIconSelect,
     Link,
@@ -176,7 +180,11 @@ export {
     MuiThemeProvider,
     withStyles,
     withTheme,
-
+    makeStyles,
+    ThemeProvider,
+    styled,
+    install,
+    
     // Core Components
     AppBar,
     Avatar,

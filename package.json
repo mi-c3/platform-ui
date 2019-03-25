@@ -1,12 +1,12 @@
 {
   "name": "@mic3/platform-ui",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "module": "dist/index.es.js",
   "scripts": {
     "start": "start-storybook -p 9009 -s public",
     "lint": "eslint --max-warnings=0 src",
     "build": "rm -rf dist && BUILD_UI_MODULE=true yarn build-storybook",
-    "build:watch": "rm -rf dist && BUILD_UI_MODULE=true yarn build-storybook -w",
+    "build:watch": "BUILD_UI_MODULE=true yarn build-storybook -w",
     "storybook:build": "rm -rf storybook-static && build-storybook -s public"
   },
   "husky": {
