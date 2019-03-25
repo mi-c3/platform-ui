@@ -132,6 +132,7 @@ import DropzoneDialog from 'components/Upload/DropzoneDialog';
 import Location from 'components/Location/Location';
 import LocationForm from 'components/Location/LocationForm';
 import LocationSwitch from 'components/Location/LocationSwitch';
+import PuiProvider from 'components/PuiProvider';
 import styled from 'components/styled';
 
 export {
@@ -153,6 +154,7 @@ export {
     Location,
     LocationForm,
     LocationSwitch,
+    PuiProvider,
 
     //3dd library
     MuiPickersUtilsProvider,

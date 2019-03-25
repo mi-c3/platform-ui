@@ -5,9 +5,10 @@ import { action } from '@storybook/addon-actions';
 
 import { DateTimePicker, TimePicker, DatePicker, Grid } from 'index';
 import stateForDateTime from 'stories/utils/hoc/stateForDateTime';
+import statefullInput from 'stories/utils/hoc/statefullInput';
 
-const DateTimePickerSTFull = stateForDateTime(DateTimePicker);
-const InlineDateTimePickerSTFull = stateForDateTime(DateTimePicker);
+const DateTimePickerSTFull = statefullInput(DateTimePicker);
+const InlineDateTimePickerSTFull = statefullInput(DateTimePicker);
 const DatePickerFull = stateForDateTime(DatePicker);
 const TimePickerFull = stateForDateTime(TimePicker);
 

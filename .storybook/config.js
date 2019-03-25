@@ -9,8 +9,7 @@ import { withCssResources } from '@storybook/addon-cssresources';
 import 'react-chromatic/storybook-addon';
 import extraViewports from './extra-viewports.json';
 
-import MomentUtils from '@date-io/moment';
-import { MuiThemeProvider, DarkTheme, MuiPickersUtilsProvider } from '../src/index';
+import PuiProvider from '../src/components/PuiProvider';
 
 import '~@mdi/font/css/materialdesignicons.css';
 
@@ -44,11 +43,9 @@ addDecorator(
 addDecorator((story, { kind }) =>
   kind === 'Core|Errors' ? story() : (
       <ThemeProvider theme={themes.normal}>
-          <MuiThemeProvider theme={DarkTheme}>
-              <MuiPickersUtilsProvider utils={MomentUtils}>
-                  {story()}
-              </MuiPickersUtilsProvider>
-          </MuiThemeProvider>
+          <PuiProvider>
+              {story()}
+          </PuiProvider>
       </ThemeProvider>
       )
 );
