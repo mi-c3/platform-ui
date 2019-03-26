@@ -5,9 +5,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
+import { styled } from '@material-ui/styles';
 
 import Dropzone from 'components/Upload/Dropzone';
-import styled from 'components/styled';
 
 const DialogActionsStyled = styled(DialogActions)({
     minWidth: 300,

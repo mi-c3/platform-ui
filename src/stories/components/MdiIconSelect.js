@@ -2,12 +2,9 @@
 
 import React from 'react';
 
-import { MdiIcon, styled, Avatar, MdiIconSelect } from 'index';
+import { MdiIcon, Avatar, MdiIconSelect } from 'index';
 import { createInitials } from 'stories/utils/avatar/avatar';
 
-const SuggestionIcon = styled(MdiIcon)({
-    fontSize: '19px',
-});
 
 /**
  *
@@ -15,9 +12,9 @@ const SuggestionIcon = styled(MdiIcon)({
 class MdiSelectIcon extends MdiIconSelect {
     optionTemplate = ({ value, label }) => ({
         ChipProps: {
-            icon: <Avatar>{(value || '').charAt(0).toUpperCase()}</Avatar>, //<SuggestionIcon name={value} />, // <ChipIcon name={value} />
+            icon: <Avatar>{(value || '').charAt(0).toUpperCase()}</Avatar>, //<MdiIcon name={value} />, // <ChipIcon name={value} />
         },
-        startAdornment: <SuggestionIcon name={value} />,
+        startAdornment: <MdiIcon name={value} size={19} />,
         label
     });
 }
@@ -26,7 +23,7 @@ class MdiSelectLetter extends MdiIconSelect {
         ChipProps: {
             avatar: <Avatar>{createInitials(value, '-')}</Avatar>,
         },
-        startAdornment: <SuggestionIcon name={value} />,
+        startAdornment: <MdiIcon name={value} size={19} />,
         label
     });
 }
