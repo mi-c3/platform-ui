@@ -9,8 +9,11 @@ class Switch extends PureComponent {
 
     onChange = (event) => {
         const { onChange } = this.props;
-        const { name, checked } = event.target;
-        onChange && onChange(createEvent('change', { target: { name, value: checked, checked } }));
+        const { checked } = event.target;
+        onChange && onChange(createEvent('change', {
+            target: { name, checked, value: checked },
+            originalEvent: event,
+        }), event);
     }
 
     render() {
