@@ -7,7 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import styled from 'components/styled';
+import { styled } from '@material-ui/styles';
 
 const TableCellStyled = styled(TableCell)({
     textTransform: 'capitalize',
@@ -38,9 +38,10 @@ class DataTableHead extends PureComponent {
   )
 
   buildRows = memoize(({ columnDefinitions, orderBy, order }) => columnDefinitions.map(
-      ({ field, header, sortable }) => (
+      ({ field, header, sortable }, index) => (
           <TableCellStyled
               key={field}
+              index={index}
               sortDirection={orderBy === field ? order : false}
           >
               {sortable === false ? header || field : this.buildSortWrapper({ header, field, orderBy, order })}

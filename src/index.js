@@ -8,7 +8,11 @@ import {
     MuiThemeProvider,
     withStyles,
     withTheme,
-} from '@material-ui/core/styles';
+    styled,
+    makeStyles,
+    ThemeProvider,
+    install,
+} from '@material-ui/styles';
 
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
@@ -132,7 +136,7 @@ import DropzoneDialog from 'components/Upload/DropzoneDialog';
 import Location from 'components/Location/Location';
 import LocationForm from 'components/Location/LocationForm';
 import LocationSwitch from 'components/Location/LocationSwitch';
-import styled from 'components/styled';
+import PuiProvider from 'components/PuiProvider';
 
 export {
 
@@ -142,7 +146,6 @@ export {
     Checkbox,
     MdiIcon,
     Radio,
-    styled,
     TextField,
     MdiIconSelect,
     Link,
@@ -153,6 +156,7 @@ export {
     Location,
     LocationForm,
     LocationSwitch,
+    PuiProvider,
 
     //3dd library
     MuiPickersUtilsProvider,
@@ -174,6 +178,10 @@ export {
     MuiThemeProvider,
     withStyles,
     withTheme,
+    makeStyles,
+    ThemeProvider,
+    styled,
+    install,
 
     // Core Components
     AppBar,

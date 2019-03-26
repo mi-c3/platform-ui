@@ -1,40 +1,53 @@
-import React from 'react';
+
+import React, { PureComponent } from 'react';
 import { DatePicker as DPMui, InlineDatePicker as IDPMui } from 'material-ui-pickers';
 
-const DatePicker = ({
-    label, value, onChange, ampm, inline, disabled, views, minDate, maxDate,
-    helperText, disableFuture, disablePast, animateYearScrolling, adornmentPosition, clearable,
-    InputAdornmentProps, mask, showTodayButton
-}) => {
-    const Component = inline ? IDPMui : DPMui;
-    return (
-        <Component
-            margin="normal"
-            showTodayButton={showTodayButton}
-            animateYearScrolling={animateYearScrolling}
-            ampm={ampm.toString()}
-            views={views}
-            label={label}
-            value={value}
-            onChange={onChange}
-            disabled={disabled}
-            minDate={minDate}
-            maxDate={maxDate}
-            helperText={helperText}
-            disableFuture={disableFuture}
-            disablePast={disablePast}
-            adornmentPosition={adornmentPosition}
-            clearable={clearable}
-            InputAdornmentProps={InputAdornmentProps}
-            maks={mask}
-        />
-    );
-};
+import { createEvent } from 'utils/http/event';
 
-DatePicker.defaultProps = {
-    animateYearScrolling: true,
-    ampm: false,
-    inline: false,
-};
-DatePicker.displayName = 'DatePicker';
+
+class DatePicker extends PureComponent {
+
+    static defaultProps = {
+        animateYearScrolling: true,
+        ampm: false,
+        inline: false,
+    }
+
+    onChange = (value) => {
+        const { onChange } = this.props;
+        onChange && onChange(createEvent('change', { target: { name, value } }));
+    }
+
+    render() {
+        const {
+            label, value, ampm, inline, disabled, views, minDate, maxDate,
+            helperText, disableFuture, disablePast, animateYearScrolling, adornmentPosition, clearable,
+            InputAdornmentProps, mask, showTodayButton
+        } = this.props;
+        const Component = inline ? IDPMui : DPMui;
+        return (
+            <Component
+                margin="normal"
+                showTodayButton={showTodayButton}
+                animateYearScrolling={animateYearScrolling}
+                ampm={ampm.toString()}
+                views={views}
+                label={label}
+                value={value}
+                onChange={this.onChange}
+                disabled={disabled}
+                minDate={minDate}
+                maxDate={maxDate}
+                helperText={helperText}
+                disableFuture={disableFuture}
+                disablePast={disablePast}
+                adornmentPosition={adornmentPosition}
+                clearable={clearable}
+                InputAdornmentProps={InputAdornmentProps}
+                maks={mask}
+            />
+        );
+    }
+}
+
 export default DatePicker;
