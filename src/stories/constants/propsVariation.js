@@ -49,10 +49,16 @@ const forIcon = {
     }
 };
 
+const forTypography = {
+    variant: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'subtitle1', 'subtitle2', 'body1', 'body2', 'caption', 'button', 'overline', 'srOnly', 'inherit', 'display4', 'display3', 'display2', 'display1', 'headline', 'title', 'subheading']
+        .reduce((accum, type) => { accum[type] = type; return accum; }, {})
+};
+
 
 export {
     forButton,
     forRadio,
     forIconSelect,
     forIcon,
+    forTypography
 };
