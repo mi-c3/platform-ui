@@ -1,5 +1,5 @@
-
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { DatePicker as DPMui, InlineDatePicker as IDPMui } from 'material-ui-pickers';
 
 import { createEvent } from 'utils/http/event';
@@ -7,9 +7,14 @@ import { createEvent } from 'utils/http/event';
 
 class DatePicker extends PureComponent {
 
+    static propTypes = {
+        ...DPMui.propTypes,
+        inline: PropTypes.bool,
+        onChange: PropTypes.func,
+    }
+
     static defaultProps = {
         animateYearScrolling: true,
-        ampm: false,
         inline: false,
     }
 
@@ -19,34 +24,14 @@ class DatePicker extends PureComponent {
     }
 
     render() {
-        const {
-            label, value, ampm, inline, disabled, views, minDate, maxDate,
-            helperText, disableFuture, disablePast, animateYearScrolling, adornmentPosition, clearable,
-            InputAdornmentProps, mask, showTodayButton
-        } = this.props;
+        /*
+         * WARNING: We need to avoid passing the onClick function because it will break the Component.
+         * TODO: open a bug in the material-ui-pickers project.
+         */
+        // eslint-disable-next-line no-unused-vars
+        const { inline, onClick, ...datePickerProps } = this.props;
         const Component = inline ? IDPMui : DPMui;
-        return (
-            <Component
-                margin="normal"
-                showTodayButton={showTodayButton}
-                animateYearScrolling={animateYearScrolling}
-                ampm={ampm.toString()}
-                views={views}
-                label={label}
-                value={value}
-                onChange={this.onChange}
-                disabled={disabled}
-                minDate={minDate}
-                maxDate={maxDate}
-                helperText={helperText}
-                disableFuture={disableFuture}
-                disablePast={disablePast}
-                adornmentPosition={adornmentPosition}
-                clearable={clearable}
-                InputAdornmentProps={InputAdornmentProps}
-                maks={mask}
-            />
-        );
+        return <Component margin="normal" {...datePickerProps} onChange={this.onChange} />;
     }
 }
 

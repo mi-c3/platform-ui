@@ -51,10 +51,20 @@ const AdormentOptionStyle = styled('div')({
 class Autocomplete extends PureComponent {
 
     static propTypes = {
+        classes: PropTypes.object,
+        clearable: PropTypes.bool,
+        disabled: PropTypes.bool,
+        InputProps: PropTypes.object,
+        multiple: PropTypes.bool,
+        name: PropTypes.string,
         onChange: PropTypes.func.isRequired,
         options: PropTypes.arrayOf(PropTypes.object),
+        optionTemplate: PropTypes.func,
+        searchDelay: PropTypes.number,
+        suggest: PropTypes.func,
+        value: PropTypes.any,
+        valueField: PropTypes.string,
         valueId: PropTypes.string,
-        InputProps: PropTypes.object,
         VirtualListProps: PropTypes.object,
     }
 

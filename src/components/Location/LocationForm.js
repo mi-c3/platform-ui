@@ -24,6 +24,9 @@ class LocationForm extends PureComponent {
         disabled: PropTypes.bool,
         name: PropTypes.string,
         onChange: PropTypes.func,
+        onGoogleApiLoaded: PropTypes.func,
+        withAutocomplete: PropTypes.bool,
+        LocationProps: PropTypes.shape(Location.propTypes),
     };
 
     static defaultProps = {

@@ -9,7 +9,7 @@ import statefullInput from 'stories/utils/hoc/statefullInput';
 
 const DateTimePickerSTFull = statefullInput(DateTimePicker);
 const InlineDateTimePickerSTFull = statefullInput(DateTimePicker);
-const DatePickerFull = stateForDateTime(DatePicker);
+const DatePickerFull = statefullInput(DatePicker);
 const TimePickerFull = stateForDateTime(TimePicker);
 
 storiesOf('Components.DateTimePickers', module)

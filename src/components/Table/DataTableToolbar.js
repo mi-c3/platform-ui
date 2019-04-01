@@ -41,7 +41,7 @@ const toolbarStyles = theme => ({
 const DataTableToolbar = props => {
     const { numSelected, classes, onSelectAllClick, rowCount, title, selectionMode } = props;
     return (
-        <Toolbar className={[classes.root, { [classes.highlight]: numSelected > 0 }]}>
+        <Toolbar className={`${classes.root} ${numSelected > 0 ? classes.highlight : ''}`}>
             <div className={classes.title}>
                 {numSelected > 0 ? (
                     <Typography color="inherit" variant="subtitle1">
@@ -86,6 +86,10 @@ const DataTableToolbar = props => {
 DataTableToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired,
+    onSelectAllClick: PropTypes.func,
+    rowCount: PropTypes.number,
+    title: PropTypes.string,
+    selectionMode: PropTypes.string,
 };
 
 export default withStyles(toolbarStyles)(DataTableToolbar);

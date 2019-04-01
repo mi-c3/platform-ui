@@ -1,7 +1,14 @@
-
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 class StateForDateTime extends PureComponent {
+
+    static propTypes = {
+        value: PropTypes.any,
+        onChange: PropTypes.func,
+        Component: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
+        children: PropTypes.node,
+    };
 
     constructor(props) {
         super(props);
@@ -21,9 +28,9 @@ class StateForDateTime extends PureComponent {
     }
 
     render() {
-        const { Com, ...rest } = this.props;
-        return <Com {...rest} value={this.state.value} onChange={this.onChange} />;
+        const { Component, children, ...rest } = this.props;
+        return <Component {...rest} value={this.state.value} onChange={this.onChange}>{children}</Component>;
     }
 }
 
-export default (Component) => (props) => <StateForDateTime {...props} Com={Component} />; // eslint-disable-line
+export default (Component) => (props) => <StateForDateTime {...props} Component={Component} />; // eslint-disable-line

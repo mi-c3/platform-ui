@@ -1,7 +1,14 @@
 
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 class StatefullInput extends PureComponent {
+
+    static propTypes = {
+        value: PropTypes.any,
+        onChange: PropTypes.func,
+        Component: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
+    };
 
     constructor(props) {
         super(props);
@@ -22,9 +29,9 @@ class StatefullInput extends PureComponent {
     }
 
     render() {
-        const { Com, ...rest } = this.props;
-        return <Com {...rest} value={this.state.value} onChange={this.onChange} />;
+        const { Component, ...rest } = this.props;
+        return <Component {...rest} value={this.state.value} onChange={this.onChange} />;
     }
 }
 
-export default (Component) => (props) => <StatefullInput {...props} Com={Component} />; // eslint-disable-line
+export default (Component) => (props) => <StatefullInput {...props} Component={Component} />; // eslint-disable-line

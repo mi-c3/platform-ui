@@ -1,13 +1,19 @@
-
 import React, { PureComponent } from 'react';
-import MuiTextField from '@material-ui/core/TextField';
+import PropTypes from 'prop-types';
+import { TextField as MuiTextField, IconButton, Input } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
-import IconButton from '@material-ui/core/IconButton';
 
 import { createEvent } from 'utils/http/event';
 
+// eslint-disable-next-line no-unused-vars
+const { endAdornment, ...inputPropsSubSet } = Input.propTypes;
 
 class TextField extends PureComponent {
+
+    static propTypes = {
+        ...MuiTextField.propTypes,
+        InputProps: PropTypes.shape(inputPropsSubSet),
+    };
 
     static defaultProps = {
         variant: 'filled',
@@ -22,12 +28,13 @@ class TextField extends PureComponent {
     }
 
     render() {
-        const { disabled, value, ...restProps } = this.props;
+        const { disabled, value, InputProps, ...restProps } = this.props;
         return (
             <MuiTextField
                 value={value || ''}
                 disabled={disabled}
                 InputProps={{
+                    ...InputProps,
                     endAdornment: !disabled && !!value && (
                         <IconButton
                             aria-label="Clear input"

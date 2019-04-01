@@ -1,10 +1,19 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import Autocomplete from 'components/Autocomplete';
 import { get } from 'utils/lo/lo';
 
+// eslint-disable-next-line no-unused-vars
+const { options, suggest, optiontemplate, variant, ...autocompletePropsSubSet } = Autocomplete.propTypes;
 
 class GooglePlaceAutocomplete extends PureComponent {
+
+    static propTypes = {
+        ...autocompletePropsSubSet,
+        geocoder: PropTypes.object,
+        service: PropTypes.object,
+    };
 
     state = {
         options: [],

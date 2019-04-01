@@ -89,6 +89,8 @@ DropzoneSnackBar.propTypes = {
     message: PropTypes.node,
     onClose: PropTypes.func,
     variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+    open: PropTypes.bool,
+    autoHideDuration: PropTypes.number,
 };
 
 export default withStyles(styles)(DropzoneSnackBar);
