@@ -1,7 +1,16 @@
 import React, { PureComponent, Fragment } from 'react';
+import PropTypes from 'prop-types';
+
 import { DropzoneDialog, Button } from 'index';
 
 export default class DropzoneDialogWrapper extends PureComponent {
+
+    static propTypes = {
+        ...DropzoneDialog.propTypes,
+        onChange: PropTypes.func,
+    };
+
+
     state = {
         open: false,
         files: []

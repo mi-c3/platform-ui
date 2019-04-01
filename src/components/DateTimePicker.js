@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { DateTimePicker as DTPMui, InlineDateTimePicker as IDTPMui } from 'material-ui-pickers';
 
 import { createEvent } from 'utils/http/event';
@@ -6,9 +7,14 @@ import { createEvent } from 'utils/http/event';
 
 class DateTimePicker extends PureComponent {
 
+    static propTypes = {
+        ...DTPMui.propTypes,
+        inline: PropTypes.bool,
+        onChange: PropTypes.func,
+    }
+
     static defaultProps = {
         animateYearScrolling: true,
-        ampm: false,
         inline: false,
     }
 
@@ -18,33 +24,14 @@ class DateTimePicker extends PureComponent {
     }
 
     render() {
-        const {
-            label, value, ampm, inline, disabled, views, minDate, maxDate,
-            helperText, disableFuture, disablePast, animateYearScrolling, adornmentPosition, clearable,
-            InputAdornmentProps, mask
-        } = this.props;
+        /*
+         * WARNING: We need to avoid passing the onClick function because it will break the Component.
+         * TODO: open a bug in the material-ui-pickers project.
+         */
+        // eslint-disable-next-line no-unused-vars
+        const { inline, onClick, ...dateTimePickerProps } = this.props;
         const Component = inline ? IDTPMui : DTPMui;
-        return (
-            <Component
-                margin="normal"
-                animateYearScrolling={animateYearScrolling}
-                ampm={ampm.toString()}
-                views={views}
-                label={label}
-                value={value}
-                onChange={this.onChange}
-                disabled={disabled}
-                minDate={minDate}
-                maxDate={maxDate}
-                helperText={helperText}
-                disableFuture={disableFuture}
-                disablePast={disablePast}
-                adornmentPosition={adornmentPosition}
-                clearable={clearable}
-                InputAdornmentProps={InputAdornmentProps}
-                maks={mask}
-            />
-        );
+        return <Component margin="normal" {...dateTimePickerProps} onChange={this.onChange} />;
     }
 }
 

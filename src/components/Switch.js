@@ -1,5 +1,5 @@
-
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import MuiSwitch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
@@ -7,8 +7,14 @@ import { createEvent } from 'utils/http/event';
 
 class Switch extends PureComponent {
 
+    static propTypes = {
+        ...MuiSwitch.propTypes,
+        label: PropTypes.string,
+        labelPlacement: PropTypes.string,
+    };
+
     onChange = (event) => {
-        const { onChange } = this.props;
+        const { name, onChange } = this.props;
         const { checked } = event.target;
         onChange && onChange(createEvent('change', {
             target: { name, checked, value: checked },

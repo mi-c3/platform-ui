@@ -1,41 +1,43 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { TextField } from '@material-ui/core';
+
 import { TimePicker as TPMui, InlineTimePicker as ITPMui } from 'material-ui-pickers';
 
-const TimePicker = ({
-    label, value, onChange, ampm, inline, disabled, views, minDate, maxDate,
-    helperText, disableFuture, disablePast, adornmentPosition, clearable,
-    InputAdornmentProps, mask, showTodayButton, minutesStep, seconds
-}) => {
+// TODO: convert this component as class and implement the onChange as in the DatePicker component.
+const TimePicker = (props) => {
+
+    /*
+     * WARNING: We need to avoid passing the onClick function because it will break the Component.
+     * TODO: open a bug in the material-ui-pickers project.
+     */
+    // eslint-disable-next-line no-unused-vars
+    const { inline, onClick, children, ...muiTimePickerProps } = props;
     const Component = inline ? ITPMui : TPMui;
     return (
         <Component
             margin="normal"
-            showTodayButton={showTodayButton}
-            ampm={ampm}
-            views={views}
-            label={label}
-            value={value}
-            onChange={onChange}
-            disabled={disabled}
-            minDate={minDate}
-            maxDate={maxDate}
-            helperText={helperText}
-            disableFuture={disableFuture}
-            disablePast={disablePast}
-            adornmentPosition={adornmentPosition}
-            clearable={clearable}
-            InputAdornmentProps={InputAdornmentProps}
-            maks={mask}
-            minutesStep={minutesStep}
-            seconds={seconds}
-        />
+            {...muiTimePickerProps}
+        >
+            {children}
+        </Component>
     );
 };
 
+// eslint-disable-next-line no-unused-vars
+const { onClick, ...timePickerProps } = {
+    ...TextField.propTypes,
+    ...TPMui.propsTypes,
+    inline: PropTypes.bool,
+    value: PropTypes.object,
+};
+
+TimePicker.propTypes = timePickerProps;
+
 TimePicker.defaultProps = {
-    animateYearScrolling: true,
     ampm: false,
     inline: false,
+    children: null,
 };
-TimePicker.displayName = 'TimePicker';
+
 export default TimePicker;

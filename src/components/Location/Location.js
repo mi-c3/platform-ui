@@ -22,12 +22,12 @@ const mapOptions = ({ dark, streetViewControl }) => (maps) => {
         },
         streetViewControl: false,
     };
-    if(dark) {
+    if (dark) {
         options.styles = DarkMapTheme;
         options.mapTypeId = maps.MapTypeId.TERRAIN;
         options.mapTypeControl = false;
     }
-    if(streetViewControl) {
+    if (streetViewControl) {
         options.streetViewControl = true;
     }
     return options;
@@ -44,6 +44,8 @@ export default class Location extends PureComponent {
         writeMode: PropTypes.bool,
         onClick: PropTypes.func,
         iconInfo: PropTypes.object,
+        onGoogleApiLoaded: PropTypes.func,
+        disabled: PropTypes.bool,
     };
 
     static defaultProps = {

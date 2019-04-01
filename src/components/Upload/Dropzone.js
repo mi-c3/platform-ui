@@ -45,7 +45,46 @@ const styles = ({ palette }) => ({
     },
 });
 
-class Dropzone extends Component{
+class Dropzone extends Component {
+
+    static defaultProps = {
+        accept: 'image/*,video/*,application/*',
+        imageOptions: {},
+        filesLimit: 3,
+        capture: true,
+        maxSize: 3000000,
+        dropzoneTextHover: 'Drop files here...',
+        dropzoneText: 'Drag an image here',
+        showPreviews: true, // By default previews show up under in the dialog and inside in the standalone
+        showAlerts: true,
+        clearOnUnmount: true,
+    };
+
+    static propTypes = {
+        ...ReactDropzone.propTypes,
+        accept: PropTypes.string,
+        filesLimit: PropTypes.number,
+        maxSize: PropTypes.number,
+        dropzoneTextHover: PropTypes.string,
+        dropzoneText: PropTypes.string,
+        capture: PropTypes.bool,
+        showPreviews: PropTypes.bool,
+        showAlerts: PropTypes.bool,
+        clearOnUnmount: PropTypes.bool,
+        onChange: PropTypes.func.isRequired,
+        onDropRejected: PropTypes.func,
+        onDelete: PropTypes.func,
+        imageOptions: PropTypes.shape({
+            maxWidth: PropTypes.number,
+            maxHeigth: PropTypes.number,
+            quality: PropTypes.number,
+        }),
+        acceptedFiles: PropTypes.arrayOf(PropTypes.string),
+        fileSizeLimit: PropTypes.number,
+        classes: PropTypes.object,
+        multiple: PropTypes.bool,
+    };
+
     state = {
         files: [],
         openSnackbar: false,
@@ -123,14 +162,14 @@ class Dropzone extends Component{
         let message = '';
         rejectedFiles.forEach((rejectedFile) => {
             message = `File ${rejectedFile.name} was rejected. `;
-            if(!this.props.acceptedFiles.includes(rejectedFile.type)){
+            if (this.props.acceptedFiles && !this.props.acceptedFiles.includes(rejectedFile.type)) {
                 message += 'File type not supported. ';
             }
-            if(rejectedFile.size > Number(this.props.fileSizeLimit)){
+            if (rejectedFile.size > Number(this.props.fileSizeLimit)) {
                 message += `File is too big. Size limit is ${simplifySize(this.props.fileSizeLimit)}. `;
             }
         });
-        if(this.props.onDropRejected){
+        if (this.props.onDropRejected) {
             this.props.onDropRejected(rejectedFiles, evt);
         }
         this.props.showAlerts && this.setState({
@@ -205,30 +244,4 @@ class Dropzone extends Component{
     }
 }
 
-Dropzone.defaultProps = {
-    accept: 'image/*,video/*,application/*',
-    imageOptions: {},
-    filesLimit: 3,
-    capture: true,
-    maxSize: 3000000,
-    dropzoneTextHover: 'Drop files here...',
-    dropzoneText: 'Drag an image here',
-    showPreviews: true, // By default previews show up under in the dialog and inside in the standalone
-    showAlerts: true,
-    clearOnUnmount: true,
-};
-Dropzone.propTypes = {
-    accept: PropTypes.string,
-    filesLimit: PropTypes.number,
-    maxSize: PropTypes.number,
-    dropzoneTextHover: PropTypes.string,
-    dropzoneText: PropTypes.string,
-    capture: PropTypes.bool,
-    showPreviews: PropTypes.bool,
-    showAlerts: PropTypes.bool,
-    clearOnUnmount: PropTypes.bool,
-    onChange: PropTypes.func.isRequired,
-    onDropRejected: PropTypes.func,
-    onDelete: PropTypes.func
-};
 export default withStyles(styles)(Dropzone);
