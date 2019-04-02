@@ -5,7 +5,7 @@ import Autocomplete from 'components/Autocomplete';
 import { get } from 'utils/lo/lo';
 
 // eslint-disable-next-line no-unused-vars
-const { options, suggest, optiontemplate, variant, ...autocompletePropsSubSet } = Autocomplete.propTypes;
+const { options, suggest, optiontemplate, variant, ...autocompletePropsSubSet } = Autocomplete.propTypes || {};
 
 class GooglePlaceAutocomplete extends PureComponent {
 

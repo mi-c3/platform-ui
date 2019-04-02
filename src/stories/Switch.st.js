@@ -12,9 +12,9 @@ storiesOf('Components', module)
     .addDecorator(withKnobs)
     .addWithJSX('Switch', ({ value, onChange }) => (
         <Fragment>
-            <Switch value={value} onChange={onChange} label="Primary" /><br/>
-            <Switch value={value} color="secondary" label="Secondary color" /><br/>
-            <Switch value={value} disabled label="(Disabled option)" /><br/>
+            <Switch value={value} onChange={onChange} label="Primary" name="primary" /><br/>
+            <Switch value={value} color="secondary" label="Secondary color" name="secondary" /><br/>
+            <Switch value={value} disabled label="(Disabled option)" name="disabled" /><br/>
             <Switch
                 value={value}
                 label={text('Custom', 'Custom', 'Default')}

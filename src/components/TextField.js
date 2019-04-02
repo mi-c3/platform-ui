@@ -6,7 +6,7 @@ import Cancel from '@material-ui/icons/Cancel';
 import { createEvent } from 'utils/http/event';
 
 // eslint-disable-next-line no-unused-vars
-const { endAdornment, ...inputPropsSubSet } = Input.propTypes;
+const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};
 
 class TextField extends PureComponent {
 
