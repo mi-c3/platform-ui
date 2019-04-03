@@ -119,6 +119,7 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 
 import { DarkTheme } from 'styles/theme';
 import Autocomplete from 'components/Autocomplete';
+import AutocompleteLazy from 'components/AutocompleteLazy';
 import Button from 'components/Button';
 import Checkbox from 'components/Checkbox';
 import MdiIcon from 'components/MdiIcon';
@@ -142,6 +143,7 @@ export {
 
     // Platform MAterial UI
     Autocomplete,
+    AutocompleteLazy,
     Button,
     Checkbox,
     MdiIcon,
