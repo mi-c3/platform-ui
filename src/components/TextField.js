@@ -21,6 +21,15 @@ class TextField extends PureComponent {
         fullWidth: true,
     }
 
+    endAdornment: Object = (
+        <IconButton
+            aria-label="Clear input"
+            onClick={this.onClear}
+        >
+            <Cancel />
+        </IconButton>
+    )
+
     onClear = () => {
         const { onChange, name, type } = this.props;
         const event = createEvent('change', { target: { name, type, value: null, }});
@@ -34,15 +43,8 @@ class TextField extends PureComponent {
                 value={value || ''}
                 disabled={disabled}
                 InputProps={{
+                    endAdornment: !disabled && !!value && this.endAdornment,
                     ...InputProps,
-                    endAdornment: !disabled && !!value && (
-                        <IconButton
-                            aria-label="Clear input"
-                            onClick={this.onClear}
-                        >
-                            <Cancel />
-                        </IconButton>
-                    ),
                 }}
                 {...restProps}
             />
