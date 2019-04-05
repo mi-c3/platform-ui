@@ -9,8 +9,8 @@ export const colors = {
         main: '#4BB9D9',
     },
     common: {
-        white: '#fff',
-        black: '#000',
+        white: '#ffffff',
+        black: '#000000',
     },
     darkGray: '#DADADA',
     darkBlue: '#066AB1',
@@ -37,7 +37,8 @@ export const DarkTheme = createMuiTheme({
             default: colors.background,
         },
     },
-    typography: { useNextVariants: true },
+    typography: {
+        useNextVariants: true },
     overrides: {
         MuiFilledInput: {
             root: {
