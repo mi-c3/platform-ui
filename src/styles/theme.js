@@ -37,8 +37,7 @@ export const DarkTheme = createMuiTheme({
             default: colors.background,
         },
     },
-    typography: {
-        useNextVariants: true },
+    typography: { useNextVariants: true },
     overrides: {
         MuiFilledInput: {
             root: {
