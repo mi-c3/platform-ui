@@ -17,8 +17,9 @@ import IconButton from '@material-ui/core/IconButton';
 import { get } from 'utils/lo/lo';
 import { isImageType, simplifySize, resizeImage } from 'utils/file/file';
 import DropzoneSnackBar from 'components/Upload/DropzoneSnackBar';
+import MdiIcon from 'components/MdiIcon';
 
-const styles = ({ palette }) => ({
+const styles = ({ palette, colors }) => ({
     dropZone: {
         position: 'relative',
         width: '100%',
@@ -31,18 +32,43 @@ const styles = ({ palette }) => ({
         alignItems: 'center',
         flexDirection: 'column',
     },
+    relative: {
+        position: 'relative',
+    },
     dropZoneActive: {
         backgroundColor: '#50575b90',
     },
+    dropZoneActiveRejected: {
+        background: `${colors.red}90 !important`,
+    },
     dropzoneTypography:{
         fontSize: '1.4rem',
-        color: '#8b9194',
+        color: 'white',
     },
     dropzoneIcon: {
         width: 101,
         height: 101,
         color: palette.primary[palette.type],
     },
+    dropzoneBounceIcon: {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#50575bf0',
+        flexDirection: 'column',
+    },
+    bounce: {
+        'animation': 'bounce 2s infinite ease-in-out',
+    },
+    '@keyframes bounce': {
+        '60%': {
+            transform: 'translate(0px, 20px)',
+            opacity: 0.8,
+        }
+    }
 });
 
 class Dropzone extends Component {
@@ -83,6 +109,7 @@ class Dropzone extends Component {
         fileSizeLimit: PropTypes.number,
         classes: PropTypes.object,
         multiple: PropTypes.bool,
+        children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
     };
 
     state = {
@@ -199,7 +226,7 @@ class Dropzone extends Component {
     )))
 
     render(){
-        const { classes, capture, showPreviews, dropzoneText, dropzoneTextHover, multiple, ...restProps } = this.props;
+        const { classes, capture, showPreviews, dropzoneText, dropzoneTextHover, dropzoneTextRejected, multiple, children, dropZoneClasses, ...restProps } = this.props; // eslint-disable-line max-len
         const { files } = this.state;
         return (
             <Fragment>
@@ -208,11 +235,11 @@ class Dropzone extends Component {
                     onDropAccepted={this.handleDropAccepted}
                     onDropRejected={this.handleDropRejected}
                 >
-                    {({getRootProps, getInputProps, isDragActive}) => {
-                        return (
+                    {({getRootProps, getInputProps, isDragActive, isDragReject}) => {
+                        return !children ? (
                             <div
                                 {...getRootProps()}
-                                className={`${classes.dropZone} ${isDragActive && classes.dropZoneActive}`}
+                                className={`${classes.dropZone} ${isDragActive && classes.dropZoneActive} ${dropZoneClasses}`}
                             >
                                 <input {...getInputProps()} capture={capture} multiple={multiple} />
                                 <CloudUploadIcon className={classes.dropzoneIcon}/>
@@ -222,6 +249,22 @@ class Dropzone extends Component {
                                         <Typography className={classes.dropzoneTypography}>{dropzoneText}</Typography>
                                 }
                             </div>
+                        ) : (
+                            <div
+                                {...getRootProps()}
+                                className={`${classes.relative} ${dropZoneClasses || ''} ${isDragActive && classes.dropZoneActive}`}
+                            >
+                                { isDragActive && (
+                                    <div className={`${classes.dropzoneBounceIcon} ${isDragReject && classes.dropZoneActiveRejected}`}>
+                                        <div className={`${classes.bounce}`}><MdiIcon color="secondary" name="arrow-down-thick" size={80} /></div>
+                                        {!isDragReject && <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>}
+                                        {isDragReject && <Typography className={classes.dropzoneTypography}>{dropzoneTextRejected}</Typography>}
+                                    </div>
+                                )}
+                                <input {...getInputProps()} capture={capture} multiple={multiple} />
+                                {children}
+                            </div>
+
                         );
                     }}
                 </ReactDropzone>
