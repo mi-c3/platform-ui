@@ -19,6 +19,7 @@ export const colors = {
 };
 
 export const DarkTheme = createMuiTheme({
+    colors,
     palette: {
         type: 'dark',
         action: {

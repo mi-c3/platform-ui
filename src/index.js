@@ -14,6 +14,8 @@ import {
     install,
 } from '@material-ui/styles';
 
+import ReactDropzone, { useDropzone } from 'react-dropzone';
+
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -164,6 +166,8 @@ export {
     MuiPickersUtilsProvider,
     DatePicker,
     TimePicker,
+    ReactDropzone,
+    useDropzone,
 
     // Styles
     DarkTheme,
