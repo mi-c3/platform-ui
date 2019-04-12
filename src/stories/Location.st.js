@@ -13,7 +13,7 @@ const LocationSwitchFull = statefullInput(LocationSwitch);
 
 storiesOf('Components.Location', module)
     .addDecorator(withKnobs)
-    .addWithJSX('LocationForm', () => {
+    .add('LocationForm', () => {
         const defaultProps = {
             name: text('Name', 'location', 'Default'),
             onChange,
@@ -36,7 +36,7 @@ storiesOf('Components.Location', module)
 
 storiesOf('Components.Location', module)
     .addDecorator(withKnobs)
-    .addWithJSX('LocationSwitch', () => {
+    .add('LocationSwitch', () => {
         const defaultProps = {
             label: text('Label', 'Geotaging', 'Default'),
             name: text('Name', 'location', 'Default'),

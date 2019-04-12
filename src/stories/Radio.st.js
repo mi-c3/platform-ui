@@ -12,7 +12,7 @@ const RadioGroup = statefullInput(RadioGroupLess);
 
 storiesOf('Components', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Radio', (props) => (
+    .add('Radio', (props) => (
         <RadioGroup
             aria-label="Colors"
             name="colors"

@@ -8,7 +8,7 @@ import { forTypography } from 'stories/constants/propsVariation';
 
 storiesOf('Components', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Typography', () => (
+    .add('Typography', () => (
         <Fragment>
             <H3>Display text</H3>
             <Typography

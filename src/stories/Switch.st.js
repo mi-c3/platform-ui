@@ -10,7 +10,7 @@ const Switch = statefullInput(S);
 
 storiesOf('Components', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Switch', ({ value, onChange }) => (
+    .add('Switch', ({ value, onChange }) => (
         <Fragment>
             <Switch value={value} onChange={onChange} label="Primary" name="primary" /><br/>
             <Switch value={value} color="secondary" label="Secondary color" name="secondary" /><br/>

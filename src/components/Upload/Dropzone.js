@@ -59,6 +59,7 @@ const styles = ({ palette, colors }) => ({
         alignItems: 'center',
         backgroundColor: '#50575bf0',
         flexDirection: 'column',
+        zIndex: 99,
     },
     bounce: {
         'animation': 'bounce 2s infinite ease-in-out',
@@ -112,12 +113,23 @@ class Dropzone extends Component {
         children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
     };
 
-    state = {
-        files: [],
-        openSnackbar: false,
-        snackbarMessage: '',
-        snackbarVariant: 'success'
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            files: props.value || [],
+            openSnackbar: false,
+            snackbarMessage: '',
+            snackbarVariant: 'success'
+        };
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.value !== this.props.value) {
+            this.setSatet({
+                files: this.props.value,
+            });
+        }
+    }
 
     componentWillUnmount(){
         if(this.props.clearOnUnmount){
@@ -148,26 +160,30 @@ class Dropzone extends Component {
     }
 
     handleDropAccepted = async (files) => {
-        if(this.state.files.length + files.length > this.props.filesLimit) {
-            return this.setState({
-                openSnackbar: true,
-                snackbarMessage: `Maximum allowed number of files exceeded. Only ${this.props.filesLimit} allowed`,
-                snackbarVariant: 'error'
-            });
-        }
+        if (this.props.showPreviews) {
+            if (this.state.files.length + files.length > this.props.filesLimit) {
+                return this.setState({
+                    openSnackbar: true,
+                    snackbarMessage: `Maximum allowed number of files exceeded. Only ${this.props.filesLimit} allowed`,
+                    snackbarVariant: 'error'
+                });
+            }
 
-        this.setState({ files: this.state.files.concat(files) }, () => {
+            this.setState({ files: this.state.files.concat(files) }, () => {
+                this.onChange(files);
+                let message = '';
+                files.forEach((file) => {
+                    message += `File ${file.name} successfully added.`;
+                });
+                this.props.showAlerts && this.setState({
+                    openSnackbar: true,
+                    snackbarMessage: message,
+                    snackbarVariant: 'success'
+                });
+            });
+        } else {
             this.onChange(files);
-            let message = '';
-            files.forEach((file) => {
-                message += `File ${file.name} successfully added.`;
-            });
-            this.props.showAlerts && this.setState({
-                openSnackbar: true,
-                snackbarMessage: message,
-                snackbarVariant: 'success'
-            });
-        });
+        }
     }
 
     handleRemove = (index) => (event) => {
@@ -226,7 +242,7 @@ class Dropzone extends Component {
     )))
 
     render(){
-        const { classes, capture, showPreviews, dropzoneText, dropzoneTextHover, dropzoneTextRejected, multiple, children, dropZoneClasses, ...restProps } = this.props; // eslint-disable-line max-len
+        const { classes, capture, showPreviews, dropzoneText, dropzoneTextHover, dropzoneTextRejected, multiple, children, dropZoneClasses, onClick, ...restProps } = this.props; // eslint-disable-line max-len
         const { files } = this.state;
         return (
             <Fragment>
@@ -251,7 +267,9 @@ class Dropzone extends Component {
                             </div>
                         ) : (
                             <div
-                                {...getRootProps()}
+                                {...getRootProps({
+                                    onClick,
+                                })}
                                 className={`${classes.relative} ${dropZoneClasses || ''} ${isDragActive && classes.dropZoneActive}`}
                             >
                                 { isDragActive && (

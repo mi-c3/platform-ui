@@ -2,19 +2,19 @@ import colors from '@material-ui/core/colors';
 
 import {
     createGenerateClassName,
-    createMuiTheme,
     createStyles,
     jssPreset,
-    MuiThemeProvider,
     withStyles,
     withTheme,
     styled,
     makeStyles,
     ThemeProvider,
     install,
+    useTheme,
+    StylesProvider,
 } from '@material-ui/styles';
 
-import ReactDropzone, { useDropzone } from 'react-dropzone';
+import ReactDropzone from 'react-dropzone';
 
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
@@ -167,7 +167,6 @@ export {
     DatePicker,
     TimePicker,
     ReactDropzone,
-    useDropzone,
 
     // Styles
     DarkTheme,
@@ -178,16 +177,16 @@ export {
 
     // Core Styles and themes
     createGenerateClassName,
-    createMuiTheme,
     createStyles,
     jssPreset,
-    MuiThemeProvider,
     withStyles,
     withTheme,
     makeStyles,
     ThemeProvider,
     styled,
     install,
+    useTheme,
+    StylesProvider,
 
     // Core Components
     AppBar,

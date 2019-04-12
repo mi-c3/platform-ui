@@ -22,7 +22,7 @@ const SelectionModes = { None: null, Single: 'single', Multiple: 'multiple' };
 
 storiesOf('Components.Tables', module)
     .addDecorator(withKnobs)
-    .addWithJSX('DataTable', () => (
+    .add('DataTable', () => (
         <Fragment>
             <DataTable
                 title={text('Title', 'Customizable Data Table', 'Default')}

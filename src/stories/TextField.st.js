@@ -26,7 +26,7 @@ const optionsMargin = {
 
 storiesOf('Components.TextField', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Text', () => (
+    .add('Text', () => (
         <Fragment>
             <H3>Simple TextField</H3>
             <TextField
@@ -52,7 +52,7 @@ storiesOf('Components.TextField', module)
 
 storiesOf('Components.TextField', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Multiline', () => (
+    .add('Multiline', () => (
         <Fragment>
             <H3>Multiline TextField</H3>
             <TextField
@@ -78,7 +78,7 @@ storiesOf('Components.TextField', module)
 
 storiesOf('Components.TextField', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Number', () => (
+    .add('Number', () => (
         <Fragment>
             <H3>Still TextField but Number =)</H3>
             <TextField

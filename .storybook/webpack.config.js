@@ -1,16 +1,15 @@
 const path = require('path')
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const storybookConfiguration = (baseConfig, env, defaultConfig) => {
+const storybookConfiguration = ({ config: defaultConfig, mode }) => {
   console.log('[Affectli] enhancing storybook webpack configuration...');
   const config = { ...defaultConfig };
-  config.module.rules.push({
-    test: /\.css$/,
-    loaders: ["style-loader", "css-loader", "sass-loader"],
-    include: path.resolve(__dirname, '../src')
-  });
-  config.resolve.extensions.push('.css');
-  config.resolve.modules = ['node_modules', 'src'];
+  // config.module.rules.push({
+  //   test: /\.css$/,
+  //   loaders: ["style-loader", "css-loader", "sass-loader"],
+  //   include: path.resolve(__dirname, '../src')
+  // });
+  // config.resolve.modules = ['node_modules', 'src'];
+  // config.resolve.extensions.push('.css');
   config.resolve.alias = { '~@mdi/font/css/materialdesignicons.css': path.join(__dirname, '../node_modules/@mdi/font/css/materialdesignicons.css') };
 
   if (process.env.BUILD_UI_MODULE) {
@@ -23,12 +22,11 @@ const storybookConfiguration = (baseConfig, env, defaultConfig) => {
           libraryTarget: "commonjs"
       };
 
-      config.plugins.push(new ExtractTextPlugin('style.css'));
-
       config.resolve.modules = [__dirname + '/src', 'node_modules'];
 
       config.optimization = {};
-
+      console.log('$$$ [config]', config);
+      // delete config.module.loaders[0].exclude;
       // removed chunks options
       // config.plugins.splice(0, 1);
   }

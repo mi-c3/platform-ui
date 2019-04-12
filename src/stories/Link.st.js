@@ -7,7 +7,7 @@ import { Link, Typography } from 'index';
 
 storiesOf('Components', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Link', () => (
+    .add('Link', () => (
         <Fragment>
             <H3>Default link</H3>
             <Typography>

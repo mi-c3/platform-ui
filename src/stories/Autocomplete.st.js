@@ -21,7 +21,7 @@ const MdiSelectLetterFull = statefullInput(MdiSelectLetter);
 
 storiesOf('Components.Autocomplete', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Dropdown', () => (
+    .add('Dropdown', () => (
         <Fragment>
             <H3>Simple Autocomplete with static data</H3>
             <Autocomplete
@@ -40,7 +40,7 @@ storiesOf('Components.Autocomplete', module)
 
 storiesOf('Components.Autocomplete', module)
     .addDecorator(withKnobs)
-    .addWithJSX('MdiIconSelect', () => {
+    .add('MdiIconSelect', () => {
         const iconChipType = select('Icon chip type', forIconSelect.chipType, 'icon', 'Default');
         const SelectIconComponent = {
             'icon': MdiSelectIconFull,
@@ -65,7 +65,7 @@ storiesOf('Components.Autocomplete', module)
 
 storiesOf('Components.Autocomplete', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Typeahead', () => (
+    .add('Typeahead', () => (
         <Fragment>
             <H3>Lazy Typeahead Autocomplete with imitation of server side rendering</H3>
             <AutocompleteLazy
@@ -107,7 +107,7 @@ storiesOf('Components.Autocomplete', module)
 
 storiesOf('Components.Autocomplete.Multiple', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Icons', () => {
+    .add('Icons', () => {
         const iconChipType = select('Icon chip type', forIconSelect.chipType, 'icon', 'Default');
         const SelectIconComponent = {
             'icon': MdiSelectIconFull,
@@ -131,7 +131,7 @@ storiesOf('Components.Autocomplete.Multiple', module)
     });
 storiesOf('Components.Autocomplete.Multiple', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Letters', () => {
+    .add('Letters', () => {
         const iconChipType = select('Icon chip type', forIconSelect.chipType, 'letters', 'Default');
         const SelectIconComponent = {
             'icon': MdiSelectIconFull,
