@@ -1,68 +1,39 @@
 import React from 'react';
-import ThemeProvider from '@emotion/provider';
-import JSXAddon from 'storybook-addon-jsx';
-import { configure, addDecorator, setAddon } from '@storybook/react';
-import { themes } from '@storybook/components';
-import { withOptions } from '@storybook/addon-options';
-import { configureViewport, INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
-import { withCssResources } from '@storybook/addon-cssresources';
-import 'react-chromatic/storybook-addon';
+import { configure, addParameters, addDecorator } from '@storybook/react';
+import { create } from '@storybook/theming';
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import extraViewports from './extra-viewports.json';
+import '~@mdi/font/css/materialdesignicons.css';
 
 import PuiProvider from '../src/components/PuiProvider';
 
-import '~@mdi/font/css/materialdesignicons.css';
+addDecorator((story) => (
+    <PuiProvider>
+        {story()}
+    </PuiProvider>
+));
 
-addDecorator(
-  withOptions({
-    hierarchySeparator: /\/|\./,
-    hierarchyRootSeparator: /\|/,
-    theme: themes.dark,
-    name: 'Affectli Platform-UI',
-    addonPanelInRight: false, // set panel right by default if 'true'
-  })
-);
-
-addDecorator(
-  withCssResources({
-    cssresources: [
-      {
-        name: `white`,
-        code: `<style>
-    body {
-        background-color: white;
-        transition: background-color 0.3s;
-    }
-</style>`,
-        picked: false,
-      },
-    ],
-  })
-);
-
-addDecorator((story, { kind }) =>
-  kind === 'Core|Errors' ? story() : (
-      <ThemeProvider theme={themes.normal}>
-          <PuiProvider>
-              {story()}
-          </PuiProvider>
-      </ThemeProvider>
-      )
-);
-
-configureViewport({
-  viewports: {
+addParameters({
+  viewport: {
     ...INITIAL_VIEWPORTS,
     ...extraViewports,
   },
 });
 
-setAddon(JSXAddon);
+addParameters({
+    options: {
+        theme: create({
+          base: 'dark',
+          brandTitle: 'Affectli Platform-UI',
+        }),
+        panelPosition: 'bottom',
+    }
+});
 
-const req = require.context('../src/stories', true, /index\.js|\.st\.js$/)
-
+// automatically import all files ending in *.stories.js
+const req = require.context('../src/stories', true, /\.st\.js$/);
 function loadStories() {
-    req.keys().forEach(filename => req(filename));
+  req.keys().forEach(filename => req(filename));
 }
 
 configure(loadStories, module);

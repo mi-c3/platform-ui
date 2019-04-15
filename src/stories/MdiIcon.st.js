@@ -7,7 +7,7 @@ import { forIcon } from 'stories/constants/propsVariation';
 
 storiesOf('Components', module)
     .addDecorator(withKnobs)
-    .addWithJSX('MdiIcon', () => {
+    .add('MdiIcon', () => {
         const prefix = text('Prefix', '', 'Default');
         const sufix = text('Suffix', '', 'Default');
         return (

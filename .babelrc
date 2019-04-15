@@ -3,10 +3,8 @@
     [
       "@babel/preset-env",
       {
-        "targets": {
-            "chrome": "69",
-            "firefox": "48",
-        }
+        "corejs": 2,
+        "useBuiltIns": "entry"
       }
     ],
     "@babel/preset-react"

@@ -9,7 +9,7 @@ import DropzoneDialogWrapper from 'stories/components/DropzoneDialogWrapper';
 
 storiesOf('Components.Uploads', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Dropzone', () => {
+    .add('Dropzone', () => {
         const props = {
             dropzoneText: text('Main text', 'Drag an image here', 'Default'),
             dropzoneTextHover: text('Hover text', 'YES HERE...', 'Default'),
@@ -40,7 +40,7 @@ storiesOf('Components.Uploads', module)
 
 storiesOf('Components.Uploads', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Dropzone:onDrag', () => {
+    .add('Dropzone:onDrag', () => {
         const props = {
             dropzoneTextHover: text('Hover text', 'Drag an image here...', 'Default'),
             dropzoneTextRejected: text('Rejected text', 'You cant drag this file...', 'Default'),
@@ -64,11 +64,7 @@ storiesOf('Components.Uploads', module)
                 <Dropzone
                     {...props}
                     accept={text('Accepted Files', 'image/jpeg,image/png,image/bmp', 'Default')}
-                    noClick
                 >
-                    <Typography variant="h1">Drag some file inside this text area.</Typography>
-                    <Typography variant="h1">Drag some file inside this text area.</Typography>
-                    <Typography variant="h1">Drag some file inside this text area.</Typography>
                     <Typography variant="h1">Drag some file inside this text area.</Typography>
                 </Dropzone>
             </Fragment>
@@ -77,7 +73,7 @@ storiesOf('Components.Uploads', module)
 
 storiesOf('Components.Uploads', module)
     .addDecorator(withKnobs)
-    .addWithJSX('DropzoneDialog', () => {
+    .add('DropzoneDialog', () => {
         const props = {
             dropzoneText: text('Main text', 'Drag an image here', 'Default'),
             dropzoneTextHover: text('Hover text', 'YES HERE...', 'Default'),

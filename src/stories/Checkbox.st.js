@@ -10,7 +10,7 @@ const Checkbox = statefullInput(CB);
 
 storiesOf('Components', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Checkbox', () => <Checkbox
+    .add('Checkbox', () => <Checkbox
         label={text('Label', 'Active', 'Default')}
         disabled={boolean('Disabled', false, 'Default')}
         name={text('Name', 'active', 'Default')}

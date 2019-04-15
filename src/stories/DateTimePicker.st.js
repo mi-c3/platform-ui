@@ -14,7 +14,7 @@ const TimePickerFull = stateForDateTime(TimePicker);
 
 storiesOf('Components.DateTimePickers', module)
     .addDecorator(withKnobs)
-    .addWithJSX('DateTimePicker', () => (
+    .add('DateTimePicker', () => (
         <DateTimePickerSTFull
             label={text('Label', 'Default', 'Default')}
             disabled={boolean('Disabled', false, 'Default')}
@@ -25,7 +25,7 @@ storiesOf('Components.DateTimePickers', module)
 
 storiesOf('Components.DateTimePickers', module)
     .addDecorator(withKnobs)
-    .addWithJSX('DateTimePicker Inline', () => (
+    .add('DateTimePicker Inline', () => (
         <InlineDateTimePickerSTFull
             label={text('Label', 'Inline', 'Default')}
             disabled={boolean('Disabled', false, 'Default')}
@@ -37,7 +37,7 @@ storiesOf('Components.DateTimePickers', module)
 
 storiesOf('Components.DateTimePickers', module)
     .addDecorator(withKnobs)
-    .addWithJSX('DatePicker', () => {
+    .add('DatePicker', () => {
         const defaultProps = {
             disabled: boolean('Disabled', false, 'Default'),
             disableFuture: boolean('Disabled Future', false, 'Default'),
@@ -80,7 +80,7 @@ storiesOf('Components.DateTimePickers', module)
 
 storiesOf('Components.DateTimePickers', module)
     .addDecorator(withKnobs)
-    .addWithJSX('TimePicker', () => {
+    .add('TimePicker', () => {
         const defaultProps = {
             disabled: boolean('Disabled', false, 'Default'),
             clearable: boolean('Clearable', false, 'Default'),

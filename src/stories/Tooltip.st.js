@@ -7,7 +7,7 @@ import { Typography, Grid, Button, Tooltip } from 'index';
 
 storiesOf('Components', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Tooltip', () => {
+    .add('Tooltip', () => {
         const title = text('Title','Add any text in `KNOBS` tab');
         return (
             <Fragment>

@@ -8,9 +8,8 @@ import { forButton } from 'stories/constants/propsVariation';
 
 storiesOf('Components', module)
     .addDecorator(withKnobs)
-    .addWithJSX('Button', () => (
+    .add('Button', () => (
         <Button
-            label={text('Label', 'Email', 'Default')}
             disabled={boolean('Disabled', false, 'Default')}
             name={text('Name', 'email', 'Default')}
             onClick={action('onclick')}
