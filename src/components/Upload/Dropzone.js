@@ -19,7 +19,7 @@ import { isImageType, simplifySize, resizeImage } from 'utils/file/file';
 import DropzoneSnackBar from 'components/Upload/DropzoneSnackBar';
 import MdiIcon from 'components/MdiIcon';
 
-const styles = ({ palette, colors }) => ({
+const styles = ({ palette }) => ({
     dropZone: {
         position: 'relative',
         width: '100%',
@@ -37,9 +37,6 @@ const styles = ({ palette, colors }) => ({
     },
     dropZoneActive: {
         backgroundColor: '#50575b90',
-    },
-    dropZoneActiveRejected: {
-        background: `${colors.red}90 !important`,
     },
     dropzoneTypography:{
         fontSize: '1.4rem',
@@ -155,7 +152,6 @@ class Dropzone extends Component {
                 value.push(blob);
             })
         );
-
         onChange && onChange({ value, originalFiles: files });
     }
 
@@ -184,6 +180,7 @@ class Dropzone extends Component {
         } else {
             this.onChange(files);
         }
+        this.props.onDropAccepted && this.props.onDropAccepted(files);
     }
 
     handleRemove = (index) => (event) => {
@@ -242,7 +239,7 @@ class Dropzone extends Component {
     )))
 
     render(){
-        const { classes, capture, showPreviews, dropzoneText, dropzoneTextHover, dropzoneTextRejected, multiple, children, dropZoneClasses, onClick, ...restProps } = this.props; // eslint-disable-line max-len
+        const { classes, capture, showPreviews, dropzoneText, dropzoneTextHover, multiple, children, dropZoneClasses, onClick, ...restProps } = this.props; // eslint-disable-line max-len
         const { files } = this.state;
         return (
             <Fragment>
@@ -251,7 +248,7 @@ class Dropzone extends Component {
                     onDropAccepted={this.handleDropAccepted}
                     onDropRejected={this.handleDropRejected}
                 >
-                    {({getRootProps, getInputProps, isDragActive, isDragReject}) => {
+                    {({getRootProps, getInputProps, isDragActive}) => {
                         return !children ? (
                             <div
                                 {...getRootProps()}
@@ -273,10 +270,9 @@ class Dropzone extends Component {
                                 className={`${classes.relative} ${dropZoneClasses || ''} ${isDragActive && classes.dropZoneActive}`}
                             >
                                 { isDragActive && (
-                                    <div className={`${classes.dropzoneBounceIcon} ${isDragReject && classes.dropZoneActiveRejected}`}>
+                                    <div className={classes.dropzoneBounceIcon}>
                                         <div className={`${classes.bounce}`}><MdiIcon color="secondary" name="arrow-down-thick" size={80} /></div>
-                                        {!isDragReject && <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>}
-                                        {isDragReject && <Typography className={classes.dropzoneTypography}>{dropzoneTextRejected}</Typography>}
+                                        <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
                                     </div>
                                 )}
                                 <input {...getInputProps()} capture={capture} multiple={multiple} />
