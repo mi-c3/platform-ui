@@ -6,12 +6,9 @@ import MomentUtils from '@date-io/moment';
 
 import { DarkTheme } from 'styles/theme';
 
-
 const PuiProvider = ({ children }) => (
     <MuiThemeProvider theme={DarkTheme}>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
-            {children}
-        </MuiPickersUtilsProvider>
+        <MuiPickersUtilsProvider utils={MomentUtils}>{children}</MuiPickersUtilsProvider>
     </MuiThemeProvider>
 );
 

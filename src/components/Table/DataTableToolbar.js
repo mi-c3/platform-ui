@@ -12,33 +12,36 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
-const toolbarStyles = theme => ({
-    root: {
-        paddingRight: theme.spacing.unit,
-    },
-    highlight:
-    theme.palette.type === 'light'
-        ? {
+const toolbarStyles = (theme) => {
+    let highlight = {
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.secondary.dark,
+    };
+    if (theme.palette.type === 'light') {
+        highlight = {
             color: theme.palette.secondary.main,
             backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-        : {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.secondary.dark,
+        };
+    }
+    return {
+        root: {
+            paddingRight: theme.spacing.unit,
         },
-    spacer: {
-        flex: '1 1 100%',
-    },
-    actions: {
-        color: theme.palette.text.secondary,
-        display: 'flex'
-    },
-    title: {
-        flex: '0 0 auto',
-    },
-});
+        highlight,
+        spacer: {
+            flex: '1 1 100%',
+        },
+        actions: {
+            color: theme.palette.text.secondary,
+            display: 'flex',
+        },
+        title: {
+            flex: '0 0 auto',
+        },
+    };
+};
 
-const DataTableToolbar = props => {
+const DataTableToolbar = (props) => {
     const { numSelected, classes, onSelectAllClick, rowCount, title, selectionMode } = props;
     return (
         <Toolbar className={`${classes.root} ${numSelected > 0 ? classes.highlight : ''}`}>
@@ -55,7 +58,7 @@ const DataTableToolbar = props => {
             </div>
             <div className={classes.spacer} />
             <div className={classes.actions}>
-                { selectionMode === 'multiple' && (
+                {selectionMode === 'multiple' && (
                     <Tooltip title="Select All">
                         <Checkbox
                             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -64,14 +67,14 @@ const DataTableToolbar = props => {
                         />
                     </Tooltip>
                 )}
-                { numSelected > 0 && (
+                {numSelected > 0 && (
                     <Tooltip title="Delete">
                         <IconButton aria-label="Delete">
                             <DeleteIcon />
                         </IconButton>
                     </Tooltip>
                 )}
-                { numSelected === 0 && (
+                {numSelected === 0 && (
                     <Tooltip title="Filter list">
                         <IconButton aria-label="Filter list">
                             <FilterListIcon />

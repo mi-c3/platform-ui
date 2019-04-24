@@ -54,7 +54,7 @@ export default class Location extends PureComponent {
 
     static defaultProps = {
         color: '',
-    }
+    };
 
     /**
      * onclick map will change the coordinates

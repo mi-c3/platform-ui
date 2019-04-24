@@ -15,9 +15,9 @@ const isDefined = (value) => value !== null && value !== undefined;
 const isFunction = (value) => typeof value === 'function';
 
 /**
-  * @private
-  * Used internally by the set method.
-  */
+ * @private
+ * Used internally by the set method.
+ */
 const _getPath = (accessorString) => {
     let path = [];
     const split = accessorString.split('.');
@@ -30,15 +30,15 @@ const _getPath = (accessorString) => {
         } else {
             let name = field;
             const indexes = [];
-            match.forEach( (chunk) => {
+            match.forEach((chunk) => {
                 name = name.replace(chunk, '');
                 const num = chunk.match(/\d+/);
                 indexes.push(Number(num && num[0]));
-            } );
+            });
             if (name.length > 0) {
-                path = [ ...path, name, ...indexes ];
+                path = [...path, name, ...indexes];
             } else {
-                path = [ ...path, ...indexes ];
+                path = [...path, ...indexes];
             }
         }
     });
@@ -46,44 +46,44 @@ const _getPath = (accessorString) => {
 };
 
 /**
-  * @private
-  * Used internally by the set method.
-  */
+ * @private
+ * Used internally by the set method.
+ */
 const _set = (object, fieldPath, value) => {
     const field = fieldPath.shift();
 
     if (Number.isInteger(field)) {
-        const mutableArray = Array.isArray(object) ? [ ...object ] : [];
+        const mutableArray = Array.isArray(object) ? [...object] : [];
         mutableArray[field] = fieldPath.length === 0 ? value : _set(mutableArray[field], fieldPath, value);
         return mutableArray;
     }
 
-    if ( fieldPath.length === 0 ) {
+    if (fieldPath.length === 0) {
         return { ...object, [field]: value };
     }
     return { ...object, [field]: _set(object[field] || {}, fieldPath, value) };
 };
 
 /**
-  * Returns an immutable object that it is the updated version of the object passed to this method.
-  *
-  * @param object the object to update.
-  * @param fieldPath the field to set.
-  * @param value the value to set.
-  * @return an immutable object
-  */
+ * Returns an immutable object that it is the updated version of the object passed to this method.
+ *
+ * @param object the object to update.
+ * @param fieldPath the field to set.
+ * @param value the value to set.
+ * @return an immutable object
+ */
 const set = (object, fieldPath, value) => {
     return _set(object || {}, _getPath(fieldPath), value);
 };
 
 /**
-  * @private
-  * Gets a property value. This method is null safe.
-  *
-  * @param object the object to that contains the value.
-  * @param fieldPath the field's path.
-  * @return the value
-  */
+ * @private
+ * Gets a property value. This method is null safe.
+ *
+ * @param object the object to that contains the value.
+ * @param fieldPath the field's path.
+ * @return the value
+ */
 const _get = (object, fieldPath) => {
     const path = _getPath(fieldPath);
     let pivot = object;
@@ -97,13 +97,13 @@ const _get = (object, fieldPath) => {
 };
 
 /**
-  * Gets a property value. This method is null safe.
-  *
-  * @param object the object to that contains the value.
-  * @param fieldPath the field's path.
-  * @param defaultValue the default value.
-  * @return the value
-  */
+ * Gets a property value. This method is null safe.
+ *
+ * @param object the object to that contains the value.
+ * @param fieldPath the field's path.
+ * @param defaultValue the default value.
+ * @return the value
+ */
 const get = (object, fieldPath, defaultValue) => {
     const value = _get(object, fieldPath);
     if (defaultValue === undefined) {
@@ -117,7 +117,7 @@ const _toArray = (collection) => {
         return [];
     }
     const list = Array.isArray(collection) ? collection : Object.values(collection);
-    return [ ...list ];
+    return [...list];
 };
 
 const _compare = (valueA, valueB) => {
@@ -139,26 +139,30 @@ const _compare = (valueA, valueB) => {
  * // => { 'left': { 'dir': 'left', 'code': 97 }, 'right': { 'dir': 'right', 'code': 100 } }
  */
 const keyBy = (collection, key) => {
-    return _toArray(collection).filter(isDefined).reduce((map, element) => {
-        // $FlowFixMe
-        if (element[key]) {
-            map[element[key]] = element;
-        }
-        return map;
-    }, {});
+    return _toArray(collection)
+        .filter(isDefined)
+        .reduce((map, element) => {
+            // $FlowFixMe
+            if (element[key]) {
+                map[element[key]] = element;
+            }
+            return map;
+        }, {});
 };
 
 const groupBy = (collection, iteratee) => {
-    return _toArray(collection).filter(isDefined).reduce((map, element) => {
-        // $FlowFixMe
-        const key = isFunction(iteratee) ? String(iteratee(element)) : String(get(element, iteratee));
-        if (map[key]) {
-            map[key].push(element);
-        } else {
-            map[key] = [element];
-        }
-        return map;
-    }, {});
+    return _toArray(collection)
+        .filter(isDefined)
+        .reduce((map, element) => {
+            // $FlowFixMe
+            const key = isFunction(iteratee) ? String(iteratee(element)) : String(get(element, iteratee));
+            if (map[key]) {
+                map[key].push(element);
+            } else {
+                map[key] = [element];
+            }
+            return map;
+        }, {});
 };
 
 const map = (collection, predicate) => {
@@ -179,12 +183,14 @@ const sortBy = (collection, iteratees, options) => {
         return list.sort((a, b) => _compare(iteratees(a), iteratees(b)));
     }
     if (typeof iteratees === 'string') {
-        return list.sort((a, b) => _compare(
-            // $FlowFixMe
-            opts.caseInsensitive ? (get(a, iteratees) || '').toLowerCase() : get(a, iteratees),
-            // $FlowFixMe
-            opts.caseInsensitive ? (get(b, iteratees) || '').toLowerCase() : get(b, iteratees)
-        ));
+        return list.sort((a, b) =>
+            _compare(
+                // $FlowFixMe
+                opts.caseInsensitive ? (get(a, iteratees) || '').toLowerCase() : get(a, iteratees),
+                // $FlowFixMe
+                opts.caseInsensitive ? (get(b, iteratees) || '').toLowerCase() : get(b, iteratees)
+            )
+        );
     }
     if (Array.isArray(iteratees)) {
         return list.sort((a, b) => {

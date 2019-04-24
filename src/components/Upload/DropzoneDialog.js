@@ -14,40 +14,31 @@ const DialogActionsStyled = styled(DialogActions)({
 });
 
 class DropzoneDialog extends PureComponent {
-
     onSave = () => {
         const { onSave, onClose, value } = this.props;
         if (onSave) {
             onSave(value);
             onClose();
         }
-    }
+    };
 
     render() {
         const { open, title, onClose, fullScreen, ...restProps } = this.props;
         return (
-            <Dialog
-                open={open}
-                onClose={onClose}
-                fullScreen={fullScreen}
-            >
+            <Dialog open={open} onClose={onClose} fullScreen={fullScreen}>
                 {title && <DialogTitle>{title}</DialogTitle>}
-                <Dropzone
-                    showPreviews={false}
-                    showPreviewsInDropzone={false}
-                    showAlerts={false}
-                    {...restProps}
-                />
+                <Dropzone showPreviews={false} showPreviewsInDropzone={false} showAlerts={false} {...restProps} />
                 <DialogActionsStyled>
-                    <Button onClick={onClose} variant="text" >
-                    Cancel
+                    <Button onClick={onClose} variant="text">
+                        Cancel
                     </Button>
-                    <Button onClick={this.onSave} variant="text" >
-                    Save
+                    <Button onClick={this.onSave} variant="text">
+                        Save
                     </Button>
                 </DialogActionsStyled>
             </Dialog>
-        );}
+        );
+    }
 }
 
 DropzoneDialog.defaultProps = {

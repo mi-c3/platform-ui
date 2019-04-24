@@ -6,7 +6,6 @@ import { TimePicker as TPMui, InlineTimePicker as ITPMui } from 'material-ui-pic
 
 // TODO: convert this component as class and implement the onChange as in the DatePicker component.
 const TimePicker = (props) => {
-
     /*
      * WARNING: We need to avoid passing the onClick function because it will break the Component.
      * TODO: open a bug in the material-ui-pickers project.
@@ -15,10 +14,7 @@ const TimePicker = (props) => {
     const { inline, onClick, children, ...muiTimePickerProps } = props;
     const Component = inline ? ITPMui : TPMui;
     return (
-        <Component
-            margin="normal"
-            {...muiTimePickerProps}
-        >
+        <Component margin="normal" {...muiTimePickerProps}>
             {children}
         </Component>
     );

@@ -4,24 +4,22 @@ import { DatePicker as DPMui, InlineDatePicker as IDPMui } from 'material-ui-pic
 
 import { createEvent } from 'utils/http/event';
 
-
 class DatePicker extends PureComponent {
-
     static propTypes = {
         ...DPMui.propTypes,
         inline: PropTypes.bool,
         onChange: PropTypes.func,
-    }
+    };
 
     static defaultProps = {
         animateYearScrolling: true,
         inline: false,
-    }
+    };
 
     onChange = (value) => {
         const { onChange } = this.props;
         onChange && onChange(createEvent('change', { target: { name, value } }));
-    }
+    };
 
     render() {
         /*

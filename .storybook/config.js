@@ -84,7 +84,7 @@ addParameters({
 });
 
 // automatically import all files ending in *.stories.js
-const req = require.context('../src/stories', true, /\.st\.js$/);
+const req = require.context('../src/storybook', true, /\.st\.js$/);
 function loadStories() {
   req.keys().forEach(filename => req(filename));
 }

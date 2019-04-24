@@ -7,14 +7,14 @@ import Location from 'components/Location/Location';
 import Button from 'components/Button';
 import { createEvent } from 'utils/http/event';
 import { get, set } from 'utils/lo/lo';
-import statefullInput from 'stories/utils/hoc/statefullInput';
+import statefullInput from 'storybook/utils/hoc/statefullInput';
 import Geocode from 'utils/maps/geocodeUtils';
 import GPA from 'components/Location/GooglePlaceAutocomplete';
 
 const GooglePlaceAutocomplete = statefullInput(GPA);
 
 const myCurrentLocationError = () =>
-    console.log({ severity: 'error', detail: 'Could not get your location, please allow location tracking in your browser' });  // eslint-disable-line no-console
+    console.log({ severity: 'error', detail: 'Could not get your location, please allow location tracking in your browser' }); // eslint-disable-line no-console
 /**
  * Renders a location form to allow a user to change address and location.
  */
@@ -31,7 +31,7 @@ class LocationForm extends PureComponent {
 
     static defaultProps = {
         addressOnlyFields: false,
-        value: {}
+        value: {},
     };
 
     geocoder = null;
@@ -88,19 +88,19 @@ class LocationForm extends PureComponent {
     };
 
     onGoogleApiLoaded = ({ maps, map }) => {
-        this.geocoder = new maps.Geocoder;
+        this.geocoder = new maps.Geocoder();
         this.service = new maps.places.AutocompleteService();
         this.props.onGoogleApiLoaded && this.props.onGoogleApiLoaded({ maps, map });
     };
 
-    onMapClick = (latitude, longitude) => this.myCurrentLocation({ coords: { latitude, longitude }});
+    onMapClick = (latitude, longitude) => this.myCurrentLocation({ coords: { latitude, longitude } });
 
     render() {
         const { value, disabled, withAutocomplete, LocationProps } = this.props;
         const latitude = get(value, 'latitude');
         const longitude = get(value, 'longitude');
         return (
-            <Grid direction="column" container >
+            <Grid direction="column" container>
                 {!disabled && withAutocomplete && (
                     <GooglePlaceAutocomplete
                         onChangeCoords={this.myCurrentLocation}
@@ -120,16 +120,16 @@ class LocationForm extends PureComponent {
                     disabled={disabled}
                     {...LocationProps}
                 />
-                <Grid container justify="space-between" >
-                    <Grid item >
+                <Grid container justify="space-between">
+                    <Grid item>
                         {latitude && <Typography variant="button">Latitude: {latitude}</Typography>}
                         {longitude && <Typography variant="button">Longitude: {longitude}</Typography>}
                     </Grid>
-                    <Grid item >
+                    <Grid item>
                         <Button onClick={this.centerMap} variant="text">
                             Center map
                         </Button>
-                        <Button disabled={disabled} onClick={this.myLocation}  variant="text">
+                        <Button disabled={disabled} onClick={this.myLocation} variant="text">
                             My location
                         </Button>
                     </Grid>

@@ -1,4 +1,3 @@
-
 import blueGrey from '@material-ui/core/colors/blueGrey';
 import { createMuiTheme } from '@material-ui/core/styles';
 
@@ -34,7 +33,7 @@ export const DarkTheme = createMuiTheme({
             ...colors.primary,
         },
         secondary: {
-            ...colors.primary
+            ...colors.primary,
         },
         background: {
             paper: colors.background,
@@ -70,19 +69,19 @@ export const DarkTheme = createMuiTheme({
         MuiFormLabel: {
             asterisk: {
                 color: colors.red,
-            }
+            },
         },
         MuiPaper: {
             root: {
                 maxHeight: '15rem',
-            }
+            },
         },
         MuiChip: {
             colorPrimary: {
                 color: colors.common.white,
                 background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2))',
                 backgroundColor: colors.darkBlue,
-            }
+            },
         },
         MuiMenuItem: {
             root: {
@@ -96,5 +95,5 @@ export const DarkTheme = createMuiTheme({
                 },
             },
         },
-    }
+    },
 });

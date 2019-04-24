@@ -8,7 +8,7 @@ import {
     styled,
     useTheme,
     withStyles,
-    withTheme
+    withTheme,
 } from '@material-ui/core/styles';
 
 import ReactDropzone from 'react-dropzone';
@@ -139,7 +139,6 @@ import LocationSwitch from 'components/Location/LocationSwitch';
 import PuiProvider from 'components/PuiProvider';
 
 export {
-
     // Platform MAterial UI
     Autocomplete,
     AutocompleteLazy,
@@ -158,20 +157,15 @@ export {
     LocationForm,
     LocationSwitch,
     PuiProvider,
-
     //3dd library
     MuiPickersUtilsProvider,
     DatePicker,
     TimePicker,
     ReactDropzone,
-
     // Styles
     DarkTheme,
-
-
     // Core colors
     colors,
-
     // Core Styles and themes
     createStyles,
     withStyles,

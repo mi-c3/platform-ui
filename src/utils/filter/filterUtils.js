@@ -7,11 +7,7 @@
  * @param options.property: the property of the object to match.
  * @param options.caseSensitive: indicates if the search must be case sensitive.
  */
-const filter = (
-    list,
-    query,
-    { type, property, caseSensitive }
-) => {
+const filter = (list, query, { type, property, caseSensitive }) => {
     if (!list) {
         return [];
     }
@@ -31,18 +27,8 @@ const filter = (
     });
 };
 
+const startsWith = (list, query, options) => filter(list, query, { ...options, type: 'startsWith' });
 
-const startsWith = (
-    list,
-    query,
-    options
-) => filter(list, query, { ...options, type: 'startsWith' });
-
-const includes = (
-    list,
-    query,
-    options
-) => filter(list, query, { ...options, type: 'includes' });
-
+const includes = (list, query, options) => filter(list, query, { ...options, type: 'includes' });
 
 export { includes, startsWith };
