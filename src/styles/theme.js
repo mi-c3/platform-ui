@@ -8,6 +8,7 @@ export const colors = {
         dark: '#4BB9D9',
         main: '#4BB9D9',
     },
+    secondary: blueGrey,
     common: {
         white: '#ffffff',
         black: '#000000',
@@ -32,7 +33,9 @@ export const DarkTheme = createMuiTheme({
         primary: {
             ...colors.primary,
         },
-        secondary: blueGrey,
+        secondary: {
+            ...colors.primary
+        },
         background: {
             paper: colors.background,
             default: colors.background,

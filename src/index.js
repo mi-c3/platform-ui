@@ -1,18 +1,15 @@
 import colors from '@material-ui/core/colors';
 
 import {
-    createGenerateClassName,
     createStyles,
-    jssPreset,
-    withStyles,
-    withTheme,
-    styled,
+    createMuiTheme,
+    MuiThemeProvider,
     makeStyles,
-    ThemeProvider,
-    install,
+    styled,
     useTheme,
-    StylesProvider,
-} from '@material-ui/styles';
+    withStyles,
+    withTheme
+} from '@material-ui/core/styles';
 
 import ReactDropzone from 'react-dropzone';
 
@@ -176,18 +173,14 @@ export {
     colors,
 
     // Core Styles and themes
-    createGenerateClassName,
     createStyles,
-    jssPreset,
     withStyles,
     withTheme,
     makeStyles,
-    ThemeProvider,
     styled,
-    install,
     useTheme,
-    StylesProvider,
-
+    MuiThemeProvider,
+    createMuiTheme,
     // Core Components
     AppBar,
     Avatar,

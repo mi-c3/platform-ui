@@ -1,5 +1,5 @@
 
-import { styled } from 'index';
+import { styled } from '@material-ui/styles';
 
 const H3 = styled('h3')({
     color : '#FFFFFF97',
