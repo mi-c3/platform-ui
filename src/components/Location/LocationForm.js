@@ -27,6 +27,7 @@ class LocationForm extends PureComponent {
         onGoogleApiLoaded: PropTypes.func,
         withAutocomplete: PropTypes.bool,
         LocationProps: PropTypes.shape(Location.propTypes),
+        GooglePlaceAutocompleteProps: PropTypes.object,
     };
 
     static defaultProps = {
@@ -96,7 +97,7 @@ class LocationForm extends PureComponent {
     onMapClick = (latitude, longitude) => this.myCurrentLocation({ coords: { latitude, longitude } });
 
     render() {
-        const { value, disabled, withAutocomplete, LocationProps } = this.props;
+        const { value, disabled, withAutocomplete, LocationProps, GooglePlaceAutocompleteProps } = this.props;
         const latitude = get(value, 'latitude');
         const longitude = get(value, 'longitude');
         return (
@@ -109,6 +110,7 @@ class LocationForm extends PureComponent {
                         geocoder={this.geocoder}
                         service={this.service}
                         fullWidth
+                        {...GooglePlaceAutocompleteProps}
                     />
                 )}
                 <Location
