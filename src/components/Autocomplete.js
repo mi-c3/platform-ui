@@ -32,9 +32,12 @@ const styles = () => ({
     },
 });
 
-const ChipStyled = styled(Chip)(({ theme }) => ({
-    margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
-}), { defaultTheme: DarkTheme });
+const ChipStyled = styled(Chip)(
+    ({ theme }) => ({
+        margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
+    }),
+    { defaultTheme: DarkTheme }
+);
 
 const ChipIconStyle = styled('div')({
     margin: '4px -4px 0 8px',
@@ -49,7 +52,6 @@ const AdormentOptionStyle = styled('div')({
 });
 
 class Autocomplete extends PureComponent {
-
     static propTypes = {
         classes: PropTypes.object,
         clearable: PropTypes.bool,
@@ -66,13 +68,13 @@ class Autocomplete extends PureComponent {
         valueField: PropTypes.string,
         valueId: PropTypes.string,
         VirtualListProps: PropTypes.object,
-    }
+    };
 
     static defaultProps = {
         clearable: true,
         options: [],
         InputProps: {},
-    }
+    };
 
     popperRef = React.createRef();
     inputRef = React.createRef();
@@ -100,12 +102,15 @@ class Autocomplete extends PureComponent {
             return suggest(event);
         }
         const query = get(event, 'target.value');
-        const opts = options.filter((opt) => this.optionTemplate(opt).label.toLowerCase().includes(query.toLowerCase()));
+        const opts = options.filter((opt) =>
+            this.optionTemplate(opt)
+                .label.toLowerCase()
+                .includes(query.toLowerCase())
+        );
         this.setState({ suggestions: this.filterValue(opts, value, valueId, valueField) });
     }, 300);
 
-
-    getOptionValue = (option) => this.props.valueField ? get(option, this.props.valueField) : option;
+    getOptionValue = (option) => (this.props.valueField ? get(option, this.props.valueField) : option);
 
     /**
      * Removes the selected option/s (value) from the options.
@@ -114,11 +119,11 @@ class Autocomplete extends PureComponent {
         if (!Array.isArray(options) || !options.length || !options) {
             return options || [];
         }
-        const getValue = (option) => valueField ? get(option, valueField) : option;
+        const getValue = (option) => (valueField ? get(option, valueField) : option);
         if (Array.isArray(value)) {
             let values = value;
             if (valueId) {
-                values = new Set(values.map(v => get(v, valueId)));
+                values = new Set(values.map((v) => get(v, valueId)));
                 return options.filter((opt) => !values.has(get(getValue(opt), valueId)));
             }
             return options.filter((opt) => !values.some((val) => equals(getValue(opt), val)));
@@ -131,24 +136,24 @@ class Autocomplete extends PureComponent {
     onChange = (option) => {
         const { onChange, name, value: currentValue, multiple, valueField } = this.props;
         const optionValue = valueField ? get(option, valueField) : option;
-        const value = !multiple ? optionValue : [ ...(arrayfy(currentValue) || []), optionValue ];
+        const value = !multiple ? optionValue : [...(arrayfy(currentValue) || []), optionValue];
         this.setState({ query: '' }, () => onChange && onChange(createEvent('change', { target: { name, value } })));
     };
 
     onSearching = (event) => {
-        if(event.persist) {
+        if (event.persist) {
             event.persist();
         }
         const query = get(event, 'target.value');
-        this.setState({ query, openSuggestions : true }, () => this.suggest(event));
+        this.setState({ query, openSuggestions: true }, () => this.suggest(event));
     };
 
     onFocus = (/* event */) => {
         const { query } = this.state;
-        this.onSearching(createEvent('focus', { target: { name, value: query }}));
-    }
+        this.onSearching(createEvent('focus', { target: { name, value: query } }));
+    };
 
-    onBlur = (/* event */) => this.setState({ query: '' })
+    onBlur = () => /* event */ this.setState({ query: '' });
 
     /**
      * Returns the option template of the specified option.
@@ -159,14 +164,14 @@ class Autocomplete extends PureComponent {
             return { label: '', startAdornment: null };
         }
         return optionTemplate ? optionTemplate(option) : { label: option.label, startAdornment: null };
-    }
+    };
 
     /**
      * Closes the suggestion popper.
      */
     closeSuggestions = () => {
         this.setState({ openSuggestions: false });
-    }
+    };
 
     /**
      * Clear the input (used only when multiple is false).
@@ -181,7 +186,7 @@ class Autocomplete extends PureComponent {
         const valueToRemove = this.getOptionValue(option);
         const vals = value.filter((v) => v !== valueToRemove);
         this.setState({ query: '' }, () => onChange && onChange(createEvent('change', { target: { name, value: vals } })));
-    }
+    };
 
     /**
      * Builds the suggestion popper.
@@ -190,42 +195,56 @@ class Autocomplete extends PureComponent {
         const maxPopperHeight = 224;
         const maxSuggetionsHeight = suggestions.length * (get(VirtualListProps, 'itemSize', 25) + 4);
         const popperHeight = Math.min(maxSuggetionsHeight, get(VirtualListProps, 'height', maxPopperHeight));
-        if(popperHeight < maxPopperHeight) {
+        if (popperHeight < maxPopperHeight) {
             this.popperRef.current && this.popperRef.current.popper && this.popperRef.current.popper.update();
         }
-        return suggestions && suggestions.length > 0 && (
-            <Popper ref={this.popperRef} style={{ zIndex: 1 }} open={openSuggestions} anchorEl={get(this.inputRef, 'current.parentNode.parentNode')} transition>
-                {({ TransitionProps, placement }) => (
-                    <Grow
-                        {...TransitionProps}
-                        id="menu-list-grow"
-                        style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                    >
-                        <Paper square style={{ width: get(this.inputRef, 'current.parentNode.clientWidth') }}>
-                            <VirtualList
-                                width='100%'
-                                height={popperHeight}
-                                itemCount={suggestions.length}
-                                renderItem={({index, style}) => {
-                                    const op = suggestions[index];
-                                    const { startAdornment, label } = this.optionTemplate(op);
-                                    return (
-                                        <div key={index} style={style}>
-                                            <MenuItem onClick={this.buildOnChange(op)} value={op} style={{ height: '10px', fontWeight: 500 }} component="div">
-                                                {startAdornment && <AdormentOptionStyle>{startAdornment}</AdormentOptionStyle>} {label}
-                                            </MenuItem>
-                                        </div>
-                                    );
-                                }}
-                                {...(VirtualListProps || {})}
-                                itemSize={get(VirtualListProps, 'itemSize', 25)}
-                            />
-                        </Paper>
-                    </Grow>
-                )}
-            </Popper>
+        return (
+            suggestions &&
+            suggestions.length > 0 && (
+                <Popper
+                    ref={this.popperRef}
+                    style={{ zIndex: 1 }}
+                    open={openSuggestions}
+                    anchorEl={get(this.inputRef, 'current.parentNode.parentNode')}
+                    transition
+                >
+                    {({ TransitionProps, placement }) => (
+                        <Grow
+                            {...TransitionProps}
+                            id="menu-list-grow"
+                            style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+                        >
+                            <Paper square style={{ width: get(this.inputRef, 'current.parentNode.clientWidth') }}>
+                                <VirtualList
+                                    width="100%"
+                                    height={popperHeight}
+                                    itemCount={suggestions.length}
+                                    renderItem={({ index, style }) => {
+                                        const op = suggestions[index];
+                                        const { startAdornment, label } = this.optionTemplate(op);
+                                        return (
+                                            <div key={index} style={style}>
+                                                <MenuItem
+                                                    onClick={this.buildOnChange(op)}
+                                                    value={op}
+                                                    style={{ height: '10px', fontWeight: 500 }}
+                                                    component="div"
+                                                >
+                                                    {startAdornment && <AdormentOptionStyle>{startAdornment}</AdormentOptionStyle>} {label}
+                                                </MenuItem>
+                                            </div>
+                                        );
+                                    }}
+                                    {...VirtualListProps || {}}
+                                    itemSize={get(VirtualListProps, 'itemSize', 25)}
+                                />
+                            </Paper>
+                        </Grow>
+                    )}
+                </Popper>
+            )
         );
-    }, shallowEquals)
+    }, shallowEquals);
 
     /**
      * Builds the input component.
@@ -257,11 +276,11 @@ class Autocomplete extends PureComponent {
                     />
                 );
             });
-            InputProperties.classes = { root: classes.inputRoot, input: classes.inputInput, };
+            InputProperties.classes = { root: classes.inputRoot, input: classes.inputInput };
         } else {
             InputProperties.startAdornment = startAdornment && <AdormentStyle>{startAdornment}</AdormentStyle>;
             InputProperties.endAdornment = selected && clearable && !disabled && (
-                <IconButton aria-label="Clear input" onClick={this.clearInput} >
+                <IconButton aria-label="Clear input" onClick={this.clearInput}>
                     <Cancel />
                 </IconButton>
             );
@@ -278,9 +297,9 @@ class Autocomplete extends PureComponent {
         }
         if (Array.isArray(value)) {
             const values = new Set(value);
-            return options.filter(option => values.has(get(option, valueField)));
+            return options.filter((option) => values.has(get(option, valueField)));
         }
-        return options.find(option => value === get(option, valueField));
+        return options.find((option) => value === get(option, valueField));
     });
 
     render() {
@@ -302,7 +321,16 @@ class Autocomplete extends PureComponent {
         } = this.props;
         const { suggestions, openSuggestions, query } = this.state;
         const selected = this.getSelectedOptions(value, valueField, options);
-        const InputProperties = this.buildInputProps({ selected, clearable, disabled, multiple, query, InputProps, classes, openSuggestions });
+        const InputProperties = this.buildInputProps({
+            selected,
+            clearable,
+            disabled,
+            multiple,
+            query,
+            InputProps,
+            classes,
+            openSuggestions,
+        });
         return (
             <ClickAwayListener onClickAway={this.closeSuggestions}>
                 <div>

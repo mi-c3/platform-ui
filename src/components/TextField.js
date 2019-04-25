@@ -9,7 +9,6 @@ import { createEvent } from 'utils/http/event';
 const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};
 
 class TextField extends PureComponent {
-
     static propTypes = {
         ...MuiTextField.propTypes,
         InputProps: PropTypes.shape(inputPropsSubSet),
@@ -19,22 +18,19 @@ class TextField extends PureComponent {
         variant: 'filled',
         margin: 'normal',
         fullWidth: true,
-    }
-
-    endAdornment: Object = (
-        <IconButton
-            aria-label="Clear input"
-            onClick={this.onClear}
-        >
-            <Cancel />
-        </IconButton>
-    )
+    };
 
     onClear = () => {
         const { onChange, name, type } = this.props;
-        const event = createEvent('change', { target: { name, type, value: null, }});
+        const event = createEvent('change', { target: { name, type, value: null } });
         onChange && onChange(event);
-    }
+    };
+
+    endAdornment = (
+        <IconButton aria-label="Clear input" onClick={this.onClear}>
+            <Cancel />
+        </IconButton>
+    );
 
     render() {
         const { disabled, value, InputProps, ...restProps } = this.props;

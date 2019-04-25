@@ -6,13 +6,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 /*
  * TODO: do we need to normalize onChange? check and implement if necessary.
  */
-const Checkbox = ({ labelPlacement, label, ...restProps }) => (
-    <FormControlLabel
-        {...restProps}
-        control={<MuiCheckbox />}
-        labelPlacement={labelPlacement || 'end'}
-        label={label}
-    />
+const Checkbox = ({ labelPlacement, label, CheckboxProps, ...restProps }) => (
+    <FormControlLabel {...restProps} control={<MuiCheckbox {...CheckboxProps} />} labelPlacement={labelPlacement || 'end'} label={label} />
 );
 
 Checkbox.propTypes = {

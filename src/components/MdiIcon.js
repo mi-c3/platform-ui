@@ -9,7 +9,7 @@ const MdiIcon = ({ size, name, className, ...restProps }) => (
         className={`${className || ''} mdi mdi-${name}`}
         style={{
             ...(restProps.style || {}),
-            fontSize: size
+            fontSize: size,
         }}
     />
 );

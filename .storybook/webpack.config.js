@@ -11,6 +11,11 @@ const storybookConfiguration = ({ config: defaultConfig, mode }) => {
   // config.resolve.modules = ['node_modules', 'src'];
   // config.resolve.extensions.push('.css');
   config.resolve.alias = { '~@mdi/font/css/materialdesignicons.css': path.join(__dirname, '../node_modules/@mdi/font/css/materialdesignicons.css') };
+  config.module.rules.push({
+    test: /\.st\.js?$/,
+    loaders: [require.resolve('@storybook/addon-storysource/loader')],
+    enforce: 'pre',
+  });
 
   if (process.env.BUILD_UI_MODULE) {
       console.log('[Affectli] BUILD_UI_MODULE...');
@@ -25,7 +30,6 @@ const storybookConfiguration = ({ config: defaultConfig, mode }) => {
       config.resolve.modules = [__dirname + '/src', 'node_modules'];
 
       config.optimization = {};
-      console.log('$$$ [config]', config);
       // delete config.module.loaders[0].exclude;
       // removed chunks options
       // config.plugins.splice(0, 1);
