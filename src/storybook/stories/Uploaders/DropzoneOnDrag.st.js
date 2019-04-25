@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 import { Dropzone, Typography } from 'index';
 import H3 from 'storybook/components/atoms/H3';
 
-storiesOf('Components.Uploaders', module)
+storiesOf('Components|Uploaders', module)
     .addDecorator(withKnobs)
     .add('Dropzone:onDrag', () => {
         const dropzoneTextHover = text('Hover text', 'YES HERE...', 'Default');

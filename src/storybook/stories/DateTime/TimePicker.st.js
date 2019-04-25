@@ -8,7 +8,7 @@ import stateForDateTime from 'storybook/utils/hoc/stateForDateTime';
 
 const TimePickerFull = stateForDateTime(TimePicker);
 
-storiesOf('Components.DateTimePickers', module)
+storiesOf('Components|DateTimePickers', module)
     .addDecorator(withKnobs)
     .add('TimePicker', () => {
         const disabled = boolean('Disabled', false, 'Default');

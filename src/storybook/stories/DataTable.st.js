@@ -20,7 +20,7 @@ const gridSettings = {
 };
 const SelectionModes = { None: null, Single: 'single', Multiple: 'multiple' };
 
-storiesOf('Components.Tables', module)
+storiesOf('Components|Tables', module)
     .addDecorator(withKnobs)
     .add('DataTable', () => (
         <Fragment>

@@ -6,7 +6,7 @@ import { Typography } from 'index';
 import H3 from 'storybook/components/atoms/H3';
 import { forTypography } from 'storybook/constants/propsVariation';
 
-storiesOf('Components', module)
+storiesOf('Components|Typography', module)
     .addDecorator(withKnobs)
     .add('Typography', () => {
         const variant = select('Variant', forTypography.variant, 'caption', 'Default');

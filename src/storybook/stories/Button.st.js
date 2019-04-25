@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 import { Button } from 'index';
 import { forButton } from 'storybook/constants/propsVariation';
 
-storiesOf('Components', module)
+storiesOf('Components|Button', module)
     .addDecorator(withKnobs)
     .add('Button', () => {
         const disabled = boolean('Disabled', false, 'Default');

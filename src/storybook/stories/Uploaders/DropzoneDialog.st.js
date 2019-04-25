@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 import H3 from 'storybook/components/atoms/H3';
 import DropzoneDialogWrapper from 'storybook/components/DropzoneDialogWrapper';
 
-storiesOf('Components.Uploaders', module)
+storiesOf('Components|Uploaders', module)
     .addDecorator(withKnobs)
     .add('DropzoneDialog', () => {
         const title = text('Modal title', 'Upload File', 'Default');

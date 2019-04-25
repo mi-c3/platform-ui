@@ -10,7 +10,7 @@ import H3 from 'storybook/components/atoms/H3';
 
 const Autocomplete = statefullInput(AUCO);
 
-storiesOf('Components.Autocomplete', module)
+storiesOf('Components|Autocomplete', module)
     .addDecorator(withKnobs)
     .add('Dropdown', () => {
         const label = text('Label', 'Countries', 'Default');

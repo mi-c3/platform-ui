@@ -11,7 +11,7 @@ import H3 from 'storybook/components/atoms/H3';
 const MdiSelectIconFull = statefullInput(MdiSelectIcon);
 const MdiSelectLetterFull = statefullInput(MdiSelectLetter);
 
-storiesOf('Components.Autocomplete', module)
+storiesOf('Components|Autocomplete', module)
     .addDecorator(withKnobs)
     .add('MdiIconSelect', () => {
         const iconChipType = select('Icon chip type', forIconSelect.chipType, 'icon', 'Default');

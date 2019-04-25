@@ -9,7 +9,7 @@ import statefullInput from 'storybook/utils/hoc/statefullInput';
 
 const LocationSwitchFull = statefullInput(LocationSwitch);
 
-storiesOf('Components.Location', module)
+storiesOf('Components|Location', module)
     .addDecorator(withKnobs)
     .add('LocationSwitch', () => {
         const label = text('Label', 'Geotaging', 'Default');

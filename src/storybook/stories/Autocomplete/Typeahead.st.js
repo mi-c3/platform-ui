@@ -12,7 +12,7 @@ import H3 from 'storybook/components/atoms/H3';
 
 const AutocompleteLazy = statefullInput(AL);
 
-storiesOf('Components.Autocomplete', module)
+storiesOf('Components|Autocomplete', module)
     .addDecorator(withKnobs)
     .add('Typeahead', () => {
         const disabled = boolean('Disabled', false, 'Default');

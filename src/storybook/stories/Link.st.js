@@ -5,7 +5,7 @@ import { withKnobs, text } from '@storybook/addon-knobs';
 import H3 from 'storybook/components/atoms/H3';
 import { Link, Typography } from 'index';
 
-storiesOf('Components', module)
+storiesOf('Components|Link', module)
     .addDecorator(withKnobs)
     .add('Link', () => {
         const href = text('Href', '#', 'Default');

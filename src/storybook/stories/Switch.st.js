@@ -8,7 +8,7 @@ import { forRadio } from 'storybook/constants/propsVariation';
 
 const Switch = statefullInput(S);
 
-storiesOf('Components', module)
+storiesOf('Components|Switch', module)
     .addDecorator(withKnobs)
     .add('Switch', ({ value, onChange }) => {
         const label = text('Custom', 'Custom', 'Default');

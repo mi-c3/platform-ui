@@ -8,7 +8,7 @@ import statefullInput from 'storybook/utils/hoc/statefullInput';
 
 const InlineDateTimePickerSTFull = statefullInput(DateTimePicker);
 
-storiesOf('Components.DateTimePickers', module)
+storiesOf('Components|DateTimePickers', module)
     .addDecorator(withKnobs)
     .add('DateTimePicker Inline', () => {
         const label = text('Label', 'Inline', 'Default');

@@ -5,7 +5,7 @@ import { withKnobs, text } from '@storybook/addon-knobs';
 import H3 from 'storybook/components/atoms/H3';
 import { Typography, Grid, Button, Tooltip } from 'index';
 
-storiesOf('Components', module)
+storiesOf('Components|Tooltip', module)
     .addDecorator(withKnobs)
     .add('Tooltip', () => {
         const title = text('Title', 'Add any text in `KNOBS` tab');

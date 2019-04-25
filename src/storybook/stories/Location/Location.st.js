@@ -9,7 +9,7 @@ import statefullInput from 'storybook/utils/hoc/statefullInput';
 
 const LocationFormFull = statefullInput(LocationForm);
 
-storiesOf('Components.Location', module)
+storiesOf('Components|Location', module)
     .addDecorator(withKnobs)
     .add('LocationForm', () => {
         const name = text('Name', 'location', 'Default');

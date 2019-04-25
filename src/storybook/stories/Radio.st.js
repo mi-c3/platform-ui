@@ -9,7 +9,7 @@ import { forRadio } from 'storybook/constants/propsVariation';
 
 const RadioGroup = statefullInput(RadioGroupLess);
 
-storiesOf('Components', module)
+storiesOf('Components|Radio', module)
     .addDecorator(withKnobs)
     .add('Radio', (props) => {
         const label = text('Custom', 'Custom', 'Default');

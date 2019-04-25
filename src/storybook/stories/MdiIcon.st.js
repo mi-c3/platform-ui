@@ -5,7 +5,7 @@ import { withKnobs, text, number, select } from '@storybook/addon-knobs';
 import { MdiIcon, Typography } from 'index';
 import { forIcon } from 'storybook/constants/propsVariation';
 
-storiesOf('Components', module)
+storiesOf('Components|MdiIcon', module)
     .addDecorator(withKnobs)
     .add('MdiIcon', () => {
         const prefix = text('Prefix', '', 'Default');
