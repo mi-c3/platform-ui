@@ -3,12 +3,8 @@ import PropTypes from 'prop-types';
 import MuiRadio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-const Radio = ({ labelPlacement, color, ...restProps }) => (
-    <FormControlLabel
-        {...restProps}
-        control={<MuiRadio color={color} />}
-        labelPlacement={labelPlacement || 'end'}
-    />
+const Radio = ({ labelPlacement, color, RadioProps, ...restProps }) => (
+    <FormControlLabel {...restProps} control={<MuiRadio color={color} {...RadioProps} />} labelPlacement={labelPlacement || 'end'} />
 );
 
 Radio.propTypes = {

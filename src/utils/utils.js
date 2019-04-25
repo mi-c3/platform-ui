@@ -1,4 +1,3 @@
-
 import { get } from 'utils/lo/lo';
 
 const isObject = (value) => value && typeof value === 'object' && !Array.isArray(value);
@@ -39,13 +38,7 @@ const arrayfy = (value) => {
     if (!isDefined(value)) {
         return null;
     }
-    return Array.isArray(value) ? value : [ value ];
+    return Array.isArray(value) ? value : [value];
 };
 
-export {
-    isObject,
-    shallowEquals,
-    debounce,
-    arrayfy,
-    isDefined,
-};
+export { isObject, shallowEquals, debounce, arrayfy, isDefined };

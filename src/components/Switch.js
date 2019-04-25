@@ -6,7 +6,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { createEvent } from 'utils/http/event';
 
 class Switch extends PureComponent {
-
     static propTypes = {
         ...MuiSwitch.propTypes,
         label: PropTypes.string,
@@ -16,20 +15,24 @@ class Switch extends PureComponent {
     onChange = (event) => {
         const { name, onChange } = this.props;
         const { checked } = event.target;
-        onChange && onChange(createEvent('change', {
-            target: { name, checked, value: checked },
-            originalEvent: event,
-        }), event);
-    }
+        onChange &&
+            onChange(
+                createEvent('change', {
+                    target: { name, checked, value: checked },
+                    originalEvent: event,
+                }),
+                event
+            );
+    };
 
     render() {
-        const { labelPlacement, color, value,  ...restProps } = this.props;
+        const { SwitchProps, labelPlacement, color, value, ...restProps } = this.props;
         return (
             <FormControlLabel
                 {...restProps}
                 checked={value || false}
                 onChange={this.onChange}
-                control={<MuiSwitch color={color} />}
+                control={<MuiSwitch color={color} {...SwitchProps} />}
                 labelPlacement={labelPlacement || 'end'}
             />
         );

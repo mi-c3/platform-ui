@@ -68,13 +68,7 @@ const DropzoneSnackBar = (props) => {
                     </span>
                 }
                 action={[
-                    <IconButton
-                        key="close"
-                        aria-label="Close"
-                        color="inherit"
-                        className={classes.close}
-                        onClick={onClose}
-                    >
+                    <IconButton key="close" aria-label="Close" color="inherit" className={classes.close} onClick={onClose}>
                         <CloseIcon className={classes.icon} />
                     </IconButton>,
                 ]}

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import memoize from 'memoize-one';
 import ReactDropzone from 'react-dropzone';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
@@ -38,7 +38,7 @@ const styles = ({ palette }) => ({
     dropZoneActive: {
         backgroundColor: '#50575b90',
     },
-    dropzoneTypography:{
+    dropzoneTypography: {
         fontSize: '1.4rem',
         color: 'white',
     },
@@ -59,18 +59,17 @@ const styles = ({ palette }) => ({
         zIndex: 99,
     },
     bounce: {
-        'animation': 'bounce 2s infinite ease-in-out',
+        animation: 'bounce 2s infinite ease-in-out',
     },
     '@keyframes bounce': {
         '60%': {
             transform: 'translate(0px, 20px)',
             opacity: 0.8,
-        }
-    }
+        },
+    },
 });
 
 class Dropzone extends Component {
-
     static defaultProps = {
         accept: 'image/*,video/*,application/*',
         imageOptions: {},
@@ -107,7 +106,7 @@ class Dropzone extends Component {
         fileSizeLimit: PropTypes.number,
         classes: PropTypes.object,
         multiple: PropTypes.bool,
-        children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
+        children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
     };
 
     constructor(props) {
@@ -116,7 +115,7 @@ class Dropzone extends Component {
             files: props.value || [],
             openSnackbar: false,
             snackbarMessage: '',
-            snackbarVariant: 'success'
+            snackbarVariant: 'success',
         };
     }
 
@@ -128,21 +127,22 @@ class Dropzone extends Component {
         }
     }
 
-    componentWillUnmount(){
-        if(this.props.clearOnUnmount){
+    componentWillUnmount() {
+        if (this.props.clearOnUnmount) {
             this.setState({
-                files: []
+                files: [],
             });
         }
     }
 
     onChange = async (files) => {
-        const { onChange, imageOptions: { maxWidth, maxHeigth, quality } } = this.props;
+        const {
+            onChange,
+            imageOptions: { maxWidth, maxHeigth, quality },
+        } = this.props;
 
         const postProcessFiles = files.map((file) =>
-            isImageType(file.type)
-                ? resizeImage({ image: file, width: maxWidth, height: maxHeigth, quality })
-                : Promise.resolve(file)
+            isImageType(file.type) ? resizeImage({ image: file, width: maxWidth, height: maxHeigth, quality }) : Promise.resolve(file)
         );
 
         const value = [];
@@ -153,7 +153,7 @@ class Dropzone extends Component {
             })
         );
         onChange && onChange({ value, originalFiles: files });
-    }
+    };
 
     handleDropAccepted = async (files) => {
         if (this.props.showPreviews) {
@@ -161,7 +161,7 @@ class Dropzone extends Component {
                 return this.setState({
                     openSnackbar: true,
                     snackbarMessage: `Maximum allowed number of files exceeded. Only ${this.props.filesLimit} allowed`,
-                    snackbarVariant: 'error'
+                    snackbarVariant: 'error',
                 });
             }
 
@@ -171,17 +171,18 @@ class Dropzone extends Component {
                 files.forEach((file) => {
                     message += `File ${file.name} successfully added.`;
                 });
-                this.props.showAlerts && this.setState({
-                    openSnackbar: true,
-                    snackbarMessage: message,
-                    snackbarVariant: 'success'
-                });
+                this.props.showAlerts &&
+                    this.setState({
+                        openSnackbar: true,
+                        snackbarMessage: message,
+                        snackbarVariant: 'success',
+                    });
             });
         } else {
             this.onChange(files);
         }
         this.props.onDropAccepted && this.props.onDropAccepted(files);
-    }
+    };
 
     handleRemove = (index) => (event) => {
         event.stopPropagation();
@@ -190,13 +191,14 @@ class Dropzone extends Component {
         files.splice(index, 1);
         this.setState({ files }, () => {
             this.onChange(files);
-            this.props.showAlerts && this.setState({
-                openSnackbar: true,
-                snackbarMessage: ('File ' + fileName + ' removed'),
-                snackbarVariant: 'info'
-            });
+            this.props.showAlerts &&
+                this.setState({
+                    openSnackbar: true,
+                    snackbarMessage: 'File ' + fileName + ' removed',
+                    snackbarVariant: 'info',
+                });
         });
-    }
+    };
 
     handleDropRejected = (rejectedFiles, evt) => {
         let message = '';
@@ -212,55 +214,89 @@ class Dropzone extends Component {
         if (this.props.onDropRejected) {
             this.props.onDropRejected(rejectedFiles, evt);
         }
-        this.props.showAlerts && this.setState({
-            openSnackbar: true,
-            snackbarMessage: message,
-            snackbarVariant: 'error'
+        this.props.showAlerts &&
+            this.setState({
+                openSnackbar: true,
+                snackbarMessage: message,
+                snackbarVariant: 'error',
+            });
+    };
+
+    onCloseSnackbar = () =>
+        this.setState({
+            openSnackbar: false,
         });
-    }
 
-    onCloseSnackbar = () => this.setState({
-        openSnackbar: false,
-    });
+    buildFilesList = memoize(({ files }) =>
+        files.map((file, index) => (
+            <ListItem key={index}>
+                {isImageType(files[index].type) ? (
+                    <Avatar src={URL.createObjectURL(file)} />
+                ) : (
+                    <Avatar>
+                        <AttachFileIcon />
+                    </Avatar>
+                )}
+                <ListItemText primary={files[index].name} secondary={files[index].type} />
+                <ListItemSecondaryAction>
+                    <IconButton onClick={this.handleRemove(index)} aria-label="Delete">
+                        <CancelIcon />
+                    </IconButton>
+                </ListItemSecondaryAction>
+            </ListItem>
+        ))
+    );
 
-    buildFilesList =  memoize(({ files }) => files.map((file, index) => (
-        <ListItem key={index}>
-            {isImageType(files[index].type) ?
-                <Avatar src={URL.createObjectURL(file)} />
-                : (<Avatar><AttachFileIcon /></Avatar>)
-            }
-            <ListItemText primary={files[index].name} secondary={files[index].type} />
-            <ListItemSecondaryAction>
-                <IconButton onClick={this.handleRemove(index)} aria-label="Delete">
-                    <CancelIcon />
-                </IconButton>
-            </ListItemSecondaryAction>
-        </ListItem>
-    )))
+    buildFilesList = memoize(({ files }) =>
+        files.map((file, index) => (
+            <ListItem key={index}>
+                {isImageType(files[index].type) ? (
+                    <Avatar src={URL.createObjectURL(file)} />
+                ) : (
+                    <Avatar>
+                        <AttachFileIcon />
+                    </Avatar>
+                )}
+                <ListItemText primary={files[index].name} secondary={files[index].type} />
+                <ListItemSecondaryAction>
+                    <IconButton onClick={this.handleRemove(index)} aria-label="Delete">
+                        <CancelIcon />
+                    </IconButton>
+                </ListItemSecondaryAction>
+            </ListItem>
+        ))
+    );
 
-    render(){
-        const { classes, capture, showPreviews, dropzoneText, dropzoneTextHover, multiple, children, dropZoneClasses, onClick, ...restProps } = this.props; // eslint-disable-line max-len
+    render() {
+        const {
+            classes,
+            capture,
+            showPreviews,
+            dropzoneText,
+            dropzoneTextHover,
+            multiple,
+            children,
+            dropZoneClasses,
+            onClick,
+            ...restProps
+        } = this.props; // eslint-disable-line max-len
         const { files } = this.state;
         return (
             <Fragment>
-                <ReactDropzone
-                    {...restProps}
-                    onDropAccepted={this.handleDropAccepted}
-                    onDropRejected={this.handleDropRejected}
-                >
-                    {({getRootProps, getInputProps, isDragActive}) => {
+                <ReactDropzone {...restProps} onDropAccepted={this.handleDropAccepted} onDropRejected={this.handleDropRejected}>
+                    {({ getRootProps, getInputProps, isDragActive }) => {
                         return !children ? (
                             <div
                                 {...getRootProps()}
                                 className={`${classes.dropZone} ${isDragActive && classes.dropZoneActive} ${dropZoneClasses}`}
                             >
                                 <input {...getInputProps()} capture={capture} multiple={multiple} />
-                                <CloudUploadIcon className={classes.dropzoneIcon}/>
-                                {
-                                    isDragActive ?
-                                        <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography> :
-                                        <Typography className={classes.dropzoneTypography}>{dropzoneText}</Typography>
-                                }
+                                <CloudUploadIcon className={classes.dropzoneIcon} />
+                                {isDragActive ? (
+                                    <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
+                                ) : (
+                                    <Typography className={classes.dropzoneTypography}>{dropzoneText}</Typography>
+                                )}
                             </div>
                         ) : (
                             <div
@@ -269,25 +305,22 @@ class Dropzone extends Component {
                                 })}
                                 className={`${classes.relative} ${dropZoneClasses || ''} ${isDragActive && classes.dropZoneActive}`}
                             >
-                                { isDragActive && (
+                                {isDragActive && (
                                     <div className={classes.dropzoneBounceIcon}>
-                                        <div className={`${classes.bounce}`}><MdiIcon color="secondary" name="arrow-down-thick" size={80} /></div>
+                                        <div className={`${classes.bounce}`}>
+                                            <MdiIcon color="secondary" name="arrow-down-thick" size={80} />
+                                        </div>
                                         <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
                                     </div>
                                 )}
                                 <input {...getInputProps()} capture={capture} multiple={multiple} />
                                 {children}
                             </div>
-
                         );
                     }}
                 </ReactDropzone>
-                {showPreviews && (
-                    <List>
-                        {this.buildFilesList({ files })}
-                    </List>
-                )}
-                {this.props.showAlerts &&
+                {showPreviews && <List>{this.buildFilesList({ files })}</List>}
+                {this.props.showAlerts && (
                     <DropzoneSnackBar
                         open={this.state.openSnackbar}
                         autoHideDuration={6000}
@@ -295,7 +328,7 @@ class Dropzone extends Component {
                         variant={this.state.snackbarVariant}
                         message={this.state.snackbarMessage}
                     />
-                }
+                )}
             </Fragment>
         );
     }

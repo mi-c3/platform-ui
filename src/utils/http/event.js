@@ -12,6 +12,4 @@ const createEvent = (type, body) => {
     return event;
 };
 
-
-
 export { createEvent };

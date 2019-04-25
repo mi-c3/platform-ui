@@ -29,7 +29,6 @@ const styles = (theme) => ({
 });
 
 class DataTable extends React.Component {
-
     static propTypes = {
         title: PropTypes.string,
         columnDefinitions: PropTypes.array.isRequired,
@@ -38,11 +37,11 @@ class DataTable extends React.Component {
         dataKey: PropTypes.string,
         selectionMode: PropTypes.string,
         onSelectionChange: PropTypes.func,
-    }
+    };
 
     static defaultProps = {
         onSelectionChange: () => {},
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -62,34 +61,34 @@ class DataTable extends React.Component {
         const { orderBy, order } = this.state;
         this.setState({
             order: orderBy === field && order === 'desc' ? 'asc' : 'desc',
-            orderBy: field
+            orderBy: field,
         });
     };
 
     handleSelectAllClick = (event) => {
         const { data } = this.props;
-        this.setState({ selected: event.target.checked ? data.map(n => n.id) : [] });
+        this.setState({ selected: event.target.checked ? data.map((n) => n.id) : [] });
     };
 
     select = (id) => () => {
         const { selectionMode } = this.props;
-        if(!selectionMode) {
+        if (!selectionMode) {
             return;
         }
 
         let selected = [...this.state.selected];
         const selectedIndex = selected.indexOf(id);
 
-        switch(selectionMode) {
+        switch (selectionMode) {
             case 'multiple':
                 if (selectedIndex === -1) {
-                    selected = [ ...selected, id ];
+                    selected = [...selected, id];
                 } else {
                     selected.splice(selectedIndex, 1);
                 }
                 break;
             case 'single':
-                selected = selectedIndex === -1 ? [ id ] : [];
+                selected = selectedIndex === -1 ? [id] : [];
                 break;
             default:
         }
@@ -108,26 +107,19 @@ class DataTable extends React.Component {
             .map((row) => {
                 const isSelected = this.isSelected(row[dataKey]);
                 return (
-                    <TableRow
-                        hover
-                        onClick={this.select(row[dataKey])}
-                        tabIndex={-1}
-                        key={row[dataKey]}
-                        selected={isSelected}
-                    >
+                    <TableRow hover onClick={this.select(row[dataKey])} tabIndex={-1} key={row[dataKey]} selected={isSelected}>
                         {columnDefinitions.map(({ field, renderValue }, index) => (
-                            <TableCell key={index}>
-                                {renderValue ? renderValue({ value: row[field] }) : row[field]}
-                            </TableCell>
+                            <TableCell key={index}>{renderValue ? renderValue({ value: row[field] }) : row[field]}</TableCell>
                         ))}
                     </TableRow>
                 );
-            }))
+            })
+    );
 
     render() {
         const { classes, columnDefinitions, dataKey, data, title, selectionMode } = this.props;
         const { order, orderBy, selected, pageSize, page } = this.state;
-        const emptyRows = pageSize - Math.min(pageSize, data.length - (page * pageSize));
+        const emptyRows = pageSize - Math.min(pageSize, data.length - page * pageSize);
         return (
             <Paper className={classes.root}>
                 <DataTableToolbar
@@ -160,8 +152,8 @@ class DataTable extends React.Component {
                     component="div"
                     count={data.length}
                     page={page}
-                    backIconButtonProps={{ 'aria-label': 'Previous Page', }}
-                    nextIconButtonProps={{ 'aria-label': 'Next Page', }}
+                    backIconButtonProps={{ 'aria-label': 'Previous Page' }}
+                    nextIconButtonProps={{ 'aria-label': 'Next Page' }}
                     onChangePage={this.handleChangePage}
                     rowsPerPage={pageSize}
                     rowsPerPageOptions={[5, 10, 25]}

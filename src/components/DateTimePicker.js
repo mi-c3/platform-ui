@@ -4,24 +4,22 @@ import { DateTimePicker as DTPMui, InlineDateTimePicker as IDTPMui } from 'mater
 
 import { createEvent } from 'utils/http/event';
 
-
 class DateTimePicker extends PureComponent {
-
     static propTypes = {
         ...DTPMui.propTypes,
         inline: PropTypes.bool,
         onChange: PropTypes.func,
-    }
+    };
 
     static defaultProps = {
         animateYearScrolling: true,
         inline: false,
-    }
+    };
 
     onChange = (value) => {
         const { onChange } = this.props;
         onChange && onChange(createEvent('change', { target: { name, value } }));
-    }
+    };
 
     render() {
         /*

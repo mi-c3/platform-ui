@@ -2,11 +2,13 @@
   "extends": [
     "eslint:recommended",
     "plugin:jsx-a11y/recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
   ],
   "plugins": [
     "jsx-a11y",
-    "react"
+    "react",
+    "react-hooks"    
   ],
   "parser": "babel-eslint",
   "env": {
@@ -25,7 +27,7 @@
       "spread": true,
       "jsx": true
     },
-    "ecmaVersion": 6,
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
   "settings": {
@@ -48,6 +50,8 @@
     "no-debugger": "warn",
     "prefer-const": "warn",
     "semi": "warn",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }
