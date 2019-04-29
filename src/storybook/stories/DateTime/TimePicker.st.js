@@ -4,9 +4,9 @@ import { withKnobs, boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 
 import { TimePicker, Grid } from 'index';
-import stateForDateTime from 'storybook/utils/hoc/stateForDateTime';
+import statefullInput from 'storybook/utils/hoc/statefullInput';
 
-const TimePickerFull = stateForDateTime(TimePicker);
+const TimePickerFull = statefullInput(TimePicker);
 
 storiesOf('Components|DateTimePickers', module)
     .addDecorator(withKnobs)

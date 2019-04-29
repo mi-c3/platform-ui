@@ -17,7 +17,7 @@ class DateTimePicker extends PureComponent {
     };
 
     onChange = (value) => {
-        const { onChange } = this.props;
+        const { onChange, name } = this.props;
         onChange && onChange(createEvent('change', { target: { name, value } }));
     };
 

@@ -102,7 +102,7 @@ class Autocomplete extends PureComponent {
             return suggest(event);
         }
         const query = get(event, 'target.value');
-        const opts = options.filter((opt) =>
+        const opts = (options || []).filter((opt) =>
             this.optionTemplate(opt)
                 .label.toLowerCase()
                 .includes(query.toLowerCase())
@@ -291,7 +291,7 @@ class Autocomplete extends PureComponent {
     /**
      * Returns the selected option/s.
      */
-    getSelectedOptions = memoize((value, valueField, options) => {
+    getSelectedOptions = memoize((value, valueField, options = []) => {
         if (!value || !valueField) {
             return value;
         }
