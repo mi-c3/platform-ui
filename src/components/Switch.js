@@ -12,6 +12,10 @@ class Switch extends PureComponent {
         labelPlacement: PropTypes.string,
     };
 
+    static defaultProps = {
+        color: 'primary',
+    };
+
     onChange = (event) => {
         const { name, onChange } = this.props;
         const { checked } = event.target;
@@ -38,9 +42,5 @@ class Switch extends PureComponent {
         );
     }
 }
-
-Switch.defaultProps = {
-    color: 'primary',
-};
 
 export default Switch;
