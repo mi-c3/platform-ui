@@ -19,11 +19,9 @@ storiesOf('Components|Switch', module)
             <Fragment>
                 <Switch value={value} onChange={onChange} label="Primary" name="primary" />
                 <br />
-                <Switch value={value} color="secondary" label="Secondary color" name="secondary" />
-                <br />
                 <Switch value={value} disabled label="(Disabled option)" name="disabled" />
                 <br />
-                <Switch value={value} label={label} disabled={disabled} color={color} />
+                <Switch value={value} label={label} disabled={disabled} SwitchProps={{ color }} />
             </Fragment>
         );
     });

@@ -150,7 +150,7 @@ class Autocomplete extends PureComponent {
 
     onFocus = (/* event */) => {
         const { query } = this.state;
-        this.onSearching(createEvent('focus', { target: { name, value: query } }));
+        this.onSearching(createEvent('focus', { target: { name: this.props.name, value: query } }));
     };
 
     onBlur = () => /* event */ this.setState({ query: '' });
@@ -185,7 +185,7 @@ class Autocomplete extends PureComponent {
         const { value, onChange } = this.props;
         const valueToRemove = this.getOptionValue(option);
         const vals = value.filter((v) => v !== valueToRemove);
-        this.setState({ query: '' }, () => onChange && onChange(createEvent('change', { target: { name, value: vals } })));
+        this.setState({ query: '' }, () => onChange && onChange(createEvent('change', { target: { name: this.props.name, value: vals } })));
     };
 
     /**
