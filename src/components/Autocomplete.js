@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import equals from 'fast-deep-equal';
@@ -333,7 +333,7 @@ class Autocomplete extends PureComponent {
         });
         return (
             <ClickAwayListener onClickAway={this.closeSuggestions}>
-                <div>
+                <Fragment>
                     <TextField
                         InputProps={InputProperties}
                         InputLabelProps={{ shrink: true }}
@@ -343,7 +343,7 @@ class Autocomplete extends PureComponent {
                         {...restProps}
                     />
                     {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps)}
-                </div>
+                </Fragment>
             </ClickAwayListener>
         );
     }
