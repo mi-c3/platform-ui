@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { TextField as MuiTextField, IconButton, Input } from '@material-ui/core';
+import { TextField as MuiTextField, IconButton, Input, InputAdornment } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
 
 import { createEvent } from 'utils/http/event';
@@ -27,9 +27,11 @@ class TextField extends PureComponent {
     };
 
     endAdornment = (
-        <IconButton aria-label="Clear input" onClick={this.onClear}>
-            <Cancel />
-        </IconButton>
+        <InputAdornment position="end">
+            <IconButton aria-label="Clear input" onClick={this.onClear}>
+                <Cancel />
+            </IconButton>
+        </InputAdornment>
     );
 
     render() {

@@ -129,6 +129,7 @@ import MdiIconSelect from 'components/MdiIconSelect';
 import DataTable from 'components/Table/DataTable';
 import Link from 'components/Link';
 import DateTimePickerRange from 'components/DateTimePickerRange';
+import DateTimePickerRangeModal from 'components/DateTimePickerRangeModal';
 import DateTimePicker from 'components/DateTimePicker';
 import DatePicker from 'components/DatePicker';
 import TimePicker from 'components/TimePicker';
@@ -162,6 +163,7 @@ export {
     MuiPickersUtilsProvider,
     DatePicker,
     DateTimePickerRange,
+    DateTimePickerRangeModal,
     TimePicker,
     ReactDropzone,
     // Styles

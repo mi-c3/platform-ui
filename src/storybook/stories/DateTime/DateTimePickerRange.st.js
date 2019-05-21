@@ -7,7 +7,7 @@ import { DateTimePickerRange, Grid } from 'index';
 storiesOf('Components|DateTimePickers', module).add('DateTimePickerRange', () => {
     return (
         <Grid container justify="space-between">
-            <DateTimePickerRange onChange={action('change')} />
+            <DateTimePickerRange onChange={action('change')} label="Date time range" />
         </Grid>
     );
 });

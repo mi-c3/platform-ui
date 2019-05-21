@@ -1,8 +1,13 @@
-import React, { PureComponent, Fragment, memo } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
+import moment from 'moment';
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import Cancel from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/core/styles';
@@ -11,19 +16,11 @@ import DateTimePicker from './DateTimePicker';
 import TextField from './TextField';
 import MdiIcon from './MdiIcon';
 
+const normilizeDate = (date) => moment(date).format('DD, MMM YYYY HH:mm');
+
 const styles = {
-    inputWrapper: { flexGrow: 1, display: 'flex', flexWrap: 'wrap' },
-    customInput: { flexGrow: 1, marginBottom: '-10px' },
-};
-
-const CustomInput = withStyles(styles)(({ value, onClick, placeholder, classes }) => (
-    <InputBase className={classes.customInput} placeholder={placeholder} value={value} onClick={onClick} />
-));
-
-CustomInput.propTypes = {
-    value: PropTypes.any,
-    onClick: PropTypes.func,
-    placeholder: PropTypes.string,
+    cancelButton: { color: '#999999', position: 'absolute', left: '12px' },
+    clearButton: { color: '#999999' },
 };
 
 class CalendarRange extends PureComponent<Object, Object> {
@@ -36,7 +33,7 @@ class CalendarRange extends PureComponent<Object, Object> {
     constructor(props: Object) {
         super(props);
         const [start, end] = (props.value && props.value.map((date) => new Date(date))) || [null, null];
-        this.state = { start, end, showModal: false };
+        this.state = { start, end, showModal: false, fieldLabel: 'All days' };
     }
 
     componentDidUpdate(prevProps) {
@@ -49,7 +46,7 @@ class CalendarRange extends PureComponent<Object, Object> {
 
     onClear = (e) => {
         e.stopPropagation();
-        this.setState({ start: null, end: null }, this.onChange);
+        this.setState({ start: null, end: null, fieldLabel: 'All days' }, this.onChange);
     };
 
     onChange = () => {
@@ -74,7 +71,7 @@ class CalendarRange extends PureComponent<Object, Object> {
             start = new Date(end.getTime());
         }
         start && start.setMilliseconds(0);
-        this.setState({ start, end }, this.onChange);
+        this.setState({ start, end });
     };
 
     onChangeEnd = ({ target: { value } }) => {
@@ -92,43 +89,36 @@ class CalendarRange extends PureComponent<Object, Object> {
             end = new Date(start.getTime());
         }
         end && end.setMilliseconds(999);
-        this.setState({ start, end }, this.onChange);
+        this.setState({ start, end });
     };
 
-    buildInputs = memoize((PickersToProps, PickersFromProps, start, end, classes) => () => {
-        return (
-            <span className={classes.inputWrapper}>
-                <DateTimePicker
-                    showTodayButton
-                    ampm={false}
-                    placeholder="From"
-                    {...PickersFromProps}
-                    value={start}
-                    format="DD, MMM YYYY HH:mm"
-                    onChange={this.onChangeStart}
-                    TextFieldComponent={CustomInput}
-                />
-                <DateTimePicker
-                    showTodayButton
-                    ampm={false}
-                    placeholder="To"
-                    {...PickersToProps}
-                    value={end}
-                    format="DD, MMM YYYY HH:mm"
-                    onChange={this.onChangeEnd}
-                    TextFieldComponent={CustomInput}
-                />
-            </span>
+    toggleModal = () => {
+        this.setState((state) => ({
+            showModal: !state.showModal,
+        }));
+    };
+
+    onSave = () => {
+        const { start, end } = this.state;
+        this.setState(
+            {
+                fieldLabel: start ? `${normilizeDate(start)} - ${normilizeDate(end)}` : 'All days   ',
+                showModal: false,
+            },
+            this.onChange
         );
-    });
+    };
 
     render() {
-        const { PickersFromProps, PickersToProps, classes, ...restProps } = this.props;
-        const { start, end } = this.state;
+        const { TextFieldProps, PickersFromProps, PickersToProps, classes } = this.props;
+        const { start, end, showModal, fieldLabel } = this.state;
         return (
             <Fragment>
                 <TextField
                     disabled
+                    label="Date and Time Range"
+                    value={fieldLabel}
+                    onClick={this.toggleModal}
                     multiline
                     rowsMax={2}
                     InputProps={{
@@ -144,13 +134,46 @@ class CalendarRange extends PureComponent<Object, Object> {
                                 </IconButton>
                             </InputAdornment>
                         ),
-                        inputComponent: this.buildInputs(PickersToProps, PickersFromProps, start, end, classes),
                     }}
-                    {...restProps}
+                    {...TextFieldProps}
                 />
+                <Dialog open={showModal} onClose={this.toggleModal}>
+                    <DialogTitle>Date time range</DialogTitle>
+                    <Divider />
+                    <DialogContent>
+                        <DateTimePicker
+                            showTodayButton
+                            ampm={false}
+                            label="From"
+                            {...PickersFromProps}
+                            value={start}
+                            onChange={this.onChangeStart}
+                        />
+                        <DateTimePicker
+                            showTodayButton
+                            ampm={false}
+                            label="To"
+                            {...PickersToProps}
+                            value={end}
+                            onChange={this.onChangeEnd}
+                        />
+                    </DialogContent>
+                    <Divider />
+                    <DialogActions>
+                        <Button className={classes.cancelButton} onClick={this.toggleModal} variant="text">
+                            Cancel
+                        </Button>
+                        <Button className={classes.clearButton} onClick={this.onClear} variant="text">
+                            Clear
+                        </Button>
+                        <Button onClick={this.onSave} variant="text">
+                            Save
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Fragment>
         );
     }
 }
 
-export default memo(withStyles(styles)(CalendarRange));
+export default withStyles(styles)(CalendarRange);
