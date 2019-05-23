@@ -68,12 +68,15 @@ class Autocomplete extends PureComponent {
         valueField: PropTypes.string,
         valueId: PropTypes.string,
         VirtualListProps: PropTypes.object,
+        PopperProps: PropTypes.object,
     };
 
     static defaultProps = {
         clearable: true,
         options: [],
         InputProps: {},
+        PopperProps: {},
+        VirtualListProps: {},
     };
 
     popperRef = React.createRef();
@@ -191,9 +194,9 @@ class Autocomplete extends PureComponent {
     /**
      * Builds the suggestion popper.
      */
-    buildSuggestionsPopper = memoize((suggestions, openSuggestions, VirtualListProps) => {
+    buildSuggestionsPopper = memoize((suggestions, openSuggestions, VirtualListProps, PopperProps) => {
         const maxPopperHeight = 224;
-        const maxSuggetionsHeight = suggestions.length * (get(VirtualListProps, 'itemSize', 25) + 4);
+        const maxSuggetionsHeight = suggestions.length * (get(VirtualListProps, 'itemSize', 30) + 4);
         const popperHeight = Math.min(maxSuggetionsHeight, get(VirtualListProps, 'height', maxPopperHeight));
         if (popperHeight < maxPopperHeight) {
             this.popperRef.current && this.popperRef.current.popper && this.popperRef.current.popper.update();
@@ -202,11 +205,12 @@ class Autocomplete extends PureComponent {
             suggestions &&
             suggestions.length > 0 && (
                 <Popper
-                    ref={this.popperRef}
-                    style={{ zIndex: 1 }}
-                    open={openSuggestions}
-                    anchorEl={get(this.inputRef, 'current.parentNode.parentNode')}
+                    style={{ zIndex: 1500 }}
                     transition
+                    {...PopperProps}
+                    open={openSuggestions}
+                    ref={this.popperRef}
+                    anchorEl={get(this.inputRef, 'current.parentNode.parentNode')}
                 >
                     {({ TransitionProps, placement }) => (
                         <Grow
@@ -236,7 +240,7 @@ class Autocomplete extends PureComponent {
                                         );
                                     }}
                                     {...VirtualListProps || {}}
-                                    itemSize={get(VirtualListProps, 'itemSize', 25)}
+                                    itemSize={get(VirtualListProps, 'itemSize', 30)}
                                 />
                             </Paper>
                         </Grow>
@@ -317,6 +321,7 @@ class Autocomplete extends PureComponent {
             VirtualListProps,
             valueField,
             options,
+            PopperProps,
             ...restProps
         } = this.props;
         const { suggestions, openSuggestions, query } = this.state;
@@ -342,7 +347,7 @@ class Autocomplete extends PureComponent {
                         disabled={disabled}
                         {...restProps}
                     />
-                    {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps)}
+                    {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps)}
                 </Fragment>
             </ClickAwayListener>
         );
