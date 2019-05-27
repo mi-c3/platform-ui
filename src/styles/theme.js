@@ -71,11 +71,6 @@ export const DarkTheme = createMuiTheme({
                 color: colors.red,
             },
         },
-        MuiPaper: {
-            root: {
-                maxHeight: '15rem',
-            },
-        },
         MuiChip: {
             colorPrimary: {
                 color: colors.common.white,
