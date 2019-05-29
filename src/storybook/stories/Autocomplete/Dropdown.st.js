@@ -19,6 +19,7 @@ storiesOf('Components|Autocomplete', module)
         const placeholder = text('Placeholder', 'Type A...', 'Default');
         const fullWidth = boolean('FullWidth', true, 'Style');
         const multiple = boolean('Multiple', false, 'Default');
+        const ordering = [{ value: null, label: 'Any' }, { value: 'stg', label: 'St. Julians' }, { value: 'sliema', label: 'Sliema' }];
         return (
             <Fragment>
                 <H3>Simple Autocomplete with static data</H3>
@@ -31,7 +32,19 @@ storiesOf('Components|Autocomplete', module)
                     multiple={multiple}
                     onChange={onChange}
                     options={countries}
+                />
+                <H3>Simple Autocomplete with `null` in value</H3>
+                <Autocomplete
+                    label="Choose city"
+                    disabled={disabled}
+                    name={name}
+                    placeholder={placeholder}
+                    fullWidth={fullWidth}
+                    multiple={multiple}
+                    onChange={onChange}
+                    options={ordering}
                     valueField="value"
+                    value={null}
                 />
             </Fragment>
         );
