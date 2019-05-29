@@ -179,7 +179,13 @@ class Autocomplete extends PureComponent {
     /**
      * Clear the input (used only when multiple is false).
      */
-    clearInput = () => this.onChange(null);
+    clearInput = () => {
+        let value = null;
+        if (this.props.valueField) {
+            value = this.props.options.find((option) => null === get(option, this.props.valueField)) || value;
+        }
+        this.onChange(value);
+    };
 
     /**
      * Returns the function to remove a value (chip) (used only when multiple is true).
@@ -296,14 +302,14 @@ class Autocomplete extends PureComponent {
      * Returns the selected option/s.
      */
     getSelectedOptions = memoize((value, valueField, options = []) => {
-        if (!value || !valueField) {
+        if (!valueField) {
             return value;
         }
         if (Array.isArray(value)) {
             const values = new Set(value);
             return options.filter((option) => values.has(get(option, valueField)));
         }
-        return options.find((option) => value === get(option, valueField));
+        return options.find((option) => value === get(option, valueField)) || value;
     });
 
     render() {
