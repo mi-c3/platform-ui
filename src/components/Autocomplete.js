@@ -10,7 +10,6 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import { withStyles } from '@material-ui/core/styles';
 import { styled } from '@material-ui/styles';
@@ -156,7 +155,7 @@ class Autocomplete extends PureComponent {
         this.onSearching(createEvent('focus', { target: { name: this.props.name, value: query } }));
     };
 
-    onBlur = () => /* event */ this.setState({ query: '' });
+    onBlur = () => /* event */ this.setState({ query: '', openSuggestions: false });
 
     /**
      * Returns the option template of the specified option.
@@ -167,13 +166,6 @@ class Autocomplete extends PureComponent {
             return { label: '', startAdornment: null };
         }
         return optionTemplate ? optionTemplate(option) : { label: option.label, startAdornment: null };
-    };
-
-    /**
-     * Closes the suggestion popper.
-     */
-    closeSuggestions = () => {
-        this.setState({ openSuggestions: false });
     };
 
     /**
@@ -254,7 +246,7 @@ class Autocomplete extends PureComponent {
                 </Popper>
             )
         );
-    }, shallowEquals);
+    }, equals);
 
     /**
      * Builds the input component.
@@ -310,7 +302,7 @@ class Autocomplete extends PureComponent {
             return options.filter((option) => values.has(get(option, valueField)));
         }
         return options.find((option) => value === get(option, valueField)) || value;
-    });
+    }, equals);
 
     render() {
         const {
@@ -343,19 +335,17 @@ class Autocomplete extends PureComponent {
             openSuggestions,
         });
         return (
-            <ClickAwayListener onClickAway={this.closeSuggestions}>
-                <Fragment>
-                    <TextField
-                        InputProps={InputProperties}
-                        InputLabelProps={{ shrink: true }}
-                        onFocus={this.onFocus}
-                        onBlur={this.onBlur}
-                        disabled={disabled}
-                        {...restProps}
-                    />
-                    {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps)}
-                </Fragment>
-            </ClickAwayListener>
+            <Fragment>
+                <TextField
+                    InputProps={InputProperties}
+                    InputLabelProps={{ shrink: true }}
+                    onFocus={this.onFocus}
+                    onBlur={this.onBlur}
+                    disabled={disabled}
+                    {...restProps}
+                />
+                {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps)}
+            </Fragment>
         );
     }
 }
