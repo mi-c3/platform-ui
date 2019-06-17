@@ -293,8 +293,8 @@ class Autocomplete extends PureComponent {
     /**
      * Returns the selected option/s.
      */
-    getSelectedOptions = memoize((value, valueField, options = []) => {
-        if (!valueField) {
+    getSelectedOptions = memoize((value, valueField, options) => {
+        if (!valueField || !options) {
             return value;
         }
         if (Array.isArray(value)) {
@@ -342,6 +342,7 @@ class Autocomplete extends PureComponent {
                     onFocus={this.onFocus}
                     onBlur={this.onBlur}
                     disabled={disabled}
+                    autoComplete="off"
                     {...restProps}
                 />
                 {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps)}
