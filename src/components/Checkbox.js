@@ -6,7 +6,7 @@ import { createEvent } from 'utils/http/event';
 
 class Checkbox extends PureComponent {
     static propTypes = {
-        ...MuiCheckbox.propTypes,
+        ...(MuiCheckbox || {}).propTypes,
         label: PropTypes.string,
         labelPlacement: PropTypes.string,
     };

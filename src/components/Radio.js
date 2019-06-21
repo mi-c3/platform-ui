@@ -8,7 +8,7 @@ const Radio = ({ labelPlacement, color, RadioProps, ...restProps }) => (
 );
 
 Radio.propTypes = {
-    ...MuiRadio.propTypes,
+    ...(MuiRadio || {}).propTypes,
     color: PropTypes.string,
     labelPlacement: PropTypes.string,
 };

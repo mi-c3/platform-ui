@@ -1,8 +1,6 @@
-// @flow
-
 import memoize from 'memoize-one';
 
-export const generateColor = memoize((colors: Array<mixed>, name: ?string) => {
+export const generateColor = memoize((colors, name) => {
     if (name && name[0]) {
         const sum = name.split('').reduce((accumulator, value) => accumulator + value.charCodeAt(0), 0);
         return colors[sum % colors.length];
@@ -11,7 +9,7 @@ export const generateColor = memoize((colors: Array<mixed>, name: ?string) => {
     }
 });
 
-export const createInitials = memoize((name: string, extraSighn: '_') => {
+export const createInitials = memoize((name, extraSighn = '_') => {
     const cleanName = (name || '').trim();
     const namesSpace = cleanName.split(' ');
     const namesSlash = cleanName.split(extraSighn);

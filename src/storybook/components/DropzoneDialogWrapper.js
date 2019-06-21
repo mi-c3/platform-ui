@@ -5,7 +5,7 @@ import { DropzoneDialog, Button } from 'index';
 
 export default class DropzoneDialogWrapper extends PureComponent {
     static propTypes = {
-        ...DropzoneDialog.propTypes,
+        ...(DropzoneDialog || {}).propTypes,
         onChange: PropTypes.func,
     };
 

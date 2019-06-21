@@ -3,9 +3,6 @@ import React from 'react';
 import { MdiIcon, Avatar, MdiIconSelect } from 'index';
 import { createInitials } from 'storybook/utils/avatar/avatar';
 
-/**
- *
- */
 class MdiSelectIcon extends MdiIconSelect {
     optionTemplate = ({ value, label }) => ({
         ChipProps: {
@@ -15,6 +12,7 @@ class MdiSelectIcon extends MdiIconSelect {
         label,
     });
 }
+
 class MdiSelectLetter extends MdiIconSelect {
     optionTemplate = ({ value, label }) => ({
         ChipProps: {

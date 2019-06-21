@@ -10,7 +10,7 @@ const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};
 
 class TextField extends PureComponent {
     static propTypes = {
-        ...MuiTextField.propTypes,
+        ...(MuiTextField || {}).propTypes,
         InputProps: PropTypes.shape(inputPropsSubSet),
     };
 

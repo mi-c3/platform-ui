@@ -46,7 +46,7 @@ DropzoneDialog.defaultProps = {
     title: 'Upload File',
 };
 DropzoneDialog.propTypes = {
-    ...Dropzone.propTypes,
+    ...(Dropzone || {}).propTypes,
     open: PropTypes.bool.isRequired,
     title: PropTypes.string,
     onSave: PropTypes.func,

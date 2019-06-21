@@ -25,7 +25,7 @@ const styles = {
 
 class CalendarRange extends PureComponent<Object, Object> {
     static propTypes = {
-        ...DateTimePicker.propTypes,
+        ...(DateTimePicker || {}).propTypes,
         value: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)])),
         classes: PropTypes.object.isRequired,
     };

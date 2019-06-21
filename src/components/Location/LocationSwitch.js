@@ -11,7 +11,7 @@ import { createEvent } from 'utils/http/event';
  */
 class LocationSwitch extends PureComponent {
     static propTypes = {
-        ...LocationForm.propTypes, //FIXME: change using MUI convention
+        ...(LocationForm || {}).propTypes, //FIXME: change using MUI convention
         name: PropTypes.string,
         label: PropTypes.string,
         onChange: PropTypes.func,

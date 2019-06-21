@@ -8,7 +8,7 @@ import { Autocomplete } from 'index';
  */
 class AutocompleteLazy extends PureComponent {
     static propTypes = {
-        ...Autocomplete.propTypes,
+        ...(Autocomplete || {}).propTypes,
         fetchData: PropTypes.func.isRequired,
     };
 
