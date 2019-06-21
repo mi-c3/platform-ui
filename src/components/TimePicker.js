@@ -6,7 +6,7 @@ import { createEvent } from 'utils/http/event';
 
 class TimePicker extends PureComponent {
     static propTypes = {
-        ...TPMui.propTypes,
+        ...(TPMui || {}).propTypes,
         inline: PropTypes.bool,
         onChange: PropTypes.func,
     };

@@ -84,7 +84,7 @@ class Dropzone extends Component {
     };
 
     static propTypes = {
-        ...ReactDropzone.propTypes,
+        ...(ReactDropzone || {}).propTypes,
         accept: PropTypes.string,
         filesLimit: PropTypes.number,
         maxSize: PropTypes.number,

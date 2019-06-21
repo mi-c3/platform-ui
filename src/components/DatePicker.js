@@ -6,7 +6,7 @@ import { createEvent } from 'utils/http/event';
 
 class DatePicker extends PureComponent {
     static propTypes = {
-        ...DPMui.propTypes,
+        ...(DPMui || {}).propTypes,
         inline: PropTypes.bool,
         onChange: PropTypes.func,
     };

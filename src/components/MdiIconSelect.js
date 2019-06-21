@@ -6,7 +6,7 @@ import Autocomplete from 'components/Autocomplete';
 import { iconsList } from 'utils/data/iconsList';
 
 // eslint-disable-next-line
-const { options, optionTemplate, ...autocompletePropsSubSet } = Autocomplete.propTypes || {};
+const { options, optionTemplate, ...autocompletePropsSubSet } = (Autocomplete || {}).propTypes || {};
 
 class MdiIconSelect extends PureComponent {
     static propTypes = autocompletePropsSubSet;

@@ -7,7 +7,7 @@ import { createEvent } from 'utils/http/event';
 
 class Switch extends PureComponent {
     static propTypes = {
-        ...MuiSwitch.propTypes,
+        ...(MuiSwitch || {}).propTypes,
         label: PropTypes.string,
         labelPlacement: PropTypes.string,
     };

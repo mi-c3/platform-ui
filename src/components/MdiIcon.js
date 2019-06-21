@@ -15,7 +15,7 @@ const MdiIcon = ({ size, name, className, ...restProps }) => (
 );
 
 MdiIcon.propTypes = {
-    ...Icon.propTypes,
+    ...(Icon || {}).propTypes,
     name: PropTypes.string.isRequired,
     className: PropTypes.string,
     size: PropTypes.number,
