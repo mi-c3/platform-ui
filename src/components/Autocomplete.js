@@ -18,25 +18,21 @@ import TextField from 'components/TextField';
 import { shallowEquals, debounce, arrayfy } from 'utils/utils';
 import { get } from 'utils/lo/lo';
 import { createEvent } from 'utils/http/event';
-import { DarkTheme } from 'styles/theme';
 
 const styles = () => ({
     inputRoot: {
-        paddingTop: '1.4rem',
+        paddingTop: '1.7rem',
         flexWrap: 'wrap',
     },
     inputInput: {
         width: 'auto',
         flexGrow: 1,
     },
+    chip: {
+        margin: '1px',
+        height: '24px',
+    },
 });
-
-const ChipStyled = styled(Chip)(
-    ({ theme }) => ({
-        margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
-    }),
-    { defaultTheme: DarkTheme }
-);
 
 const ChipIconStyle = styled('div')({
     margin: '4px -4px 0 8px',
@@ -264,15 +260,16 @@ class Autocomplete extends PureComponent {
             InputProperties.startAdornment = (arrayfy(selected) || []).map((option, index) => {
                 const { ChipProps: props, startAdornment, label } = this.optionTemplate(option);
                 const ChipProps = { ...(props || {}) };
-                if (startAdornment) {
+                if (startAdornment && !ChipProps.avatar) {
                     ChipProps.icon = <ChipIconStyle>{startAdornment}</ChipIconStyle>;
                 }
                 return (
-                    <ChipStyled
+                    <Chip
                         color="primary"
                         key={index}
                         label={label}
                         tabIndex={-1}
+                        className={classes.chip}
                         onDelete={this.buildRemoveChip(option)}
                         {...ChipProps}
                     />
