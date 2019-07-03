@@ -37,6 +37,7 @@
     "react": "^16.8.4",
     "react-avatar-editor": "^11.0.7",
     "react-chromatic": "^0.8.4",
+    "react-color": "^2.17.3",
     "react-dom": "^16.8.4",
     "react-dropzone": "^9.0.0",
     "react-jss": "^8.6.1",

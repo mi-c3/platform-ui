@@ -122,6 +122,7 @@ import Autocomplete from 'components/Autocomplete';
 import AutocompleteLazy from 'components/AutocompleteLazy';
 import Button from 'components/Button';
 import Checkbox from 'components/Checkbox';
+import ColorPicker from 'components/ColorPicker';
 import MdiIcon from 'components/MdiIcon';
 import Radio from 'components/Radio';
 import Switch from 'components/Switch';
@@ -149,6 +150,7 @@ export {
     AutocompleteLazy,
     Button,
     Checkbox,
+    ColorPicker,
     MdiIcon,
     Radio,
     TextField,
