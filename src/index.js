@@ -14,7 +14,6 @@ import {
 import ReactDropzone from 'react-dropzone';
 
 import AppBar from '@material-ui/core/AppBar';
-import Avatar from '@material-ui/core/Avatar';
 import Backdrop from '@material-ui/core/Backdrop';
 import Badge from '@material-ui/core/Badge';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
@@ -117,6 +116,8 @@ import Zoom from '@material-ui/core/Zoom';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 
 import { DarkTheme } from 'styles/theme';
+import Avatar from 'components/Avatar';
+import AvatarEditor from 'components/AvatarEditor';
 import Autocomplete from 'components/Autocomplete';
 import AutocompleteLazy from 'components/AutocompleteLazy';
 import Button from 'components/Button';
@@ -142,6 +143,8 @@ import PuiProvider from 'components/PuiProvider';
 
 export {
     // Platform MAterial UI
+    Avatar,
+    AvatarEditor,
     Autocomplete,
     AutocompleteLazy,
     Button,
@@ -181,7 +184,6 @@ export {
     createMuiTheme,
     // Core Components
     AppBar,
-    Avatar,
     Backdrop,
     Badge,
     BottomNavigation,

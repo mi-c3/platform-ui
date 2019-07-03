@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { MdiIcon, Avatar, MdiIconSelect } from 'index';
-import { createInitials } from 'storybook/utils/avatar/avatar';
+import { createInitials } from 'utils/avatar/avatar';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = () => ({
