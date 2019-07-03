@@ -94,7 +94,7 @@ class Dropzone extends Component {
         showPreviews: PropTypes.bool,
         showAlerts: PropTypes.bool,
         clearOnUnmount: PropTypes.bool,
-        onChange: PropTypes.func.isRequired,
+        onChange: PropTypes.func,
         onDropRejected: PropTypes.func,
         onDelete: PropTypes.func,
         imageOptions: PropTypes.shape({
@@ -222,30 +222,11 @@ class Dropzone extends Component {
             });
     };
 
-    onCloseSnackbar = () =>
+    onCloseSnackbar = () => {
         this.setState({
             openSnackbar: false,
         });
-
-    buildFilesList = memoize(({ files }) =>
-        files.map((file, index) => (
-            <ListItem key={index}>
-                {isImageType(files[index].type) ? (
-                    <Avatar src={URL.createObjectURL(file)} />
-                ) : (
-                    <Avatar>
-                        <AttachFileIcon />
-                    </Avatar>
-                )}
-                <ListItemText primary={files[index].name} secondary={files[index].type} />
-                <ListItemSecondaryAction>
-                    <IconButton onClick={this.handleRemove(index)} aria-label="Delete">
-                        <CancelIcon />
-                    </IconButton>
-                </ListItemSecondaryAction>
-            </ListItem>
-        ))
-    );
+    };
 
     buildFilesList = memoize(({ files }) =>
         files.map((file, index) => (
