@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { DateTimePicker as DTPMui, InlineDateTimePicker as IDTPMui } from 'material-ui-pickers';
 
 import { createEvent } from 'utils/http/event';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 class DateTimePicker extends PureComponent {
     static propTypes = {
@@ -16,10 +17,11 @@ class DateTimePicker extends PureComponent {
         inline: false,
     };
 
-    onChange = (value) => {
+    @bind
+    onChange(value) {
         const { onChange, name } = this.props;
         onChange && onChange(createEvent('change', { target: { name, value } }));
-    };
+    }
 
     render() {
         /*

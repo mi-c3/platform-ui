@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Switch from 'components/Switch';
 import LocationForm from 'components/Location/LocationForm';
 import { createEvent } from 'utils/http/event';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 /**
  * Renders a location form to allow a user to change address and location.
@@ -27,7 +28,10 @@ class LocationSwitch extends PureComponent {
         }
     }
 
-    toggleSwitch = () => this.setState({ checked: !this.state.checked });
+    @bind
+    toggleSwitch() {
+        this.setState({ checked: !this.state.checked });
+    }
 
     render() {
         const { label, SwitchProps, ...restProps } = this.props;

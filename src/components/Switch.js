@@ -4,6 +4,7 @@ import MuiSwitch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import { createEvent } from 'utils/http/event';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 class Switch extends PureComponent {
     static propTypes = {
@@ -16,7 +17,8 @@ class Switch extends PureComponent {
         color: 'primary',
     };
 
-    onChange = (event) => {
+    @bind
+    onChange(event) {
         const { name, onChange } = this.props;
         const { checked } = event.target;
         onChange &&
@@ -27,7 +29,7 @@ class Switch extends PureComponent {
                 }),
                 event
             );
-    };
+    }
 
     render() {
         const { SwitchProps, labelPlacement, color, value, ...restProps } = this.props;

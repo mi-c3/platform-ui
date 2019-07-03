@@ -8,19 +8,21 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { styled } from '@material-ui/styles';
 
 import Dropzone from 'components/Upload/Dropzone';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 const DialogActionsStyled = styled(DialogActions)({
     minWidth: 300,
 });
 
 class DropzoneDialog extends PureComponent {
-    onSave = () => {
+    @bind
+    onSave() {
         const { onSave, onClose, value } = this.props;
         if (onSave) {
             onSave(value);
             onClose();
         }
-    };
+    }
 
     render() {
         const { open, title, onClose, fullScreen, ...restProps } = this.props;

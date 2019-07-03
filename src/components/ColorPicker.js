@@ -8,6 +8,7 @@ import Icon from '@material-ui/core/Icon';
 import { materialColorPalette } from 'styles/palettes';
 import { withStyles } from '@material-ui/core/styles';
 import { createEvent } from 'utils/http/event';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 const styles = (theme) => ({
     swatches: {
@@ -46,7 +47,7 @@ class ColorPicker extends PureComponent {
         required: false,
     };
 
-    constructor(props: Object) {
+    constructor(props) {
         super(props);
 
         this.state = { displayColorPicker: false };
@@ -58,16 +59,18 @@ class ColorPicker extends PureComponent {
         ['#FFFFFF', '#00a99d', '#066ab1', '#4FC3F7', '#81C784', '#FF8A65', '#FFC107', '#FF5722', '#c62828'],
     ];
 
-    onChange = (value: Object) => {
+    @bind
+    onChange(value) {
         const { onChange, name } = this.props;
         if (onChange) {
             onChange(createEvent('change', { target: { name, value: (value || {}).hex } }));
         }
-    };
+    }
 
-    handleSwatches = () => {
+    @bind
+    handleSwatches() {
         this.setState((state) => ({ displayColorPicker: !state.displayColorPicker }));
-    };
+    }
 
     render() {
         const { label, name, value, required, size, labelPlacement, classes, disabled, ...restProps } = this.props;

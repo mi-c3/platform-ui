@@ -1,9 +1,9 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
 import equals from 'fast-deep-equal';
 import VirtualList from 'react-tiny-virtual-list';
 
+import { bind, memoize, debounce } from 'utils/decorators/decoratorUtils';
 import Cancel from '@material-ui/icons/Cancel';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,7 +15,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { styled } from '@material-ui/styles';
 
 import TextField from 'components/TextField';
-import { shallowEquals, debounce, arrayfy } from 'utils/utils';
+import { shallowEquals, arrayfy } from 'utils/utils';
 import { get } from 'utils/lo/lo';
 import { createEvent } from 'utils/http/event';
 
@@ -74,9 +74,6 @@ class Autocomplete extends PureComponent {
         VirtualListProps: {},
     };
 
-    popperRef = React.createRef();
-    inputRef = React.createRef();
-
     constructor(props) {
         super(props);
         const { options, value, valueField, valueId } = props;
@@ -94,7 +91,12 @@ class Autocomplete extends PureComponent {
         }
     }
 
-    suggest = debounce((event) => {
+    popperRef = React.createRef();
+    inputRef = React.createRef();
+
+    @bind
+    @debounce()
+    suggest(event) {
         const { value, options, valueField, valueId, suggest } = this.props;
         if (suggest) {
             return suggest(event);
@@ -106,14 +108,19 @@ class Autocomplete extends PureComponent {
                 .includes(query.toLowerCase())
         );
         this.setState({ suggestions: this.filterValue(opts, value, valueId, valueField) });
-    }, 300);
+    }
 
-    getOptionValue = (option) => (this.props.valueField ? get(option, this.props.valueField) : option);
+    @bind
+    getOptionValue(option) {
+        return this.props.valueField ? get(option, this.props.valueField) : option;
+    }
 
     /**
      * Removes the selected option/s (value) from the options.
      */
-    filterValue = memoize((options, value, valueId, valueField) => {
+    @bind
+    @memoize()
+    filterValue(options, value, valueId, valueField) {
         if (!Array.isArray(options) || !options.length || !options) {
             return options || [];
         }
@@ -127,68 +134,87 @@ class Autocomplete extends PureComponent {
             return options.filter((opt) => !values.some((val) => equals(getValue(opt), val)));
         }
         return options.filter((opt) => !equals(getValue(opt), value));
-    });
+    }
 
-    buildOnChange = (value) => () => this.onChange(value);
+    @bind
+    buildOnChange(value) {
+        return () => this.onChange(value);
+    }
 
-    onChange = (option) => {
+    @bind
+    onChange(option) {
         const { onChange, name, value: currentValue, multiple, valueField } = this.props;
         const optionValue = valueField ? get(option, valueField) : option;
         const value = !multiple ? optionValue : [...(arrayfy(currentValue) || []), optionValue];
         this.setState({ query: '' }, () => onChange && onChange(createEvent('change', { target: { name, value } })));
-    };
+    }
 
-    onSearching = (event) => {
+    @bind
+    onSearching(event) {
         if (event.persist) {
             event.persist();
         }
         const query = get(event, 'target.value');
         this.setState({ query, openSuggestions: true }, () => this.suggest(event));
-    };
+    }
 
-    onFocus = (/* event */) => {
+    @bind
+    onFocus(/* event */) {
         const { query } = this.state;
         this.onSearching(createEvent('focus', { target: { name: this.props.name, value: query } }));
-    };
+    }
 
-    onBlur = () => /* event */ this.setState({ query: '', openSuggestions: false });
+    @bind
+    onBlur() {
+        this.setState({ query: '', openSuggestions: false });
+    }
 
     /**
      * Returns the option template of the specified option.
      */
-    optionTemplate = (option) => {
+    @bind
+    optionTemplate(option) {
         const { optionTemplate } = this.props;
         if (!option) {
             return { label: '', startAdornment: null };
         }
         return optionTemplate ? optionTemplate(option) : { label: option.label, startAdornment: null };
-    };
+    }
 
     /**
      * Clear the input (used only when multiple is false).
      */
-    clearInput = () => {
+    @bind
+    clearInput() {
         let value = null;
         if (this.props.valueField) {
             value = this.props.options.find((option) => null === get(option, this.props.valueField)) || value;
         }
         this.onChange(value);
-    };
+    }
 
     /**
      * Returns the function to remove a value (chip) (used only when multiple is true).
      */
-    buildRemoveChip = (option) => () => {
-        const { value, onChange } = this.props;
-        const valueToRemove = this.getOptionValue(option);
-        const vals = value.filter((v) => v !== valueToRemove);
-        this.setState({ query: '' }, () => onChange && onChange(createEvent('change', { target: { name: this.props.name, value: vals } })));
-    };
+    @bind
+    buildRemoveChip(option) {
+        return () => {
+            const { value, onChange } = this.props;
+            const valueToRemove = this.getOptionValue(option);
+            const vals = value.filter((v) => v !== valueToRemove);
+            this.setState(
+                { query: '' },
+                () => onChange && onChange(createEvent('change', { target: { name: this.props.name, value: vals } }))
+            );
+        };
+    }
 
     /**
      * Builds the suggestion popper.
      */
-    buildSuggestionsPopper = memoize((suggestions, openSuggestions, VirtualListProps, PopperProps) => {
+    @bind
+    @memoize(equals)
+    buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps) {
         const maxPopperHeight = 224;
         const maxSuggetionsHeight = suggestions.length * (get(VirtualListProps, 'itemSize', 30) + 4);
         const popperHeight = Math.min(maxSuggetionsHeight, get(VirtualListProps, 'height', maxPopperHeight));
@@ -242,12 +268,14 @@ class Autocomplete extends PureComponent {
                 </Popper>
             )
         );
-    }, equals);
+    }
 
     /**
      * Builds the input component.
      */
-    buildInputProps = memoize(({ selected, clearable, disabled, multiple, query, InputProps, classes, openSuggestions }) => {
+    @bind
+    @memoize(shallowEquals)
+    buildInputProps({ selected, clearable, disabled, multiple, query, InputProps, classes, openSuggestions }) {
         const { startAdornment, label = '' } = !multiple ? this.optionTemplate(selected) : {};
         const InputProperties = {
             inputRef: this.inputRef,
@@ -285,12 +313,14 @@ class Autocomplete extends PureComponent {
             );
         }
         return InputProperties;
-    }, shallowEquals);
+    }
 
     /**
      * Returns the selected option/s.
      */
-    getSelectedOptions = memoize((value, valueField, options) => {
+    @bind
+    @memoize(equals)
+    getSelectedOptions(value, valueField, options) {
         if (!valueField || !options) {
             return value;
         }
@@ -299,7 +329,7 @@ class Autocomplete extends PureComponent {
             return options.filter((option) => values.has(get(option, valueField)));
         }
         return options.find((option) => value === get(option, valueField)) || value;
-    }, equals);
+    }
 
     render() {
         const {

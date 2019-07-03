@@ -5,6 +5,7 @@ import GoogleMapReact from 'google-map-react';
 import { DarkMapTheme } from 'styles/mapTheme';
 import { SimpleMarker } from 'components/Location/SimpleMarker/SimpleMarker';
 import { isDefined } from 'utils/utils';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 /* Map configuration */
 const mapOptions = ({ dark, streetViewControl }) => (maps) => {
@@ -33,9 +34,6 @@ const mapOptions = ({ dark, streetViewControl }) => (maps) => {
     return options;
 };
 
-/**
- * A map component
- */
 export default class Location extends PureComponent {
     static propTypes = {
         latitude: PropTypes.number,
@@ -56,17 +54,11 @@ export default class Location extends PureComponent {
         color: '',
     };
 
-    /**
-     * onclick map will change the coordinates
-     */
-    mapClicked = (mapProps) => {
+    @bind
+    mapClicked(mapProps) {
         !this.props.disabled && this.props.onClick(mapProps.lat, mapProps.lng);
-    };
+    }
 
-    /**
-     * Lifecycle hook: Executed on component render.
-     * @returns {XML}
-     */
     render() {
         const { latitude, longitude, onGoogleApiLoaded } = this.props;
         const noLocation = !isDefined(latitude) || !isDefined(longitude) || latitude === '' || longitude === '';

@@ -2,10 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { Autocomplete } from 'index';
+import { bind } from 'utils/decorators/decoratorUtils';
 
-/**
- *
- */
 class AutocompleteLazy extends PureComponent {
     static propTypes = {
         ...(Autocomplete || {}).propTypes,
@@ -16,11 +14,12 @@ class AutocompleteLazy extends PureComponent {
         options: [],
     };
 
-    suggest = async (event) => {
+    @bind
+    async suggest(event) {
         const { value } = event.target;
         const options = await this.props.fetchData(value);
         this.setState({ options });
-    };
+    }
 
     render() {
         const { options } = this.state;

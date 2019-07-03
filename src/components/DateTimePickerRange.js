@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment, memo } from 'react';
 import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import DateTimePicker from './DateTimePicker';
 import TextField from './TextField';
 import MdiIcon from './MdiIcon';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 const styles = {
     inputWrapper: { flexGrow: 1, display: 'flex', flexWrap: 'wrap' },
@@ -47,12 +47,14 @@ class CalendarRange extends PureComponent<Object, Object> {
         }
     }
 
-    onClear = (e) => {
+    @bind
+    onClear(e) {
         e.stopPropagation();
         this.setState({ start: null, end: null }, this.onChange);
-    };
+    }
 
-    onChange = () => {
+    @bind
+    onChange() {
         const { name, onChange } = this.props;
         if (!onChange) {
             return;
@@ -60,9 +62,10 @@ class CalendarRange extends PureComponent<Object, Object> {
         const { start, end } = this.state;
         const value = start && [start, end];
         onChange && onChange({ name, value, target: { name, value } });
-    };
+    }
 
-    onChangeStart = ({ target: { value } }) => {
+    @bind
+    onChangeStart({ target: { value } }) {
         let { end } = this.state;
         let start = value && new Date(value);
         if (!start) {
@@ -75,9 +78,10 @@ class CalendarRange extends PureComponent<Object, Object> {
         }
         start && start.setMilliseconds(0);
         this.setState({ start, end }, this.onChange);
-    };
+    }
 
-    onChangeEnd = ({ target: { value } }) => {
+    @bind
+    onChangeEnd({ target: { value } }) {
         let { start } = this.state;
         let end = value && new Date(value);
         if (end && !this.state.end) {
@@ -93,34 +97,38 @@ class CalendarRange extends PureComponent<Object, Object> {
         }
         end && end.setMilliseconds(999);
         this.setState({ start, end }, this.onChange);
-    };
+    }
 
-    buildInputs = memoize((PickersToProps, PickersFromProps, start, end, classes) => () => {
-        return (
-            <span className={classes.inputWrapper}>
-                <DateTimePicker
-                    showTodayButton
-                    ampm={false}
-                    placeholder="From"
-                    {...PickersFromProps}
-                    value={start}
-                    format="DD, MMM YYYY HH:mm"
-                    onChange={this.onChangeStart}
-                    TextFieldComponent={CustomInput}
-                />
-                <DateTimePicker
-                    showTodayButton
-                    ampm={false}
-                    placeholder="To"
-                    {...PickersToProps}
-                    value={end}
-                    format="DD, MMM YYYY HH:mm"
-                    onChange={this.onChangeEnd}
-                    TextFieldComponent={CustomInput}
-                />
-            </span>
-        );
-    });
+    @bind
+    @memoize()
+    buildInputs(PickersToProps, PickersFromProps, start, end, classes) {
+        return () => {
+            return (
+                <span className={classes.inputWrapper}>
+                    <DateTimePicker
+                        showTodayButton
+                        ampm={false}
+                        placeholder="From"
+                        {...PickersFromProps}
+                        value={start}
+                        format="DD, MMM YYYY HH:mm"
+                        onChange={this.onChangeStart}
+                        TextFieldComponent={CustomInput}
+                    />
+                    <DateTimePicker
+                        showTodayButton
+                        ampm={false}
+                        placeholder="To"
+                        {...PickersToProps}
+                        value={end}
+                        format="DD, MMM YYYY HH:mm"
+                        onChange={this.onChangeEnd}
+                        TextFieldComponent={CustomInput}
+                    />
+                </span>
+            );
+        };
+    }
 
     render() {
         const { PickersFromProps, PickersToProps, classes, ...restProps } = this.props;

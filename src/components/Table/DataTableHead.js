@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
@@ -8,6 +7,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { styled } from '@material-ui/styles';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 const TableCellStyled = styled(TableCell)({
     textTransform: 'capitalize',
@@ -15,28 +15,36 @@ const TableCellStyled = styled(TableCell)({
 });
 
 class DataTableHead extends PureComponent {
-    createSortHandler = (property) => (event) => {
-        this.props.onRequestSort(event, property);
-    };
+    @bind
+    createSortHandler(property) {
+        return (event) => {
+            this.props.onRequestSort(event, property);
+        };
+    }
 
-    buildSortWrapper = ({ header, field, orderBy, order }) => (
-        <Tooltip title="Sort" placement="bottom-start" enterDelay={100}>
-            <TableSortLabel active={orderBy === field} direction={order} onClick={this.createSortHandler(field)}>
-                {header || field}
-            </TableSortLabel>
-        </Tooltip>
-    );
+    @bind
+    buildSortWrapper({ header, field, orderBy, order }) {
+        return (
+            <Tooltip title="Sort" placement="bottom-start" enterDelay={100}>
+                <TableSortLabel active={orderBy === field} direction={order} onClick={this.createSortHandler(field)}>
+                    {header || field}
+                </TableSortLabel>
+            </Tooltip>
+        );
+    }
 
-    buildRows = memoize(({ columnDefinitions, orderBy, order }) =>
-        columnDefinitions.map(
+    @bind
+    @memoize()
+    buildRows({ columnDefinitions, orderBy, order }) {
+        return columnDefinitions.map(
             ({ field, header, sortable }, index) => (
                 <TableCellStyled key={field} index={index} sortDirection={orderBy === field ? order : false}>
                     {sortable === false ? header || field : this.buildSortWrapper({ header, field, orderBy, order })}
                 </TableCellStyled>
             ),
             this
-        )
-    );
+        );
+    }
 
     render() {
         const { order, orderBy, columnDefinitions } = this.props;
