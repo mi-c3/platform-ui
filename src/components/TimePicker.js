@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { TimePicker as TPMui, InlineTimePicker as ITPMui } from 'material-ui-pickers';
 
 import { createEvent } from 'utils/http/event';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 class TimePicker extends PureComponent {
     static propTypes = {
@@ -17,10 +18,11 @@ class TimePicker extends PureComponent {
         children: null,
     };
 
-    onChange = (value) => {
+    @bind
+    onChange(value) {
         const { onChange, name } = this.props;
         onChange && onChange(createEvent('change', { target: { name, value } }));
-    };
+    }
 
     render() {
         /*

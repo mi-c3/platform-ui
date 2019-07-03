@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import MuiCheckbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { createEvent } from 'utils/http/event';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 class Checkbox extends PureComponent {
     static propTypes = {
@@ -15,7 +16,8 @@ class Checkbox extends PureComponent {
         color: 'primary',
     };
 
-    onChange = (event) => {
+    @bind
+    onChange(event) {
         const { name, onChange } = this.props;
         const { checked } = event.target;
         onChange &&
@@ -26,7 +28,7 @@ class Checkbox extends PureComponent {
                 }),
                 event
             );
-    };
+    }
 
     render() {
         const { CheckboxProps, labelPlacement, color, value, ...restProps } = this.props;

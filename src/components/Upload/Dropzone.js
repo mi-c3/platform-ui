@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import memoize from 'memoize-one';
 import ReactDropzone from 'react-dropzone';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +13,7 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 import CancelIcon from '@material-ui/icons/Cancel';
 import IconButton from '@material-ui/core/IconButton';
 
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { get } from 'utils/lo/lo';
 import { isImageType, simplifySize, resizeImage } from 'utils/file/file';
 import DropzoneSnackBar from 'components/Upload/DropzoneSnackBar';
@@ -135,7 +135,8 @@ class Dropzone extends Component {
         }
     }
 
-    onChange = async (files) => {
+    @bind
+    async onChange(files) {
         const {
             onChange,
             imageOptions: { maxWidth, maxHeigth, quality },
@@ -153,9 +154,10 @@ class Dropzone extends Component {
             })
         );
         onChange && onChange({ value, originalFiles: files });
-    };
+    }
 
-    handleDropAccepted = async (files) => {
+    @bind
+    async handleDropAccepted(files) {
         if (this.props.showPreviews) {
             if (this.state.files.length + files.length > this.props.filesLimit) {
                 return this.setState({
@@ -182,25 +184,29 @@ class Dropzone extends Component {
             this.onChange(files);
         }
         this.props.onDropAccepted && this.props.onDropAccepted(files);
-    };
+    }
 
-    handleRemove = (index) => (event) => {
-        event.stopPropagation();
-        const { files } = this.state;
-        const fileName = get(files, `[${index}].name`);
-        files.splice(index, 1);
-        this.setState({ files }, () => {
-            this.onChange(files);
-            this.props.showAlerts &&
-                this.setState({
-                    openSnackbar: true,
-                    snackbarMessage: 'File ' + fileName + ' removed',
-                    snackbarVariant: 'info',
-                });
-        });
-    };
+    @bind
+    handleRemove(index) {
+        return (event) => {
+            event.stopPropagation();
+            const { files } = this.state;
+            const fileName = get(files, `[${index}].name`);
+            files.splice(index, 1);
+            this.setState({ files }, () => {
+                this.onChange(files);
+                this.props.showAlerts &&
+                    this.setState({
+                        openSnackbar: true,
+                        snackbarMessage: 'File ' + fileName + ' removed',
+                        snackbarVariant: 'info',
+                    });
+            });
+        };
+    }
 
-    handleDropRejected = (rejectedFiles, evt) => {
+    @bind
+    handleDropRejected(rejectedFiles, evt) {
         let message = '';
         rejectedFiles.forEach((rejectedFile) => {
             message = `File ${rejectedFile.name} was rejected. `;
@@ -220,16 +226,19 @@ class Dropzone extends Component {
                 snackbarMessage: message,
                 snackbarVariant: 'error',
             });
-    };
+    }
 
-    onCloseSnackbar = () => {
+    @bind
+    onCloseSnackbar() {
         this.setState({
             openSnackbar: false,
         });
-    };
+    }
 
-    buildFilesList = memoize(({ files }) =>
-        files.map((file, index) => (
+    @bind
+    @memoize()
+    buildFilesList({ files }) {
+        return files.map((file, index) => (
             <ListItem key={index}>
                 {isImageType(files[index].type) ? (
                     <Avatar src={URL.createObjectURL(file)} />
@@ -245,8 +254,8 @@ class Dropzone extends Component {
                     </IconButton>
                 </ListItemSecondaryAction>
             </ListItem>
-        ))
-    );
+        ));
+    }
 
     render() {
         const {

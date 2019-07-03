@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { TextField as MuiTextField, IconButton, Input, InputAdornment } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
 
+import { bind } from 'utils/decorators/decoratorUtils';
 import { createEvent } from 'utils/http/event';
 
 // eslint-disable-next-line no-unused-vars
@@ -20,12 +21,6 @@ class TextField extends PureComponent {
         fullWidth: true,
     };
 
-    onClear = () => {
-        const { onChange, name, type } = this.props;
-        const event = createEvent('change', { target: { name, type, value: null } });
-        onChange && onChange(event);
-    };
-
     endAdornment = (
         <InputAdornment position="end">
             <IconButton aria-label="Clear input" onClick={this.onClear}>
@@ -33,6 +28,13 @@ class TextField extends PureComponent {
             </IconButton>
         </InputAdornment>
     );
+
+    @bind
+    onClear() {
+        const { onChange, name, type } = this.props;
+        const event = createEvent('change', { target: { name, type, value: null } });
+        onChange && onChange(event);
+    }
 
     render() {
         const { disabled, value, InputProps, ...restProps } = this.props;

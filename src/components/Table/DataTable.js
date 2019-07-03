@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,6 +12,7 @@ import DataTableHead from 'components/Table/DataTableHead';
 import DataTableToolbar from 'components/Table/DataTableToolbar';
 import { get } from 'utils/lo/lo';
 import { getSorting, stableSort } from 'utils/table/table';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 const styles = (theme) => ({
     root: {
@@ -56,53 +56,68 @@ class DataTable extends React.Component {
             pageSize,
         };
     }
-
-    sort = (event, field) => {
+    @bind
+    sort(event, field) {
         const { orderBy, order } = this.state;
         this.setState({
             order: orderBy === field && order === 'desc' ? 'asc' : 'desc',
             orderBy: field,
         });
-    };
+    }
 
-    handleSelectAllClick = (event) => {
+    @bind
+    handleSelectAllClick(event) {
         const { data } = this.props;
         this.setState({ selected: event.target.checked ? data.map((n) => n.id) : [] });
-    };
+    }
 
-    select = (id) => () => {
-        const { selectionMode } = this.props;
-        if (!selectionMode) {
-            return;
-        }
+    @bind
+    select(id) {
+        return () => {
+            const { selectionMode } = this.props;
+            if (!selectionMode) {
+                return;
+            }
 
-        let selected = [...this.state.selected];
-        const selectedIndex = selected.indexOf(id);
+            let selected = [...this.state.selected];
+            const selectedIndex = selected.indexOf(id);
 
-        switch (selectionMode) {
-            case 'multiple':
-                if (selectedIndex === -1) {
-                    selected = [...selected, id];
-                } else {
-                    selected.splice(selectedIndex, 1);
-                }
-                break;
-            case 'single':
-                selected = selectedIndex === -1 ? [id] : [];
-                break;
-            default:
-        }
-        this.setState({ selected }, () => this.props.onSelectionChange(selected));
-    };
+            switch (selectionMode) {
+                case 'multiple':
+                    if (selectedIndex === -1) {
+                        selected = [...selected, id];
+                    } else {
+                        selected.splice(selectedIndex, 1);
+                    }
+                    break;
+                case 'single':
+                    selected = selectedIndex === -1 ? [id] : [];
+                    break;
+                default:
+            }
+            this.setState({ selected }, () => this.props.onSelectionChange(selected));
+        };
+    }
 
-    handleChangePage = (event, page) => this.setState({ page });
+    @bind
+    handleChangePage(event, page) {
+        this.setState({ page });
+    }
 
-    handleChangePageSize = (event) => this.setState({ pageSize: event.target.value });
+    @bind
+    handleChangePageSize(event) {
+        this.setState({ pageSize: event.target.value });
+    }
 
-    isSelected = (id) => this.state.selected.indexOf(id) !== -1;
+    @bind
+    isSelected(id) {
+        return this.state.selected.indexOf(id) !== -1;
+    }
 
-    buildRowsRenderer = memoize(({ data, order, orderBy, page, pageSize, columnDefinitions, dataKey }) =>
-        stableSort(data, getSorting(order, orderBy))
+    @bind
+    @memoize()
+    buildRowsRenderer({ data, order, orderBy, page, pageSize, columnDefinitions, dataKey }) {
+        return stableSort(data, getSorting(order, orderBy))
             .slice(page * pageSize, page * pageSize + pageSize)
             .map((row) => {
                 const isSelected = this.isSelected(row[dataKey]);
@@ -113,8 +128,8 @@ class DataTable extends React.Component {
                         ))}
                     </TableRow>
                 );
-            })
-    );
+            });
+    }
 
     render() {
         const { classes, columnDefinitions, dataKey, data, title, selectionMode } = this.props;

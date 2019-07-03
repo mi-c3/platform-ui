@@ -11,6 +11,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Cancel from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/core/styles';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 import DateTimePicker from './DateTimePicker';
 import TextField from './TextField';
@@ -44,12 +45,14 @@ class CalendarRange extends PureComponent<Object, Object> {
         }
     }
 
-    onClear = (e) => {
+    @bind
+    onClear(e) {
         e.stopPropagation();
         this.setState({ start: null, end: null, fieldLabel: 'All days' }, this.onChange);
-    };
+    }
 
-    onChange = () => {
+    @bind
+    onChange() {
         const { name, onChange } = this.props;
         if (!onChange) {
             return;
@@ -57,9 +60,10 @@ class CalendarRange extends PureComponent<Object, Object> {
         const { start, end } = this.state;
         const value = start && [start, end];
         onChange && onChange({ name, value, target: { name, value } });
-    };
+    }
 
-    onChangeStart = ({ target: { value } }) => {
+    @bind
+    onChangeStart({ target: { value } }) {
         let { end } = this.state;
         let start = value && new Date(value);
         if (!start) {
@@ -72,9 +76,10 @@ class CalendarRange extends PureComponent<Object, Object> {
         }
         start && start.setMilliseconds(0);
         this.setState({ start, end });
-    };
+    }
 
-    onChangeEnd = ({ target: { value } }) => {
+    @bind
+    onChangeEnd({ target: { value } }) {
         let { start } = this.state;
         let end = value && new Date(value);
         if (end && !this.state.end) {
@@ -90,15 +95,17 @@ class CalendarRange extends PureComponent<Object, Object> {
         }
         end && end.setMilliseconds(999);
         this.setState({ start, end });
-    };
+    }
 
-    toggleModal = () => {
+    @bind
+    toggleModal() {
         this.setState((state) => ({
             showModal: !state.showModal,
         }));
-    };
+    }
 
-    onSave = () => {
+    @bind
+    onSave() {
         const { start, end } = this.state;
         this.setState(
             {
@@ -107,7 +114,7 @@ class CalendarRange extends PureComponent<Object, Object> {
             },
             this.onChange
         );
-    };
+    }
 
     render() {
         const { TextFieldProps, PickersFromProps, PickersToProps, classes } = this.props;

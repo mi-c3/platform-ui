@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Autocomplete from 'components/Autocomplete';
 import { get } from 'utils/lo/lo';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 // eslint-disable-next-line no-unused-vars
 const { options, suggest, optiontemplate, variant, ...autocompletePropsSubSet } = (Autocomplete || {}).propTypes || {};
@@ -33,16 +34,18 @@ class GooglePlaceAutocomplete extends PureComponent {
         }
     }
 
-    getLatLgn = (locationID, cb) => {
+    @bind
+    getLatLgn(locationID, cb) {
         this.props.geocoder.geocode({ placeId: locationID }, (results, status) => {
             cb(results, status);
         });
-    };
+    }
 
-    suggest = (event) => {
+    @bind
+    suggest(event) {
         const { value } = event.target;
         this.props.service.getPlacePredictions({ input: value }, (predictions) => this.setState({ options: predictions || [] }));
-    };
+    }
 
     render() {
         const { onChangeCoords, geocoder, service, ...restProps } = this.props; //eslint-disable-line no-unused-vars

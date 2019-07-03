@@ -5,6 +5,7 @@ import Slider from '@material-ui/lab/Slider';
 import { Grid, Typography, IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
+import { bind } from 'utils/decorators/decoratorUtils';
 import { isImageType } from 'utils/file/file';
 import { createEvent } from 'utils/http/event';
 import Avatar from './Avatar';
@@ -52,7 +53,8 @@ class AvatarEditor extends PureComponent {
     editorRef = React.createRef();
     state = defaultState;
 
-    handleDrop = (acceptFiles, rejectFiles) => {
+    @bind
+    handleDrop(acceptFiles, rejectFiles) {
         const files = [...acceptFiles, ...rejectFiles].filter((file) => isImageType(file.type));
         const file = files[0];
         if (files) {
@@ -61,11 +63,15 @@ class AvatarEditor extends PureComponent {
                 imageFile: file,
             });
         }
-    };
+    }
 
-    cancelUpload = () => this.setState(defaultState);
+    @bind
+    cancelUpload() {
+        this.setState(defaultState);
+    }
 
-    handleUpload = () => {
+    @bind
+    handleUpload() {
         if (this.editorRef.current) {
             const { name, onChange } = this.props;
             const canvas = this.editorRef.current.getImage();
@@ -88,30 +94,34 @@ class AvatarEditor extends PureComponent {
                 );
             }
         }
-    };
+    }
 
-    handleScaleChange = (event, value) => {
+    @bind
+    handleScaleChange(event, value) {
         this.setState({ scale: value > 4 ? 4 : value });
-    };
+    }
 
-    handleRotateLeft = () => {
+    @bind
+    handleRotateLeft() {
         this.setState(({ rotate }) => ({
             rotate: parseFloat(rotate - 90),
         }));
-    };
+    }
 
-    handleRotateRight = () => {
+    @bind
+    handleRotateRight() {
         this.setState(({ rotate }) => ({
             rotate: parseFloat(rotate + 90),
         }));
-    };
+    }
 
-    dropZoneClick = (e) => {
+    @bind
+    dropZoneClick(event) {
         const { disabled } = this.props;
         if (disabled) {
-            e.stopPropagation();
+            event.stopPropagation();
         }
-    };
+    }
 
     render() {
         const { image, classes, initials, label, disabled } = this.props;

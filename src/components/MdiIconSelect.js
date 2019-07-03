@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
-import memoize from 'memoize-one';
 
 import MdiIcon from 'components/MdiIcon';
 import Autocomplete from 'components/Autocomplete';
 import { iconsList } from 'utils/data/iconsList';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 // eslint-disable-next-line
 const { options, optionTemplate, ...autocompletePropsSubSet } = (Autocomplete || {}).propTypes || {};
@@ -11,12 +11,19 @@ const { options, optionTemplate, ...autocompletePropsSubSet } = (Autocomplete ||
 class MdiIconSelect extends PureComponent {
     static propTypes = autocompletePropsSubSet;
 
-    buildOptions = memoize((iconsList) => iconsList.map((value) => ({ value, label: value })));
+    @bind
+    @memoize()
+    buildOptions(iconsList) {
+        return iconsList.map((value) => ({ value, label: value }));
+    }
 
-    optionTemplate = ({ value, label }) => ({
-        startAdornment: <MdiIcon size={19} name={value} />,
-        label,
-    });
+    @bind
+    optionTemplate({ value, label }) {
+        return {
+            startAdornment: <MdiIcon size={19} name={value} />,
+            label,
+        };
+    }
 
     render() {
         const { VirtualListProps, ...restProps } = this.props;

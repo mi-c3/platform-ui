@@ -10,14 +10,13 @@ import { get, set } from 'utils/lo/lo';
 import statefullInput from 'storybook/utils/hoc/statefullInput';
 import Geocode from 'utils/maps/geocodeUtils';
 import GPA from 'components/Location/GooglePlaceAutocomplete';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 const GooglePlaceAutocomplete = statefullInput(GPA);
 
 const myCurrentLocationError = () =>
     console.log({ severity: 'error', detail: 'Could not get your location, please allow location tracking in your browser' }); // eslint-disable-line no-console
-/**
- * Renders a location form to allow a user to change address and location.
- */
+
 class LocationForm extends PureComponent {
     static propTypes = {
         value: PropTypes.object,
@@ -46,17 +45,19 @@ class LocationForm extends PureComponent {
         this.myLocation();
     }
 
-    onChange = (locationInfo) => {
+    @bind
+    onChange(locationInfo) {
         if (this.props.onChange) {
             const name = this.props.name;
             const value = locationInfo;
             const event = createEvent('change', { target: { name, value } });
             this.props.onChange(event);
         }
-    };
+    }
 
     // if we don't need addres we can remove this functional
-    handleLatLongChange = (updatedLocationInfo) => {
+    @bind
+    handleLatLongChange(updatedLocationInfo) {
         clearTimeout(this.timer);
         const lat = Number(get(updatedLocationInfo, 'latitude'));
         const long = Number(get(updatedLocationInfo, 'longitude'));
@@ -75,26 +76,37 @@ class LocationForm extends PureComponent {
                 }
             );
         }, 1000);
-    };
+    }
 
-    centerMap = () => this.setState({ locationKey: this.state.locationKey + 1 });
+    @bind
+    centerMap() {
+        this.setState({ locationKey: this.state.locationKey + 1 });
+    }
 
-    myLocation = () => Geocode.getCurrentLocation(this.myCurrentLocation, myCurrentLocationError);
+    @bind
+    myLocation() {
+        Geocode.getCurrentLocation(this.myCurrentLocation, myCurrentLocationError);
+    }
 
-    myCurrentLocation = (position) => {
+    @bind
+    myCurrentLocation(position) {
         let updatedLocationInfo = set(this.props.value, 'latitude', position.coords.latitude);
         updatedLocationInfo = set(updatedLocationInfo, 'longitude', position.coords.longitude);
         this.onChange(updatedLocationInfo);
         this.handleLatLongChange(updatedLocationInfo);
-    };
+    }
 
-    onGoogleApiLoaded = ({ maps, map }) => {
+    @bind
+    onGoogleApiLoaded({ maps, map }) {
         this.geocoder = new maps.Geocoder();
         this.service = new maps.places.AutocompleteService();
         this.props.onGoogleApiLoaded && this.props.onGoogleApiLoaded({ maps, map });
-    };
+    }
 
-    onMapClick = (latitude, longitude) => this.myCurrentLocation({ coords: { latitude, longitude } });
+    @bind
+    onMapClick(latitude, longitude) {
+        this.myCurrentLocation({ coords: { latitude, longitude } });
+    }
 
     render() {
         const { value, disabled, withAutocomplete, LocationProps, GooglePlaceAutocompleteProps } = this.props;
