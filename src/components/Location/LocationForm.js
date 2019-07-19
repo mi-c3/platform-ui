@@ -25,6 +25,7 @@ class LocationForm extends PureComponent {
         onChange: PropTypes.func,
         onGoogleApiLoaded: PropTypes.func,
         withAutocomplete: PropTypes.bool,
+        showCoords: PropTypes.bool,
         LocationProps: PropTypes.shape((Location || {}).propTypes),
         GooglePlaceAutocompleteProps: PropTypes.object,
     };
@@ -32,6 +33,7 @@ class LocationForm extends PureComponent {
     static defaultProps = {
         addressOnlyFields: false,
         value: {},
+        showCoords: false,
     };
 
     geocoder = null;
@@ -39,11 +41,6 @@ class LocationForm extends PureComponent {
     timer = null;
 
     state = { locationKey: 0 };
-
-    constructor(props) {
-        super(props);
-        this.myLocation();
-    }
 
     @bind
     onChange(locationInfo) {
@@ -75,7 +72,7 @@ class LocationForm extends PureComponent {
                     this.onChange(updatedLocationInfo);
                 }
             );
-        }, 1000);
+        }, 300);
     }
 
     @bind
@@ -92,12 +89,14 @@ class LocationForm extends PureComponent {
     myCurrentLocation(position) {
         let updatedLocationInfo = set(this.props.value, 'latitude', position.coords.latitude);
         updatedLocationInfo = set(updatedLocationInfo, 'longitude', position.coords.longitude);
-        this.onChange(updatedLocationInfo);
         this.handleLatLongChange(updatedLocationInfo);
     }
 
     @bind
     onGoogleApiLoaded({ maps, map }) {
+        if (!maps) {
+            return;
+        }
         this.geocoder = new maps.Geocoder();
         this.service = new maps.places.AutocompleteService();
         this.props.onGoogleApiLoaded && this.props.onGoogleApiLoaded({ maps, map });
@@ -109,7 +108,7 @@ class LocationForm extends PureComponent {
     }
 
     render() {
-        const { value, disabled, withAutocomplete, LocationProps, GooglePlaceAutocompleteProps } = this.props;
+        const { value, disabled, withAutocomplete, LocationProps, GooglePlaceAutocompleteProps, showCoords } = this.props;
         const latitude = get(value, 'latitude');
         const longitude = get(value, 'longitude');
         return (
@@ -135,10 +134,14 @@ class LocationForm extends PureComponent {
                     {...LocationProps}
                 />
                 <Grid container justify="space-between">
-                    <Grid item>
-                        {latitude && <Typography variant="button">Latitude: {latitude}</Typography>}
-                        {longitude && <Typography variant="button">Longitude: {longitude}</Typography>}
-                    </Grid>
+                    {showCoords ? (
+                        <Grid item>
+                            {latitude && <Typography variant="button">Latitude: {latitude}</Typography>}
+                            {longitude && <Typography variant="button">Longitude: {longitude}</Typography>}
+                        </Grid>
+                    ) : (
+                        <Grid item />
+                    )}
                     <Grid item>
                         <Button onClick={this.centerMap} variant="text">
                             Center map

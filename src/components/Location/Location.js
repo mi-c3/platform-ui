@@ -7,6 +7,34 @@ import { SimpleMarker } from 'components/Location/SimpleMarker/SimpleMarker';
 import { isDefined } from 'utils/utils';
 import { bind } from 'utils/decorators/decoratorUtils';
 
+const Map = ({ center, zoom, children, ...restProps }) => (
+    <div style={{ height: '300px', width: '100%' }}>
+        <GoogleMapReact
+            bootstrapURLKeys={{ key: 'AIzaSyBn4zixY8-GRFxLxifzO2jyrrqCRW4qn7Q', libraries: 'places' }}
+            defaultCenter={center}
+            defaultZoom={zoom}
+            yesIWantToUseGoogleMapApiInternals
+            {...restProps}
+        >
+            {children}
+        </GoogleMapReact>
+    </div>
+);
+
+Map.propTypes = {
+    center: PropTypes.object,
+    zoom: PropTypes.number,
+    children: PropTypes.any,
+};
+
+Map.defaultProps = {
+    center: {
+        lat: 59.95,
+        lng: 30.33,
+    },
+    zoom: 11,
+};
+
 /* Map configuration */
 const mapOptions = ({ dark, streetViewControl }) => (maps) => {
     const options = {
@@ -61,26 +89,21 @@ export default class Location extends PureComponent {
 
     render() {
         const { latitude, longitude, onGoogleApiLoaded } = this.props;
-        const noLocation = !isDefined(latitude) || !isDefined(longitude) || latitude === '' || longitude === '';
+        const noLocation = !isDefined(latitude) || !isDefined(longitude);
 
         if (noLocation) {
             return <span> No location is available. </span>;
         }
         const marker = !this.props.writeMode ? <SimpleMarker lat={latitude} lng={longitude} /> : null;
         return (
-            <div style={{ height: '300px' }}>
-                <GoogleMapReact
-                    bootstrapURLKeys={{ key: 'AIzaSyBn4zixY8-GRFxLxifzO2jyrrqCRW4qn7Q', libraries: 'places' }}
-                    center={{ lat: latitude, lng: longitude }}
-                    options={mapOptions(this.props)}
-                    {...this.props}
-                    onClick={this.mapClicked}
-                    onGoogleApiLoaded={onGoogleApiLoaded}
-                    yesIWantToUseGoogleMapApiInternals
-                >
-                    {marker}
-                </GoogleMapReact>
-            </div>
+            <Map
+                options={mapOptions(this.props)}
+                onClick={this.mapClicked}
+                center={{ lat: latitude, lng: longitude }}
+                onGoogleApiLoaded={onGoogleApiLoaded}
+            >
+                {marker}
+            </Map>
         );
     }
 }
