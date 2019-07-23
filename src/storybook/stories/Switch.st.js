@@ -12,7 +12,10 @@ storiesOf('Components|Switch', module)
     .addDecorator(withKnobs)
     .add('Switch', ({ value, onChange }) => {
         const label = text('Custom', 'Custom', 'Default');
+        const helperText = text('Helper Text', '', 'Default');
+        const error = boolean('Error', false, 'Default');
         const disabled = boolean('Disabled', false, 'Default');
+        const required = boolean('Required', false, 'Default');
         const color = select('Color', forRadio.colors, 'primary', 'Style');
 
         return (
@@ -21,7 +24,15 @@ storiesOf('Components|Switch', module)
                 <br />
                 <Switch value={value} disabled label="(Disabled option)" name="disabled" />
                 <br />
-                <Switch value={value} label={label} disabled={disabled} SwitchProps={{ color }} />
+                <Switch
+                    helperText={helperText}
+                    error={error}
+                    required={required}
+                    value={value}
+                    label={label}
+                    disabled={disabled}
+                    SwitchProps={{ color }}
+                />
             </Fragment>
         );
     });
