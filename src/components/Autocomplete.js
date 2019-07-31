@@ -25,11 +25,11 @@ const styles = () => ({
         flexWrap: 'wrap',
     },
     inputInput: {
-        width: 'auto',
+        width: '100%',
         flexGrow: 1,
     },
     chip: {
-        margin: '1px',
+        margin: '5px 3px',
         height: '24px',
     },
 });
@@ -259,7 +259,7 @@ class Autocomplete extends PureComponent {
                                             </div>
                                         );
                                     }}
-                                    {...VirtualListProps || {}}
+                                    {...VirtualListProps}
                                     itemSize={get(VirtualListProps, 'itemSize', 30)}
                                 />
                             </Paper>
@@ -278,11 +278,11 @@ class Autocomplete extends PureComponent {
     buildInputProps({ selected, clearable, disabled, multiple, query, InputProps, classes, openSuggestions }) {
         const { startAdornment, label = '' } = !multiple ? this.optionTemplate(selected) : {};
         const InputProperties = {
+            ...InputProps,
             inputRef: this.inputRef,
             autoComplete: 'off',
             onChange: this.onSearching,
             value: openSuggestions ? query : label,
-            ...InputProps,
         };
         if (multiple) {
             InputProperties.startAdornment = (arrayfy(selected) || []).map((option, index) => {

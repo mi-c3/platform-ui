@@ -15,12 +15,12 @@ const styles = () => ({
     error: { backgroundColor: '#c62828' },
 });
 
-const Avatar = ({ initials, src, classes, className, ...restProps }) => {
+const Avatar = ({ initials, src, classes, className, initialsSeparator, ...restProps }) => {
     return src ? (
         <MuiAvatar src={src} className={className || ''} {...restProps} />
     ) : (
         <MuiAvatar className={`${generateColor(Object.values(classes), initials)} ${className || ''}`} {...restProps}>
-            {createInitials(initials)}
+            {createInitials(initials, initialsSeparator)}
         </MuiAvatar>
     );
 };
@@ -29,6 +29,7 @@ Avatar.propTypes = {
     initials: PropTypes.string,
     src: PropTypes.string,
     className: PropTypes.string,
+    initialsSeparator: PropTypes.string,
     classes: PropTypes.object,
 };
 
