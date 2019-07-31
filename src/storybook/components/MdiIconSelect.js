@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { MdiIcon, Avatar, MdiIconSelect } from 'index';
-import { createInitials } from 'utils/avatar/avatar';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = () => ({
@@ -28,7 +27,7 @@ const MdiSelectIcon = withStyles(styles)(MdiSelectIconClass);
 class MdiSelectLetterClass extends MdiIconSelect {
     optionTemplate = ({ value, label }) => ({
         ChipProps: {
-            avatar: <Avatar className={this.props.classes.avatar}>{createInitials(value, '-')}</Avatar>,
+            avatar: <Avatar initialsSeparator="-" initials={value} className={this.props.classes.avatar} />,
         },
         startAdornment: <MdiIcon name={value} size={19} />,
         label,
