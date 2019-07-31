@@ -1,4 +1,3 @@
-import blueGrey from '@material-ui/core/colors/blueGrey';
 import { createMuiTheme } from '@material-ui/core/styles';
 
 export const colors = {
@@ -7,14 +6,18 @@ export const colors = {
         dark: '#4BB9D9',
         main: '#4BB9D9',
     },
-    secondary: blueGrey,
+    secondary: {
+        light: '#FFFFFF',
+        dark: '#FFFFFF',
+        main: '#FFFFFF',
+    },
     common: {
         white: '#ffffff',
         black: '#000000',
     },
     darkGray: '#DADADA',
     darkBlue: '#066AB1',
-    background: '#242E36',
+    background: '#343A45',
     red: '#C22525',
 };
 
@@ -22,6 +25,16 @@ export const DarkTheme = createMuiTheme({
     colors,
     palette: {
         type: 'dark',
+        primary: colors.primary,
+        secondary: colors.secondary,
+        // text: {
+        //     primary: colors.common.white,
+        //     secondary: 'rgba(0, 0, 0, 0.6)',
+        // },
+        background: {
+            paper: colors.background,
+            default: colors.background,
+        },
         action: {
             disabled: colors.background,
             disabledBackground: colors.background,
@@ -29,19 +42,33 @@ export const DarkTheme = createMuiTheme({
             hoverOpacity: 0.1,
             selected: colors.background,
         },
-        primary: {
-            ...colors.primary,
-        },
-        secondary: {
-            ...colors.primary,
-        },
-        background: {
-            paper: colors.background,
-            default: colors.background,
-        },
     },
     typography: { useNextVariants: true },
     overrides: {
+        MuiButton: {
+            root: {
+                fontSize: 14,
+                minWidth: 103,
+            },
+            containedPrimary: {
+                color: colors.common.white,
+            },
+            containedSecondary: {
+                color: 'rgba(0, 0, 0, 0.6)',
+            },
+            contained: {
+                '&$disabled': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.24)',
+                    color: 'rgba(255, 255, 255, 0.38)',
+                },
+            },
+            outlined: {
+                '&$disabled': {
+                    border: '1px solid rgba(255, 255, 255, 0.24)',
+                    color: 'rgba(255, 255, 255, 0.38)',
+                },
+            },
+        },
         MuiFilledInput: {
             root: {
                 backgroundColor: colors.background,
