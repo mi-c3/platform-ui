@@ -8,7 +8,7 @@ import { forRadio } from 'storybook/constants/propsVariation';
 
 const Switch = statefullInput(S);
 
-storiesOf('Components|Switch', module)
+storiesOf('Components|Selection Controls', module)
     .addDecorator(withKnobs)
     .add('Switch', ({ value, onChange }) => {
         const label = text('Custom', 'Custom', 'Default');
@@ -20,9 +20,11 @@ storiesOf('Components|Switch', module)
 
         return (
             <Fragment>
-                <Switch value={value} onChange={onChange} label="Primary" name="primary" />
+                <Switch cheked value={true} onChange={onChange} label="Primary" name="primary" />
                 <br />
-                <Switch value={value} disabled label="(Disabled option)" name="disabled" />
+                <Switch value={true} disabled label="Primary (Disabled option)" name="disabled" />
+                <br />
+                <Switch disabled label="Primary (Disabled option)" name="disabled" />
                 <br />
                 <Switch
                     helperText={helperText}
