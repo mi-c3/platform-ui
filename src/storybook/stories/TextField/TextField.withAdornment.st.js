@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 
 import statefullInput from 'storybook/utils/hoc/statefullInput';
 import { currencies } from 'storybook/mock/currencies';
-import { TextField as TF, MenuItem } from 'index';
+import { TextField as TF, MenuItem, InputAdornment, MdiIcon } from 'index';
 import H3 from 'storybook/components/atoms/H3';
 
 const TextField = statefullInput(TF);
@@ -26,7 +26,7 @@ const optionsVariant = {
 
 storiesOf('Components|TextField', module)
     .addDecorator(withKnobs)
-    .add('Text', () => {
+    .add('Text with Adornment', () => {
         const label = text('Label', 'Textfield', 'Default');
         const placeholder = text('Placeholder', 'type your text', 'Default');
         const required = boolean('Required', false, 'Default');
@@ -39,11 +39,10 @@ storiesOf('Components|TextField', module)
         const rows = number('Rows', 5, {}, 'Multiline');
         const rowsMax = number('RowsMax', 10, {}, 'Multiline');
         const selectList = boolean('Select', false, 'Select');
-        const error = boolean('Error', false, 'Default');
 
         return (
             <Fragment>
-                <H3>Simple TextField</H3>
+                <H3>TextField with left adornment</H3>
                 <TextField
                     label={label}
                     placeholder={placeholder}
@@ -57,7 +56,13 @@ storiesOf('Components|TextField', module)
                     rows={rows}
                     rowsMax={rowsMax}
                     select={selectList}
-                    error={error}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <MdiIcon name="yin-yang" size={20} />
+                            </InputAdornment>
+                        ),
+                    }}
                 >
                     {generateOptions(currencies)}
                 </TextField>
