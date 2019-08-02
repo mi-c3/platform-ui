@@ -26,9 +26,10 @@ const optionsVariant = {
 
 storiesOf('Components|TextField', module)
     .addDecorator(withKnobs)
-    .add('Text', () => {
+    .add('Text with error', () => {
         const label = text('Label', 'Textfield', 'Default');
         const placeholder = text('Placeholder', 'type your text', 'Default');
+        const helperText = text('Helper text', 'some constraint message', 'Default');
         const required = boolean('Required', false, 'Default');
         const disabled = boolean('Disabled', false, 'Default');
         const name = text('Name', 'email', 'Default');
@@ -39,11 +40,11 @@ storiesOf('Components|TextField', module)
         const rows = number('Rows', 5, {}, 'Multiline');
         const rowsMax = number('RowsMax', 10, {}, 'Multiline');
         const selectList = boolean('Select', false, 'Select');
-        const error = boolean('Error', false, 'Default');
+        const error = boolean('Error', true, 'Default');
 
         return (
             <Fragment>
-                <H3>Simple TextField</H3>
+                <H3>TextField with Error</H3>
                 <TextField
                     label={label}
                     placeholder={placeholder}
@@ -58,6 +59,7 @@ storiesOf('Components|TextField', module)
                     rowsMax={rowsMax}
                     select={selectList}
                     error={error}
+                    helperText={helperText}
                 >
                     {generateOptions(currencies)}
                 </TextField>

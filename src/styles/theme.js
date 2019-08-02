@@ -82,6 +82,11 @@ export const DarkTheme = createMuiTheme({
                     backgroundColor: colors.background,
                 },
             },
+            underline: {
+                '&$disabled:before': {
+                    borderBottom: 0,
+                },
+            },
         },
         MuiRadio: {
             colorPrimary: {
@@ -114,21 +119,21 @@ export const DarkTheme = createMuiTheme({
             },
         },
         MuiSwitch: {
-            switchBase: {
+            $switchBase: {
                 color: 'rgba(255, 255, 255, 0.22)',
                 '& + $bar': {
                     backgroundColor: 'black',
                 },
             },
-            bar: {
+            $bar: {
                 backgroundColor: 'rgba(0, 0, 0, 0.54)',
             },
-            disabled: {
-                '&$switchBase.MuiSwitch-checked': {
+            $disabled: {
+                '&$switchBase$checked': {
                     opacity: 0.3,
                     color: colors.primary.dark,
                 },
-                '&.MuiSwitch-checked + $bar': {
+                '&$checked + $bar': {
                     backgroundColor: `${colors.primary.dark} !important`,
                 },
                 '&$switchBase': {

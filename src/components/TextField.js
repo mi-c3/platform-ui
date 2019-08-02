@@ -2,12 +2,20 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { TextField as MuiTextField, IconButton, Input, InputAdornment } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
+import { withStyles } from '@material-ui/core/styles';
 
-import { bind } from 'utils/decorators/decoratorUtils';
+import MdiIcon from 'components/MdiIcon';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { createEvent } from 'utils/http/event';
 
 // eslint-disable-next-line no-unused-vars
 const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};
+
+const useStyles = withStyles((theme) => ({
+    icon: {
+        color: theme.colors.darkGray,
+    },
+}));
 
 class TextField extends PureComponent {
     static propTypes = {
@@ -19,31 +27,53 @@ class TextField extends PureComponent {
         variant: 'filled',
         margin: 'normal',
         fullWidth: true,
+        InputProps: {},
     };
 
-    endAdornment = (
-        <InputAdornment position="end">
-            <IconButton aria-label="Clear input" onClick={this.onClear}>
-                <Cancel />
-            </IconButton>
-        </InputAdornment>
-    );
-
     @bind
+    @memoize()
     onClear() {
         const { onChange, name, type } = this.props;
         const event = createEvent('change', { target: { name, type, value: null } });
         onChange && onChange(event);
     }
 
+    @bind
+    @memoize()
+    getClearAdornment(disabled, value) {
+        return (
+            !disabled &&
+            !!value && (
+                <InputAdornment position="end">
+                    <IconButton aria-label="Clear input" onClick={this.onClear}>
+                        <Cancel className={this.props.classes.icon} />
+                    </IconButton>
+                </InputAdornment>
+            )
+        );
+    }
+
+    @bind
+    @memoize()
+    getErrorAdornment() {
+        return (
+            <InputAdornment position="end">
+                <IconButton aria-label="Clear input" onClick={this.onClear}>
+                    <MdiIcon name="alert-circle" color="error" />
+                </IconButton>
+            </InputAdornment>
+        );
+    }
+
     render() {
-        const { disabled, value, InputProps, ...restProps } = this.props;
+        const { disabled, value, InputProps, error, ...restProps } = this.props;
         return (
             <MuiTextField
                 value={value || ''}
                 disabled={disabled}
+                error={error}
                 InputProps={{
-                    endAdornment: !disabled && !!value && this.endAdornment,
+                    endAdornment: error ? this.getErrorAdornment() : this.getClearAdornment(disabled, value),
                     ...InputProps,
                 }}
                 {...restProps}
@@ -52,4 +82,4 @@ class TextField extends PureComponent {
     }
 }
 
-export default TextField;
+export default useStyles(TextField);
