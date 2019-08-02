@@ -17,7 +17,7 @@ export const colors = {
     },
     darkGray: '#DADADA',
     darkBlue: '#066AB1',
-    background: '#343A45',
+    background: '#2C303A',
     red: '#C22525',
 };
 
@@ -27,10 +27,6 @@ export const DarkTheme = createMuiTheme({
         type: 'dark',
         primary: colors.primary,
         secondary: colors.secondary,
-        // text: {
-        //     primary: colors.common.white,
-        //     secondary: 'rgba(0, 0, 0, 0.6)',
-        // },
         background: {
             paper: colors.background,
             default: colors.background,
@@ -119,21 +115,21 @@ export const DarkTheme = createMuiTheme({
             },
         },
         MuiSwitch: {
-            $switchBase: {
+            switchBase: {
                 color: 'rgba(255, 255, 255, 0.22)',
                 '& + $bar': {
                     backgroundColor: 'black',
                 },
             },
-            $bar: {
+            bar: {
                 backgroundColor: 'rgba(0, 0, 0, 0.54)',
             },
-            $disabled: {
-                '&$switchBase$checked': {
+            disabled: {
+                '&$switchBase.MuiSwitch-checked': {
                     opacity: 0.3,
                     color: colors.primary.dark,
                 },
-                '&$checked + $bar': {
+                '&.MuiSwitch-checked + $bar': {
                     backgroundColor: `${colors.primary.dark} !important`,
                 },
                 '&$switchBase': {

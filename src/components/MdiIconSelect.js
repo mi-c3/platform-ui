@@ -1,5 +1,8 @@
 import React, { PureComponent } from 'react';
 
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import MdiIcon from 'components/MdiIcon';
 import Autocomplete from 'components/Autocomplete';
 import { iconsList } from 'utils/data/iconsList';
@@ -22,21 +25,24 @@ class MdiIconSelect extends PureComponent {
         return {
             startAdornment: <MdiIcon size={19} name={value} />,
             label,
+            option: (
+                <ListItem ContainerComponent="div" dense disableGutters>
+                    <ListItemIcon>
+                        <MdiIcon name={value} />
+                    </ListItemIcon>
+                    <ListItemText primary={label} />
+                </ListItem>
+            ),
         };
     }
 
     render() {
-        const { VirtualListProps, ...restProps } = this.props;
         return (
             <Autocomplete
                 options={this.buildOptions(iconsList)}
                 optionTemplate={this.optionTemplate}
                 placeholder="Select an icon"
-                VirtualListProps={{
-                    itemSize: 32,
-                    ...VirtualListProps,
-                }}
-                {...restProps}
+                {...this.props}
             />
         );
     }

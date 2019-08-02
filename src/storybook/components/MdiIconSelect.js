@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { MdiIcon, Avatar, MdiIconSelect } from 'index';
+import { MdiIcon, Avatar, MdiIconSelect, ListItem, ListItemText, ListItemIcon } from 'index';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = () => ({
@@ -14,11 +14,18 @@ const styles = () => ({
 class MdiSelectIconClass extends MdiIconSelect {
     optionTemplate = ({ value, label }) => ({
         ChipProps: {
-            // avatar: <Avatar className={this.props.classes.avatar}>{(value || '').charAt(0).toUpperCase()}</Avatar>, //<MdiIcon name={value} />, // <ChipIcon name={value} />
             icon: <MdiIcon name={value} size={19} />,
         },
         startAdornment: <MdiIcon name={value} size={19} />,
         label,
+        option: (
+            <ListItem ContainerComponent="div" dense disableGutters>
+                <ListItemIcon>
+                    <MdiIcon name={value} />
+                </ListItemIcon>
+                <ListItemText primary={label} />
+            </ListItem>
+        ),
     });
 }
 
@@ -31,6 +38,14 @@ class MdiSelectLetterClass extends MdiIconSelect {
         },
         startAdornment: <MdiIcon name={value} size={19} />,
         label,
+        option: (
+            <ListItem ContainerComponent="div" dense disableGutters>
+                <ListItemIcon>
+                    <MdiIcon name={value} />
+                </ListItemIcon>
+                <ListItemText primary={label} />
+            </ListItem>
+        ),
     });
 }
 

@@ -23,7 +23,7 @@ storiesOf('Components|Autocomplete.Multiple', module)
         const name = text('Name', 'countries', 'Default');
         const placeholder = text('Placeholder', 'Type A...', 'Default');
         const fullWidth = boolean('FullWidth', true, 'Style');
-        const multiple = boolean('Multiple', false, 'Default');
+        const multiple = boolean('Multiple', true, 'Default');
         const label = text('Label', 'Icon name', 'Default');
 
         return (

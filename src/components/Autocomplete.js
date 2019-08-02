@@ -42,10 +42,6 @@ const AdormentStyle = styled('div')({
     margin: '21px 7px 0 0',
 });
 
-const AdormentOptionStyle = styled('div')({
-    margin: '0 7px 0 0',
-});
-
 class Autocomplete extends PureComponent {
     static propTypes = {
         classes: PropTypes.object,
@@ -71,7 +67,9 @@ class Autocomplete extends PureComponent {
         options: [],
         InputProps: {},
         PopperProps: {},
-        VirtualListProps: {},
+        VirtualListProps: {
+            itemSize: 50,
+        },
     };
 
     constructor(props) {
@@ -216,7 +214,8 @@ class Autocomplete extends PureComponent {
     @memoize(equals)
     buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps) {
         const maxPopperHeight = 224;
-        const maxSuggetionsHeight = suggestions.length * (get(VirtualListProps, 'itemSize', 30) + 4);
+        const { itemSize } = VirtualListProps;
+        const maxSuggetionsHeight = suggestions.length * (itemSize + 4);
         const popperHeight = Math.min(maxSuggetionsHeight, get(VirtualListProps, 'height', maxPopperHeight));
         if (popperHeight < maxPopperHeight) {
             this.popperRef.current && this.popperRef.current.popper && this.popperRef.current.popper.update();
@@ -245,22 +244,22 @@ class Autocomplete extends PureComponent {
                                     itemCount={suggestions.length}
                                     renderItem={({ index, style }) => {
                                         const op = suggestions[index];
-                                        const { startAdornment, label } = this.optionTemplate(op);
+                                        const { label, option } = this.optionTemplate(op);
                                         return (
                                             <div key={index} style={style}>
                                                 <MenuItem
+                                                    style={{ padding: '15px', fontSize: '16px' }}
                                                     onClick={this.buildOnChange(op)}
                                                     value={op}
-                                                    style={{ height: '10px', fontWeight: 500 }}
                                                     component="div"
                                                 >
-                                                    {startAdornment && <AdormentOptionStyle>{startAdornment}</AdormentOptionStyle>} {label}
+                                                    {option || label}
                                                 </MenuItem>
                                             </div>
                                         );
                                     }}
                                     {...VirtualListProps}
-                                    itemSize={get(VirtualListProps, 'itemSize', 30)}
+                                    itemSize={VirtualListProps.itemSize}
                                 />
                             </Paper>
                         </Grow>
