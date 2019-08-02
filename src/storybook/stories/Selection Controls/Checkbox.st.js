@@ -8,7 +8,7 @@ import { Checkbox as CB } from 'index';
 
 const Checkbox = statefullInput(CB);
 
-storiesOf('Components|Checkbox', module)
+storiesOf('Components|Selection Controls', module)
     .addDecorator(withKnobs)
     .add('Checkbox', () => {
         const label = text('Label', 'Active', 'Default');
