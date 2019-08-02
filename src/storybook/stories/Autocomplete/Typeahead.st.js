@@ -9,8 +9,12 @@ import { getStuff } from 'storybook/mock/stuff';
 import statefullInput from 'storybook/utils/hoc/statefullInput';
 import AL from 'components/AutocompleteLazy';
 import H3 from 'storybook/components/atoms/H3';
+import { ListItem, Avatar, ListItemText, withStyles } from 'index';
 
 const AutocompleteLazy = statefullInput(AL);
+const AvatarStyled = withStyles({ root: { width: '21px !important', height: '21px !important', fontSize: '.9rem !important' } })(
+    ({ classes, ...restProps }) => <Avatar className={classes.root} {...restProps} />
+);
 
 storiesOf('Components|Autocomplete', module)
     .addDecorator(withKnobs)
@@ -29,18 +33,39 @@ storiesOf('Components|Autocomplete', module)
                 <AutocompleteLazy
                     label={labelUser}
                     disabled={disabled}
-                    name={name}
+                    name={'user'}
                     placeholder={placeholder}
                     fullWidth={fullWidth}
                     multiple={multiple}
                     onChange={onChange}
                     fetchData={getUsers}
-                    optionTemplate={({ name, id }) => ({ label: `${name} (${id})` })}
+                    VirtualListProps={{
+                        itemSize: 60,
+                    }}
+                    optionTemplate={({ name, image, login, id }) => ({
+                        label: `${name} (${id})`,
+                        option: (
+                            <ListItem ContainerComponent="div" dense disableGutters>
+                                <Avatar src={image} />
+                                <ListItemText primary={name} secondary={`@${login}`} />
+                            </ListItem>
+                        ),
+                        ChipProps: {
+                            avatar: <AvatarStyled src={image} initials={name} />,
+                        },
+                        startAdornment: (
+                            <AvatarStyled
+                                style={{ width: '21px !important', height: '21px !important', fontSize: '.9rem !important' }}
+                                src={image}
+                                initials={name}
+                            />
+                        ),
+                    })}
                 />
                 <AutocompleteLazy
                     label={labelCittiesDB}
                     disabled={disabled}
-                    name={name}
+                    name={'cities-test'}
                     placeholder={placeholder}
                     fullWidth={fullWidth}
                     multiple={multiple}
