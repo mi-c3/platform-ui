@@ -79,7 +79,7 @@ export const DarkTheme = createMuiTheme({
                     backgroundColor: colors.background,
                 },
                 '&$disabled': {
-                    backgroundColor: colors.background,
+                    backgroundColor: 'transparent',
                 },
             },
             underline: {
