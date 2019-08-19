@@ -142,7 +142,7 @@ class Autocomplete extends PureComponent {
     @bind
     onChange(option) {
         const { onChange, name, value: currentValue, multiple, valueField } = this.props;
-        const optionValue = valueField ? get(option, valueField) : option;
+        const optionValue = valueField ? get(option, valueField, null) : option;
         const value = !multiple ? optionValue : [...(arrayfy(currentValue) || []), optionValue];
         this.setState({ query: '' }, () => onChange && onChange(createEvent('change', { target: { name, value } })));
     }
@@ -185,8 +185,9 @@ class Autocomplete extends PureComponent {
     @bind
     clearInput() {
         let value = null;
-        if (this.props.valueField) {
-            value = this.props.options.find((option) => null === get(option, this.props.valueField)) || value;
+        const { valueField, options } = this.props;
+        if (valueField) {
+            value = (options || []).find((option) => null === get(option, valueField)) || value;
         }
         this.onChange(value);
     }

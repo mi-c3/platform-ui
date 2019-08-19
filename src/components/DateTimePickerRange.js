@@ -136,7 +136,6 @@ class CalendarRange extends PureComponent<Object, Object> {
         return (
             <Fragment>
                 <TextField
-                    disabled
                     multiline
                     rowsMax={2}
                     InputProps={{
