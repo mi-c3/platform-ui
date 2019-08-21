@@ -56,11 +56,11 @@ class AvatarEditor extends PureComponent {
     @bind
     handleDrop(acceptFiles, rejectFiles) {
         const files = [...acceptFiles, ...rejectFiles].filter((file) => isImageType(file.type));
-        const file = files[0];
-        if (files) {
+        const imageFile = files[0];
+        if (imageFile) {
             this.setState({
                 showAvatarEditor: true,
-                imageFile: file,
+                imageFile,
             });
         }
     }
