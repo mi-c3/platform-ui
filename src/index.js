@@ -13,6 +13,8 @@ import {
 
 import ReactDropzone from 'react-dropzone';
 
+import Slider from '@material-ui/lab/Slider';
+
 import AppBar from '@material-ui/core/AppBar';
 import Backdrop from '@material-ui/core/Backdrop';
 import Badge from '@material-ui/core/Badge';
@@ -143,7 +145,9 @@ import LocationSwitch from 'components/Location/LocationSwitch';
 import PuiProvider from 'components/PuiProvider';
 
 export {
-    // Platform MAterial UI
+    // Material UI Lab components
+    Slider,
+    // Platform overrides Material UI components
     Avatar,
     AvatarEditor,
     Autocomplete,
