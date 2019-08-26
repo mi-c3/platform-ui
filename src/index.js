@@ -13,8 +13,6 @@ import {
 
 import ReactDropzone from 'react-dropzone';
 
-import Slider from '@material-ui/lab/Slider';
-
 import AppBar from '@material-ui/core/AppBar';
 import Backdrop from '@material-ui/core/Backdrop';
 import Badge from '@material-ui/core/Badge';
@@ -143,6 +141,7 @@ import Location from 'components/Location/Location';
 import LocationForm from 'components/Location/LocationForm';
 import LocationSwitch from 'components/Location/LocationSwitch';
 import PuiProvider from 'components/PuiProvider';
+import Slider from 'components/Slider';
 
 export {
     // Material UI Lab components
