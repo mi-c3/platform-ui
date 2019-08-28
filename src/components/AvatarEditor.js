@@ -127,7 +127,7 @@ class AvatarEditor extends PureComponent {
         const { image, classes, initials, label, disabled } = this.props;
         const { showAvatarEditor, imageFile, scale, rotate } = this.state;
         return (
-            <Grid container direction="column" alignItems={showAvatarEditor ? 'center' : 'flex-start'} className={classes.wrapper}>
+            <Grid container direction="column" alignItems={showAvatarEditor ? 'center' : 'flex-start'}>
                 {!showAvatarEditor ? (
                     <Dropzone accept="image/*" showPreviews={false} showAlerts={false} onDrop={this.handleDrop} dropzoneTextHover="...">
                         <Grid
@@ -153,7 +153,7 @@ class AvatarEditor extends PureComponent {
                             color={styleColor}
                             className={classes.avatarEditor}
                         />
-                        <Grid container direction="column">
+                        <Grid container direction="column" className={classes.wrapper}>
                             <Grid item container alignItems="center">
                                 <Typography>Zoom:</Typography>
                                 <Slider
