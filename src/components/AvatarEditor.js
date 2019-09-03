@@ -1,13 +1,13 @@
 import React, { PureComponent, Fragment } from 'react';
 import ReactAvatarEditor from 'react-avatar-editor';
 import PropTypes from 'prop-types';
-import Slider from '@material-ui/lab/Slider';
 import { Grid, Typography, IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import { bind } from 'utils/decorators/decoratorUtils';
 import { isImageType } from 'utils/file/file';
 import { createEvent } from 'utils/http/event';
+import Slider from './Slider';
 import Avatar from './Avatar';
 import Dropzone from './Upload/Dropzone';
 import Button from './Button';
@@ -97,7 +97,8 @@ class AvatarEditor extends PureComponent {
     }
 
     @bind
-    handleScaleChange(event, value) {
+    handleScaleChange(event) {
+        const { value } = event.target;
         this.setState({ scale: value > 4 ? 4 : value });
     }
 
@@ -159,7 +160,7 @@ class AvatarEditor extends PureComponent {
                                 <Slider
                                     max={4}
                                     min={0}
-                                    step={0.01}
+                                    decimals={2}
                                     value={scale}
                                     onChange={this.handleScaleChange}
                                     className={classes.slider}

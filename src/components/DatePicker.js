@@ -1,9 +1,18 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DatePicker as DPMui, InlineDatePicker as IDPMui } from 'material-ui-pickers';
+import { IconButton, InputAdornment } from '@material-ui/core';
+import Cancel from '@material-ui/icons/Cancel';
+import { withStyles } from '@material-ui/core/styles';
 
 import { createEvent } from 'utils/http/event';
-import { bind } from 'utils/decorators/decoratorUtils';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
+
+const useStyles = withStyles((theme) => ({
+    icon: {
+        color: theme.colors.darkGray,
+    },
+}));
 
 class DatePicker extends PureComponent {
     static propTypes = {
@@ -15,6 +24,8 @@ class DatePicker extends PureComponent {
     static defaultProps = {
         animateYearScrolling: true,
         inline: false,
+        variant: 'filled',
+        margin: 'normal',
     };
 
     @bind
@@ -23,16 +34,49 @@ class DatePicker extends PureComponent {
         onChange && onChange(createEvent('change', { target: { name, value } }));
     }
 
+    @bind
+    onClear(e) {
+        e.stopPropagation();
+        this.onChange(null);
+    }
+
+    @bind
+    @memoize()
+    getClearAdornment(disabled, value) {
+        return (
+            !disabled &&
+            !!value && (
+                <InputAdornment position="end">
+                    <IconButton aria-label="Clear input" onClick={this.onClear}>
+                        <Cancel className={this.props.classes.icon} />
+                    </IconButton>
+                </InputAdornment>
+            )
+        );
+    }
+
     render() {
         /*
          * WARNING: We need to avoid passing the onClick function because it will break the Component.
          * TODO: open a bug in the material-ui-pickers project.
          */
         // eslint-disable-next-line no-unused-vars
-        const { inline, onClick, ...datePickerProps } = this.props;
+        const { inline, onClick, clearable, disabled, value, InputProps, classes, ...datePickerProps } = this.props;
         const Component = inline ? IDPMui : DPMui;
-        return <Component margin="normal" {...datePickerProps} onChange={this.onChange} />;
+        return (
+            <Component
+                {...datePickerProps}
+                disabled={disabled}
+                value={value}
+                clearable={clearable}
+                InputProps={{
+                    endAdornment: clearable && this.getClearAdornment(disabled, value),
+                    ...(InputProps || {}),
+                }}
+                onChange={this.onChange}
+            />
+        );
     }
 }
 
-export default DatePicker;
+export default useStyles(DatePicker);
