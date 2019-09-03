@@ -18,7 +18,16 @@ storiesOf('Components|Slider', module)
             <Grid container direction="column" justify="space-between" style={{ height: 150, paddingTop: '3rem' }}>
                 <Grid item container justify="space-around">
                     <Grid item md={6} sm={6} xs={6}>
-                        <Slider fillColor={fillColor} label={label} name={name} disabled={disabled} max={4} min={0} step={0.01} value={2} />
+                        <Slider
+                            fillColor={fillColor}
+                            label={label}
+                            name={name}
+                            disabled={disabled}
+                            max={4}
+                            min={0}
+                            decimals={2}
+                            value={2}
+                        />
                     </Grid>
                 </Grid>
             </Grid>
