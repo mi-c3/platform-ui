@@ -44,7 +44,11 @@ class GooglePlaceAutocomplete extends PureComponent {
     @bind
     suggest(event) {
         const { value } = event.target;
-        this.props.service.getPlacePredictions({ input: value }, (predictions) => this.setState({ options: predictions || [] }));
+        if (this.props.service) {
+            this.props.service.getPlacePredictions({ input: value }, (predictions) => this.setState({ options: predictions || [] }));
+        } else {
+            console.error('Google Maps API was not loadded.'); // eslint-disable-line no-console
+        }
     }
 
     render() {

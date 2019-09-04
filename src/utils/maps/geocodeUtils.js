@@ -1,6 +1,6 @@
 import { isDefined } from 'utils/utils';
 
-const API_KEY = 'AIzaSyBn4zixY8-GRFxLxifzO2jyrrqCRW4qn7Q';
+const API_KEY = 'AIzaSyAGa4L1t68r0Kbsgp4UAUb9_K2mdyF2qGk';
 const GOOGLE_API = 'https://maps.google.com/maps/api/geocode/json';
 
 /**
