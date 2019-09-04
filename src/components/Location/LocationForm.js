@@ -39,8 +39,15 @@ class LocationForm extends PureComponent {
     geocoder = null;
     service = null;
     timer = null;
+    map = null;
+    maps = null;
 
-    state = { locationKey: 0 };
+    componentDidUpdate(prevProps) {
+        const { value } = this.props;
+        if (prevProps.value !== value) {
+            this.centerMap();
+        }
+    }
 
     @bind
     onChange(locationInfo) {
@@ -77,7 +84,9 @@ class LocationForm extends PureComponent {
 
     @bind
     centerMap() {
-        this.setState({ locationKey: this.state.locationKey + 1 });
+        const { value } = this.props;
+        const centerpoint = new this.maps.LatLng(get(value, 'latitude'), get(value, 'longitude'));
+        this.map.setCenter(centerpoint);
     }
 
     @bind
@@ -97,6 +106,8 @@ class LocationForm extends PureComponent {
         if (!maps) {
             return;
         }
+        this.map = map;
+        this.maps = maps;
         this.geocoder = new maps.Geocoder();
         this.service = new maps.places.AutocompleteService();
         this.props.onGoogleApiLoaded && this.props.onGoogleApiLoaded({ maps, map });
@@ -128,7 +139,6 @@ class LocationForm extends PureComponent {
                     latitude={latitude}
                     longitude={longitude}
                     onClick={this.onMapClick}
-                    key={this.state.locationKey}
                     onGoogleApiLoaded={this.onGoogleApiLoaded}
                     disabled={disabled}
                     {...LocationProps}

@@ -10,7 +10,7 @@ import { bind } from 'utils/decorators/decoratorUtils';
 const Map = ({ center, zoom, children, ...restProps }) => (
     <div style={{ height: '300px', width: '100%' }}>
         <GoogleMapReact
-            bootstrapURLKeys={{ key: 'AIzaSyBn4zixY8-GRFxLxifzO2jyrrqCRW4qn7Q', libraries: 'places' }}
+            bootstrapURLKeys={{ key: 'AIzaSyAGa4L1t68r0Kbsgp4UAUb9_K2mdyF2qGk', libraries: 'places' }}
             defaultCenter={center}
             defaultZoom={zoom}
             yesIWantToUseGoogleMapApiInternals
@@ -90,7 +90,6 @@ export default class Location extends PureComponent {
     render() {
         const { latitude, longitude, onGoogleApiLoaded } = this.props;
         const noLocation = !isDefined(latitude) || !isDefined(longitude);
-
         if (noLocation) {
             return <span> No location is available. </span>;
         }
