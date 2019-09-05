@@ -42,6 +42,10 @@ class LocationForm extends PureComponent {
     map = null;
     maps = null;
 
+    state = {
+        mapKey: 0,
+    };
+
     componentDidUpdate(prevProps) {
         const { value } = this.props;
         if (prevProps.value !== value) {
@@ -85,8 +89,12 @@ class LocationForm extends PureComponent {
     @bind
     centerMap() {
         const { value } = this.props;
-        const centerpoint = new this.maps.LatLng(get(value, 'latitude'), get(value, 'longitude'));
-        this.map.setCenter(centerpoint);
+        if (this.maps && value) {
+            const centerpoint = new this.maps.LatLng(get(value, 'latitude'), get(value, 'longitude'));
+            this.map.setCenter(centerpoint);
+        } else {
+            this.setState((state) => ({ mapKey: state.mapKey + 1 }));
+        }
     }
 
     @bind
@@ -120,11 +128,12 @@ class LocationForm extends PureComponent {
 
     render() {
         const { value, disabled, withAutocomplete, LocationProps, GooglePlaceAutocompleteProps, showCoords } = this.props;
+        const { mapKey } = this.state;
         const latitude = get(value, 'latitude');
         const longitude = get(value, 'longitude');
         return (
             <Grid direction="column" container>
-                {!disabled && withAutocomplete && (
+                {!disabled && withAutocomplete && this.service && (
                     <GooglePlaceAutocomplete
                         onChangeCoords={this.myCurrentLocation}
                         placeholder={'Search a location...'}
@@ -136,6 +145,7 @@ class LocationForm extends PureComponent {
                     />
                 )}
                 <Location
+                    key={mapKey}
                     latitude={latitude}
                     longitude={longitude}
                     onClick={this.onMapClick}
