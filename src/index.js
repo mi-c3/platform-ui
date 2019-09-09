@@ -27,7 +27,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import Chip from '@material-ui/core/Chip';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Collapse from '@material-ui/core/Collapse';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -121,6 +120,8 @@ import AvatarEditor from 'components/AvatarEditor';
 import Autocomplete from 'components/Autocomplete';
 import AutocompleteLazy from 'components/AutocompleteLazy';
 import Button from 'components/Button';
+import CircularProgress from 'components/CircularProgress';
+import CircularProgressStatic from 'components/CircularProgressStatic';
 import Checkbox from 'components/Checkbox';
 import ColorPicker from 'components/ColorPicker';
 import MdiIcon from 'components/MdiIcon';
@@ -203,6 +204,7 @@ export {
     CardMedia,
     Chip,
     CircularProgress,
+    CircularProgressStatic,
     ClickAwayListener,
     Collapse,
     CssBaseline,

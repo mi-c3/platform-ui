@@ -5,7 +5,7 @@ import { action } from '@storybook/addon-actions';
 
 import { AvatarEditor } from 'index';
 
-storiesOf('Components|AvatarEditor', module)
+storiesOf('Components|Avatar', module)
     .addDecorator(withKnobs)
     .add('Avatar editor', () => {
         const disabled = boolean('Disabled', false, 'Default');
