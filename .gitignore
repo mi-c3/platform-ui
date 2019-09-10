@@ -6,3 +6,6 @@ storybook-static
 
 #build
 dist
+
+#logs
+yarn-error.log

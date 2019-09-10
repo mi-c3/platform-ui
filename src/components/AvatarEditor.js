@@ -159,7 +159,7 @@ class AvatarEditor extends PureComponent {
                                 <Typography>Zoom:</Typography>
                                 <Slider
                                     max={4}
-                                    min={0}
+                                    min={1}
                                     decimals={2}
                                     value={scale}
                                     onChange={this.handleScaleChange}
