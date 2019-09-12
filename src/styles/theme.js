@@ -42,7 +42,7 @@ export const DarkTheme = createMuiTheme({
         action: {
             disabled: colors.background,
             disabledBackground: colors.background,
-            hover: colors.background,
+            hover: `${colors.background}50`,
             hoverOpacity: 0.1,
             selected: colors.background,
         },
