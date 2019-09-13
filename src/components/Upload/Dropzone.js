@@ -58,15 +58,6 @@ const styles = ({ palette }) => ({
         flexDirection: 'column',
         zIndex: 99,
     },
-    bounce: {
-        animation: 'bounce 2s infinite ease-in-out',
-    },
-    '@keyframes bounce': {
-        '60%': {
-            transform: 'translate(0px, 20px)',
-            opacity: 0.8,
-        },
-    },
 });
 
 class Dropzone extends Component {
@@ -297,9 +288,7 @@ class Dropzone extends Component {
                             >
                                 {isDragActive && (
                                     <div className={classes.dropzoneBounceIcon}>
-                                        <div className={`${classes.bounce}`}>
-                                            <MdiIcon color="secondary" name="arrow-down-thick" size={80} />
-                                        </div>
+                                        <MdiIcon color="secondary" name="arrow-down-thick" size={80} />
                                         <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
                                     </div>
                                 )}
