@@ -79,4 +79,4 @@ class DatePicker extends PureComponent {
     }
 }
 
-export default useStyles(DatePicker);
+export default useStyles(DatePicker); // eslint-disable-line react-hooks/rules-of-hooks

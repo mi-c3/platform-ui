@@ -8,14 +8,14 @@ import { isDefined } from 'utils/utils';
 import { colors } from 'styles/theme';
 
 const styles = () => ({
-    primary: { backgroundColor: '#00a99d' },
-    secondary: { backgroundColor: '#066ab1' },
-    info: { backgroundColor: '#4FC3F7' },
-    success: { backgroundColor: '#81C784' },
-    warning: { backgroundColor: '#FF8A65' },
-    alert: { backgroundColor: '#FFC107' },
-    danger: { backgroundColor: '#FF5722' },
-    error: { backgroundColor: '#c62828' },
+    primary: { backgroundColor: '#00a99d !important' },
+    secondary: { backgroundColor: '#066ab1 !important' },
+    info: { backgroundColor: '#4FC3F7 !important' },
+    success: { backgroundColor: '#81C784 !important' },
+    warning: { backgroundColor: '#FF8A65 !important' },
+    alert: { backgroundColor: '#FFC107 !important' },
+    danger: { backgroundColor: '#FF5722 !important' },
+    error: { backgroundColor: '#c62828 !important' },
     avatarClassName: {
         '& img:after': {
             content: `"\\F2EE"`,
