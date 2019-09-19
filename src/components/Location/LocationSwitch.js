@@ -16,6 +16,7 @@ class LocationSwitch extends PureComponent {
         name: PropTypes.string,
         label: PropTypes.string,
         onChange: PropTypes.func,
+        onToggle: PropTypes.func,
     };
 
     state = { checked: false };
@@ -30,7 +31,15 @@ class LocationSwitch extends PureComponent {
 
     @bind
     toggleSwitch() {
-        this.setState({ checked: !this.state.checked });
+        this.setState(
+            (state) => ({ checked: !state.checked }),
+            () => {
+                const { onToggle } = this.props;
+                if (onToggle) {
+                    onToggle(this.state.checked);
+                }
+            }
+        );
     }
 
     render() {
@@ -38,7 +47,7 @@ class LocationSwitch extends PureComponent {
         const { checked } = this.state;
         return (
             <Grid>
-                <Switch label={label} checked={checked} onChange={this.toggleSwitch} {...SwitchProps} />
+                <Switch label={label} value={checked} onChange={this.toggleSwitch} {...SwitchProps} />
                 {checked && <LocationForm {...restProps} />}
             </Grid>
         );

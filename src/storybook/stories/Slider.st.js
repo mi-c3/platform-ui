@@ -27,6 +27,7 @@ storiesOf('Components|Slider', module)
                             min={0}
                             decimals={2}
                             value={2}
+                            discrete
                         />
                     </Grid>
                 </Grid>

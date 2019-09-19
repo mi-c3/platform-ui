@@ -20,5 +20,8 @@ MdiIcon.propTypes = {
     className: PropTypes.string,
     size: PropTypes.number,
 };
+MdiIcon.defaulProps = {
+    size: 24,
+};
 
 export default MdiIcon;

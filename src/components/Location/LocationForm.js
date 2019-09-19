@@ -31,8 +31,6 @@ class LocationForm extends PureComponent {
     };
 
     static defaultProps = {
-        addressOnlyFields: false,
-        value: {},
         showCoords: false,
     };
 
@@ -45,6 +43,12 @@ class LocationForm extends PureComponent {
     state = {
         mapKey: 0,
     };
+
+    componentDidMount() {
+        if (!this.props.value) {
+            this.myLocation();
+        }
+    }
 
     componentDidUpdate(prevProps) {
         const { value } = this.props;

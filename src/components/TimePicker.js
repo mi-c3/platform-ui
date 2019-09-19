@@ -25,6 +25,8 @@ class TimePicker extends PureComponent {
         inline: false,
         variant: 'filled',
         margin: 'normal',
+        fullWidth: true,
+        clearable: false,
     };
 
     @bind

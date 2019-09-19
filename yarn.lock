@@ -1197,6 +1197,65 @@
     prop-types "^15.6.0"
     react-is "^16.6.3"
 
+"@material/animation@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@material/animation/-/animation-3.1.0.tgz#ab04e7c2e92ab370a2b28d12af1b88538d23014f"
+  integrity sha512-ZfP95awrPBLhpaCTPNx+xKYPp2D88fzf5p5YNVp6diUAGRpq3g12Aq7qJfIHDXAFo5CtrYhgOKRqIKxUVcFisQ==
+  dependencies:
+    tslib "^1.9.3"
+
+"@material/base@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@material/base/-/base-3.1.0.tgz#ab933896ab6390d4e1d2f9797b74a90f47db272a"
+  integrity sha512-pWEBHyPrMV3rdnjqWWH96h5t3MxQI6V1J9jOor+UBG7bXQtr6InTabTqhz5CLY7r+qZU8YvNh2OKIy8heP0cyQ==
+  dependencies:
+    tslib "^1.9.3"
+
+"@material/dom@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@material/dom/-/dom-3.1.0.tgz#1e58cad0cd5e1d9d6f6cb07422e327ad34a9d405"
+  integrity sha512-RtBLSkrBjMfHwknaGBifAIC8cBWF9pXjz2IYqfI2braB6SfQI4vhdJviwyiA5BmA/psn3cKpBUZbHI0ym0O0SQ==
+  dependencies:
+    tslib "^1.9.3"
+
+"@material/feature-targeting@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@material/feature-targeting/-/feature-targeting-3.1.0.tgz#a6f6cacd1e0c9b60dc82f2f3bb2de8cfd472252b"
+  integrity sha512-aXAa1Pv6w32URacE9LfMsl9zI6hFwx1K0Lp3Xpyf4rAkmaAB6z0gOkhicOrVFc0f64YheJgHjE7hJFieVenQdw==
+
+"@material/rtl@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@material/rtl/-/rtl-3.2.0.tgz#0b2f7321463100674dfbf4507b54ccd052f05378"
+  integrity sha512-L/w9m9Yx1ceOw/VjEfeJoqD4rW9QP3IBb9MamXAg3qUi/zsztoXD/FUw179pxkLn4huFFNlVYZ4Y1y6BpM0PMA==
+
+"@material/slider@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@material/slider/-/slider-3.2.0.tgz#82f7adae771b0ec546383eef7213155c52eb7a99"
+  integrity sha512-8c1u9jfulYqTNtNgaiZnAHyLDyJovQ7oHms+tzLaRV9rENT2pu3Z9H/2KIlpYkYx/5DI0Uv8ogC3s2+zzMc1Dg==
+  dependencies:
+    "@material/animation" "^3.1.0"
+    "@material/base" "^3.1.0"
+    "@material/dom" "^3.1.0"
+    "@material/feature-targeting" "^3.1.0"
+    "@material/rtl" "^3.2.0"
+    "@material/theme" "^3.1.0"
+    "@material/typography" "^3.1.0"
+    tslib "^1.9.3"
+
+"@material/theme@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@material/theme/-/theme-3.1.0.tgz#d31147bbc9e20bdaa3e322c9e898e4fc98807d8c"
+  integrity sha512-N4JX+akOwg1faAvFvIEhDcwW4cZfUpwEn8lct6Vs3WczjLF6/KdIoLVaYh+eVl1bzfsoIuWvx56j0B1PjXZw9g==
+  dependencies:
+    "@material/feature-targeting" "^3.1.0"
+
+"@material/typography@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@material/typography/-/typography-3.1.0.tgz#5a3aee31f49f6b8c87ebc91b77c5b896b280c492"
+  integrity sha512-aSNBQvVxIH1kORSYdLGuSTivx6oJ1MSOSTUAsUwhXPQLQlvbdFeZaqUp7xgn+EvRsHGRFhWk5YGuiBds9+7zQg==
+  dependencies:
+    "@material/feature-targeting" "^3.1.0"
+
 "@mdi/font@^2.5.94":
   version "2.8.94"
   resolved "https://registry.yarnpkg.com/@mdi/font/-/font-2.8.94.tgz#b6d55026693f4ac5c38ec01e05e2ec412a215673"
