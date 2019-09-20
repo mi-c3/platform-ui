@@ -12,6 +12,7 @@ import 'styles/materialComponentsWeb.min.css';
 
 const styles = {
     wrapper: {
+        width: '100%',
         '&:not(.mdc-slider--disabled) .mdc-slider__thumb': {
             fill: getFillColor(),
             stroke: getFillColor(),
@@ -123,7 +124,7 @@ class Slider extends PureComponent {
     render() {
         const { fillColor, classes, className, value, min, max, step, discrete, showMarkers, TypographyProps, label, ...otherProps } = this.props; // eslint-disable-line no-unused-vars, prettier/prettier
         const classNames = `
-            ${classes.wrapper} 
+            ${classes.wrapper}
             mdc-slider
             ${showMarkers ? 'mdc-slider--display-markers' : ''}
             ${discrete ? 'mdc-slider--discrete' : ''}
