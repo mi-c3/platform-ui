@@ -26,6 +26,8 @@ class DateTimePicker extends PureComponent {
         inline: false,
         variant: 'filled',
         margin: 'normal',
+        fullWidth: true,
+        clearable: false,
     };
 
     @bind
@@ -79,4 +81,4 @@ class DateTimePicker extends PureComponent {
     }
 }
 
-export default useStyles(DateTimePicker);
+export default useStyles(DateTimePicker); // eslint-disable-line react-hooks/rules-of-hooks

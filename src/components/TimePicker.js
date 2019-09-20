@@ -25,6 +25,8 @@ class TimePicker extends PureComponent {
         inline: false,
         variant: 'filled',
         margin: 'normal',
+        fullWidth: true,
+        clearable: false,
     };
 
     @bind
@@ -78,4 +80,4 @@ class TimePicker extends PureComponent {
     }
 }
 
-export default useStyles(TimePicker);
+export default useStyles(TimePicker); // eslint-disable-line react-hooks/rules-of-hooks

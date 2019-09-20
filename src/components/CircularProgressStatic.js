@@ -1,24 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-import { colors } from 'styles/theme';
-import { getPriorityColor } from 'utils/priority/priorityUtils';
-
-const generatePriorityColor = (priority, disabled) =>
-    disabled ? colors.priorityColors['disabled'] : colors.priorityColors[getPriorityColor(priority)];
-
-const getFillColor = (opacity) => ({ fillColor, priority, disabled }) => {
-    if (priority) {
-        return opacity > -1 ? `${generatePriorityColor(priority, disabled)}${opacity}` : generatePriorityColor(priority, disabled);
-    }
-    if (fillColor === 'primary') {
-        return opacity > -1 ? `${colors.primary.dark}${opacity}` : colors.primary.dark;
-    }
-    if (opacity > -1) {
-        return `${fillColor}${opacity}`;
-    }
-    return `${fillColor}`;
-};
+import { getFillColor } from 'utils/styles/stylesUtils';
 
 const styles = () => ({
     wrapper: {

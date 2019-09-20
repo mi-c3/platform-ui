@@ -4,6 +4,7 @@ import GoogleMapReact from 'google-map-react';
 
 import { DarkMapTheme } from 'styles/mapTheme';
 import { SimpleMarker } from 'components/Location/SimpleMarker/SimpleMarker';
+import { Typography } from '@material-ui/core';
 import { isDefined } from 'utils/utils';
 import { bind } from 'utils/decorators/decoratorUtils';
 
@@ -66,20 +67,12 @@ export default class Location extends PureComponent {
     static propTypes = {
         latitude: PropTypes.number,
         longitude: PropTypes.number,
-        centerKey: PropTypes.number,
         writeMode: PropTypes.bool,
         onClick: PropTypes.func,
-        iconInfo: PropTypes.object,
         onGoogleApiLoaded: PropTypes.func,
         disabled: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        iconInfo: {},
-    };
-
-    static defaultProps = {
-        color: '',
+        dark: PropTypes.bool,
+        streetViewControl: PropTypes.bool,
     };
 
     @bind
@@ -88,18 +81,19 @@ export default class Location extends PureComponent {
     }
 
     render() {
-        const { latitude, longitude, onGoogleApiLoaded } = this.props;
+        const { dark, streetViewControl, latitude, longitude, onGoogleApiLoaded, writeMode, ...restProps } = this.props;
         const noLocation = !isDefined(latitude) || !isDefined(longitude);
         if (noLocation) {
-            return <span> No location is available. </span>;
+            return <Typography> No location is available.</Typography>;
         }
-        const marker = !this.props.writeMode ? <SimpleMarker lat={latitude} lng={longitude} /> : null;
+        const marker = !writeMode ? <SimpleMarker lat={latitude} lng={longitude} /> : null;
         return (
             <Map
-                options={mapOptions(this.props)}
-                onClick={this.mapClicked}
+                options={mapOptions({ dark, streetViewControl })}
                 center={{ lat: latitude, lng: longitude }}
                 onGoogleApiLoaded={onGoogleApiLoaded}
+                {...restProps}
+                onClick={this.mapClicked}
             >
                 {marker}
             </Map>

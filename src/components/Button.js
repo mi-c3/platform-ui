@@ -35,4 +35,4 @@ Button.defaultProps = {
     variant: 'contained',
 };
 
-export default useStyles(Button);
+export default useStyles(Button); // eslint-disable-line react-hooks/rules-of-hooks

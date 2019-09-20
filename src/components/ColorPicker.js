@@ -22,7 +22,7 @@ const styles = (theme) => ({
     },
     icon: {
         margin: '0 8px 0 0',
-        borderRadius: '1rem',
+        borderRadius: '5rem',
     },
     controlLabel: {
         margin: '8px 0',
@@ -37,7 +37,7 @@ class ColorPicker extends PureComponent {
         value: PropTypes.string,
         required: PropTypes.bool,
         disabled: PropTypes.bool,
-        size: PropTypes.number,
+        fontSize: PropTypes.string,
         labelPlacement: PropTypes.string,
         classes: PropTypes.object,
     };
@@ -51,6 +51,9 @@ class ColorPicker extends PureComponent {
         super(props);
 
         this.state = { displayColorPicker: false };
+        if (!props.value) {
+            this.onChange({ hex: this.defaultValue });
+        }
     }
 
     defaultValue = '#00BCD4';
@@ -73,7 +76,7 @@ class ColorPicker extends PureComponent {
     }
 
     render() {
-        const { label, name, value, required, size, labelPlacement, classes, disabled, ...restProps } = this.props;
+        const { label, name, value, required, fontSize, labelPlacement, classes, disabled, ...restProps } = this.props;
         const { displayColorPicker } = this.state;
 
         return (
@@ -84,7 +87,7 @@ class ColorPicker extends PureComponent {
                     onClick={this.handleSwatches}
                     control={
                         <Icon
-                            size={size}
+                            fontSize={fontSize}
                             style={{ backgroundColor: value || this.defaultValue }}
                             name={'circle'}
                             className={classes.icon}
