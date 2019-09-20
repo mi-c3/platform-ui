@@ -64,13 +64,13 @@ class Dropzone extends Component {
     static defaultProps = {
         accept: 'image/*,video/*,application/*',
         imageOptions: {},
-        filesLimit: 3,
+        filesLimit: 1,
         capture: true,
         maxSize: 3000000,
         dropzoneTextHover: 'Drop files here...',
         dropzoneText: 'Drag an image here',
-        showPreviews: true, // By default previews show up under in the dialog and inside in the standalone
-        showAlerts: true,
+        showPreviews: false, // By default previews show up under in the dialog and inside in the standalone
+        showAlerts: false,
         clearOnUnmount: true,
     };
 

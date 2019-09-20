@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { withKnobs, text, boolean } from '@storybook/addon-knobs';
+import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
 
 import { Grid, Slider as SliderPui } from 'index';
 import statefullInput from 'storybook/utils/hoc/statefullInput';
@@ -11,9 +11,17 @@ storiesOf('Components|Slider', module)
     .addDecorator(withKnobs)
     .add('Slider', () => {
         const disabled = boolean('Disabled', false, 'Default');
+        const discrete = boolean('discrete', true, 'Default');
+        const showMarkers = boolean('ShowMarkers', false, 'Default');
         const name = text('Name', 'slider', 'Default');
         const label = text('Label', 'Slider', 'Default');
         const fillColor = text('Pass hex color', '', 'Default');
+
+        const props = {};
+        const enablePriority = boolean('Enable priority', false, 'Priority');
+        if (enablePriority) {
+            props.priority = number('Priority', 3, {}, 'Priority');
+        }
         return (
             <Grid container direction="column" justify="space-between" style={{ height: 150, paddingTop: '3rem' }}>
                 <Grid item container justify="space-around">
@@ -23,11 +31,10 @@ storiesOf('Components|Slider', module)
                             label={label}
                             name={name}
                             disabled={disabled}
-                            max={4}
-                            min={0}
-                            decimals={2}
-                            value={2}
-                            discrete
+                            value={75}
+                            discrete={discrete}
+                            showMarkers={showMarkers}
+                            {...props}
                         />
                     </Grid>
                 </Grid>

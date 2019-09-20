@@ -1,64 +1,63 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Slider as MuiSlider } from 'material-ui-slider';
 
 import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/styles';
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
+import { getFillColor } from 'utils/styles/stylesUtils';
 
 import { MDCSlider } from '@material/slider/dist/mdc.slider';
 import 'styles/materialComponentsWeb.min.css';
 
-class SliderDepre extends PureComponent {
-    static propTypes = {
-        ...(MuiSlider || {}).propTypes,
-        className: PropTypes.string,
-        label: PropTypes.string,
-        fillColor: PropTypes.string,
-        SliderProps: PropTypes.object,
-        classes: PropTypes.object,
-    };
-
-    @bind
-    onChange(value, event) {
-        if (event.persist) {
-            event.persist();
-        }
-        const { name, onChange } = this.props;
-        onChange &&
-            onChange(
-                createEvent('change', {
-                    target: { name, value: Number(Math.round(value + 'e2') + 'e-2') },
-                    originalEvent: event,
-                }),
-                event
-            );
-    }
-
-    render() {
-        const { label, TypographyProps, fillColor, ...restProps } = this.props;
-        return (
-            <Fragment>
-                {label && <Typography {...TypographyProps}>{label}</Typography>}
-                <MuiSlider color={fillColor} {...restProps} onChange={this.onChange} />
-            </Fragment>
-        );
-    }
-}
+const styles = {
+    wrapper: {
+        '&:not(.mdc-slider--disabled) .mdc-slider__thumb': {
+            fill: getFillColor(),
+            stroke: getFillColor(),
+        },
+        '&.mdc-slider--disabled .mdc-slider__thumb': {
+            stroke: getFillColor(),
+        },
+        '&:not(.mdc-slider--disabled) .mdc-slider__pin': {
+            backgroundColor: getFillColor(),
+        },
+        '&:not(.mdc-slider--disabled) .mdc-slider__track-container': {
+            backgroundColor: getFillColor(26),
+        },
+        '&:not(.mdc-slider--disabled) .mdc-slider__track': {
+            backgroundColor: getFillColor(),
+        },
+    },
+};
 
 class Slider extends PureComponent {
     static propTypes = {
+        TypographyProps: PropTypes.object,
+        label: PropTypes.string,
+        classes: PropTypes.object,
         className: PropTypes.string,
         name: PropTypes.string,
         value: PropTypes.number.isRequired,
         min: PropTypes.number,
         max: PropTypes.number,
         step: PropTypes.number,
+        fillColor: PropTypes.string,
         // Per MDC documentation providing step doesn't imply discrete, so an explicit property
         discrete: PropTypes.bool,
         showMarkers: PropTypes.bool,
         onInput: PropTypes.func,
         onChange: PropTypes.func.isRequired,
+    };
+
+    static defaultProps = {
+        min: 0,
+        max: 100,
+        step: 1,
+        TypographyProps: {},
+        discrete: false,
+        showMarkers: false,
+        fillColor: 'primary',
     };
 
     nodeRef = React.createRef();
@@ -75,7 +74,7 @@ class Slider extends PureComponent {
         this.init(this.props);
     }
 
-    componentDidUnmount() {
+    componentWillUnmount() {
         this.slider.unlisten('MDCSlider:change', () => this.handleMDCSliderChange());
         this.slider.unlisten('MDCSlider:input', () => this.handleMDCSliderInput());
         this.slider.destroy();
@@ -98,8 +97,14 @@ class Slider extends PureComponent {
 
     @bind
     handleMDCSliderInput() {
-        if (this.props.onInput) {
-            this.props.onInput(this.slider.value);
+        const { name, onInput } = this.props;
+        if (onInput) {
+            onInput(
+                createEvent('change', {
+                    // target: { name, value: Number(Math.round(value + 'e2') + 'e-2') },
+                    target: { name, value: this.slider.value },
+                })
+            );
         }
     }
 
@@ -109,17 +114,16 @@ class Slider extends PureComponent {
         if (onChange) {
             onChange(
                 createEvent('change', {
-                    // target: { name, value: Number(Math.round(value + 'e2') + 'e-2') },
                     target: { name, value: this.slider.value },
-                }),
-                event
+                })
             );
         }
     }
 
     render() {
-        const { className, value, min, max, step, discrete, showMarkers, ...otherProps } = this.props; // eslint-disable-line no-unused-vars
+        const { fillColor, classes, className, value, min, max, step, discrete, showMarkers, TypographyProps, label, ...otherProps } = this.props; // eslint-disable-line no-unused-vars, prettier/prettier
         const classNames = `
+            ${classes.wrapper} 
             mdc-slider
             ${showMarkers ? 'mdc-slider--display-markers' : ''}
             ${discrete ? 'mdc-slider--discrete' : ''}
@@ -127,6 +131,7 @@ class Slider extends PureComponent {
         `;
         return (
             <div ref={this.nodeRef} {...otherProps} className={classNames} onChange={this.onChange}>
+                {label && <Typography {...TypographyProps}>{label}</Typography>}
                 <div className="mdc-slider__track-container">
                     <div className="mdc-slider__track" />
                     {discrete && showMarkers && <div className="mdc-slider__track-marker-container" />}
@@ -147,4 +152,4 @@ class Slider extends PureComponent {
     }
 }
 
-export default Slider;
+export default withStyles(styles)(Slider);

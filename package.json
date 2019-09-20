@@ -8,7 +8,7 @@
     "lint:fix": "eslint --max-warnings=0 src --fix",
     "build": "rm -rf dist && BUILD_UI_MODULE=true yarn build-storybook",
     "build:watch": "BUILD_UI_MODULE=true yarn build-storybook -w",
-    "storybook:build": "rm -rf storybook-static && build-storybook"
+    "storybook:build": "rm -rf ./documentation/static/storybook && build-storybook -o ./documentation/static/storybook"
   },
   "husky": {
     "hooks": {
