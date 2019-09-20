@@ -185,9 +185,9 @@ class AvatarEditor extends PureComponent {
                                 <Slider
                                     max={4}
                                     min={1}
-                                    decimals={2}
+                                    step={0.01}
                                     value={scale}
-                                    onChange={this.handleScaleChange}
+                                    onInput={this.handleScaleChange}
                                     className={classes.slider}
                                 />
                             </Grid>
