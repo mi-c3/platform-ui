@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/styles';
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
 import { getFillColor } from 'utils/styles/stylesUtils';
@@ -10,33 +9,10 @@ import { getFillColor } from 'utils/styles/stylesUtils';
 import { MDCSlider } from '@material/slider/dist/mdc.slider';
 import 'styles/materialComponentsWeb.min.css';
 
-const styles = {
-    wrapper: {
-        width: '100%',
-        '&:not(.mdc-slider--disabled) .mdc-slider__thumb': {
-            fill: getFillColor(),
-            stroke: getFillColor(),
-        },
-        '&.mdc-slider--disabled .mdc-slider__thumb': {
-            stroke: getFillColor(),
-        },
-        '&:not(.mdc-slider--disabled) .mdc-slider__pin': {
-            backgroundColor: getFillColor(),
-        },
-        '&:not(.mdc-slider--disabled) .mdc-slider__track-container': {
-            backgroundColor: getFillColor(26),
-        },
-        '&:not(.mdc-slider--disabled) .mdc-slider__track': {
-            backgroundColor: getFillColor(),
-        },
-    },
-};
-
 class Slider extends PureComponent {
     static propTypes = {
         TypographyProps: PropTypes.object,
         label: PropTypes.string,
-        classes: PropTypes.object,
         className: PropTypes.string,
         name: PropTypes.string,
         value: PropTypes.number.isRequired,
@@ -49,6 +25,8 @@ class Slider extends PureComponent {
         showMarkers: PropTypes.bool,
         onInput: PropTypes.func,
         onChange: PropTypes.func.isRequired,
+        priority: PropTypes.number,
+        disabled: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -122,9 +100,8 @@ class Slider extends PureComponent {
     }
 
     render() {
-        const { fillColor, classes, className, value, min, max, step, discrete, showMarkers, TypographyProps, label, ...otherProps } = this.props; // eslint-disable-line no-unused-vars, prettier/prettier
+        const { fillColor, priority, disabled, className, value, min, max, step, discrete, showMarkers, TypographyProps, label, ...otherProps } = this.props; // eslint-disable-line no-unused-vars, prettier/prettier, max-len
         const classNames = `
-            ${classes.wrapper}
             mdc-slider
             ${showMarkers ? 'mdc-slider--display-markers' : ''}
             ${discrete ? 'mdc-slider--discrete' : ''}
@@ -133,17 +110,28 @@ class Slider extends PureComponent {
         return (
             <div ref={this.nodeRef} {...otherProps} className={classNames} onChange={this.onChange}>
                 {label && <Typography {...TypographyProps}>{label}</Typography>}
-                <div className="mdc-slider__track-container">
-                    <div className="mdc-slider__track" />
+                <div
+                    className="mdc-slider__track-container"
+                    style={{ backgroundColor: getFillColor(26)({ fillColor, priority, disabled }) }}
+                >
+                    <div className="mdc-slider__track" style={{ backgroundColor: getFillColor()({ fillColor, priority, disabled }) }} />
                     {discrete && showMarkers && <div className="mdc-slider__track-marker-container" />}
                 </div>
                 <div className="mdc-slider__thumb-container">
                     {discrete && (
-                        <div className="mdc-slider__pin">
+                        <div className="mdc-slider__pin" style={{ backgroundColor: getFillColor()({ fillColor, priority, disabled }) }}>
                             <span className="mdc-slider__pin-value-marker" />
                         </div>
                     )}
-                    <svg className="mdc-slider__thumb" width="21" height="21">
+                    <svg
+                        style={{
+                            fill: getFillColor()({ fillColor, priority, disabled }),
+                            stroke: getFillColor()({ fillColor, priority, disabled }),
+                        }}
+                        className="mdc-slider__thumb"
+                        width="21"
+                        height="21"
+                    >
                         <circle cx="10.5" cy="10.5" r="7.875" />
                     </svg>
                     <div className="mdc-slider__focus-ring" />
@@ -153,4 +141,4 @@ class Slider extends PureComponent {
     }
 }
 
-export default withStyles(styles)(Slider);
+export default Slider;
