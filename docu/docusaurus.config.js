@@ -15,7 +15,7 @@ module.exports = {
             title: 'Platform UI Doc',
             logo: {
                 alt: 'Platform UI Doc',
-                src: '/img/logo.192x192.png',
+                src: 'img/logo.192x192.png',
             },
             links: [
                 { to: 'docs/get-started/installation', label: 'Docs', position: 'left' },
@@ -65,7 +65,7 @@ module.exports = {
             // ],
             logo: {
                 alt: 'Affectli',
-                src: '/img/badge.png',
+                src: 'img/badge.png',
             },
             copyright: `Copyright © ${new Date().getFullYear()} MI-C3, Inc. Platform UI. Built with Docusaurus.`,
         },
