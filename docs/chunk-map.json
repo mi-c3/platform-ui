@@ -1,18 +1,18 @@
 {
   "main": [
     "/platform-ui/main.832055469fdfd47b66e2.css",
-    "/platform-ui/main.199c6e2839a76f05433d.js"
+    "/platform-ui/main.ca8e7349a8d2cb1f6372.js"
   ],
   "component---site-src-pages-index-jsc-4-f-f99": [
     "/platform-ui/component---site-src-pages-index-jsc-4-f-f99.9f99729bff7f082bd679.css",
-    "/platform-ui/component---site-src-pages-index-jsc-4-f-f99.790b68baf25f4d2c3bca.js"
+    "/platform-ui/component---site-src-pages-index-jsc-4-f-f99.07475247b11fe4a07409.js"
   ],
   "component---site-src-pages-redirect-js-47-b-9f1": [
     "/platform-ui/component---site-src-pages-redirect-js-47-b-9f1.1987bf01a0eb7081f38e.js"
   ],
   "component---theme-doc-legacy-page-9-e-7-ca5": [],
   "docsMetadata---platform-ui-docs-10-f-c07": [
-    "/platform-ui/docsMetadata---platform-ui-docs-10-f-c07.b4ad09650a4e2b8aa852.js"
+    "/platform-ui/docsMetadata---platform-ui-docs-10-f-c07.4fedde6819e5fb44afa8.js"
   ],
   "component---theme-doc-legacy-item-031-769": [
     "/platform-ui/component---theme-doc-legacy-item-031-769.1f1ce10374de019f5d3a.css",
@@ -36,17 +36,17 @@
   "metadata---platform-ui-docs-components-avatar-651-dd1": [
     "/platform-ui/metadata---platform-ui-docs-components-avatar-651-dd1.0e70b9152cd2b9100328.js"
   ],
-  "content---platform-ui-docs-components-avatar-editord-3-a-24e": [
-    "/platform-ui/content---platform-ui-docs-components-avatar-editord-3-a-24e.fff14baf4f66ac44c3de.js"
-  ],
-  "metadata---platform-ui-docs-components-avatar-editor-8-e-1-65b": [
-    "/platform-ui/metadata---platform-ui-docs-components-avatar-editor-8-e-1-65b.186ecbe9919c43065cbd.js"
-  ],
   "content---platform-ui-docs-components-buttonb-59-3f1": [
-    "/platform-ui/content---platform-ui-docs-components-buttonb-59-3f1.9cd7835e0d53047c8b71.js"
+    "/platform-ui/content---platform-ui-docs-components-buttonb-59-3f1.bf6507d67ce18dcdc74d.js"
   ],
   "metadata---platform-ui-docs-components-buttonc-2-f-a66": [
-    "/platform-ui/metadata---platform-ui-docs-components-buttonc-2-f-a66.bacf665c758698f4799d.js"
+    "/platform-ui/metadata---platform-ui-docs-components-buttonc-2-f-a66.949351b71ef779fc2fc8.js"
+  ],
+  "content---platform-ui-docs-components-avatar-editord-3-a-24e": [
+    "/platform-ui/content---platform-ui-docs-components-avatar-editord-3-a-24e.617f11bf142718809b0b.js"
+  ],
+  "metadata---platform-ui-docs-components-avatar-editor-8-e-1-65b": [
+    "/platform-ui/metadata---platform-ui-docs-components-avatar-editor-8-e-1-65b.a588977b934829d812ae.js"
   ],
   "content---platform-ui-docs-components-checkbox-67-e-b0a": [
     "/platform-ui/content---platform-ui-docs-components-checkbox-67-e-b0a.fad37991338412966e46.js"
@@ -66,29 +66,29 @@
   "metadata---platform-ui-docs-components-circular-progress-statica-6-d-1be": [
     "/platform-ui/metadata---platform-ui-docs-components-circular-progress-statica-6-d-1be.d6c58dc17b486ad64261.js"
   ],
-  "content---platform-ui-docs-components-date-picker-2-fa-b49": [
-    "/platform-ui/content---platform-ui-docs-components-date-picker-2-fa-b49.37500f8fe2192a567249.js"
-  ],
-  "metadata---platform-ui-docs-components-date-picker-2-fb-7f5": [
-    "/platform-ui/metadata---platform-ui-docs-components-date-picker-2-fb-7f5.96c8078e2eed0fc1ba85.js"
-  ],
-  "content---platform-ui-docs-components-date-time-picker-2-c-7-12f": [
-    "/platform-ui/content---platform-ui-docs-components-date-time-picker-2-c-7-12f.e51fc0d11a20d21b0b1e.js"
-  ],
-  "metadata---platform-ui-docs-components-date-time-pickerd-1-e-234": [
-    "/platform-ui/metadata---platform-ui-docs-components-date-time-pickerd-1-e-234.d3fb06e57001ace006f8.js"
-  ],
-  "content---platform-ui-docs-components-date-time-picker-rangecb-0-1f9": [
-    "/platform-ui/content---platform-ui-docs-components-date-time-picker-rangecb-0-1f9.3df905df741d47a87090.js"
-  ],
-  "metadata---platform-ui-docs-components-date-time-picker-rangeb-8-e-e0e": [
-    "/platform-ui/metadata---platform-ui-docs-components-date-time-picker-rangeb-8-e-e0e.bc981bfac13075ac5c7b.js"
-  ],
   "content---platform-ui-docs-components-color-pickerea-9-321": [
-    "/platform-ui/content---platform-ui-docs-components-color-pickerea-9-321.a40171d4882870cf33f3.js"
+    "/platform-ui/content---platform-ui-docs-components-color-pickerea-9-321.60a7d06f2c72d7532e5c.js"
   ],
   "metadata---platform-ui-docs-components-color-pickerb-39-a22": [
-    "/platform-ui/metadata---platform-ui-docs-components-color-pickerb-39-a22.571331afab641889b1c6.js"
+    "/platform-ui/metadata---platform-ui-docs-components-color-pickerb-39-a22.b456bca475689c8c8d28.js"
+  ],
+  "content---platform-ui-docs-components-date-picker-2-fa-b49": [
+    "/platform-ui/content---platform-ui-docs-components-date-picker-2-fa-b49.5bb77226374600330355.js"
+  ],
+  "metadata---platform-ui-docs-components-date-picker-2-fb-7f5": [
+    "/platform-ui/metadata---platform-ui-docs-components-date-picker-2-fb-7f5.c92523db5e71fd562367.js"
+  ],
+  "content---platform-ui-docs-components-date-time-picker-2-c-7-12f": [
+    "/platform-ui/content---platform-ui-docs-components-date-time-picker-2-c-7-12f.a5b9d25751f5930c0412.js"
+  ],
+  "metadata---platform-ui-docs-components-date-time-pickerd-1-e-234": [
+    "/platform-ui/metadata---platform-ui-docs-components-date-time-pickerd-1-e-234.095f5866ad6359033330.js"
+  ],
+  "content---platform-ui-docs-components-date-time-picker-rangecb-0-1f9": [
+    "/platform-ui/content---platform-ui-docs-components-date-time-picker-rangecb-0-1f9.93333a930d81560bc532.js"
+  ],
+  "metadata---platform-ui-docs-components-date-time-picker-rangeb-8-e-e0e": [
+    "/platform-ui/metadata---platform-ui-docs-components-date-time-picker-rangeb-8-e-e0e.943ba2879bca26b18cfd.js"
   ],
   "content---platform-ui-docs-components-dropzonec-48-7d7": [
     "/platform-ui/content---platform-ui-docs-components-dropzonec-48-7d7.41776514ce9a0660a6ab.js"
@@ -96,17 +96,17 @@
   "metadata---platform-ui-docs-components-dropzoneac-7-fbf": [
     "/platform-ui/metadata---platform-ui-docs-components-dropzoneac-7-fbf.c8aabb1bc6f95e0db6b9.js"
   ],
-  "content---platform-ui-docs-components-locationa-4-d-ffe": [
-    "/platform-ui/content---platform-ui-docs-components-locationa-4-d-ffe.9a44757be329bee2e0e3.js"
-  ],
-  "metadata---platform-ui-docs-components-locationd-73-dd6": [
-    "/platform-ui/metadata---platform-ui-docs-components-locationd-73-dd6.113f28bf3a822e64f309.js"
-  ],
   "content---platform-ui-docs-components-link-570-283": [
-    "/platform-ui/content---platform-ui-docs-components-link-570-283.90617d67a51b66b66d31.js"
+    "/platform-ui/content---platform-ui-docs-components-link-570-283.6a32a8d74c93e78123ac.js"
   ],
   "metadata---platform-ui-docs-components-link-379-6b6": [
-    "/platform-ui/metadata---platform-ui-docs-components-link-379-6b6.16dac8a1a39b339eed66.js"
+    "/platform-ui/metadata---platform-ui-docs-components-link-379-6b6.5acf2e604c1be25f484f.js"
+  ],
+  "content---platform-ui-docs-components-locationa-4-d-ffe": [
+    "/platform-ui/content---platform-ui-docs-components-locationa-4-d-ffe.aed8ca4513d196a5e266.js"
+  ],
+  "metadata---platform-ui-docs-components-locationd-73-dd6": [
+    "/platform-ui/metadata---platform-ui-docs-components-locationd-73-dd6.a1850f9ffff8b91d27cf.js"
   ],
   "content---platform-ui-docs-components-location-form-39-c-e80": [
     "/platform-ui/content---platform-ui-docs-components-location-form-39-c-e80.e3c8a1b793d0a0092e2b.js"
@@ -132,23 +132,23 @@
   "metadata---platform-ui-docs-components-mdi-icon-select-95-c-40f": [
     "/platform-ui/metadata---platform-ui-docs-components-mdi-icon-select-95-c-40f.9563ccf581162297f87d.js"
   ],
-  "content---platform-ui-docs-components-slider-18-c-e5b": [
-    "/platform-ui/content---platform-ui-docs-components-slider-18-c-e5b.4e56fee1d6556a3a9d64.js"
-  ],
-  "metadata---platform-ui-docs-components-slider-614-ba4": [
-    "/platform-ui/metadata---platform-ui-docs-components-slider-614-ba4.babecb10fa97fc4f354b.js"
-  ],
-  "content---platform-ui-docs-components-switch-0-ed-cb4": [
-    "/platform-ui/content---platform-ui-docs-components-switch-0-ed-cb4.4706696582383232b0a6.js"
-  ],
-  "metadata---platform-ui-docs-components-switch-3-c-5-5fa": [
-    "/platform-ui/metadata---platform-ui-docs-components-switch-3-c-5-5fa.1cc543b02d9cf8d2cb5b.js"
-  ],
   "content---platform-ui-docs-components-radioc-3-d-0e0": [
-    "/platform-ui/content---platform-ui-docs-components-radioc-3-d-0e0.38be3c0b6a79539878d0.js"
+    "/platform-ui/content---platform-ui-docs-components-radioc-3-d-0e0.094be0d11324bffcf7d0.js"
   ],
   "metadata---platform-ui-docs-components-radiod-2-e-bdc": [
-    "/platform-ui/metadata---platform-ui-docs-components-radiod-2-e-bdc.392819e227ccdc7a7af7.js"
+    "/platform-ui/metadata---platform-ui-docs-components-radiod-2-e-bdc.fbda2e6616c156b8c6f9.js"
+  ],
+  "content---platform-ui-docs-components-slider-18-c-e5b": [
+    "/platform-ui/content---platform-ui-docs-components-slider-18-c-e5b.313672cdd15d35755d77.js"
+  ],
+  "metadata---platform-ui-docs-components-slider-614-ba4": [
+    "/platform-ui/metadata---platform-ui-docs-components-slider-614-ba4.914534115ec59eb89c1a.js"
+  ],
+  "content---platform-ui-docs-components-switch-0-ed-cb4": [
+    "/platform-ui/content---platform-ui-docs-components-switch-0-ed-cb4.41c3ed92c6f95e781ef0.js"
+  ],
+  "metadata---platform-ui-docs-components-switch-3-c-5-5fa": [
+    "/platform-ui/metadata---platform-ui-docs-components-switch-3-c-5-5fa.aeca0ec87f3db59241e1.js"
   ],
   "content---platform-ui-docs-components-text-fielde-71-84c": [
     "/platform-ui/content---platform-ui-docs-components-text-fielde-71-84c.a751cf32c92042b3fc1b.js"
@@ -168,17 +168,17 @@
   "metadata---platform-ui-docs-docusaurus-style-guidef-1-d-39f": [
     "/platform-ui/metadata---platform-ui-docs-docusaurus-style-guidef-1-d-39f.df574eb555d32ac63c42.js"
   ],
-  "content---platform-ui-docs-get-started-developmentf-91-6c1": [
-    "/platform-ui/content---platform-ui-docs-get-started-developmentf-91-6c1.ab8c080b1322dff6edf7.js"
-  ],
-  "metadata---platform-ui-docs-get-started-developmentf-50-767": [
-    "/platform-ui/metadata---platform-ui-docs-get-started-developmentf-50-767.f7a7c7eef2a2a8852dc7.js"
-  ],
   "content---platform-ui-docs-get-started-buildfb-1-f30": [
-    "/platform-ui/content---platform-ui-docs-get-started-buildfb-1-f30.77db75f608225143c7a6.js"
+    "/platform-ui/content---platform-ui-docs-get-started-buildfb-1-f30.d37c0b1bebe742abe163.js"
   ],
   "metadata---platform-ui-docs-get-started-buildbc-3-41e": [
-    "/platform-ui/metadata---platform-ui-docs-get-started-buildbc-3-41e.85c52ae4a685d36670ad.js"
+    "/platform-ui/metadata---platform-ui-docs-get-started-buildbc-3-41e.439690a47f522444148a.js"
+  ],
+  "content---platform-ui-docs-get-started-developmentf-91-6c1": [
+    "/platform-ui/content---platform-ui-docs-get-started-developmentf-91-6c1.42a656b81604aad9af50.js"
+  ],
+  "metadata---platform-ui-docs-get-started-developmentf-50-767": [
+    "/platform-ui/metadata---platform-ui-docs-get-started-developmentf-50-767.e2d7af9c42c4304bbba9.js"
   ],
   "content---platform-ui-docs-get-started-installation-1-c-2-b77": [
     "/platform-ui/content---platform-ui-docs-get-started-installation-1-c-2-b77.655be92752810205fdc8.js"
