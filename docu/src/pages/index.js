@@ -47,7 +47,7 @@ function Home() {
     const context = useDocusaurusContext();
     const { siteConfig = {} } = context;
     return (
-        <Layout title={`Hello from ${siteConfig.title}`} description="Description will go into a meta tag in <head />">
+        <Layout title={`${siteConfig.title}`} description="Platform UI is an extending of material ui library">
             <header className={classnames('hero hero--primary', styles.heroBanner)}>
                 <div className="container">
                     <h1 className="hero__title">{siteConfig.title}</h1>
@@ -55,7 +55,7 @@ function Home() {
                     <div className={styles.buttons}>
                         <Link
                             className={classnames('button button--outline button--secondary button--lg', styles.getStarted)}
-                            to={withBaseUrl('docs/doc1')}
+                            to={withBaseUrl('docs/get-started/installation')}
                         >
                             Get Started
                         </Link>
