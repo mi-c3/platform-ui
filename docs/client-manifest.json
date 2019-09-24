@@ -1,0 +1,882 @@
+{
+  "entrypoints": [
+    "main"
+  ],
+  "origins": {
+    "0": [
+      1,
+      2,
+      3,
+      4,
+      66,
+      67,
+      0
+    ],
+    "1": [
+      0,
+      2,
+      3,
+      66,
+      67,
+      1
+    ],
+    "@site/src/pages/index.js": [
+      0,
+      1,
+      2
+    ],
+    "@site/src/pages/redirect.js": [
+      0,
+      1,
+      3
+    ],
+    "@theme/DocLegacyItem": [
+      0,
+      4
+    ],
+    "@site/docs/components/Autocomplete.md": [
+      5
+    ],
+    "@site/docs/components/AutocompleteLazy.md": [
+      6
+    ],
+    "@site/docs/components/Avatar.md": [
+      7
+    ],
+    "@site/docs/components/AvatarEditor.md": [
+      8
+    ],
+    "@site/docs/components/Button.md": [
+      9
+    ],
+    "@site/docs/components/Checkbox.md": [
+      10
+    ],
+    "@site/docs/components/CircularProgress.md": [
+      11
+    ],
+    "@site/docs/components/CircularProgressStatic.md": [
+      12
+    ],
+    "@site/docs/components/ColorPicker.md": [
+      13
+    ],
+    "@site/docs/components/DatePicker.md": [
+      14
+    ],
+    "@site/docs/components/DateTimePicker.md": [
+      15
+    ],
+    "@site/docs/components/DateTimePickerRange.md": [
+      16
+    ],
+    "@site/docs/components/Dropzone.md": [
+      17
+    ],
+    "@site/docs/components/Link.md": [
+      18
+    ],
+    "@site/docs/components/LocationForm.md": [
+      19
+    ],
+    "@site/docs/components/LocationFormSwitch.md": [
+      20
+    ],
+    "@site/docs/components/Location.md": [
+      21
+    ],
+    "@site/docs/components/MdiIconSelect.md": [
+      22
+    ],
+    "@site/docs/components/MdiIcon.md": [
+      23
+    ],
+    "@site/docs/components/Radio.md": [
+      24
+    ],
+    "@site/docs/components/Slider.md": [
+      25
+    ],
+    "@site/docs/components/Switch.md": [
+      26
+    ],
+    "@site/docs/components/TextField.md": [
+      27
+    ],
+    "@site/docs/components/TimePicker.md": [
+      28
+    ],
+    "@site/docs/docusaurus/style-guide.md": [
+      29
+    ],
+    "@site/docs/get-started/build.md": [
+      30
+    ],
+    "@site/docs/get-started/development.md": [
+      31
+    ],
+    "@site/docs/get-started/installation.md": [
+      32
+    ],
+    "@site/docs/get-started/learn.md": [
+      33
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-b5f.json": [
+      34
+    ],
+    "main": [
+      65,
+      35
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-autocomplete-a08.json": [
+      36
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-autocomplete-lazy-94d.json": [
+      37
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-avatar-editor-572.json": [
+      38
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-avatar-793.json": [
+      39
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-button-3da.json": [
+      40
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-checkbox-4e8.json": [
+      41
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-circular-progress-af6.json": [
+      42
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-circular-progress-static-5f2.json": [
+      43
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-color-picker-3d6.json": [
+      44
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-date-picker-4ad.json": [
+      45
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-date-time-picker-e0e.json": [
+      46
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-date-time-picker-range-6d2.json": [
+      47
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-dropzone-8b9.json": [
+      48
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-link-b79.json": [
+      49
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-location-fd8.json": [
+      50
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-location-form-switch-b0b.json": [
+      51
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-location-form-0a9.json": [
+      52
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-mdi-icon-2b2.json": [
+      53
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-mdi-icon-select-f46.json": [
+      54
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-radio-03d.json": [
+      55
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-slider-afe.json": [
+      56
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-switch-ca7.json": [
+      57
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-text-field-c18.json": [
+      58
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-components-time-picker-ced.json": [
+      59
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-docusaurus-style-guide-f14.json": [
+      60
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-get-started-build-2aa.json": [
+      61
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-get-started-development-1b6.json": [
+      62
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-get-started-installation-089.json": [
+      63
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/docs-get-started-learn-6c2.json": [
+      64
+    ],
+    "runtime~main": [
+      35,
+      65
+    ],
+    "@theme/DocLegacyPage": [
+      0,
+      1,
+      66
+    ],
+    "@theme/NotFound": [
+      0,
+      1,
+      67
+    ]
+  },
+  "assets": {
+    "0": {
+      "js": [
+        {
+          "file": "0.d04b66a992b0f23e2179.js",
+          "hash": "deca0f8f3b96648711ba",
+          "publicPath": "/0.d04b66a992b0f23e2179.js"
+        }
+      ]
+    },
+    "1": {
+      "css": [
+        {
+          "file": "1.7cc1ec06bd83c57cc543.css",
+          "hash": "c22e733120fd16e5b5f8",
+          "publicPath": "/1.7cc1ec06bd83c57cc543.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "1.dd7c7f195253aa578a1b.js",
+          "hash": "c22e733120fd16e5b5f8",
+          "publicPath": "/1.dd7c7f195253aa578a1b.js"
+        }
+      ]
+    },
+    "2": {
+      "css": [
+        {
+          "file": "component---site-src-pages-index-jsc-4-f-f99.9f99729bff7f082bd679.css",
+          "hash": "3b9411c73e5b3570b986",
+          "publicPath": "/component---site-src-pages-index-jsc-4-f-f99.9f99729bff7f082bd679.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "component---site-src-pages-index-jsc-4-f-f99.790b68baf25f4d2c3bca.js",
+          "hash": "3b9411c73e5b3570b986",
+          "publicPath": "/component---site-src-pages-index-jsc-4-f-f99.790b68baf25f4d2c3bca.js"
+        }
+      ]
+    },
+    "3": {
+      "js": [
+        {
+          "file": "component---site-src-pages-redirect-js-47-b-9f1.1987bf01a0eb7081f38e.js",
+          "hash": "8cb4aef479ece55a9f57",
+          "publicPath": "/component---site-src-pages-redirect-js-47-b-9f1.1987bf01a0eb7081f38e.js"
+        }
+      ]
+    },
+    "4": {
+      "css": [
+        {
+          "file": "component---theme-doc-legacy-item-031-769.1f1ce10374de019f5d3a.css",
+          "hash": "58f4eb6da358ab7385dc",
+          "publicPath": "/component---theme-doc-legacy-item-031-769.1f1ce10374de019f5d3a.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "component---theme-doc-legacy-item-031-769.48a61b93b89c97201e36.js",
+          "hash": "58f4eb6da358ab7385dc",
+          "publicPath": "/component---theme-doc-legacy-item-031-769.48a61b93b89c97201e36.js"
+        }
+      ]
+    },
+    "5": {
+      "js": [
+        {
+          "file": "content---docs-components-autocomplete-856-724.e463548d04d6d4724923.js",
+          "hash": "cddfceb53f413f14d263",
+          "publicPath": "/content---docs-components-autocomplete-856-724.e463548d04d6d4724923.js"
+        }
+      ]
+    },
+    "6": {
+      "js": [
+        {
+          "file": "content---docs-components-autocomplete-lazyb-9-e-b8d.4bf05d58ed652ad965b8.js",
+          "hash": "620fb29af560c6a28f9a",
+          "publicPath": "/content---docs-components-autocomplete-lazyb-9-e-b8d.4bf05d58ed652ad965b8.js"
+        }
+      ]
+    },
+    "7": {
+      "js": [
+        {
+          "file": "content---docs-components-avatar-19-d-09b.834c9d73b69686979771.js",
+          "hash": "0513fb9d6b1544bf6489",
+          "publicPath": "/content---docs-components-avatar-19-d-09b.834c9d73b69686979771.js"
+        }
+      ]
+    },
+    "8": {
+      "js": [
+        {
+          "file": "content---docs-components-avatar-editord-3-a-461.fff14baf4f66ac44c3de.js",
+          "hash": "4a8e07bc54ccf0830b66",
+          "publicPath": "/content---docs-components-avatar-editord-3-a-461.fff14baf4f66ac44c3de.js"
+        }
+      ]
+    },
+    "9": {
+      "js": [
+        {
+          "file": "content---docs-components-buttonb-59-ba3.9cd7835e0d53047c8b71.js",
+          "hash": "351fe7c77211550fed4d",
+          "publicPath": "/content---docs-components-buttonb-59-ba3.9cd7835e0d53047c8b71.js"
+        }
+      ]
+    },
+    "10": {
+      "js": [
+        {
+          "file": "content---docs-components-checkbox-67-e-738.fad37991338412966e46.js",
+          "hash": "f1b05e76e4b21d96adf8",
+          "publicPath": "/content---docs-components-checkbox-67-e-738.fad37991338412966e46.js"
+        }
+      ]
+    },
+    "11": {
+      "js": [
+        {
+          "file": "content---docs-components-circular-progress-240-26c.cd0d0c16813257b3bb4d.js",
+          "hash": "c859a28740a155237fc7",
+          "publicPath": "/content---docs-components-circular-progress-240-26c.cd0d0c16813257b3bb4d.js"
+        }
+      ]
+    },
+    "12": {
+      "js": [
+        {
+          "file": "content---docs-components-circular-progress-static-3-cd-83e.e4d08df49f43ea06f917.js",
+          "hash": "067aa78582655af1ffb4",
+          "publicPath": "/content---docs-components-circular-progress-static-3-cd-83e.e4d08df49f43ea06f917.js"
+        }
+      ]
+    },
+    "13": {
+      "js": [
+        {
+          "file": "content---docs-components-color-pickerea-9-1ef.46be1f7cf44902cfc2ac.js",
+          "hash": "a2e563734c8b0b48149f",
+          "publicPath": "/content---docs-components-color-pickerea-9-1ef.46be1f7cf44902cfc2ac.js"
+        }
+      ]
+    },
+    "14": {
+      "js": [
+        {
+          "file": "content---docs-components-date-picker-2-fa-d02.37500f8fe2192a567249.js",
+          "hash": "fb028577c643c42575d9",
+          "publicPath": "/content---docs-components-date-picker-2-fa-d02.37500f8fe2192a567249.js"
+        }
+      ]
+    },
+    "15": {
+      "js": [
+        {
+          "file": "content---docs-components-date-time-picker-2-c-7-642.e51fc0d11a20d21b0b1e.js",
+          "hash": "5c77bb873218ba31d325",
+          "publicPath": "/content---docs-components-date-time-picker-2-c-7-642.e51fc0d11a20d21b0b1e.js"
+        }
+      ]
+    },
+    "16": {
+      "js": [
+        {
+          "file": "content---docs-components-date-time-picker-rangecb-0-04a.93333a930d81560bc532.js",
+          "hash": "b884a75598c69e6668ae",
+          "publicPath": "/content---docs-components-date-time-picker-rangecb-0-04a.93333a930d81560bc532.js"
+        }
+      ]
+    },
+    "17": {
+      "js": [
+        {
+          "file": "content---docs-components-dropzonec-48-e44.41776514ce9a0660a6ab.js",
+          "hash": "1ed4dbf1f143be0f44b1",
+          "publicPath": "/content---docs-components-dropzonec-48-e44.41776514ce9a0660a6ab.js"
+        }
+      ]
+    },
+    "18": {
+      "js": [
+        {
+          "file": "content---docs-components-link-570-853.6a32a8d74c93e78123ac.js",
+          "hash": "53f3890493969018f588",
+          "publicPath": "/content---docs-components-link-570-853.6a32a8d74c93e78123ac.js"
+        }
+      ]
+    },
+    "19": {
+      "js": [
+        {
+          "file": "content---docs-components-location-form-39-c-93a.e3c8a1b793d0a0092e2b.js",
+          "hash": "7fcd9d4ad652e8db3354",
+          "publicPath": "/content---docs-components-location-form-39-c-93a.e3c8a1b793d0a0092e2b.js"
+        }
+      ]
+    },
+    "20": {
+      "js": [
+        {
+          "file": "content---docs-components-location-form-switch-1-ef-122.1e51cb3fca8b28de598f.js",
+          "hash": "17981f56dd40ab6f9d94",
+          "publicPath": "/content---docs-components-location-form-switch-1-ef-122.1e51cb3fca8b28de598f.js"
+        }
+      ]
+    },
+    "21": {
+      "js": [
+        {
+          "file": "content---docs-components-locationa-4-d-507.aed8ca4513d196a5e266.js",
+          "hash": "7544a8f5a563afbbe5d3",
+          "publicPath": "/content---docs-components-locationa-4-d-507.aed8ca4513d196a5e266.js"
+        }
+      ]
+    },
+    "22": {
+      "js": [
+        {
+          "file": "content---docs-components-mdi-icon-select-475-992.7f9c54cef693b91d2ee2.js",
+          "hash": "13f185ddc7ecfc5be15e",
+          "publicPath": "/content---docs-components-mdi-icon-select-475-992.7f9c54cef693b91d2ee2.js"
+        }
+      ]
+    },
+    "23": {
+      "js": [
+        {
+          "file": "content---docs-components-mdi-iconf-86-73e.12c802768717770a8272.js",
+          "hash": "c13f4d8409b9eb43a262",
+          "publicPath": "/content---docs-components-mdi-iconf-86-73e.12c802768717770a8272.js"
+        }
+      ]
+    },
+    "24": {
+      "js": [
+        {
+          "file": "content---docs-components-radioc-3-d-44b.094be0d11324bffcf7d0.js",
+          "hash": "dbe9e5600f1cd5e73ca1",
+          "publicPath": "/content---docs-components-radioc-3-d-44b.094be0d11324bffcf7d0.js"
+        }
+      ]
+    },
+    "25": {
+      "js": [
+        {
+          "file": "content---docs-components-slider-18-c-e54.313672cdd15d35755d77.js",
+          "hash": "2dce8044228a20854fd7",
+          "publicPath": "/content---docs-components-slider-18-c-e54.313672cdd15d35755d77.js"
+        }
+      ]
+    },
+    "26": {
+      "js": [
+        {
+          "file": "content---docs-components-switch-0-ed-376.41c3ed92c6f95e781ef0.js",
+          "hash": "c6660f19d71c417f4a69",
+          "publicPath": "/content---docs-components-switch-0-ed-376.41c3ed92c6f95e781ef0.js"
+        }
+      ]
+    },
+    "27": {
+      "js": [
+        {
+          "file": "content---docs-components-text-fielde-71-12c.a751cf32c92042b3fc1b.js",
+          "hash": "20ee161243b8e79a9c9c",
+          "publicPath": "/content---docs-components-text-fielde-71-12c.a751cf32c92042b3fc1b.js"
+        }
+      ]
+    },
+    "28": {
+      "js": [
+        {
+          "file": "content---docs-components-time-picker-7-d-2-bf0.aad91eece72bcc0a51d7.js",
+          "hash": "c05e3fe4c6e72108f8c2",
+          "publicPath": "/content---docs-components-time-picker-7-d-2-bf0.aad91eece72bcc0a51d7.js"
+        }
+      ]
+    },
+    "29": {
+      "js": [
+        {
+          "file": "content---docs-docusaurus-style-guide-7-b-5-e8e.355de551c45a145e325b.js",
+          "hash": "916b8abbc08a290bf8f4",
+          "publicPath": "/content---docs-docusaurus-style-guide-7-b-5-e8e.355de551c45a145e325b.js"
+        }
+      ]
+    },
+    "30": {
+      "js": [
+        {
+          "file": "content---docs-get-started-buildfb-1-71e.d37c0b1bebe742abe163.js",
+          "hash": "4194040969625400918f",
+          "publicPath": "/content---docs-get-started-buildfb-1-71e.d37c0b1bebe742abe163.js"
+        }
+      ]
+    },
+    "31": {
+      "js": [
+        {
+          "file": "content---docs-get-started-developmentf-91-526.42a656b81604aad9af50.js",
+          "hash": "c8421a138ad4db1123d7",
+          "publicPath": "/content---docs-get-started-developmentf-91-526.42a656b81604aad9af50.js"
+        }
+      ]
+    },
+    "32": {
+      "js": [
+        {
+          "file": "content---docs-get-started-installation-1-c-2-a76.655be92752810205fdc8.js",
+          "hash": "4f43c5f1b637b11068a6",
+          "publicPath": "/content---docs-get-started-installation-1-c-2-a76.655be92752810205fdc8.js"
+        }
+      ]
+    },
+    "33": {
+      "js": [
+        {
+          "file": "content---docs-get-started-learn-082-977.d043bed9a439520d3e70.js",
+          "hash": "dc3d3395d3141921f81b",
+          "publicPath": "/content---docs-get-started-learn-082-977.d043bed9a439520d3e70.js"
+        }
+      ]
+    },
+    "34": {
+      "js": [
+        {
+          "file": "docsMetadata---docs-654-e89.dd387d452887254b76e5.js",
+          "hash": "789cfc3de61909c7b4ef",
+          "publicPath": "/docsMetadata---docs-654-e89.dd387d452887254b76e5.js"
+        }
+      ]
+    },
+    "35": {
+      "css": [
+        {
+          "file": "main.832055469fdfd47b66e2.css",
+          "hash": "d4040d86d939eb8656d0",
+          "publicPath": "/main.832055469fdfd47b66e2.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "main.53f289dd1613e7e0801a.js",
+          "hash": "d4040d86d939eb8656d0",
+          "publicPath": "/main.53f289dd1613e7e0801a.js"
+        }
+      ]
+    },
+    "36": {
+      "js": [
+        {
+          "file": "metadata---docs-components-autocomplete-6-c-9-ad7.baa0583adff253d88afa.js",
+          "hash": "8755dc858f4a449f8175",
+          "publicPath": "/metadata---docs-components-autocomplete-6-c-9-ad7.baa0583adff253d88afa.js"
+        }
+      ]
+    },
+    "37": {
+      "js": [
+        {
+          "file": "metadata---docs-components-autocomplete-lazyf-8-e-b20.6ae03eea7654862e5ed6.js",
+          "hash": "73c95dffd941eeda9e73",
+          "publicPath": "/metadata---docs-components-autocomplete-lazyf-8-e-b20.6ae03eea7654862e5ed6.js"
+        }
+      ]
+    },
+    "38": {
+      "js": [
+        {
+          "file": "metadata---docs-components-avatar-editorc-87-6e5.b7b1d55e06db12406df2.js",
+          "hash": "f2bc3c10e11e4f2fc734",
+          "publicPath": "/metadata---docs-components-avatar-editorc-87-6e5.b7b1d55e06db12406df2.js"
+        }
+      ]
+    },
+    "39": {
+      "js": [
+        {
+          "file": "metadata---docs-components-avatarb-88-832.7607a380666122a21df2.js",
+          "hash": "fc8cc4648bc721386967",
+          "publicPath": "/metadata---docs-components-avatarb-88-832.7607a380666122a21df2.js"
+        }
+      ]
+    },
+    "40": {
+      "js": [
+        {
+          "file": "metadata---docs-components-buttonce-4-816.f1337362bdc5531541be.js",
+          "hash": "8d8981b7dc6fbb34bc3e",
+          "publicPath": "/metadata---docs-components-buttonce-4-816.f1337362bdc5531541be.js"
+        }
+      ]
+    },
+    "41": {
+      "js": [
+        {
+          "file": "metadata---docs-components-checkbox-402-5b7.a7ec252d66d0dca8e987.js",
+          "hash": "71e77fa807f99fab7699",
+          "publicPath": "/metadata---docs-components-checkbox-402-5b7.a7ec252d66d0dca8e987.js"
+        }
+      ]
+    },
+    "42": {
+      "js": [
+        {
+          "file": "metadata---docs-components-circular-progress-692-a35.72310b2d799227999295.js",
+          "hash": "21120defb5a010be833a",
+          "publicPath": "/metadata---docs-components-circular-progress-692-a35.72310b2d799227999295.js"
+        }
+      ]
+    },
+    "43": {
+      "js": [
+        {
+          "file": "metadata---docs-components-circular-progress-static-171-e41.d3b38b85c1f681db9c2d.js",
+          "hash": "b2ed3a85b4458e6d87dd",
+          "publicPath": "/metadata---docs-components-circular-progress-static-171-e41.d3b38b85c1f681db9c2d.js"
+        }
+      ]
+    },
+    "44": {
+      "js": [
+        {
+          "file": "metadata---docs-components-color-picker-9-ec-7be.69b50da4853c78cfc751.js",
+          "hash": "6f911cae64cea08f8add",
+          "publicPath": "/metadata---docs-components-color-picker-9-ec-7be.69b50da4853c78cfc751.js"
+        }
+      ]
+    },
+    "45": {
+      "js": [
+        {
+          "file": "metadata---docs-components-date-picker-2-b-8-023.58315533676a1aa46a75.js",
+          "hash": "0b0a03b49c7c374b5614",
+          "publicPath": "/metadata---docs-components-date-picker-2-b-8-023.58315533676a1aa46a75.js"
+        }
+      ]
+    },
+    "46": {
+      "js": [
+        {
+          "file": "metadata---docs-components-date-time-picker-4-f-8-b94.73f2c4edb6dc994881d5.js",
+          "hash": "8fe320e3f8d557d7608a",
+          "publicPath": "/metadata---docs-components-date-time-picker-4-f-8-b94.73f2c4edb6dc994881d5.js"
+        }
+      ]
+    },
+    "47": {
+      "js": [
+        {
+          "file": "metadata---docs-components-date-time-picker-range-2-e-0-8a9.80c448123e27994e5e80.js",
+          "hash": "370031ac827c0428cd31",
+          "publicPath": "/metadata---docs-components-date-time-picker-range-2-e-0-8a9.80c448123e27994e5e80.js"
+        }
+      ]
+    },
+    "48": {
+      "js": [
+        {
+          "file": "metadata---docs-components-dropzone-99-b-440.bdc7d576f027a48e99f2.js",
+          "hash": "caa134d07cc29f93d2a0",
+          "publicPath": "/metadata---docs-components-dropzone-99-b-440.bdc7d576f027a48e99f2.js"
+        }
+      ]
+    },
+    "49": {
+      "js": [
+        {
+          "file": "metadata---docs-components-link-265-e98.485748be2ec454c41998.js",
+          "hash": "91c26f1b20e166b09225",
+          "publicPath": "/metadata---docs-components-link-265-e98.485748be2ec454c41998.js"
+        }
+      ]
+    },
+    "50": {
+      "js": [
+        {
+          "file": "metadata---docs-components-location-1-f-3-551.411c0fd21cd251d9a65a.js",
+          "hash": "a3459bfb29224443724d",
+          "publicPath": "/metadata---docs-components-location-1-f-3-551.411c0fd21cd251d9a65a.js"
+        }
+      ]
+    },
+    "51": {
+      "js": [
+        {
+          "file": "metadata---docs-components-location-form-switch-506-592.f6e5944058fd49d30d2a.js",
+          "hash": "6db64f968015155eed18",
+          "publicPath": "/metadata---docs-components-location-form-switch-506-592.f6e5944058fd49d30d2a.js"
+        }
+      ]
+    },
+    "52": {
+      "js": [
+        {
+          "file": "metadata---docs-components-location-formc-04-681.3f0c6b85707ca0ec6b27.js",
+          "hash": "a47f1acb2b342840cede",
+          "publicPath": "/metadata---docs-components-location-formc-04-681.3f0c6b85707ca0ec6b27.js"
+        }
+      ]
+    },
+    "53": {
+      "js": [
+        {
+          "file": "metadata---docs-components-mdi-icon-752-c05.21654b3b9659731b451d.js",
+          "hash": "c3cdd6df29cd03f68816",
+          "publicPath": "/metadata---docs-components-mdi-icon-752-c05.21654b3b9659731b451d.js"
+        }
+      ]
+    },
+    "54": {
+      "js": [
+        {
+          "file": "metadata---docs-components-mdi-icon-select-402-0df.d5d5f1d7990a21110b45.js",
+          "hash": "9a7128914a342f442139",
+          "publicPath": "/metadata---docs-components-mdi-icon-select-402-0df.d5d5f1d7990a21110b45.js"
+        }
+      ]
+    },
+    "55": {
+      "js": [
+        {
+          "file": "metadata---docs-components-radio-38-e-914.d2ced5e1762e4c840cb0.js",
+          "hash": "ee06be67c72579180a80",
+          "publicPath": "/metadata---docs-components-radio-38-e-914.d2ced5e1762e4c840cb0.js"
+        }
+      ]
+    },
+    "56": {
+      "js": [
+        {
+          "file": "metadata---docs-components-slider-737-209.b0aa571abcbb0280b3bc.js",
+          "hash": "535af0e95c3bf8ef9ad5",
+          "publicPath": "/metadata---docs-components-slider-737-209.b0aa571abcbb0280b3bc.js"
+        }
+      ]
+    },
+    "57": {
+      "js": [
+        {
+          "file": "metadata---docs-components-switch-5-c-4-c13.45f4ca2c6e67325af40f.js",
+          "hash": "1b36e8d3689d967a29d9",
+          "publicPath": "/metadata---docs-components-switch-5-c-4-c13.45f4ca2c6e67325af40f.js"
+        }
+      ]
+    },
+    "58": {
+      "js": [
+        {
+          "file": "metadata---docs-components-text-fieldd-0-f-c95.8b64a0df7066703cb11d.js",
+          "hash": "be620a8a0462f86e6d53",
+          "publicPath": "/metadata---docs-components-text-fieldd-0-f-c95.8b64a0df7066703cb11d.js"
+        }
+      ]
+    },
+    "59": {
+      "js": [
+        {
+          "file": "metadata---docs-components-time-pickerf-9-e-fac.3727d6d2437a4742cd12.js",
+          "hash": "b74fb5f22a7b5f724726",
+          "publicPath": "/metadata---docs-components-time-pickerf-9-e-fac.3727d6d2437a4742cd12.js"
+        }
+      ]
+    },
+    "60": {
+      "js": [
+        {
+          "file": "metadata---docs-docusaurus-style-guide-9-e-3-1a0.16cf99e1850290662eb0.js",
+          "hash": "901c53e852b33a2992ff",
+          "publicPath": "/metadata---docs-docusaurus-style-guide-9-e-3-1a0.16cf99e1850290662eb0.js"
+        }
+      ]
+    },
+    "61": {
+      "js": [
+        {
+          "file": "metadata---docs-get-started-build-6-f-0-740.ad130962e3aea483d0dd.js",
+          "hash": "7573c59bf3dbd1998d46",
+          "publicPath": "/metadata---docs-get-started-build-6-f-0-740.ad130962e3aea483d0dd.js"
+        }
+      ]
+    },
+    "62": {
+      "js": [
+        {
+          "file": "metadata---docs-get-started-developmente-9-b-0ec.bae89f980b074014d57a.js",
+          "hash": "b82bbcf360c5084043c4",
+          "publicPath": "/metadata---docs-get-started-developmente-9-b-0ec.bae89f980b074014d57a.js"
+        }
+      ]
+    },
+    "63": {
+      "js": [
+        {
+          "file": "metadata---docs-get-started-installation-40-c-0ce.8e3e7d59247bf90ffbd5.js",
+          "hash": "405d7dafdee6290aae75",
+          "publicPath": "/metadata---docs-get-started-installation-40-c-0ce.8e3e7d59247bf90ffbd5.js"
+        }
+      ]
+    },
+    "64": {
+      "js": [
+        {
+          "file": "metadata---docs-get-started-learne-98-6f5.5dfcbb021ee67a0a88e1.js",
+          "hash": "65ff62b672e96e7f9962",
+          "publicPath": "/metadata---docs-get-started-learne-98-6f5.5dfcbb021ee67a0a88e1.js"
+        }
+      ]
+    },
+    "65": {
+      "js": [
+        {
+          "file": "runtime~main.f17b3cc0e28843709109.js",
+          "hash": "5ef380578f6dd53fd852",
+          "publicPath": "/runtime~main.f17b3cc0e28843709109.js"
+        }
+      ]
+    },
+    "66": {
+      "css": [
+        {
+          "file": "66.f070d87cc699240ea0d8.css",
+          "hash": "15bc7a8c57e26d1dad0e",
+          "publicPath": "/66.f070d87cc699240ea0d8.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "66.899ab6d06f7c45419684.js",
+          "hash": "15bc7a8c57e26d1dad0e",
+          "publicPath": "/66.899ab6d06f7c45419684.js"
+        }
+      ]
+    },
+    "67": {
+      "js": [
+        {
+          "file": "67.f318aadb3632a817130a.js",
+          "hash": "6c24f962616f04132437",
+          "publicPath": "/67.f318aadb3632a817130a.js"
+        }
+      ]
+    }
+  }
+}

@@ -1,11 +1,14 @@
 module.exports = {
     title: 'Platform UI',
     tagline: 'Make your UI affectli. Build with quintessence of material-ui and our vision.',
-    url: 'https://github.com/mi-c3/platform-ui',
+
+    // Deployment
+    url: 'https://mi-c3.github.io',
     baseUrl: '/',
     favicon: 'img/favicon.ico',
     organizationName: 'mic3', // Usually your GitHub org/user name.
     projectName: 'platform-ui', // Usually your repo name.
+
     themeConfig: {
         prismTheme: require('prism-react-renderer/themes/vsDark'),
         navbar: {
