@@ -4,7 +4,7 @@ module.exports = {
 
     // Deployment
     url: 'https://mi-c3.github.io',
-    baseUrl: '/',
+    baseUrl: '/platform-ui/',
     favicon: 'img/favicon.ico',
     organizationName: 'mic3', // Usually your GitHub org/user name.
     projectName: 'platform-ui', // Usually your repo name.
@@ -65,7 +65,7 @@ module.exports = {
             // ],
             logo: {
                 alt: 'Affectli',
-                src: '/img/badge.png',
+                src: '/platform-ui/img/badge.png',
             },
             copyright: `Copyright © ${new Date().getFullYear()} MI-C3, Inc. Platform UI. Built with Docusaurus.`,
         },
