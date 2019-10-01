@@ -101,7 +101,7 @@ class CalendarRange extends PureComponent<Object, Object> {
 
     @bind
     @memoize()
-    buildInputs(PickersToProps, PickersFromProps, start, end, classes) {
+    buildInputs(PickersToProps, PickersFromProps, start, end, classes, disabled) {
         return () => {
             return (
                 <span className={classes.inputWrapper}>
@@ -114,6 +114,7 @@ class CalendarRange extends PureComponent<Object, Object> {
                         format="DD, MMM YYYY HH:mm"
                         onChange={this.onChangeStart}
                         TextFieldComponent={CustomInput}
+                        disabled={disabled}
                     />
                     <DateTimePicker
                         showTodayButton
@@ -124,6 +125,7 @@ class CalendarRange extends PureComponent<Object, Object> {
                         format="DD, MMM YYYY HH:mm"
                         onChange={this.onChangeEnd}
                         TextFieldComponent={CustomInput}
+                        disabled={disabled}
                     />
                 </span>
             );
@@ -131,7 +133,7 @@ class CalendarRange extends PureComponent<Object, Object> {
     }
 
     render() {
-        const { PickersFromProps, PickersToProps, classes, ...restProps } = this.props;
+        const { PickersFromProps, PickersToProps, classes, disabled, ...restProps } = this.props;
         const { start, end } = this.state;
         return (
             <Fragment>
@@ -151,8 +153,9 @@ class CalendarRange extends PureComponent<Object, Object> {
                                 </IconButton>
                             </InputAdornment>
                         ),
-                        inputComponent: this.buildInputs(PickersToProps, PickersFromProps, start, end, classes),
+                        inputComponent: this.buildInputs(PickersToProps, PickersFromProps, start, end, classes, disabled),
                     }}
+                    disabled={disabled}
                     {...restProps}
                 />
             </Fragment>
