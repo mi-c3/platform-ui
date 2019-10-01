@@ -328,7 +328,7 @@ class Autocomplete extends PureComponent {
             const values = new Set(value);
             return options.filter((option) => values.has(get(option, valueField)));
         }
-        return options.find((option) => value === get(option, valueField)) || value;
+        return options.find((option) => shallowEquals(value, get(option, valueField))) || value;
     }
 
     render() {
