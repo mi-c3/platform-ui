@@ -73,4 +73,4 @@ async suggest(event) {
 
 ## Storybook
 
-<[Autocomplete/Dropdown](/redirect?/storybook/index.html?path=/story/components-autocomplete--dropdown)>
+<[Autocomplete/Dropdown](/platform-ui/redirect?/storybook/index.html?path=/story/components-autocomplete--dropdown)>

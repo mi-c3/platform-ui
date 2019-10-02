@@ -35,4 +35,4 @@ import { Slider } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[Slider](/redirect?/storybook/index.html?path=/story/components-slider--slider)>
+<[Slider](/platform-ui/redirect?/storybook/index.html?path=/story/components-slider--slider)>

@@ -25,4 +25,4 @@ import { Link } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[Link](/redirect?/storybook/index.html?path=/story/components-link--link)>
+<[Link](/platform-ui/redirect?/storybook/index.html?path=/story/components-link--link)>

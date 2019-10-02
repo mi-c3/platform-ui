@@ -34,4 +34,4 @@ import { DateTimePickerRange } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[DateTimePickerRange](/redirect?/storybook/index.html?path=/story/components-datetimepickers--datetimepickerrange)>
+<[DateTimePickerRange](/platform-ui/redirect?/storybook/index.html?path=/story/components-datetimepickers--datetimepickerrange)>

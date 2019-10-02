@@ -39,4 +39,4 @@ import { Checkbox } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[Checkbox](/redirect?/storybook/index.html?path=/story/components-selection-controls--checkbox)>
+<[Checkbox](/platform-ui/redirect?/storybook/index.html?path=/story/components-selection-controls--checkbox)>

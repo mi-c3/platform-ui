@@ -39,4 +39,4 @@ import { DateTimePicker } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[DateTimePicker](/redirect?/storybook/index.html?path=/story/components-datetimepickers--datetimepicker)>
+<[DateTimePicker](/platform-ui/redirect?/storybook/index.html?path=/story/components-datetimepickers--datetimepicker)>

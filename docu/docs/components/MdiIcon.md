@@ -30,4 +30,4 @@ import { MdiIcon } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[MdiIcon](/redirect?/storybook/index.html?path=/story/components-mdiicon--mdiicon)>
+<[MdiIcon](/platform-ui/redirect?/storybook/index.html?path=/story/components-mdiicon--mdiicon)>

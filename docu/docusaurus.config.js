@@ -26,7 +26,7 @@ module.exports = {
                     position: 'right',
                 },
                 {
-                    to: '/storybook/index.html',
+                    to: '/redirect?/storybook/index.html?path=/story/components-autocomplete--dropdown',
                     label: 'Storybook',
                     position: 'right',
                 },

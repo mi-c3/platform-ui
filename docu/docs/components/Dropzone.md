@@ -47,4 +47,4 @@ const DropzoneWrapper = ({ children, ...restProps }: Object) => {
 
 ## Storybook
 
-<[Dropzone](/redirect?/storybook/index.html?path=/story/components-uploaders--dropzone)>
+<[Dropzone](/platform-ui/redirect?/storybook/index.html?path=/story/components-uploaders--dropzone)>

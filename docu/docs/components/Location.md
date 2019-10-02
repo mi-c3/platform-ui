@@ -28,4 +28,4 @@ import { Location } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[Location](/redirect?/storybook/index.html?path=/story/components-location--location)>
+<[Location](/platform-ui/redirect?/storybook/index.html?path=/story/components-location--location)>

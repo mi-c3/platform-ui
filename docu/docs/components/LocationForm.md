@@ -24,4 +24,4 @@ import { LocationForm } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[LocationForm](/redirect?/storybook/index.html?path=/story/components-location--locationform)>
+<[LocationForm](/platform-ui/redirect?/storybook/index.html?path=/story/components-location--locationform)>

@@ -65,4 +65,4 @@ import { AvatarEditor } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[AvatarEditor](/redirect?/storybook/index.html?path=/story/components-avatar--avatar-editor)>
+<[AvatarEditor](/platform-ui/redirect?/storybook/index.html?path=/story/components-avatar--avatar-editor)>

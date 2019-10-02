@@ -25,4 +25,4 @@ import { Avatar } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[Avatar](/redirect?/storybook/index.html?path=/story/components-avatar--avatar)>
+<[Avatar](/platform-ui/redirect?/storybook/index.html?path=/story/components-avatar--avatar)>
