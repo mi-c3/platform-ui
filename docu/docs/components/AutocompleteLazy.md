@@ -36,4 +36,4 @@ const fetchData = async (searchText = null) => {
 
 ## Storybook
 
-<[Autocomplete/Typeahead](/redirect?/storybook/index.html?path=/story/components-autocomplete--typeahead)>
+<[Autocomplete/Typeahead](/platform-ui/redirect?/storybook/index.html?path=/story/components-autocomplete--typeahead)>

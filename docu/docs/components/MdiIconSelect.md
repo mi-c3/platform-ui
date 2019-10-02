@@ -29,4 +29,4 @@ import { MdiIconSelect } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[MdiIcon](/redirect?/storybook/index.html?path=/story/components-autocomplete--mdiiconselect)>
+<[MdiIcon](/platform-ui/redirect?/storybook/index.html?path=/story/components-autocomplete--mdiiconselect)>

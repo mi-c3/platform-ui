@@ -31,4 +31,4 @@ import { TextField } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[TextField](/redirect?/storybook/index.html?path=/story/components-textfield--text)>
+<[TextField](/platform-ui/redirect?/storybook/index.html?path=/story/components-textfield--text)>

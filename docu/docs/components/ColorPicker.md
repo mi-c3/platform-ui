@@ -31,4 +31,4 @@ import { ColorPicker } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[ColorPicker](/redirect?/storybook/index.html?path=/story/components-colorpicker--color-picker)>
+<[ColorPicker](/platform-ui/redirect?/storybook/index.html?path=/story/components-colorpicker--color-picker)>

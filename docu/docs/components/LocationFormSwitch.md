@@ -22,4 +22,4 @@ import { LocationFormSwitch } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[LocationFormSwitch](/redirect?/storybook/index.html?path=/story/components-location--locationformswitch)>
+<[LocationFormSwitch](/platform-ui/redirect?/storybook/index.html?path=/story/components-location--locationformswitch)>

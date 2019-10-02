@@ -41,4 +41,4 @@ import { Switch } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[Switch](/redirect?/storybook/index.html?path=/story/components-selection-controls--switch)>
+<[Switch](/platform-ui/redirect?/storybook/index.html?path=/story/components-selection-controls--switch)>

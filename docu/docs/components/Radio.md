@@ -35,4 +35,4 @@ import { Radio, RadioGroup } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[Radio](/redirect?/storybook/index.html?path=/story/components-selection-controls--radio)>
+<[Radio](/platform-ui/redirect?/storybook/index.html?path=/story/components-selection-controls--radio)>

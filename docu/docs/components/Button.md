@@ -25,4 +25,4 @@ import { Button } from '@mic3/platform-ui';
 
 ## Storybook
 
-<[Button](/redirect?/storybook/index.html?path=/story/components-button--primary)>
+<[Button](/platform-ui/redirect?/storybook/index.html?path=/story/components-button--primary)>
