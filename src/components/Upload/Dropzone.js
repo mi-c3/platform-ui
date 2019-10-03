@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import ReactDropzone from 'react-dropzone';
@@ -60,7 +60,7 @@ const styles = ({ palette }) => ({
     },
 });
 
-class Dropzone extends Component {
+class Dropzone extends PureComponent {
     static defaultProps = {
         accept: 'image/*,video/*,application/*',
         imageOptions: null,
@@ -112,7 +112,7 @@ class Dropzone extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.value !== this.props.value) {
-            this.setSatet({
+            this.setState({
                 files: this.props.value,
             });
         }
