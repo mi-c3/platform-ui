@@ -63,7 +63,7 @@ const styles = ({ palette }) => ({
 class Dropzone extends Component {
     static defaultProps = {
         accept: 'image/*,video/*,application/*',
-        imageOptions: {},
+        imageOptions: null,
         filesLimit: 1,
         capture: true,
         maxSize: 3000000,
@@ -128,13 +128,14 @@ class Dropzone extends Component {
 
     @bind
     async onChange(files) {
-        const {
-            onChange,
-            imageOptions: { maxWidth, maxHeigth, quality },
-        } = this.props;
+        const { onChange, imageOptions } = this.props;
+
+        const { maxWidth, maxHeigth, quality } = imageOptions || {};
 
         const postProcessFiles = files.map((file) =>
-            isImageType(file.type) ? resizeImage({ image: file, width: maxWidth, height: maxHeigth, quality }) : Promise.resolve(file)
+            imageOptions && isImageType(file.type)
+                ? resizeImage({ image: file, width: maxWidth, height: maxHeigth, quality })
+                : Promise.resolve(file)
         );
 
         const value = [];
@@ -144,7 +145,7 @@ class Dropzone extends Component {
                 value.push(blob);
             })
         );
-        onChange && onChange({ value, originalFiles: files });
+        onChange && onChange({ value, originalFiles: files, target: { value, name: this.props.name } });
     }
 
     @bind
