@@ -143,6 +143,7 @@ import LocationForm from 'components/Location/LocationForm';
 import LocationSwitch from 'components/Location/LocationSwitch';
 import PuiProvider from 'components/PuiProvider';
 import Slider from 'components/Slider';
+import UploadFileField from 'components/UploadFileField';
 
 export {
     // Platform overrides Material UI components
@@ -161,6 +162,7 @@ export {
     Radio,
     Switch,
     TextField,
+    UploadFileField,
     //3dd library
     AvatarEditor,
     ColorPicker,
