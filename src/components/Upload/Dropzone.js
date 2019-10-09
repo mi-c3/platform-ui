@@ -72,6 +72,7 @@ class Dropzone extends PureComponent {
         showPreviews: false, // By default previews show up under in the dialog and inside in the standalone
         showAlerts: false,
         clearOnUnmount: true,
+        disableDragActive: false,
     };
 
     static propTypes = {
@@ -260,6 +261,7 @@ class Dropzone extends PureComponent {
             children,
             dropZoneClasses,
             onClick,
+            disableDragActive,
             ...restProps
         } = this.props; // eslint-disable-line max-len
         const { files } = this.state;
@@ -270,11 +272,15 @@ class Dropzone extends PureComponent {
                         return !children ? (
                             <div
                                 {...getRootProps()}
-                                className={`${classes.dropZone} ${isDragActive && classes.dropZoneActive} ${dropZoneClasses}`}
+                                className={`
+                                  ${classes.dropZone}
+                                  ${!disableDragActive && isDragActive && classes.dropZoneActive}
+                                  ${dropZoneClasses}
+                                `}
                             >
                                 <input {...getInputProps()} capture={capture} multiple={multiple} />
                                 <CloudUploadIcon className={classes.dropzoneIcon} />
-                                {isDragActive ? (
+                                {!disableDragActive && isDragActive ? (
                                     <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
                                 ) : (
                                     <Typography className={classes.dropzoneTypography}>{dropzoneText}</Typography>
@@ -285,9 +291,13 @@ class Dropzone extends PureComponent {
                                 {...getRootProps({
                                     onClick,
                                 })}
-                                className={`${classes.relative} ${dropZoneClasses || ''} ${isDragActive && classes.dropZoneActive}`}
+                                className={`
+                                  ${classes.relative}
+                                  ${dropZoneClasses || ''}
+                                  ${!disableDragActive && isDragActive && classes.dropZoneActive}
+                                `}
                             >
-                                {isDragActive && (
+                                {!disableDragActive && isDragActive && (
                                     <div className={classes.dropzoneBounceIcon}>
                                         <MdiIcon color="secondary" name="arrow-down-thick" size={80} />
                                         <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
