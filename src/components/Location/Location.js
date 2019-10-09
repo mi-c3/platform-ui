@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
 
 import { DarkMapTheme } from 'styles/mapTheme';
-import { SimpleMarker } from 'components/Location/SimpleMarker/SimpleMarker';
 import { Typography } from '@material-ui/core';
 import { isDefined } from 'utils/utils';
 import { bind } from 'utils/decorators/decoratorUtils';
+import Marker from './Marker/Marker';
 
 const Map = ({ center, zoom, children, ...restProps }) => (
     <div style={{ height: '300px', width: '100%' }}>
@@ -73,6 +73,11 @@ export default class Location extends PureComponent {
         disabled: PropTypes.bool,
         dark: PropTypes.bool,
         streetViewControl: PropTypes.bool,
+        MarkerProps: PropTypes.object,
+    };
+
+    static defaultProps = {
+        MarkerProps: {},
     };
 
     @bind
@@ -81,12 +86,12 @@ export default class Location extends PureComponent {
     }
 
     render() {
-        const { dark, streetViewControl, latitude, longitude, onGoogleApiLoaded, writeMode, ...restProps } = this.props;
+        const { dark, streetViewControl, latitude, longitude, onGoogleApiLoaded, writeMode, MarkerProps, ...restProps } = this.props;
         const noLocation = !isDefined(latitude) || !isDefined(longitude);
         if (noLocation) {
             return <Typography> No location is available.</Typography>;
         }
-        const marker = !writeMode ? <SimpleMarker lat={latitude} lng={longitude} /> : null;
+        const marker = !writeMode ? <Marker lat={latitude} lng={longitude} {...MarkerProps} /> : null;
         return (
             <Map
                 options={mapOptions({ dark, streetViewControl })}
