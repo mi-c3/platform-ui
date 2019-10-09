@@ -17,6 +17,7 @@ dropzoneTextHover | string | 'Drop files here...'          | text for on hover
 dropzoneText      | string | 'Drag an image here'          | text for drop zone
 showPreviews      |  bool  | false                         | show previews
 showAlerts        |  bool  | false                         | show alerts
+disableDragActive |  bool  | false                         | if true disabled hover styles effects on dragzone
 
 ## How to use
 
