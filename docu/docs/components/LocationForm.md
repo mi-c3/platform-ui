@@ -13,6 +13,7 @@ showCoords                   |  bool  | false   | show/hide coordination values 
 onChange                     |  func  |         | You can pull out the new value by accessing event.target.value
 LocationProps                | object | {}      | Location properties or `GoogleMapReact` properties
 GooglePlaceAutocompleteProps | object | {}      | Autocomplete properties
+MarkerProps                  | object | {}      | Marker properties
 
 ## How to use
 

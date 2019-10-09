@@ -28,10 +28,12 @@ class LocationForm extends PureComponent {
         showCoords: PropTypes.bool,
         LocationProps: PropTypes.shape((Location || {}).propTypes),
         GooglePlaceAutocompleteProps: PropTypes.object,
+        MarkerProps: PropTypes.object,
     };
 
     static defaultProps = {
         showCoords: false,
+        MarkerProps: {},
     };
 
     geocoder = null;
@@ -131,7 +133,7 @@ class LocationForm extends PureComponent {
     }
 
     render() {
-        const { value, disabled, withAutocomplete, LocationProps, GooglePlaceAutocompleteProps, showCoords } = this.props;
+        const { value, disabled, withAutocomplete, LocationProps, MarkerProps, GooglePlaceAutocompleteProps, showCoords } = this.props;
         const { mapKey } = this.state;
         const latitude = get(value, 'latitude');
         const longitude = get(value, 'longitude');
@@ -155,6 +157,7 @@ class LocationForm extends PureComponent {
                     onClick={this.onMapClick}
                     onGoogleApiLoaded={this.onGoogleApiLoaded}
                     disabled={disabled}
+                    MarkerProps={MarkerProps}
                     {...LocationProps}
                 />
                 <Grid container justify="space-between">

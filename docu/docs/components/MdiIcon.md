@@ -15,10 +15,11 @@ import '~@mdi/font/css/materialdesignicons.css';
 
 ## Props
 
-Name |  Type  | Default | Description
----- | :----: | ------- | --------------------------------------------------------
-size | number | 24      | The fontSize applied to the icon. Defaults to `24px`
-name | string |         | Name of the MaterialDisignIcons icon. Required property.
+Name  |  Type  | Default   | Description
+----- | :----: | --------- | --------------------------------------------------------------------------------------------------------
+size  | number | 24        | The fontSize applied to the icon. Defaults to `24px`
+name  | string |           | Name of the MaterialDisignIcons icon. Required property.
+color | string | 'inherit' | Can be one of MUI colors `['inherit', 'primary', 'secondary', 'action', 'error', 'disabled']` or any hex
 
 ## How to use
 

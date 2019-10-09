@@ -9,12 +9,13 @@ Using `GoogleMapReact` from [google-map-react](https://github.com/google-map-rea
 
 ## Props
 
-Name      |  Type  | Default | Description
---------- | :----: | ------- | -------------------------------------------------------
-latitude  | float  | 59.95   | Latitude of location
-longitude | float  | 30.33   | Longitude of location
-zoom      | number | 11      | Zoom for google map
-disabled  |  bool  | false   | if we have `onClick` event, this properties disabled it
+Name                |  Type  | Default | Description
+------------------- | :----: | ------- | -------------------------------------------------------
+latitude            | float  | 59.95   | Latitude of location
+longitude           | float  | 30.33   | Longitude of location
+zoom                | number | 11      | Zoom for google map
+disabled            |  bool  | false   | if we have `onClick` event, this properties disabled it
+disabledMarkerProps | object | {}      | Marker properties
 
 Also support full `GoogleMapReact` component properties.
 
