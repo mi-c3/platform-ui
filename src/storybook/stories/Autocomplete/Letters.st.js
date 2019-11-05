@@ -22,9 +22,10 @@ storiesOf('Components|Autocomplete.Multiple', module)
         const disabled = boolean('Disabled', false, 'Default');
         const name = text('Name', 'countries', 'Default');
         const placeholder = text('Placeholder', 'Type A...', 'Default');
+        const helperText = text('Helper text', 'Any helper text...', 'Default');
         const fullWidth = boolean('FullWidth', true, 'Style');
         const multiple = boolean('Multiple', true, 'Default');
-
+        const error = boolean('Error', false, 'Default');
         return (
             <Fragment>
                 <H3>Multiple Select with letters of Icon name</H3>
@@ -36,6 +37,8 @@ storiesOf('Components|Autocomplete.Multiple', module)
                     fullWidth={fullWidth}
                     multiple={multiple}
                     onChange={onChange}
+                    error={error}
+                    helperText={helperText}
                     valueField="value"
                 />
             </Fragment>

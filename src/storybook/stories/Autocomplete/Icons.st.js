@@ -25,6 +25,8 @@ storiesOf('Components|Autocomplete.Multiple', module)
         const fullWidth = boolean('FullWidth', true, 'Style');
         const multiple = boolean('Multiple', true, 'Default');
         const label = text('Label', 'Icon name', 'Default');
+        const error = boolean('Error', false, 'Default');
+        const helperText = text('Helper text', 'Any helper text...', 'Default');
 
         return (
             <Fragment>
@@ -37,6 +39,8 @@ storiesOf('Components|Autocomplete.Multiple', module)
                     fullWidth={fullWidth}
                     multiple={multiple}
                     onChange={onChange}
+                    error={error}
+                    helperText={helperText}
                     valueField="value"
                 />
             </Fragment>
