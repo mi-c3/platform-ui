@@ -44,7 +44,7 @@ class TextField extends PureComponent {
     getClearAdornment(disabled, value) {
         return (
             !disabled &&
-            !!value && (
+            isDefined(value) && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
                         <Cancel className={this.props.classes.icon} />
