@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import MdiIcon from 'components/MdiIcon';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { createEvent } from 'utils/http/event';
+import { isDefined } from 'utils/utils';
 
 // eslint-disable-next-line no-unused-vars
 const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};
@@ -69,7 +70,7 @@ class TextField extends PureComponent {
         const { disabled, value, InputProps, error, ...restProps } = this.props;
         return (
             <MuiTextField
-                value={value || ''}
+                value={isDefined(value) ? value : ''}
                 disabled={disabled}
                 error={error}
                 InputProps={{
