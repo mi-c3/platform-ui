@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import MdiIcon from 'components/MdiIcon';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { createEvent } from 'utils/http/event';
+import { isDefined } from 'utils/utils';
 
 // eslint-disable-next-line no-unused-vars
 const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};
@@ -43,7 +44,7 @@ class TextField extends PureComponent {
     getClearAdornment(disabled, value) {
         return (
             !disabled &&
-            !!value && (
+            isDefined(value) && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
                         <Cancel className={this.props.classes.icon} />
@@ -69,7 +70,7 @@ class TextField extends PureComponent {
         const { disabled, value, InputProps, error, ...restProps } = this.props;
         return (
             <MuiTextField
-                value={value || ''}
+                value={isDefined(value) ? value : ''}
                 disabled={disabled}
                 error={error}
                 InputProps={{
