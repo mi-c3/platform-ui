@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`calls "onClick" prop on button click 1`] = `
+<button
+  class="MuiButtonBase-root-65 MuiButton-root-39 MuiButton-contained-50 MuiButton-containedPrimary-51 MuiButton-raised-53 MuiButton-raisedPrimary-54"
+  tabindex="0"
+  type="button"
+>
+  <span
+    class="MuiButton-label-40"
+  >
+    Click Me!
+  </span>
+  <span
+    class="MuiTouchRipple-root-68"
+  />
+</button>
+`;
+
+exports[`checks button attribute 1`] = `
+<button
+  class="MuiButtonBase-root-102 MuiButtonBase-disabled-103 MuiButton-root-76 MuiButton-contained-87 MuiButton-containedSecondary-89 MuiButton-raised-90 MuiButton-raisedSecondary-92 MuiButton-disabled-96"
+  data-testid="btn-secondary"
+  disabled=""
+  tabindex="-1"
+  type="button"
+>
+  <span
+    class="MuiButton-label-77"
+  >
+    Click Me!
+  </span>
+</button>
+`;
+
+exports[`renders button 1`] = `
+<button
+  class="MuiButtonBase-root-28 MuiButton-root-2 MuiButton-contained-13 MuiButton-containedPrimary-14 MuiButton-raised-16 MuiButton-raisedPrimary-17"
+  data-testid="btn-primary"
+  tabindex="0"
+  type="button"
+>
+  <span
+    class="MuiButton-label-3"
+  >
+    Click Me!
+  </span>
+  <span
+    class="MuiTouchRipple-root-31"
+  />
+</button>
+`;
