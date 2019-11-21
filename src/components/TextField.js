@@ -44,7 +44,7 @@ class TextField extends PureComponent {
     getClearAdornment(disabled, value) {
         return (
             !disabled &&
-            isDefined(value) && (
+            this.isDefined(value) && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
                         <Cancel className={this.props.classes.icon} />
@@ -66,11 +66,15 @@ class TextField extends PureComponent {
         );
     }
 
+    isDefined(value) {
+        return isDefined(value) && value !== '';
+    }
+
     render() {
         const { disabled, value, InputProps, error, ...restProps } = this.props;
         return (
             <MuiTextField
-                value={isDefined(value) ? value : ''}
+                value={this.isDefined(value) ? value : ''}
                 disabled={disabled}
                 error={error}
                 InputProps={{
