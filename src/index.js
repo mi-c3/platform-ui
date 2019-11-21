@@ -144,6 +144,7 @@ import LocationSwitch from 'components/Location/LocationSwitch';
 import PuiProvider from 'components/PuiProvider';
 import Slider from 'components/Slider';
 import UploadFileField from 'components/UploadFileField';
+import RichTextEditor from 'components/RichTextEditor';
 
 export {
     // Platform overrides Material UI components
@@ -163,6 +164,7 @@ export {
     Switch,
     TextField,
     UploadFileField,
+    RichTextEditor,
     //3dd library
     AvatarEditor,
     ColorPicker,
