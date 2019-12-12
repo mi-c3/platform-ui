@@ -22,6 +22,7 @@ class TextField extends PureComponent {
     static propTypes = {
         ...(MuiTextField || {}).propTypes,
         InputProps: PropTypes.shape(inputPropsSubSet),
+        clearable: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -29,6 +30,7 @@ class TextField extends PureComponent {
         margin: 'normal',
         fullWidth: true,
         InputProps: {},
+        clearable: true,
     };
 
     @bind
@@ -71,14 +73,15 @@ class TextField extends PureComponent {
     }
 
     render() {
-        const { disabled, value, InputProps, error, ...restProps } = this.props;
+        const { disabled, value, InputProps, error, clearable, ...restProps } = this.props;
+        const defaultEndAdornment = error ? this.getErrorAdornment() : this.getClearAdornment(disabled, value);
         return (
             <MuiTextField
                 value={this.isDefined(value) ? value : ''}
                 disabled={disabled}
                 error={error}
                 InputProps={{
-                    endAdornment: error ? this.getErrorAdornment() : this.getClearAdornment(disabled, value),
+                    endAdornment: clearable ? defaultEndAdornment : undefined,
                     ...InputProps,
                 }}
                 {...restProps}

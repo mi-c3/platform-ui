@@ -20,6 +20,7 @@ storiesOf('Components|Autocomplete', module)
         const fullWidth = boolean('FullWidth', true, 'Style');
         const multiple = boolean('Multiple', false, 'Default');
         const ordering = [{ value: null, label: 'Any' }, { value: 'stg', label: 'St. Julians' }, { value: 'sliema', label: 'Sliema' }];
+        const clearable = boolean('Clearable', true, 'Default');
         return (
             <Fragment>
                 <H3>Simple Autocomplete with static data</H3>
@@ -32,6 +33,7 @@ storiesOf('Components|Autocomplete', module)
                     multiple={multiple}
                     onChange={onChange}
                     options={countries}
+                    clearable={clearable}
                 />
                 <H3>Simple Autocomplete with `null` in value</H3>
                 <Autocomplete
@@ -45,6 +47,7 @@ storiesOf('Components|Autocomplete', module)
                     options={ordering}
                     valueField="value"
                     value={null}
+                    clearable={clearable}
                 />
             </Fragment>
         );
