@@ -40,6 +40,7 @@ storiesOf('Components|TextField', module)
         const rowsMax = number('RowsMax', 10, {}, 'Multiline');
         const selectList = boolean('Select', false, 'Select');
         const error = boolean('Error', false, 'Default');
+        const clearable = boolean('Clearable', true, 'Default');
 
         return (
             <Fragment>
@@ -58,6 +59,7 @@ storiesOf('Components|TextField', module)
                     rowsMax={rowsMax}
                     select={selectList}
                     error={error}
+                    clearable={clearable}
                 >
                     {generateOptions(currencies)}
                 </TextField>

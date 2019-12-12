@@ -306,12 +306,15 @@ class Autocomplete extends PureComponent {
             InputProperties.classes = { root: classes.inputRoot, input: classes.inputInput };
         } else {
             InputProperties.startAdornment = startAdornment && <AdormentStyle>{startAdornment}</AdormentStyle>;
-            InputProperties.endAdornment = selected && clearable && !disabled && (
-                <IconButton aria-label="Clear input" onClick={this.clearInput}>
-                    <Cancel />
-                </IconButton>
-            );
+            if (!InputProperties.endAdornment) {
+                InputProperties.endAdornment = selected && clearable && !disabled && (
+                    <IconButton aria-label="Clear input" onClick={this.clearInput}>
+                        <Cancel />
+                    </IconButton>
+                );
+            }
         }
+
         return InputProperties;
     }
 

@@ -27,6 +27,7 @@ storiesOf('Components|Autocomplete', module)
         const labelUser = text('Label', 'User', 'Default');
         const labelCittiesDB = text('Label', 'Cities DB', 'Default');
         const labelStuff = text('Label', 'Stuff (Big Data)', 'Default');
+        const clearable = boolean('Clearable', true, 'Default');
         return (
             <Fragment>
                 <H3>Lazy Typeahead Autocomplete with imitation of server side rendering</H3>
@@ -39,6 +40,7 @@ storiesOf('Components|Autocomplete', module)
                     multiple={multiple}
                     onChange={onChange}
                     fetchData={getUsers}
+                    clearable={clearable}
                     VirtualListProps={{
                         itemSize: 60,
                     }}
@@ -72,6 +74,7 @@ storiesOf('Components|Autocomplete', module)
                     onChange={onChange}
                     fetchData={getCities}
                     optionTemplate={({ name, country }) => ({ label: `${name} (${country})` })}
+                    clearable={clearable}
                 />
                 <AutocompleteLazy
                     label={labelStuff}
@@ -84,6 +87,7 @@ storiesOf('Components|Autocomplete', module)
                     fetchData={getStuff}
                     valueId={text('valueId', 'id', 'Default')}
                     optionTemplate={({ name, id }) => ({ label: `${name} (${id})` })}
+                    clearable={clearable}
                 />
             </Fragment>
         );
