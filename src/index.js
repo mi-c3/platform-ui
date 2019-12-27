@@ -144,6 +144,7 @@ import LocationSwitch from 'components/Location/LocationSwitch';
 import PuiProvider from 'components/PuiProvider';
 import Slider from 'components/Slider';
 import UploadFileField from 'components/UploadFileField';
+import TextEditor from 'components/TextEditor';
 
 export {
     // Platform overrides Material UI components
@@ -179,6 +180,7 @@ export {
     ReactDropzone,
     Slider,
     TimePicker,
+    TextEditor,
     // Styles
     DarkTheme,
     // Core colors
