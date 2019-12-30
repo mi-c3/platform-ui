@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core/styles';
 
 import ReactDropzone from 'react-dropzone';
+import ReactMde, { commands as reactMdeCommands } from 'react-mde';
 
 import AppBar from '@material-ui/core/AppBar';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -181,6 +182,8 @@ export {
     Slider,
     TimePicker,
     TextEditor,
+    ReactMde,
+    reactMdeCommands,
     // Styles
     DarkTheme,
     // Core colors
