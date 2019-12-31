@@ -23,6 +23,13 @@ class TextEditor extends PureComponent {
         value: '',
     };
 
+    componentDidUpdate(prevProps) {
+        const { value: newValue } = this.props;
+        if (newValue !== prevProps.value) {
+            this.setState({ value: newValue });
+        }
+    }
+
     @bind
     onChange(value) {
         const { name, onChange } = this.props;
