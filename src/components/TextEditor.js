@@ -18,10 +18,13 @@ class TextEditor extends PureComponent {
         ...(ReactMde || {}).propTypes,
     };
 
-    state = {
-        selectedTab: 'write',
-        value: '',
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedTab: 'write',
+            value: props.value || '',
+        };
+    }
 
     componentDidUpdate(prevProps) {
         const { value: newValue } = this.props;

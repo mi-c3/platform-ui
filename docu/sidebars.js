@@ -11,6 +11,7 @@ module.exports = {
             'components/autocomplete',
             'components/autocompleteLazy',
             'components/avatarEditor',
+            'components/textEditor',
             'components/circularProgressStatic',
             'components/colorPicker',
             'components/link',
