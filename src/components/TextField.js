@@ -34,7 +34,6 @@ class TextField extends PureComponent {
     };
 
     @bind
-    @memoize()
     onClear() {
         const { onChange, name, type } = this.props;
         const event = createEvent('change', { target: { name, type, value: null } });
