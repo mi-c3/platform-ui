@@ -13,6 +13,7 @@ import {
 
 import ReactDropzone from 'react-dropzone';
 import ReactMde, { commands as reactMdeCommands } from 'react-mde';
+import * as Showdown from 'showdown';
 
 import AppBar from '@material-ui/core/AppBar';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -184,6 +185,7 @@ export {
     TextEditor,
     ReactMde,
     reactMdeCommands,
+    Showdown,
     // Styles
     DarkTheme,
     // Core colors
