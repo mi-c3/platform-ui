@@ -10,7 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Cancel from '@material-ui/icons/Cancel';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { bind } from 'utils/decorators/decoratorUtils';
 
 import DateTimePicker from './DateTimePicker';

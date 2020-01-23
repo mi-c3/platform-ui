@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { MdiIcon, Avatar, MdiIconSelect, ListItem, ListItemText, ListItemIcon } from 'index';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 const styles = () => ({
     avatar: {

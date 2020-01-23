@@ -30,6 +30,7 @@ const storybookConfiguration = ({ config: defaultConfig, mode }) => {
       config.resolve.modules = [__dirname + '/src', 'node_modules'];
 
       config.optimization = {};
+      config.externals = [/react$/, /react\-dom/, /@material-ui\/core\/*./, /@material-ui\/styles/];
       // delete config.module.loaders[0].exclude;
       // removed chunks options
       // config.plugins.splice(0, 1);

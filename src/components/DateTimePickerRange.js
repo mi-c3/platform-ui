@@ -4,7 +4,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import Cancel from '@material-ui/icons/Cancel';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 import DateTimePicker from './DateTimePicker';
 import TextField from './TextField';

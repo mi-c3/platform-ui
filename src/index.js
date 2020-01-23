@@ -1,15 +1,4 @@
-import colors from '@material-ui/core/colors';
-
-import {
-    createStyles,
-    createMuiTheme,
-    MuiThemeProvider,
-    makeStyles,
-    styled,
-    useTheme,
-    withStyles,
-    withTheme,
-} from '@material-ui/core/styles';
+import { createStyles, makeStyles, styled, useTheme, withStyles, withTheme } from '@material-ui/styles';
 
 import ReactDropzone from 'react-dropzone';
 import ReactMde, { commands as reactMdeCommands } from 'react-mde';
@@ -114,7 +103,7 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 import withWidth from '@material-ui/core/withWidth';
 import Zoom from '@material-ui/core/Zoom';
 
-import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import { DarkTheme } from 'styles/theme';
 import Avatar from 'components/Avatar';
@@ -188,13 +177,9 @@ export {
     Showdown,
     // Styles
     DarkTheme,
-    // Core colors
-    colors,
     // Core Styles and themes
-    createMuiTheme,
     createStyles,
     makeStyles,
-    MuiThemeProvider,
     styled,
     useTheme,
     withStyles,

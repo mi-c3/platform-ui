@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { IconButton, InputAdornment, Grid, Typography, TextField, FormControl, FormHelperText, InputLabel, Input } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 import MdiIcon from 'components/MdiIcon';
 import Dropzone from './Upload/Dropzone';

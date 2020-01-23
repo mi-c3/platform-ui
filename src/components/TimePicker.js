@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { TimePicker as TPMui, InlineTimePicker as ITPMui } from 'material-ui-pickers';
+import { TimePicker as TPMui } from '@material-ui/pickers';
 import { IconButton, InputAdornment } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 import { createEvent } from 'utils/http/event';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
@@ -62,10 +62,9 @@ class TimePicker extends PureComponent {
          * TODO: open a bug in the material-ui-pickers project.
          */
         // eslint-disable-next-line no-unused-vars
-        const { inline, onClick, clearable, disabled, value, InputProps, classes, ...datePickerProps } = this.props;
-        const Component = inline ? ITPMui : TPMui;
+        const { onClick, clearable, disabled, value, InputProps, classes, ...datePickerProps } = this.props;
         return (
-            <Component
+            <TPMui
                 {...datePickerProps}
                 disabled={disabled}
                 value={value}

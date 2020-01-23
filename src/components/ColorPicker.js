@@ -6,7 +6,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Icon from '@material-ui/core/Icon';
 import { materialColorPalette } from 'styles/palettes';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
 

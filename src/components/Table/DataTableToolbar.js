@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -25,7 +25,7 @@ const toolbarStyles = (theme) => {
     }
     return {
         root: {
-            paddingRight: theme.spacing.unit,
+            paddingRight: 8,
         },
         highlight,
         spacer: {
