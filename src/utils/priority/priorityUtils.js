@@ -1,7 +1,7 @@
 const PRIORITY_LABELS = ['Highest', 'High', 'Medium', 'Low', 'Lowest'];
 const PRIORITY_COLORS = ['danger', 'warning', 'alert', 'info', 'success'];
 
-export const normalizePriorityValue = (priorityValue?: string | number) => {
+export const normalizePriorityValue = (priorityValue) => {
     let priority = priorityValue && Number(priorityValue);
     priority = priority && priority >= 1 && priority <= 5 ? priority : 3;
     return priority;
@@ -15,6 +15,6 @@ export const PRIORITY_OPTIONS = [
     { value: 5, label: PRIORITY_LABELS[4] },
 ];
 
-export const getPriorityLabel = (priority?: string | number) => PRIORITY_LABELS[normalizePriorityValue(priority) - 1];
+export const getPriorityLabel = (priority) => PRIORITY_LABELS[normalizePriorityValue(priority) - 1];
 
-export const getPriorityColor = (priority?: string | number) => PRIORITY_COLORS[normalizePriorityValue(priority) - 1];
+export const getPriorityColor = (priority) => PRIORITY_COLORS[normalizePriorityValue(priority) - 1];

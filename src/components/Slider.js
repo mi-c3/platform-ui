@@ -6,7 +6,7 @@ import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
 import { getFillColor } from 'utils/styles/stylesUtils';
 
-import { MDCSlider } from '@material/slider/dist/mdc.slider';
+import { MDCSlider } from '@material/slider';
 import 'styles/materialComponentsWeb.min.css';
 
 class Slider extends PureComponent {

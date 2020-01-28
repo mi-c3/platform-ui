@@ -16,8 +16,7 @@ To install and save in your `package.json` dependencies, run:
 
 ```shell
 # with npm
-npm i @mic3/platform-ui
-
+npm i @mic3/platform-ui @material-ui/core @material-ui/styles @material-ui/pickers react-jss prop-types react-dom react
 # with yarn
-yarn add @mic3/platform-ui
+yarn add @mic3/platform-ui @material-ui/core @material-ui/styles @material-ui/pickers react-jss prop-types react-dom react
 ```

@@ -6,12 +6,15 @@ import { createEvent } from 'utils/http/event';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import 'styles/react-mde-all.css';
 
-const converter = new Showdown.Converter({
-    tables: true,
-    simplifiedAutoLink: true,
-    strikethrough: true,
-    tasklists: true,
-});
+let converter = () => {};
+if (Showdown.Converter) {
+    converter = new Showdown.Converter({
+        tables: true,
+        simplifiedAutoLink: true,
+        strikethrough: true,
+        tasklists: true,
+    });
+}
 
 class TextEditor extends PureComponent {
     static propTypes = {

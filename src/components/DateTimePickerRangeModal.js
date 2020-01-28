@@ -24,14 +24,14 @@ const styles = {
     clearButton: { color: '#999999' },
 };
 
-class CalendarRange extends PureComponent<Object, Object> {
+class DateTimePickerRangeModal extends PureComponent {
     static propTypes = {
         ...(DateTimePicker || {}).propTypes,
         value: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)])),
         classes: PropTypes.object.isRequired,
     };
 
-    constructor(props: Object) {
+    constructor(props) {
         super(props);
         const [start, end] = (props.value && props.value.map((date) => new Date(date))) || [null, null];
         this.state = { start, end, showModal: false, fieldLabel: 'All days' };
@@ -183,4 +183,4 @@ class CalendarRange extends PureComponent<Object, Object> {
     }
 }
 
-export default withStyles(styles)(CalendarRange);
+export default withStyles(styles)(DateTimePickerRangeModal);

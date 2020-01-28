@@ -1,5 +1,3 @@
-/* @flow */
-
 /**
  * Lodash like library that provide immutable support
  */
