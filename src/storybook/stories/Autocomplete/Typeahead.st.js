@@ -12,9 +12,9 @@ import H3 from 'storybook/components/atoms/H3';
 import { ListItem, Avatar, ListItemText, withStyles } from 'index';
 
 const AutocompleteLazy = statefullInput(AL);
-const AvatarStyled = withStyles({ root: { width: '21px !important', height: '21px !important', fontSize: '.9rem !important' } })(
-    ({ classes, ...restProps }) => <Avatar className={classes.root} {...restProps} />
-);
+const AvatarStyled = withStyles({
+    root: { width: '21px !important', height: '21px !important', fontSize: '.9rem !important' },
+})(({ classes, ...restProps }) => <Avatar className={classes.root} {...restProps} />);
 
 storiesOf('Components|Autocomplete', module)
     .addDecorator(withKnobs)

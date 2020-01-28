@@ -7,10 +7,11 @@ import { withStyles } from '@material-ui/styles';
 
 import { createEvent } from 'utils/http/event';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
+import { colors } from 'styles/theme';
 
-const useStyles = withStyles((theme) => ({
+const useStyles = withStyles(() => ({
     icon: {
-        color: theme.colors.darkGray,
+        color: colors.darkGray,
     },
 }));
 

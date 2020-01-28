@@ -1,5 +1,3 @@
-import { createStyles, makeStyles, styled, useTheme, withStyles, withTheme } from '@material-ui/styles';
-
 import ReactDropzone from 'react-dropzone';
 import ReactMde, { commands as reactMdeCommands } from 'react-mde';
 import * as Showdown from 'showdown';
@@ -9,7 +7,6 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Badge from '@material-ui/core/Badge';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-// import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -103,7 +100,7 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 import withWidth from '@material-ui/core/withWidth';
 import Zoom from '@material-ui/core/Zoom';
 
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 
 import { DarkTheme } from 'styles/theme';
 import Avatar from 'components/Avatar';
@@ -138,6 +135,8 @@ import UploadFileField from 'components/UploadFileField';
 import TextEditor from 'components/TextEditor';
 
 export {
+    // utils
+    MomentUtils,
     // Platform overrides Material UI components
     Autocomplete,
     AutocompleteLazy,
@@ -167,7 +166,6 @@ export {
     Location,
     LocationForm,
     LocationSwitch,
-    MuiPickersUtilsProvider,
     ReactDropzone,
     Slider,
     TimePicker,
@@ -177,13 +175,6 @@ export {
     Showdown,
     // Styles
     DarkTheme,
-    // Core Styles and themes
-    createStyles,
-    makeStyles,
-    styled,
-    useTheme,
-    withStyles,
-    withTheme,
     // Core Components
     AppBar,
     Backdrop,

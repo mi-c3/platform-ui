@@ -7,8 +7,9 @@ import MdiIcon from 'components/MdiIcon';
 import Dropzone from './Upload/Dropzone';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { get } from 'utils/lo/lo';
+import { colors } from 'styles/theme';
 
-const useStyles = withStyles((theme) => ({
+const useStyles = withStyles(() => ({
     fullWidth: {
         width: '100%',
         flexWrap: 'nowrap',
@@ -18,7 +19,7 @@ const useStyles = withStyles((theme) => ({
     },
     input: {},
     icon: {
-        color: theme.colors.darkGray,
+        color: colors.darkGray,
     },
     startAdornment: {
         marginRight: '17px',

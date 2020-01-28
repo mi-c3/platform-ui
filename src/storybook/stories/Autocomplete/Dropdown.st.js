@@ -19,7 +19,11 @@ storiesOf('Components|Autocomplete', module)
         const placeholder = text('Placeholder', 'Type A...', 'Default');
         const fullWidth = boolean('FullWidth', true, 'Style');
         const multiple = boolean('Multiple', false, 'Default');
-        const ordering = [{ value: null, label: 'Any' }, { value: 'stg', label: 'St. Julians' }, { value: 'sliema', label: 'Sliema' }];
+        const ordering = [
+            { value: null, label: 'Any' },
+            { value: 'stg', label: 'St. Julians' },
+            { value: 'sliema', label: 'Sliema' },
+        ];
         const clearable = boolean('Clearable', true, 'Default');
         return (
             <Fragment>

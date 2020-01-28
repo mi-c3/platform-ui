@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ThemeProvider } from '@material-ui/styles';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
+// import { ThemeProvider } from '@material-ui/styles';
+// import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+// import MomentUtils from '@date-io/moment';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName } from '@material-ui/core/styles';
 
@@ -12,11 +12,10 @@ const generateClassName = createGenerateClassName({
     dangerouslyUseGlobalCSS: true,
 });
 
+const ThemeProvider = ({ children }) => children;
 const PuiProvider = ({ children }) => (
     <ThemeProvider theme={DarkTheme}>
-        <JssProvider generateClassName={generateClassName}>
-            <MuiPickersUtilsProvider utils={MomentUtils}>{children}</MuiPickersUtilsProvider>
-        </JssProvider>
+        <JssProvider generateClassName={generateClassName}>{children}</JssProvider>
     </ThemeProvider>
 );
 
