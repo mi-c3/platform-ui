@@ -4,7 +4,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import Cancel from '@material-ui/icons/Cancel';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 import DateTimePicker from './DateTimePicker';
 import TextField from './TextField';
@@ -26,14 +26,14 @@ CustomInput.propTypes = {
     placeholder: PropTypes.string,
 };
 
-class CalendarRange extends PureComponent<Object, Object> {
+class DateTimePickerRange extends PureComponent {
     static propTypes = {
         ...(DateTimePicker || {}).propTypes,
         value: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)])),
         classes: PropTypes.object.isRequired,
     };
 
-    constructor(props: Object) {
+    constructor(props) {
         super(props);
         const [start, end] = (props.value && props.value.map((date) => new Date(date))) || [null, null];
         this.state = { start, end, showModal: false };
@@ -163,4 +163,4 @@ class CalendarRange extends PureComponent<Object, Object> {
     }
 }
 
-export default memo(withStyles(styles)(CalendarRange));
+export default memo(withStyles(styles)(DateTimePickerRange));

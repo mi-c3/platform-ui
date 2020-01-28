@@ -1,16 +1,3 @@
-import colors from '@material-ui/core/colors';
-
-import {
-    createStyles,
-    createMuiTheme,
-    MuiThemeProvider,
-    makeStyles,
-    styled,
-    useTheme,
-    withStyles,
-    withTheme,
-} from '@material-ui/core/styles';
-
 import ReactDropzone from 'react-dropzone';
 import ReactMde, { commands as reactMdeCommands } from 'react-mde';
 import * as Showdown from 'showdown';
@@ -20,8 +7,10 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Badge from '@material-ui/core/Badge';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-// import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Box from '@material-ui/core/Box';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -30,6 +19,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import Chip from '@material-ui/core/Chip';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Container from '@material-ui/core/Container';
 import Collapse from '@material-ui/core/Collapse';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Dialog from '@material-ui/core/Dialog';
@@ -74,6 +64,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
+import Modal from '@material-ui/core/Modal';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import NoSsr from '@material-ui/core/NoSsr';
@@ -111,10 +102,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import withWidth from '@material-ui/core/withWidth';
 import Zoom from '@material-ui/core/Zoom';
 
-import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import MomentUtils from '@date-io/moment';
 
 import { DarkTheme } from 'styles/theme';
 import Avatar from 'components/Avatar';
@@ -143,12 +136,13 @@ import DropzoneDialog from 'components/Upload/DropzoneDialog';
 import Location from 'components/Location/Location';
 import LocationForm from 'components/Location/LocationForm';
 import LocationSwitch from 'components/Location/LocationSwitch';
-import PuiProvider from 'components/PuiProvider';
 import Slider from 'components/Slider';
 import UploadFileField from 'components/UploadFileField';
 import TextEditor from 'components/TextEditor';
 
 export {
+    // utils
+    MomentUtils,
     // Platform overrides Material UI components
     Autocomplete,
     AutocompleteLazy,
@@ -161,7 +155,6 @@ export {
     Link,
     MdiIcon,
     MdiIconSelect,
-    PuiProvider,
     Radio,
     Switch,
     TextField,
@@ -178,7 +171,6 @@ export {
     Location,
     LocationForm,
     LocationSwitch,
-    MuiPickersUtilsProvider,
     ReactDropzone,
     Slider,
     TimePicker,
@@ -188,24 +180,16 @@ export {
     Showdown,
     // Styles
     DarkTheme,
-    // Core colors
-    colors,
-    // Core Styles and themes
-    createMuiTheme,
-    createStyles,
-    makeStyles,
-    MuiThemeProvider,
-    styled,
-    useTheme,
-    withStyles,
-    withTheme,
     // Core Components
     AppBar,
     Backdrop,
     Badge,
     BottomNavigation,
     BottomNavigationAction,
+    Box,
+    Breadcrumbs,
     ButtonBase,
+    ButtonGroup,
     Card,
     CardActionArea,
     CardActions,
@@ -215,6 +199,7 @@ export {
     Chip,
     ClickAwayListener,
     Collapse,
+    Container,
     CssBaseline,
     Dialog,
     DialogActions,
@@ -259,6 +244,7 @@ export {
     MenuItem,
     MenuList,
     MobileStepper,
+    Modal,
     NativeSelect,
     NoSsr,
     OutlinedInput,
@@ -294,6 +280,8 @@ export {
     Toolbar,
     Tooltip,
     Typography,
+    useMediaQuery,
+    useScrollTrigger,
     withMobileDialog,
     withWidth,
     Zoom,

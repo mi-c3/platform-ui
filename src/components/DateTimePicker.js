@@ -1,16 +1,17 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { DateTimePicker as DTPMui, InlineDateTimePicker as IDTPMui } from 'material-ui-pickers';
+import { DateTimePicker as DTPMui } from '@material-ui/pickers';
 import { IconButton, InputAdornment } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 import { createEvent } from 'utils/http/event';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
+import { colors } from 'styles/theme';
 
-const useStyles = withStyles((theme) => ({
+const useStyles = withStyles(() => ({
     icon: {
-        color: theme.colors.darkGray,
+        color: colors.darkGray,
     },
 }));
 
@@ -63,10 +64,9 @@ class DateTimePicker extends PureComponent {
          * TODO: open a bug in the material-ui-pickers project.
          */
         // eslint-disable-next-line no-unused-vars
-        const { inline, onClick, disabled, value, clearable, InputProps, ...dateTimePickerProps } = this.props;
-        const Component = inline ? IDTPMui : DTPMui;
+        const { onClick, disabled, value, clearable, InputProps, ...dateTimePickerProps } = this.props;
         return (
-            <Component
+            <DTPMui
                 {...dateTimePickerProps}
                 disabled={disabled}
                 value={value}

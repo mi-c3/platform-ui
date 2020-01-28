@@ -11,8 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
-import { withStyles } from '@material-ui/core/styles';
-import { styled } from '@material-ui/styles';
+import { withStyles, styled } from '@material-ui/styles';
 
 import TextField from 'components/TextField';
 import { shallowEquals, arrayfy } from 'utils/utils';

@@ -2,19 +2,20 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { TextField as MuiTextField, IconButton, Input, InputAdornment } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 import MdiIcon from 'components/MdiIcon';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { createEvent } from 'utils/http/event';
 import { isDefined } from 'utils/utils';
+import { colors } from 'styles/theme';
 
 // eslint-disable-next-line no-unused-vars
 const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};
 
-const useStyles = withStyles((theme) => ({
+const useStyles = withStyles(() => ({
     icon: {
-        color: theme.colors.darkGray,
+        color: colors.darkGray,
     },
 }));
 
