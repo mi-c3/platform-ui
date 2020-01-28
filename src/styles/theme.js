@@ -132,6 +132,23 @@ export const DarkTheme = responsiveFontSizes(
                 },
             },
             MuiSwitch: {
+                root: {
+                    '&$disabled': {
+                        '&$switchBase.MuiSwitch-checked': {
+                            opacity: 0.3,
+                            color: '#4BB9D9',
+                        },
+                        '&.MuiSwitch-checked + $bar': {
+                            backgroundColor: '#4BB9D9 !important',
+                        },
+                        '&$switchBase': {
+                            opacity: 0.6,
+                        },
+                        '& + $bar': {
+                            backgroundColor: 'rgba(0, 0, 0, 1) !important',
+                        },
+                    },
+                },
                 switchBase: {
                     color: 'rgba(255, 255, 255, 0.22)',
                     '& + $bar': {
@@ -140,21 +157,6 @@ export const DarkTheme = responsiveFontSizes(
                 },
                 bar: {
                     backgroundColor: 'rgba(0, 0, 0, 0.54)',
-                },
-                disabled: {
-                    '&$switchBase.MuiSwitch-checked': {
-                        opacity: 0.3,
-                        color: colors.primary.dark,
-                    },
-                    '&.MuiSwitch-checked + $bar': {
-                        backgroundColor: `${colors.primary.dark} !important`,
-                    },
-                    '&$switchBase': {
-                        opacity: 0.6,
-                    },
-                    '& + $bar': {
-                        backgroundColor: 'rgba(0, 0, 0, 1) !important',
-                    },
                 },
             },
             MuiFormLabel: {
