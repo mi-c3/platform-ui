@@ -20,8 +20,8 @@ export default {
     output: [
         {
             file: pkg.module,
-            // format: 'cjs',
-            format: 'es',
+            format: 'cjs',
+            // format: 'es',
             sourcemap: true,
         },
     ],
