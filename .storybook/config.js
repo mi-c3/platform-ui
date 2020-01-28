@@ -5,11 +5,14 @@ import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { withCssResources } from '@storybook/addon-cssresources';
 import { withA11y } from '@storybook/addon-a11y';
 import { withNotes } from '@storybook/addon-notes';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { ThemeProvider as MuiThemeProvider  } from '@material-ui/styles';
+import { createGenerateClassName } from '@material-ui/core/styles';
+import { DarkTheme, MomentUtils } from '../src';
+import { JssProvider } from 'react-jss';
 
 import extraViewports from './extra-viewports.json';
 import '~@mdi/font/css/materialdesignicons.css';
-
-import PuiProvider from '../src/components/PuiProvider';
 
 import { colors } from '../src/styles/theme';
 
@@ -17,10 +20,18 @@ addDecorator(withCssResources);
 addDecorator(withA11y);
 addDecorator(withNotes);
 
+const generateClassName = createGenerateClassName({
+    dangerouslyUseGlobalCSS: true,
+});
 addDecorator((story) => (
-    <PuiProvider>
+    <MuiThemeProvider theme={DarkTheme}>
+        <JssProvider generateClassName={generateClassName}>
+            <MuiPickersUtilsProvider utils={MomentUtils}>
         {story()}
-    </PuiProvider>
+    </MuiPickersUtilsProvider>
+</JssProvider>
+</MuiThemeProvider>
+
 ));
 
 addParameters({

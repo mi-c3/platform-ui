@@ -9,7 +9,8 @@ import { getStuff } from 'storybook/mock/stuff';
 import statefullInput from 'storybook/utils/hoc/statefullInput';
 import AL from 'components/AutocompleteLazy';
 import H3 from 'storybook/components/atoms/H3';
-import { ListItem, Avatar, ListItemText, withStyles } from 'index';
+import { ListItem, Avatar, ListItemText } from 'index';
+import { withStyles } from '@material-ui/styles';
 
 const AutocompleteLazy = statefullInput(AL);
 const AvatarStyled = withStyles({
