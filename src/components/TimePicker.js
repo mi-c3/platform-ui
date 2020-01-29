@@ -10,7 +10,7 @@ import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { colors } from 'styles/theme';
 
 const useStyles = withStyles(() => ({
-    icon: {
+    root: {
         color: colors.darkGray,
     },
 }));
@@ -50,7 +50,7 @@ class TimePicker extends PureComponent {
             !!value && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <Cancel className={this.props.classes.icon} />
+                        <Cancel className={this.props.classes.root} />
                     </IconButton>
                 </InputAdornment>
             )

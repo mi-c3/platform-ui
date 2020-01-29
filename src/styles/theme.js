@@ -34,6 +34,7 @@ export const colors = {
 export const DarkTheme = responsiveFontSizes(
     createMuiTheme({
         colors,
+        spacing: (factor) => `${0.25 * factor}rem`,
         palette: {
             type: 'dark',
             primary: colors.primary,

@@ -18,7 +18,7 @@ const useStyles = withStyles(() => ({
         margin: '1rem 0',
     },
     input: {},
-    icon: {
+    iconRoot: {
         color: colors.darkGray,
     },
     startAdornment: {
@@ -52,7 +52,7 @@ class UploadFileField extends PureComponent {
             !disabled && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <Cancel className={this.props.classes.icon} />
+                        <Cancel className={this.props.classes.iconRoot} />
                     </IconButton>
                 </InputAdornment>
             )
