@@ -37,7 +37,7 @@ const styles = ({ palette, spacing }) => ({
     },
     iconVariant: {
         opacity: 0.9,
-        marginRight: spacing.unit,
+        marginRight: spacing(),
     },
     message: {
         display: 'flex',

@@ -14,7 +14,7 @@ import { colors } from 'styles/theme';
 const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};
 
 const useStyles = withStyles(() => ({
-    icon: {
+    root: {
         color: colors.darkGray,
     },
 }));
@@ -49,7 +49,7 @@ class TextField extends PureComponent {
             this.isDefined(value) && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <Cancel className={this.props.classes.icon} />
+                        <Cancel className={this.props.classes.root} />
                     </IconButton>
                 </InputAdornment>
             )
