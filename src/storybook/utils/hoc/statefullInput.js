@@ -5,7 +5,7 @@ class StatefullInput extends PureComponent {
     static propTypes = {
         value: PropTypes.any,
         onChange: PropTypes.func,
-        Component: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
+        Component: PropTypes.any,
     };
 
     constructor(props) {

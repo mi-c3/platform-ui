@@ -10,7 +10,7 @@ import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { colors } from 'styles/theme';
 
 const useStyles = withStyles(() => ({
-    root: {
+    clearIcon: {
         color: colors.darkGray,
     },
 }));
@@ -18,12 +18,10 @@ const useStyles = withStyles(() => ({
 class TimePicker extends PureComponent {
     static propTypes = {
         ...(TPMui || {}).propTypes,
-        inline: PropTypes.bool,
         onChange: PropTypes.func,
     };
 
     static defaultProps = {
-        inline: false,
         variant: 'filled',
         margin: 'normal',
         fullWidth: true,
@@ -50,7 +48,7 @@ class TimePicker extends PureComponent {
             !!value && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <Cancel className={this.props.classes.root} />
+                        <Cancel className={this.props.classes.clearIcon} />
                     </IconButton>
                 </InputAdornment>
             )

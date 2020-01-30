@@ -17,7 +17,6 @@ storiesOf('Components|DateTimePickers', module)
         const maxDate = date('Max Date', new Date('Jan 20 2020'), 'Default');
         const minDate = date('Min Date', new Date('Jan 20 2017'), 'Default');
         const clearable = boolean('Clearable', false, 'Default');
-        const inline = boolean('Inline', false, 'Default');
         const showTodayButton = boolean('Show Today Button (clearebale button has higher priority)', false, 'Default');
         return (
             <Grid container justify="space-between">
@@ -30,7 +29,6 @@ storiesOf('Components|DateTimePickers', module)
                     maxDate={maxDate}
                     minDate={minDate}
                     clearable={clearable}
-                    inline={inline}
                     showTodayButton={showTodayButton}
                 />
                 <DatePickerFull
@@ -42,7 +40,6 @@ storiesOf('Components|DateTimePickers', module)
                     maxDate={maxDate}
                     minDate={minDate}
                     clearable={clearable}
-                    inline={inline}
                     showTodayButton={showTodayButton}
                     views={['month']}
                 />
@@ -55,7 +52,6 @@ storiesOf('Components|DateTimePickers', module)
                     maxDate={maxDate}
                     minDate={minDate}
                     clearable={clearable}
-                    inline={inline}
                     showTodayButton={showTodayButton}
                     views={['year']}
                 />
@@ -68,7 +64,6 @@ storiesOf('Components|DateTimePickers', module)
                     maxDate={maxDate}
                     minDate={minDate}
                     clearable={clearable}
-                    inline={inline}
                     showTodayButton={showTodayButton}
                     views={['year', 'month']}
                 />

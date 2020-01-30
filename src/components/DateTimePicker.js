@@ -10,7 +10,7 @@ import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { colors } from 'styles/theme';
 
 const useStyles = withStyles(() => ({
-    root: {
+    clearIcon: {
         color: colors.darkGray,
     },
 }));
@@ -18,13 +18,11 @@ const useStyles = withStyles(() => ({
 class DateTimePicker extends PureComponent {
     static propTypes = {
         ...(DTPMui || {}).propTypes,
-        inline: PropTypes.bool,
         onChange: PropTypes.func,
     };
 
     static defaultProps = {
         animateYearScrolling: true,
-        inline: false,
         variant: 'filled',
         margin: 'normal',
         fullWidth: true,
@@ -51,7 +49,7 @@ class DateTimePicker extends PureComponent {
             !!value && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <Cancel className={this.props.classes.root} />
+                        <Cancel className={this.props.classes.clearIcon} />
                     </IconButton>
                 </InputAdornment>
             )
@@ -64,7 +62,7 @@ class DateTimePicker extends PureComponent {
          * TODO: open a bug in the material-ui-pickers project.
          */
         // eslint-disable-next-line no-unused-vars
-        const { onClick, disabled, value, clearable, InputProps, ...dateTimePickerProps } = this.props;
+        const { onClick, disabled, value, clearable, InputProps, classes, ...dateTimePickerProps } = this.props;
         return (
             <DTPMui
                 {...dateTimePickerProps}
