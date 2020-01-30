@@ -14,7 +14,7 @@ import { colors } from 'styles/theme';
 const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};
 
 const useStyles = withStyles(() => ({
-    root: {
+    clearIcon: {
         color: colors.darkGray,
     },
 }));
@@ -49,7 +49,7 @@ class TextField extends PureComponent {
             this.isDefined(value) && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <Cancel className={this.props.classes.root} />
+                        <Cancel className={this.props.classes.clearIcon} />
                     </IconButton>
                 </InputAdornment>
             )
@@ -73,7 +73,8 @@ class TextField extends PureComponent {
     }
 
     render() {
-        const { disabled, value, InputProps, error, clearable, ...restProps } = this.props;
+        // eslint-disable-next-line no-unused-vars
+        const { disabled, value, InputProps, error, clearable, classes, ...restProps } = this.props;
         const defaultEndAdornment = error ? this.getErrorAdornment() : this.getClearAdornment(disabled, value);
         return (
             <MuiTextField
