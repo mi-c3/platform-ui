@@ -23,7 +23,7 @@ class DateTimePicker extends PureComponent {
 
     static defaultProps = {
         animateYearScrolling: true,
-        variant: 'filled',
+        inputVariant: 'filled',
         margin: 'normal',
         fullWidth: true,
         clearable: false,
