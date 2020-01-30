@@ -248,7 +248,11 @@ class Autocomplete extends PureComponent {
                                         return (
                                             <div key={index} style={style}>
                                                 <MenuItem
-                                                    style={{ padding: '15px', fontSize: '16px' }}
+                                                    style={
+                                                        option
+                                                            ? { margin: '0 !important' }
+                                                            : { padding: '15px', fontSize: '16px', margin: '0 !important' }
+                                                    }
                                                     onClick={this.buildOnChange(op)}
                                                     value={op}
                                                     component="div"
