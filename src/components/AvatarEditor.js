@@ -45,7 +45,7 @@ const defaultState = {
 class AvatarEditor extends PureComponent {
     static propTypes = {
         onChange: PropTypes.func,
-        label: PropTypes.string,
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
         name: PropTypes.string,
         disabled: PropTypes.bool,
         withEditButton: PropTypes.bool,

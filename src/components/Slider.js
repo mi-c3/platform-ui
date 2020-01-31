@@ -12,7 +12,7 @@ import 'styles/materialComponentsWeb.min.css';
 class Slider extends PureComponent {
     static propTypes = {
         TypographyProps: PropTypes.object,
-        label: PropTypes.string,
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
         className: PropTypes.string,
         name: PropTypes.string,
         value: PropTypes.number.isRequired,

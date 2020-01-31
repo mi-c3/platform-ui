@@ -14,7 +14,7 @@ class LocationSwitch extends PureComponent {
     static propTypes = {
         ...(LocationForm || {}).propTypes, //FIXME: change using MUI convention
         name: PropTypes.string,
-        label: PropTypes.string,
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
         onChange: PropTypes.func,
         onToggle: PropTypes.func,
     };

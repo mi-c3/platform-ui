@@ -10,7 +10,7 @@ import { bind } from 'utils/decorators/decoratorUtils';
 class Switch extends PureComponent {
     static propTypes = {
         ...(MuiSwitch || {}).propTypes,
-        label: PropTypes.string,
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
         labelPlacement: PropTypes.string,
     };
 

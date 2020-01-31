@@ -8,7 +8,7 @@ import { bind } from 'utils/decorators/decoratorUtils';
 class Checkbox extends PureComponent {
     static propTypes = {
         ...(MuiCheckbox || {}).propTypes,
-        label: PropTypes.string,
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
         labelPlacement: PropTypes.string,
     };
 
