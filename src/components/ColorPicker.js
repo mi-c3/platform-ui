@@ -33,7 +33,7 @@ class ColorPicker extends PureComponent {
     static propTypes = {
         onChange: PropTypes.func,
         name: PropTypes.string,
-        label: PropTypes.string,
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
         value: PropTypes.string,
         required: PropTypes.bool,
         disabled: PropTypes.bool,
