@@ -35,16 +35,17 @@ const styles = () => ({
 
 const Avatar = withStyles(styles)(({ initials, src, classes, className, initialsSeparator, ...restProps }) => {
     const { avatarClassName, ...colorClassNames } = classes;
-    return src ? (
-        <MuiAvatar src={src} className={`${avatarClassName} ${className || ''}`} {...restProps} />
-    ) : (
-        <MuiAvatar
-            className={`${generateColor(Object.values(colorClassNames), initials)} ${avatarClassName} ${className || ''}`}
-            {...restProps}
-        >
-            {createInitials(initials, initialsSeparator)}
-        </MuiAvatar>
-    );
+    if (!src && initials) {
+        return (
+            <MuiAvatar
+                className={`${generateColor(Object.values(colorClassNames), initials)} ${avatarClassName} ${className || ''}`}
+                {...restProps}
+            >
+                {createInitials(initials, initialsSeparator)}
+            </MuiAvatar>
+        );
+    }
+    return <MuiAvatar className={`${avatarClassName} ${className || ''}`} {...restProps} />;
 });
 
 const circulaStyles = () => ({
