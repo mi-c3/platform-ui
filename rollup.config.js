@@ -51,5 +51,7 @@ export default {
         '@material-ui/styles',
         '@material-ui/pickers',
         'react-jss',
+        'react-router-dom',
+        'react-router',
     ],
 };
