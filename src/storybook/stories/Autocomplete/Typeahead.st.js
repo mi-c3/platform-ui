@@ -17,6 +17,10 @@ const AvatarStyled = withStyles({
     root: { width: '21px !important', height: '21px !important', fontSize: '.9rem !important' },
 })(({ classes, ...restProps }) => <Avatar className={classes.root} {...restProps} />);
 
+const ListItemStyled = withStyles({
+    root: { padding: '0 !important', margin: '-5px 0 !important' },
+})(ListItem);
+
 storiesOf('Components|Autocomplete', module)
     .addDecorator(withKnobs)
     .add('Typeahead', () => {
@@ -48,10 +52,10 @@ storiesOf('Components|Autocomplete', module)
                     optionTemplate={({ name, image, login, id }) => ({
                         label: `${name} (${id})`,
                         option: (
-                            <ListItem ContainerComponent="div" dense disableGutters>
+                            <ListItemStyled ContainerComponent="div" dense disableGutters>
                                 <Avatar src={image} />
                                 <ListItemText primary={name} secondary={`@${login}`} />
-                            </ListItem>
+                            </ListItemStyled>
                         ),
                         ChipProps: {
                             avatar: <AvatarStyled src={image} initials={name} />,

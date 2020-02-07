@@ -250,7 +250,7 @@ class Autocomplete extends PureComponent {
                                                 <MenuItem
                                                     style={
                                                         option
-                                                            ? { margin: '0 !important' }
+                                                            ? { margin: '0 !important', padding: '0 !important' }
                                                             : { padding: '15px', fontSize: '16px', margin: '0 !important' }
                                                     }
                                                     onClick={this.buildOnChange(op)}

@@ -45,7 +45,7 @@ const Avatar = withStyles(styles)(({ initials, src, classes, className, initials
             </MuiAvatar>
         );
     }
-    return <MuiAvatar className={`${avatarClassName} ${className || ''}`} {...restProps} />;
+    return <MuiAvatar src={src} classes={classes} className={`${avatarClassName} ${className || ''}`} {...restProps} />;
 });
 
 const circulaStyles = () => ({
