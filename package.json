@@ -1,6 +1,6 @@
 {
   "name": "@mic3/platform-ui",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "scripts": {
     "start": "start-storybook -p 9009",
     "lint": "eslint --max-warnings=0 src",
@@ -38,7 +38,6 @@
     "react-chromatic": "0.8.4",
     "react-color": "2.18.0",
     "react-dropzone": "9.0.0",
-    "react-is": "^16.12.0",
     "react-jss": "^10.0.4",
     "react-mde": "8.0.1",
     "react-tiny-virtual-list": "2.2.0",
@@ -86,6 +85,7 @@
     "prop-types": "^15.7.2",
     "random-name": "0.1.2",
     "react": "^16.12.0",
+    "react-is": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "5.1.2",
     "rollup": "^1.1.2",
