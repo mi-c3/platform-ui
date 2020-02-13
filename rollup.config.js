@@ -53,5 +53,7 @@ export default {
         'react-jss',
         'react-router-dom',
         'react-router',
+
+        'react-is',
     ],
 };
