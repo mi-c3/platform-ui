@@ -20,7 +20,7 @@ export default {
     output: [
         {
             file: pkg.module,
-            format: 'esm',
+            format: 'cjs',
             // format: 'es',
             sourcemap: true,
         },
@@ -36,7 +36,6 @@ export default {
         resolve(),
         commonjs({
             namedExports: {
-                'node_modules/react-is/index.js': ['isValidElementType', 'isForwardRef', 'ForwardRef', 'isFragment'],
                 'node_modules/showdown/index.js': ['Converter'],
             },
             include: /node_modules/,
