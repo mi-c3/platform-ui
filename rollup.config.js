@@ -36,7 +36,7 @@ export default {
         resolve(),
         commonjs({
             namedExports: {
-                'node_modules/react-is/index.js': ['isValidElementType'],
+                'node_modules/react-is/index.js': ['isValidElementType', 'isForwardRef', 'ForwardRef', 'isFragment'],
                 'node_modules/showdown/index.js': ['Converter'],
             },
             include: /node_modules/,
