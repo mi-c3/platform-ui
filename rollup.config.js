@@ -20,7 +20,7 @@ export default {
     output: [
         {
             file: pkg.module,
-            format: 'cjs',
+            format: 'esm',
             // format: 'es',
             sourcemap: true,
         },
@@ -53,5 +53,6 @@ export default {
         'react-jss',
         'react-router-dom',
         'react-router',
+        'react-is',
     ],
 };
