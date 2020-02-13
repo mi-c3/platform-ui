@@ -18,7 +18,7 @@ const MdiIcon = ({ size, name, style, className, color, ...restProps }) => {
     if (MAIN_COLORS.includes(color)) {
         restProps.color = color;
     } else {
-        style.color = color;
+        styles.color = color;
     }
     return <Icon {...restProps} className={`${className || ''} mdi mdi-${name}`} style={styles} />;
 };
