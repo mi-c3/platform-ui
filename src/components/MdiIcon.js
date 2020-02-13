@@ -7,7 +7,7 @@ import Icon from '@material-ui/core/Icon';
 const MAIN_COLORS = ['inherit', 'primary', 'secondary', 'action', 'error', 'disabled'];
 
 const MdiIcon = ({ size, name, style, className, color, ...restProps }) => {
-    const styles = useMemo(
+    let styles = useMemo(
         () => ({
             ...(style || {}),
             fontSize: size,
@@ -18,7 +18,7 @@ const MdiIcon = ({ size, name, style, className, color, ...restProps }) => {
     if (MAIN_COLORS.includes(color)) {
         restProps.color = color;
     } else {
-        styles.color = color;
+        styles = { ...styles, color };
     }
     return <Icon {...restProps} className={`${className || ''} mdi mdi-${name}`} style={styles} />;
 };
