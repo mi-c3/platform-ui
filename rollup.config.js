@@ -36,6 +36,7 @@ export default {
         resolve(),
         commonjs({
             namedExports: {
+                'node_modules/react-is/index.js': ['isValidElementType', 'ForwardRef', 'isFragment'],
                 'node_modules/showdown/index.js': ['Converter'],
             },
             include: /node_modules/,
@@ -52,6 +53,5 @@ export default {
         'react-jss',
         'react-router-dom',
         'react-router',
-        'react-is',
     ],
 };
