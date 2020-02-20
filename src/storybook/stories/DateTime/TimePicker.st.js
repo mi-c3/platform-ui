@@ -13,8 +13,6 @@ storiesOf('Components|DateTimePickers', module)
     .add('TimePicker', () => {
         const disabled = boolean('Disabled', false, 'Default');
         const clearable = boolean('Clearable', false, 'Default');
-        const inline = boolean('Inline', false, 'Default');
-        const seconds = boolean('With seconds', false, 'Default');
         const showTodayButton = boolean('Show Today Button (clearebale button has higher priority)', false, 'Default');
         return (
             <Grid container justify="space-between">
@@ -24,8 +22,6 @@ storiesOf('Components|DateTimePickers', module)
                     minutesStep={5}
                     disabled={disabled}
                     clearable={clearable}
-                    inline={inline}
-                    seconds={seconds}
                     showTodayButton={showTodayButton}
                     ampm={true}
                 />
@@ -34,19 +30,15 @@ storiesOf('Components|DateTimePickers', module)
                     onClick={action('DateOnclick')}
                     disabled={disabled}
                     clearable={clearable}
-                    inline={inline}
-                    seconds={seconds}
                     showTodayButton={showTodayButton}
                 />
-                <TimePickerFull
+                <TimePicker
                     label={'Minutes Step 5'}
                     onClick={action('DateOnclick')}
                     minutesStep={5}
                     ampm={false}
                     disabled={disabled}
                     clearable={clearable}
-                    inline={inline}
-                    seconds={seconds}
                     showTodayButton={showTodayButton}
                 />
             </Grid>

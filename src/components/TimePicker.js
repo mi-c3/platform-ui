@@ -42,8 +42,9 @@ class TimePicker extends PureComponent {
 
     @bind
     @memoize()
-    getClearAdornment(disabled, value) {
+    getClearAdornment(disabled, value, clearable) {
         return (
+            clearable &&
             !disabled &&
             !!value && (
                 <InputAdornment position="end">
@@ -61,15 +62,16 @@ class TimePicker extends PureComponent {
          * TODO: open a bug in the material-ui-pickers project.
          */
         // eslint-disable-next-line no-unused-vars
-        const { onClick, clearable, disabled, value, InputProps, classes, ...datePickerProps } = this.props;
+        const { showTodayButton, onClick, clearable, disabled, value, InputProps, classes, ...datePickerProps } = this.props;
         return (
             <TPMui
                 {...datePickerProps}
                 disabled={disabled}
                 value={value}
                 clearable={clearable}
+                showTodayButton={!clearable && showTodayButton}
                 InputProps={{
-                    endAdornment: clearable && this.getClearAdornment(disabled, value),
+                    endAdornment: clearable && this.getClearAdornment(disabled, value, clearable),
                     ...(InputProps || {}),
                 }}
                 onChange={this.onChange}
