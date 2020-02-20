@@ -11,6 +11,8 @@ const MdiIcon = ({ size, name, style, className, color, ...restProps }) => {
         () => ({
             ...(style || {}),
             fontSize: size,
+            height: size,
+            width: size,
             lineHeight: `${size}px`,
         }),
         [style, size]
@@ -30,7 +32,7 @@ MdiIcon.propTypes = {
     color: PropTypes.string,
     size: PropTypes.number,
 };
-MdiIcon.defaulProps = {
+MdiIcon.defaultProps = {
     size: 24,
 };
 

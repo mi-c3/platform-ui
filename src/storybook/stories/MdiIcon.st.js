@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, text, number, select } from '@storybook/addon-knobs';
 
-import { MdiIcon, Typography } from 'index';
+import { MdiIcon, Typography, List, ListItem, ListItemText, ListItemIcon } from 'index';
 import { forIcon } from 'storybook/constants/propsVariation';
 
 storiesOf('Components|MdiIcon', module)
@@ -18,6 +18,32 @@ storiesOf('Components|MdiIcon', module)
                 <Typography>{prefix}</Typography>
                 <MdiIcon name={name} size={size} color={color} />
                 <Typography>{sufix}</Typography>
+                <List>
+                    <ListItem ContainerComponent="div" dense disableGutters>
+                        <ListItemIcon>
+                            <MdiIcon name="account-circle" />
+                        </ListItemIcon>
+                        <ListItemText primary="account-circle" />
+                    </ListItem>
+                    <ListItem ContainerComponent="div" dense disableGutters>
+                        <ListItemIcon>
+                            <MdiIcon name="account-circle" />
+                        </ListItemIcon>
+                        <ListItemText primary="account-circle" />
+                    </ListItem>
+                    <ListItem ContainerComponent="div" dense disableGutters>
+                        <ListItemIcon>
+                            <MdiIcon name="account-circle" />
+                        </ListItemIcon>
+                        <ListItemText primary="account-circle" />
+                    </ListItem>
+                    <ListItem ContainerComponent="div" dense disableGutters>
+                        <ListItemIcon>
+                            <MdiIcon name="account-circle" />
+                        </ListItemIcon>
+                        <ListItemText primary="account-circle" />
+                    </ListItem>
+                </List>
             </Fragment>
         );
     });

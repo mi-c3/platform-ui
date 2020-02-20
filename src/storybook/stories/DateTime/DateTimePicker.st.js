@@ -13,5 +13,16 @@ storiesOf('Components|DateTimePickers', module)
     .add('DateTimePicker', () => {
         const label = text('Label', 'Default', 'Default');
         const disabled = boolean('Disabled', false, 'Default');
-        return <DateTimePickerSTFull label={label} disabled={disabled} onClick={action('onclick')} />;
+        const clearable = boolean('Clearable', false, 'Default');
+        const showTodayButton = boolean('Show Today Button (clearebale button has higher priority)', false, 'Default');
+
+        return (
+            <DateTimePickerSTFull
+                clearable={clearable}
+                showTodayButton={showTodayButton}
+                label={label}
+                disabled={disabled}
+                onClick={action('onclick')}
+            />
+        );
     });
