@@ -56,7 +56,6 @@ export const DarkTheme = responsiveFontSizes(
             MuiButton: {
                 root: {
                     fontSize: 14,
-                    minWidth: 103,
                 },
                 containedPrimary: {
                     color: colors.common.white,
