@@ -1,13 +1,13 @@
 {
-  "name": "@mic3/platform-ui",
-  "version": "1.0.18",
+  "name": "platform-ui",
+  "version": "2.0.0",
   "scripts": {
-    "start": "start-storybook -p 9009",
     "lint": "eslint --max-warnings=0 src",
     "lint:fix": "eslint --max-warnings=0 src --fix",
     "build": "export BABEL_ENV=production && rm -rf dist && babel --copy-files src --out-dir dist",
     "build:watch": "export BABEL_ENV=development && babel --watch --copy-files src --out-dir dist",
-    "storybook:build": "rm -rf ./docu/static/storybook && build-storybook -o ./docu/static/storybook"
+    "test:watch": "craco test",
+    "test": "export CI=true && craco test"
   },
   "husky": {
     "hooks": {
@@ -39,24 +39,7 @@
     "@babel/cli": "7.8.3",
     "@babel/core": "7.8.3",
     "@babel/plugin-proposal-decorators": "7.8.3",
-    "@babel/preset-env": "7.8.3",
-    "@babel/preset-react": "7.8.3",
-    "@storybook/addon-a11y": "5.3.13",
-    "@storybook/addon-actions": "5.3.13",
-    "@storybook/addon-backgrounds": "5.3.13",
-    "@storybook/addon-cssresources": "5.3.13",
-    "@storybook/addon-events": "5.3.13",
-    "@storybook/addon-jest": "5.3.13",
-    "@storybook/addon-knobs": "5.3.13",
-    "@storybook/addon-links": "5.3.13",
-    "@storybook/addon-notes": "5.3.13",
-    "@storybook/addon-options": "5.3.13",
-    "@storybook/addon-storysource": "5.3.13",
-    "@storybook/addon-viewport": "5.3.13",
-    "@storybook/addons": "5.3.13",
-    "@storybook/preset-create-react-app": "^1.5.2",
-    "@storybook/react": "5.3.13",
-    "@storybook/theming": "5.3.13",
+    "@craco/craco": "^5.6.3",
     "babel-eslint": "10.0.3",
     "babel-loader": "8.0.6",
     "babel-plugin-module-resolver": "3.2.0",
