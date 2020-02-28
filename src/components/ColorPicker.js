@@ -2,19 +2,18 @@ import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { SwatchesPicker } from 'react-color';
 
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Icon from '@material-ui/core/Icon';
-import { materialColorPalette } from 'styles/palettes';
+import { ClickAwayListener, FormControlLabel, Icon } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
+import { materialColorPalette } from 'styles/palettes';
+import { colors } from 'styles/theme';
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
 
-const styles = (theme) => ({
+const styles = () => ({
     swatches: {
         width: '243px !important',
         '& > div div:nth-child(2)': {
-            background: `${theme.palette.background.default} !important`,
+            background: `${colors.background} !important`,
         },
         '& > div div:nth-child(1) > div > span div:nth-child(1)': {
             fill: 'white !important',
@@ -113,4 +112,4 @@ class ColorPicker extends PureComponent {
     }
 }
 
-export default withStyles(styles)(ColorPicker);
+export default withStyles(styles, { withTheme: true })(ColorPicker);

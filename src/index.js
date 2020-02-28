@@ -139,12 +139,13 @@ import LocationSwitch from 'components/Location/LocationSwitch';
 import Slider from 'components/Slider';
 import UploadFileField from 'components/UploadFileField';
 import TextEditor from 'components/TextEditor';
-
+import { colors } from 'styles/theme';
 import '@mdi/font/css/materialdesignicons.css';
 
 export {
     // utils
     MomentUtils,
+    colors,
     // Platform overrides Material UI components
     Autocomplete,
     AutocompleteLazy,
