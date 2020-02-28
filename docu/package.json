@@ -1,0 +1,33 @@
+{
+  "name": "platform-ui-doc",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build": "rm -rf ./build && rm -rf ../docs/* && docusaurus build && cp -R ./build/* ../docs",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^2.0.0-alpha.24",
+    "@docusaurus/preset-classic": "^2.0.0-alpha.24",
+    "@docusaurus/theme-live-codeblock": "^2.0.0-alpha.23",
+    "@mic3/platform-ui": "^0.6.3",
+    "classnames": "^2.2.6",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

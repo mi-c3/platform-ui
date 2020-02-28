@@ -1,0 +1,11 @@
+# dependencies
+node_modules
+
+# storybook build
+storybook-static
+
+#build
+dist
+
+#logs
+yarn-error.log

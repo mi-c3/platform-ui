@@ -1,0 +1,90 @@
+{
+  "name": "@mic3/platform-ui",
+  "version": "1.0.18",
+  "scripts": {
+    "start": "start-storybook -p 9009",
+    "lint": "eslint --max-warnings=0 src",
+    "lint:fix": "eslint --max-warnings=0 src --fix",
+    "build": "export BABEL_ENV=production && rm -rf dist && babel --copy-files src --out-dir dist",
+    "build:watch": "export BABEL_ENV=development && babel --watch --copy-files src --out-dir dist",
+    "storybook:build": "rm -rf ./docu/static/storybook && build-storybook -o ./docu/static/storybook"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn lint"
+    }
+  },
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mi-c3/platform-ui.git"
+  },
+  "dependencies": {
+    "@date-io/moment": "1.3.13",
+    "@material-ui/icons": "^4.5.1",
+    "@material/slider": "4.0.0",
+    "@mdi/font": "2.5.94",
+    "fast-deep-equal": "2.0.1",
+    "google-map-react": "1.1.5",
+    "jss": "^10.0.4",
+    "memoize-one": "5.1.1",
+    "moment": "2.24.0",
+    "react-chromatic": "0.8.4",
+    "react-color": "^2.18.0",
+    "react-dropzone": "9.0.0",
+    "react-mde": "8.0.1",
+    "showdown": "1.9.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.8.3",
+    "@babel/core": "7.8.3",
+    "@babel/plugin-proposal-decorators": "7.8.3",
+    "@babel/preset-env": "7.8.3",
+    "@babel/preset-react": "7.8.3",
+    "@storybook/addon-a11y": "5.3.13",
+    "@storybook/addon-actions": "5.3.13",
+    "@storybook/addon-backgrounds": "5.3.13",
+    "@storybook/addon-cssresources": "5.3.13",
+    "@storybook/addon-events": "5.3.13",
+    "@storybook/addon-jest": "5.3.13",
+    "@storybook/addon-knobs": "5.3.13",
+    "@storybook/addon-links": "5.3.13",
+    "@storybook/addon-notes": "5.3.13",
+    "@storybook/addon-options": "5.3.13",
+    "@storybook/addon-storysource": "5.3.13",
+    "@storybook/addon-viewport": "5.3.13",
+    "@storybook/addons": "5.3.13",
+    "@storybook/preset-create-react-app": "^1.5.2",
+    "@storybook/react": "5.3.13",
+    "@storybook/theming": "5.3.13",
+    "babel-eslint": "10.0.3",
+    "babel-loader": "8.0.6",
+    "babel-plugin-module-resolver": "3.2.0",
+    "babel-preset-react-app": "^9.1.1",
+    "core-js": "2.6.11",
+    "eslint": "5.16.0",
+    "eslint-config-prettier": "4.3.0",
+    "eslint-plugin-import": "2.20.0",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "7.18.0",
+    "eslint-plugin-react-hooks": "1.7.0",
+    "husky": "1.3.1",
+    "module-resolver": "^1.0.0",
+    "prettier": "1.19.1",
+    "random-name": "0.1.2",
+    "react-scripts": "^3.4.0"
+  },
+  "peerDepenedencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "5.1.2",
+    "react-avatar-editor": "^11.0.7",
+    "react-jss": "^10.0.4",
+    "react-tiny-virtual-list": "^2.2.0",
+    "@material-ui/core": "^4.9.2",
+    "@material-ui/pickers": "^3.2.10",
+    "@material-ui/styles": "^4.9.0",
+    "prop-types": "^15.7.2"
+  }
+}

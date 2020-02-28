@@ -1,0 +1,906 @@
+{
+  "entrypoints": [
+    "main"
+  ],
+  "origins": {
+    "0": [
+      1,
+      2,
+      3,
+      4,
+      68,
+      69,
+      0
+    ],
+    "1": [
+      0,
+      2,
+      3,
+      68,
+      69,
+      1
+    ],
+    "@site/src/pages/index.js": [
+      0,
+      1,
+      2
+    ],
+    "@site/src/pages/redirect.js": [
+      0,
+      1,
+      3
+    ],
+    "@theme/DocLegacyItem": [
+      0,
+      4
+    ],
+    "@site/docs/components/Autocomplete.md": [
+      5
+    ],
+    "@site/docs/components/AutocompleteLazy.md": [
+      6
+    ],
+    "@site/docs/components/Avatar.md": [
+      7
+    ],
+    "@site/docs/components/AvatarEditor.md": [
+      8
+    ],
+    "@site/docs/components/Button.md": [
+      9
+    ],
+    "@site/docs/components/Checkbox.md": [
+      10
+    ],
+    "@site/docs/components/CircularProgress.md": [
+      11
+    ],
+    "@site/docs/components/CircularProgressStatic.md": [
+      12
+    ],
+    "@site/docs/components/ColorPicker.md": [
+      13
+    ],
+    "@site/docs/components/DatePicker.md": [
+      14
+    ],
+    "@site/docs/components/DateTimePicker.md": [
+      15
+    ],
+    "@site/docs/components/DateTimePickerRange.md": [
+      16
+    ],
+    "@site/docs/components/Dropzone.md": [
+      17
+    ],
+    "@site/docs/components/Link.md": [
+      18
+    ],
+    "@site/docs/components/LocationForm.md": [
+      19
+    ],
+    "@site/docs/components/LocationFormSwitch.md": [
+      20
+    ],
+    "@site/docs/components/Location.md": [
+      21
+    ],
+    "@site/docs/components/MdiIconSelect.md": [
+      22
+    ],
+    "@site/docs/components/MdiIcon.md": [
+      23
+    ],
+    "@site/docs/components/Radio.md": [
+      24
+    ],
+    "@site/docs/components/Slider.md": [
+      25
+    ],
+    "@site/docs/components/Switch.md": [
+      26
+    ],
+    "@site/docs/components/TextEditor.md": [
+      27
+    ],
+    "@site/docs/components/TextField.md": [
+      28
+    ],
+    "@site/docs/components/TimePicker.md": [
+      29
+    ],
+    "@site/docs/docusaurus/style-guide.md": [
+      30
+    ],
+    "@site/docs/get-started/build.md": [
+      31
+    ],
+    "@site/docs/get-started/development.md": [
+      32
+    ],
+    "@site/docs/get-started/installation.md": [
+      33
+    ],
+    "@site/docs/get-started/learn.md": [
+      34
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-96c.json": [
+      35
+    ],
+    "main": [
+      67,
+      36
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-autocomplete-lazy-a9d.json": [
+      37
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-autocomplete-d0f.json": [
+      38
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-avatar-41c.json": [
+      39
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-avatar-editor-12d.json": [
+      40
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-button-fc8.json": [
+      41
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-checkbox-049.json": [
+      42
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-circular-progress-static-6e4.json": [
+      43
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-circular-progress-309.json": [
+      44
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-color-picker-017.json": [
+      45
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-date-picker-01d.json": [
+      46
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-date-time-picker-range-950.json": [
+      47
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-date-time-picker-f8d.json": [
+      48
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-dropzone-c0a.json": [
+      49
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-link-457.json": [
+      50
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-location-form-4e7.json": [
+      51
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-location-form-switch-3eb.json": [
+      52
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-location-6ae.json": [
+      53
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-mdi-icon-select-571.json": [
+      54
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-mdi-icon-409.json": [
+      55
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-radio-c49.json": [
+      56
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-slider-d9f.json": [
+      57
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-switch-e29.json": [
+      58
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-text-editor-141.json": [
+      59
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-text-field-af2.json": [
+      60
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-components-time-picker-021.json": [
+      61
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-docusaurus-style-guide-552.json": [
+      62
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-get-started-build-7d4.json": [
+      63
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-get-started-development-089.json": [
+      64
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-get-started-installation-0f0.json": [
+      65
+    ],
+    "/home/denys/Documents/mic3/platform-ui/docu/.docusaurus/docusaurus-plugin-content-docs/platform-ui-docs-get-started-learn-3ff.json": [
+      66
+    ],
+    "runtime~main": [
+      36,
+      67
+    ],
+    "@theme/DocLegacyPage": [
+      0,
+      1,
+      68
+    ],
+    "@theme/NotFound": [
+      0,
+      1,
+      69
+    ]
+  },
+  "assets": {
+    "0": {
+      "js": [
+        {
+          "file": "0.0bad26e1f3ccbed86c2e.js",
+          "hash": "13446b3aa9eedcd47e67",
+          "publicPath": "/platform-ui/0.0bad26e1f3ccbed86c2e.js"
+        }
+      ]
+    },
+    "1": {
+      "css": [
+        {
+          "file": "1.196ce05925ea6d776920.css",
+          "hash": "d89d9eb29785b4532ecd",
+          "publicPath": "/platform-ui/1.196ce05925ea6d776920.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "1.7f7ad32ba96295269db1.js",
+          "hash": "d89d9eb29785b4532ecd",
+          "publicPath": "/platform-ui/1.7f7ad32ba96295269db1.js"
+        }
+      ]
+    },
+    "2": {
+      "css": [
+        {
+          "file": "component---site-src-pages-index-jsc-4-f-f99.9f99729bff7f082bd679.css",
+          "hash": "0c1448a039994057952c",
+          "publicPath": "/platform-ui/component---site-src-pages-index-jsc-4-f-f99.9f99729bff7f082bd679.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "component---site-src-pages-index-jsc-4-f-f99.433138f7477056691dba.js",
+          "hash": "0c1448a039994057952c",
+          "publicPath": "/platform-ui/component---site-src-pages-index-jsc-4-f-f99.433138f7477056691dba.js"
+        }
+      ]
+    },
+    "3": {
+      "js": [
+        {
+          "file": "component---site-src-pages-redirect-js-47-b-9f1.bb17e1ba99c4b2f82bee.js",
+          "hash": "9e868ca4a3b8f32fb377",
+          "publicPath": "/platform-ui/component---site-src-pages-redirect-js-47-b-9f1.bb17e1ba99c4b2f82bee.js"
+        }
+      ]
+    },
+    "4": {
+      "css": [
+        {
+          "file": "component---theme-doc-legacy-item-031-769.1f1ce10374de019f5d3a.css",
+          "hash": "facbd50dce7b5acd519c",
+          "publicPath": "/platform-ui/component---theme-doc-legacy-item-031-769.1f1ce10374de019f5d3a.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "component---theme-doc-legacy-item-031-769.0a3c7d4cde2006751f7e.js",
+          "hash": "facbd50dce7b5acd519c",
+          "publicPath": "/platform-ui/component---theme-doc-legacy-item-031-769.0a3c7d4cde2006751f7e.js"
+        }
+      ]
+    },
+    "5": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-autocomplete-856-4d2.e9984f036662e390a1ed.js",
+          "hash": "c811e3c9b7244347eef9",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-autocomplete-856-4d2.e9984f036662e390a1ed.js"
+        }
+      ]
+    },
+    "6": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-autocomplete-lazyb-9-e-778.713b97af9d8a4efd6a09.js",
+          "hash": "28f88103252bebc18b2d",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-autocomplete-lazyb-9-e-778.713b97af9d8a4efd6a09.js"
+        }
+      ]
+    },
+    "7": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-avatar-19-d-53a.258a35e6601cefb427d3.js",
+          "hash": "b830a6c7c1949feb0044",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-avatar-19-d-53a.258a35e6601cefb427d3.js"
+        }
+      ]
+    },
+    "8": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-avatar-editord-3-a-24e.275d357f90a455902af7.js",
+          "hash": "7a1190bf9d3652dbb06a",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-avatar-editord-3-a-24e.275d357f90a455902af7.js"
+        }
+      ]
+    },
+    "9": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-buttonb-59-3f1.8d1e21d00655397d9849.js",
+          "hash": "ba0a780b45bf94158fe1",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-buttonb-59-3f1.8d1e21d00655397d9849.js"
+        }
+      ]
+    },
+    "10": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-checkbox-67-e-b0a.e515da0ee0e2a8211e6e.js",
+          "hash": "4fd2187e526bb2a9dd70",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-checkbox-67-e-b0a.e515da0ee0e2a8211e6e.js"
+        }
+      ]
+    },
+    "11": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-circular-progress-240-6a9.f2850079bf9d00a18f0c.js",
+          "hash": "7c275179922eeec01d48",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-circular-progress-240-6a9.f2850079bf9d00a18f0c.js"
+        }
+      ]
+    },
+    "12": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-circular-progress-static-3-cd-6c9.e0dbb996f160064bb242.js",
+          "hash": "bc16e7022650a1b198c8",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-circular-progress-static-3-cd-6c9.e0dbb996f160064bb242.js"
+        }
+      ]
+    },
+    "13": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-color-pickerea-9-321.4ace9b0dcfd8d2c22193.js",
+          "hash": "2754850655526dd60cd7",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-color-pickerea-9-321.4ace9b0dcfd8d2c22193.js"
+        }
+      ]
+    },
+    "14": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-date-picker-2-fa-b49.f6420f6df2447029c9d1.js",
+          "hash": "0ffbab6a99f79181c9d2",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-date-picker-2-fa-b49.f6420f6df2447029c9d1.js"
+        }
+      ]
+    },
+    "15": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-date-time-picker-2-c-7-12f.080987dc25a0c66b291e.js",
+          "hash": "704b9a617b30a14f03f8",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-date-time-picker-2-c-7-12f.080987dc25a0c66b291e.js"
+        }
+      ]
+    },
+    "16": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-date-time-picker-rangecb-0-1f9.624af63519535500ee1b.js",
+          "hash": "a3985e78386aa0bbe22d",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-date-time-picker-rangecb-0-1f9.624af63519535500ee1b.js"
+        }
+      ]
+    },
+    "17": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-dropzonec-48-7d7.7d5541483a2e39d55ed2.js",
+          "hash": "65517c41eb52c73eac30",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-dropzonec-48-7d7.7d5541483a2e39d55ed2.js"
+        }
+      ]
+    },
+    "18": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-link-570-283.e5c49d3d427f5262f8f1.js",
+          "hash": "472a7cf4aa713c1d2781",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-link-570-283.e5c49d3d427f5262f8f1.js"
+        }
+      ]
+    },
+    "19": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-location-form-39-c-e80.cc3a70cd1cdbbcb0336c.js",
+          "hash": "0468f21868422f5dd667",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-location-form-39-c-e80.cc3a70cd1cdbbcb0336c.js"
+        }
+      ]
+    },
+    "20": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-location-form-switch-1-ef-0b0.60946778a087dacf48ae.js",
+          "hash": "74b18adfc4180e6ff25e",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-location-form-switch-1-ef-0b0.60946778a087dacf48ae.js"
+        }
+      ]
+    },
+    "21": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-locationa-4-d-ffe.7a1b5bd656688a0445b2.js",
+          "hash": "74d7145dbdd565a555f0",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-locationa-4-d-ffe.7a1b5bd656688a0445b2.js"
+        }
+      ]
+    },
+    "22": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-mdi-icon-select-475-f8f.c954dba68fc0bcc6d8c9.js",
+          "hash": "7c029c3e267d5cf76895",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-mdi-icon-select-475-f8f.c954dba68fc0bcc6d8c9.js"
+        }
+      ]
+    },
+    "23": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-mdi-iconf-86-18f.9890f3a9da1785572a75.js",
+          "hash": "50d4cf1de379c8366474",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-mdi-iconf-86-18f.9890f3a9da1785572a75.js"
+        }
+      ]
+    },
+    "24": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-radioc-3-d-0e0.13166dd001f3f4dffc79.js",
+          "hash": "1faaad80859b61998f0c",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-radioc-3-d-0e0.13166dd001f3f4dffc79.js"
+        }
+      ]
+    },
+    "25": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-slider-18-c-e5b.ac816e3a395d85b67ce5.js",
+          "hash": "b010cf983986f9afd54b",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-slider-18-c-e5b.ac816e3a395d85b67ce5.js"
+        }
+      ]
+    },
+    "26": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-switch-0-ed-cb4.bdfcce0a5db97a9b1a7a.js",
+          "hash": "850e075ee8cd110a4547",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-switch-0-ed-cb4.bdfcce0a5db97a9b1a7a.js"
+        }
+      ]
+    },
+    "27": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-text-editor-248-a96.32d576de5b87763c479e.js",
+          "hash": "8802c8a4d4d199d86eeb",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-text-editor-248-a96.32d576de5b87763c479e.js"
+        }
+      ]
+    },
+    "28": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-text-fielde-71-84c.ed7a2f40f98d6318db27.js",
+          "hash": "72d103fa03532f7f35af",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-text-fielde-71-84c.ed7a2f40f98d6318db27.js"
+        }
+      ]
+    },
+    "29": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-components-time-picker-7-d-2-1cc.677729c4b3af9e742357.js",
+          "hash": "ed988ecd7c6bdf383c48",
+          "publicPath": "/platform-ui/content---platform-ui-docs-components-time-picker-7-d-2-1cc.677729c4b3af9e742357.js"
+        }
+      ]
+    },
+    "30": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-docusaurus-style-guide-7-b-5-4e2.77b7fadc80f00b40d24d.js",
+          "hash": "1963c0d326051a4d561c",
+          "publicPath": "/platform-ui/content---platform-ui-docs-docusaurus-style-guide-7-b-5-4e2.77b7fadc80f00b40d24d.js"
+        }
+      ]
+    },
+    "31": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-get-started-buildfb-1-f30.4a15411254002e4197d6.js",
+          "hash": "d704c5c6f1f31cc75141",
+          "publicPath": "/platform-ui/content---platform-ui-docs-get-started-buildfb-1-f30.4a15411254002e4197d6.js"
+        }
+      ]
+    },
+    "32": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-get-started-developmentf-91-6c1.312e43f169e47a99ee7b.js",
+          "hash": "ec0657c9813b363ca0ca",
+          "publicPath": "/platform-ui/content---platform-ui-docs-get-started-developmentf-91-6c1.312e43f169e47a99ee7b.js"
+        }
+      ]
+    },
+    "33": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-get-started-installation-1-c-2-b77.6062651e1e028b9a4da6.js",
+          "hash": "55a82404eca17f8ceedc",
+          "publicPath": "/platform-ui/content---platform-ui-docs-get-started-installation-1-c-2-b77.6062651e1e028b9a4da6.js"
+        }
+      ]
+    },
+    "34": {
+      "js": [
+        {
+          "file": "content---platform-ui-docs-get-started-learn-082-757.8ce4e8c036c4bb21a1e1.js",
+          "hash": "be12e3a1296658d626b2",
+          "publicPath": "/platform-ui/content---platform-ui-docs-get-started-learn-082-757.8ce4e8c036c4bb21a1e1.js"
+        }
+      ]
+    },
+    "35": {
+      "js": [
+        {
+          "file": "docsMetadata---platform-ui-docs-10-f-c07.0898bef65a173c1444f4.js",
+          "hash": "19bf9dd63bbb365cb818",
+          "publicPath": "/platform-ui/docsMetadata---platform-ui-docs-10-f-c07.0898bef65a173c1444f4.js"
+        }
+      ]
+    },
+    "36": {
+      "css": [
+        {
+          "file": "main.5384c1e280261abdb75d.css",
+          "hash": "aa3ea7ddbfd2f27f1595",
+          "publicPath": "/platform-ui/main.5384c1e280261abdb75d.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "main.84771661a843d7a05004.js",
+          "hash": "aa3ea7ddbfd2f27f1595",
+          "publicPath": "/platform-ui/main.84771661a843d7a05004.js"
+        }
+      ]
+    },
+    "37": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-autocomplete-lazy-5-e-0-3a9.689b8ced53836a5adfb7.js",
+          "hash": "3374539802b53ae11dd1",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-autocomplete-lazy-5-e-0-3a9.689b8ced53836a5adfb7.js"
+        }
+      ]
+    },
+    "38": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-autocompletedbc-c55.ca2368037520ee7a0fdf.js",
+          "hash": "fe3c9da1dc8076f610a2",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-autocompletedbc-c55.ca2368037520ee7a0fdf.js"
+        }
+      ]
+    },
+    "39": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-avatar-651-dd1.4f6472d2c12383101004.js",
+          "hash": "6d2fb8bafcfff32f296a",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-avatar-651-dd1.4f6472d2c12383101004.js"
+        }
+      ]
+    },
+    "40": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-avatar-editor-8-e-1-65b.fdf930032aba6444fea7.js",
+          "hash": "bb3624b2cf651b4094cc",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-avatar-editor-8-e-1-65b.fdf930032aba6444fea7.js"
+        }
+      ]
+    },
+    "41": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-buttonc-2-f-a66.8d0e8bea264000b2f29c.js",
+          "hash": "731a57727af1f2620b20",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-buttonc-2-f-a66.8d0e8bea264000b2f29c.js"
+        }
+      ]
+    },
+    "42": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-checkbox-2-df-f58.7f38f07d0c352f414867.js",
+          "hash": "014f4ce93610c7556718",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-checkbox-2-df-f58.7f38f07d0c352f414867.js"
+        }
+      ]
+    },
+    "43": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-circular-progress-statica-6-d-1be.edda75eb9e508cece2e0.js",
+          "hash": "f83b1b141b17d66e082c",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-circular-progress-statica-6-d-1be.edda75eb9e508cece2e0.js"
+        }
+      ]
+    },
+    "44": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-circular-progressc-81-97c.eb822a67295349eb2732.js",
+          "hash": "379d84ffbffa06de8292",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-circular-progressc-81-97c.eb822a67295349eb2732.js"
+        }
+      ]
+    },
+    "45": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-color-pickerb-39-a22.5d8bb1d5d96d0393db98.js",
+          "hash": "c72c1ea291694b16967b",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-color-pickerb-39-a22.5d8bb1d5d96d0393db98.js"
+        }
+      ]
+    },
+    "46": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-date-picker-2-fb-7f5.c1b0473c582af3f6a156.js",
+          "hash": "efaa89aad5f03e388ac3",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-date-picker-2-fb-7f5.c1b0473c582af3f6a156.js"
+        }
+      ]
+    },
+    "47": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-date-time-picker-rangeb-8-e-e0e.2ccd21081bcb6ce73ac0.js",
+          "hash": "0832970a1dbe1a8dc2e4",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-date-time-picker-rangeb-8-e-e0e.2ccd21081bcb6ce73ac0.js"
+        }
+      ]
+    },
+    "48": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-date-time-pickerd-1-e-234.fc875071afd331419819.js",
+          "hash": "f73217560bafa898254d",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-date-time-pickerd-1-e-234.fc875071afd331419819.js"
+        }
+      ]
+    },
+    "49": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-dropzoneac-7-fbf.a94e34a47dc087c7fbb3.js",
+          "hash": "e1fef10b9038b0cc3247",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-dropzoneac-7-fbf.a94e34a47dc087c7fbb3.js"
+        }
+      ]
+    },
+    "50": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-link-379-6b6.663f389740da84927654.js",
+          "hash": "bd56331cbd1d47573d33",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-link-379-6b6.663f389740da84927654.js"
+        }
+      ]
+    },
+    "51": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-location-form-95-a-e45.93b13891638c747e4fba.js",
+          "hash": "1aadc888f3feda8f11c0",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-location-form-95-a-e45.93b13891638c747e4fba.js"
+        }
+      ]
+    },
+    "52": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-location-form-switch-190-03d.a817e8a470cba5b00452.js",
+          "hash": "7df7ea8dce64ea92dd45",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-location-form-switch-190-03d.a817e8a470cba5b00452.js"
+        }
+      ]
+    },
+    "53": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-locationd-73-dd6.fdc8b4b69c615de59943.js",
+          "hash": "e1e2a535ffddf6bc21c2",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-locationd-73-dd6.fdc8b4b69c615de59943.js"
+        }
+      ]
+    },
+    "54": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-mdi-icon-select-95-c-40f.5ed865f872fb0bb32c82.js",
+          "hash": "d1b77edcccab56dfec5d",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-mdi-icon-select-95-c-40f.5ed865f872fb0bb32c82.js"
+        }
+      ]
+    },
+    "55": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-mdi-icond-94-10a.9060f51dc74147890c33.js",
+          "hash": "258eacab927da48db354",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-mdi-icond-94-10a.9060f51dc74147890c33.js"
+        }
+      ]
+    },
+    "56": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-radiod-2-e-bdc.79dc5bec7c8813d61c96.js",
+          "hash": "e5b465d5884fbe514102",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-radiod-2-e-bdc.79dc5bec7c8813d61c96.js"
+        }
+      ]
+    },
+    "57": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-slider-614-ba4.092c46f24214db687443.js",
+          "hash": "ce61caab5394ef98a35c",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-slider-614-ba4.092c46f24214db687443.js"
+        }
+      ]
+    },
+    "58": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-switch-3-c-5-5fa.44a145936468206c5771.js",
+          "hash": "aab110db3f0045b20a3d",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-switch-3-c-5-5fa.44a145936468206c5771.js"
+        }
+      ]
+    },
+    "59": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-text-editorc-73-fc4.4d03d1f0d14094c6215c.js",
+          "hash": "e44af332891e19ec0520",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-text-editorc-73-fc4.4d03d1f0d14094c6215c.js"
+        }
+      ]
+    },
+    "60": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-text-field-588-7e4.fd55d30e7f862eeab934.js",
+          "hash": "a1d04a85656cce041980",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-text-field-588-7e4.fd55d30e7f862eeab934.js"
+        }
+      ]
+    },
+    "61": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-components-time-pickerc-54-468.83987e44028a8177afb5.js",
+          "hash": "d9a133e38798e07f2682",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-components-time-pickerc-54-468.83987e44028a8177afb5.js"
+        }
+      ]
+    },
+    "62": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-docusaurus-style-guidef-1-d-39f.d78779bdb2c0ffb8887d.js",
+          "hash": "aec36fdb9aac2af81008",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-docusaurus-style-guidef-1-d-39f.d78779bdb2c0ffb8887d.js"
+        }
+      ]
+    },
+    "63": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-get-started-buildbc-3-41e.9b398f2d082da7a1737a.js",
+          "hash": "e6de1e2c183826f2b74c",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-get-started-buildbc-3-41e.9b398f2d082da7a1737a.js"
+        }
+      ]
+    },
+    "64": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-get-started-developmentf-50-767.08c04961bd6a16578e82.js",
+          "hash": "1fb256c24c7b02b6f523",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-get-started-developmentf-50-767.08c04961bd6a16578e82.js"
+        }
+      ]
+    },
+    "65": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-get-started-installationf-4-e-126.e337df58bb2f9900c888.js",
+          "hash": "1e54482a3658c3c19f1e",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-get-started-installationf-4-e-126.e337df58bb2f9900c888.js"
+        }
+      ]
+    },
+    "66": {
+      "js": [
+        {
+          "file": "metadata---platform-ui-docs-get-started-learne-30-c3d.2d027741a6d052be8f22.js",
+          "hash": "8faf73af64c01690c7bc",
+          "publicPath": "/platform-ui/metadata---platform-ui-docs-get-started-learne-30-c3d.2d027741a6d052be8f22.js"
+        }
+      ]
+    },
+    "67": {
+      "js": [
+        {
+          "file": "runtime~main.e3fe625bad6ead2a5bc5.js",
+          "hash": "dd74eaf223a3f1aec403",
+          "publicPath": "/platform-ui/runtime~main.e3fe625bad6ead2a5bc5.js"
+        }
+      ]
+    },
+    "68": {
+      "css": [
+        {
+          "file": "68.d0f6e0a00d5a9a4d7b7d.css",
+          "hash": "900efa64056a782a0b77",
+          "publicPath": "/platform-ui/68.d0f6e0a00d5a9a4d7b7d.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "68.ff1706d4d38d9b3451eb.js",
+          "hash": "900efa64056a782a0b77",
+          "publicPath": "/platform-ui/68.ff1706d4d38d9b3451eb.js"
+        }
+      ]
+    },
+    "69": {
+      "js": [
+        {
+          "file": "69.f37580313faf3fefcd07.js",
+          "hash": "3f4c66cfc5ad7bb07910",
+          "publicPath": "/platform-ui/69.f37580313faf3fefcd07.js"
+        }
+      ]
+    }
+  }
+}
