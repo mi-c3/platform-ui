@@ -140,6 +140,8 @@ import Slider from 'components/Slider';
 import UploadFileField from 'components/UploadFileField';
 import TextEditor from 'components/TextEditor';
 
+import '@mdi/font/css/materialdesignicons.css';
+
 export {
     // utils
     MomentUtils,
