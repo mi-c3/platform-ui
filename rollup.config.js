@@ -38,6 +38,7 @@ export default {
             namedExports: {
                 'node_modules/react-is/index.js': ['isValidElementType', 'ForwardRef', 'isFragment'],
                 'node_modules/showdown/index.js': ['Converter'],
+                'popper.js': ['Popper'],
             },
             include: /node_modules/,
         }),
@@ -53,5 +54,6 @@ export default {
         'react-jss',
         'react-router-dom',
         'react-router',
+        'popper.js',
     ],
 };
