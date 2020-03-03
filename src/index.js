@@ -106,7 +106,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import withWidth from '@material-ui/core/withWidth';
 import Zoom from '@material-ui/core/Zoom';
-import Slider from '@material-ui/core/Slider';
 
 import MomentUtils from '@date-io/moment';
 
@@ -137,7 +136,7 @@ import DropzoneDialog from 'components/Upload/DropzoneDialog';
 import Location from 'components/Location/Location';
 import LocationForm from 'components/Location/LocationForm';
 import LocationSwitch from 'components/Location/LocationSwitch';
-// import Slider from 'components/Slider';
+import Slider from 'components/Slider';
 import UploadFileField from 'components/UploadFileField';
 import TextEditor from 'components/TextEditor';
 
