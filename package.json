@@ -1,6 +1,6 @@
 {
   "name": "@mic3/platform-ui",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "scripts": {
     "start": "start-storybook -p 9009",
     "lint": "eslint --max-warnings=0 src",
