@@ -5,8 +5,8 @@
     "start": "start-storybook -p 9009",
     "lint": "eslint --max-warnings=0 src",
     "lint:fix": "eslint --max-warnings=0 src --fix",
-    "build": "rm -rf dist && rollup -c",
-    "build:watch": "rollup -c -w",
+    "build": "export BABEL_ENV=production && rm -rf dist && babel --copy-files src --out-dir dist",
+    "build:watch": "export BABEL_ENV=development && babel --watch --copy-files src --out-dir dist",
     "storybook:build": "rm -rf ./docu/static/storybook && build-storybook -o ./docu/static/storybook"
   },
   "husky": {
@@ -14,12 +14,7 @@
       "pre-push": "yarn lint"
     }
   },
-  "module": "dist/index.es.js",
-  "files": [
-    "dist/index.es.js",
-    "dist/index.es.js.map",
-    "dist/bundle.css"
-  ],
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:mi-c3/platform-ui.git"
@@ -34,13 +29,10 @@
     "jss": "^10.0.4",
     "memoize-one": "5.1.1",
     "moment": "2.24.0",
-    "react-avatar-editor": "11.0.7",
     "react-chromatic": "0.8.4",
-    "react-color": "2.18.0",
+    "react-color": "^2.18.0",
     "react-dropzone": "9.0.0",
-    "react-jss": "^10.0.4",
     "react-mde": "8.0.1",
-    "react-tiny-virtual-list": "2.2.0",
     "showdown": "1.9.1"
   },
   "devDependencies": {
@@ -50,10 +42,6 @@
     "@babel/plugin-proposal-decorators": "7.8.3",
     "@babel/preset-env": "7.8.3",
     "@babel/preset-react": "7.8.3",
-    "@material-ui/core": "^4.9.0",
-    "@material-ui/pickers": "^3.2.10",
-    "@material-ui/styles": "^4.9.0",
-    "@mic3/platform-ui": "^0.8.6",
     "@storybook/addon-a11y": "5.3.9",
     "@storybook/addon-actions": "5.3.9",
     "@storybook/addon-backgrounds": "5.3.9",
@@ -82,18 +70,18 @@
     "eslint-plugin-react-hooks": "1.7.0",
     "husky": "1.3.1",
     "prettier": "1.19.1",
-    "prop-types": "^15.7.2",
-    "random-name": "0.1.2",
+    "random-name": "0.1.2"
+  },
+  "peerDepenedencies": {
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "5.1.2",
-    "rollup": "^1.1.2",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-css-only": "^2.0.0",
-    "rollup-plugin-includepaths": "^0.2.3",
-    "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-peer-deps-external": "^2.2.0",
-    "rollup-plugin-url": "^2.1.0"
+    "react-avatar-editor": "^11.0.7",
+    "react-jss": "^10.0.4",
+    "react-tiny-virtual-list": "^2.2.0",
+    "@material-ui/core": "^4.9.2",
+    "@material-ui/pickers": "^3.2.10",
+    "@material-ui/styles": "^4.9.0",
+    "prop-types": "^15.7.2"
   }
 }
