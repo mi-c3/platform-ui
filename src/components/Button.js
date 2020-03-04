@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MuiButton from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/styles';
-import Link from './Link';
-
 import MdiIcon from 'components/MdiIcon';
+import Link from './Link';
 
 const useStyles = withStyles({
     icon: {
@@ -27,11 +26,11 @@ const Button = ({ iconName, children, classes, color, ...restProps }) =>
         <LinkedButton color={color} {...restProps}>
             <MdiIcon size={15} name={iconName} className={classes.icon} />
             {children}
-        </LinkedButton>
+      </LinkedButton>
     ) : (
         <LinkedButton color={color} {...restProps}>
             {children}
-        </LinkedButton>
+      </LinkedButton>
     );
 Button.propTypes = {
     iconName: PropTypes.string,

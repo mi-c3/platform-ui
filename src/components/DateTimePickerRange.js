@@ -6,10 +6,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Cancel from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/styles';
 
+import { bind, memoize } from '../utils/decorators/decoratorUtils';
 import DateTimePicker from './DateTimePicker';
 import TextField from './TextField';
 import MdiIcon from './MdiIcon';
-import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 const styles = {
     inputWrapper: { flexGrow: 1, display: 'flex', flexWrap: 'wrap' },
@@ -40,7 +40,7 @@ class DateTimePickerRange extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        const props = this.props;
+        const { props } = this;
         const [start, end] = (props.value && props.value.map((date) => new Date(date))) || [null, null];
         if (prevProps.value !== this.props.value) {
             this.setState({ start, end });
@@ -115,7 +115,7 @@ class DateTimePickerRange extends PureComponent {
                         onChange={this.onChangeStart}
                         TextFieldComponent={CustomInput}
                         disabled={disabled}
-                    />
+                  />
                     <DateTimePicker
                         showTodayButton
                         ampm={false}
@@ -126,8 +126,8 @@ class DateTimePickerRange extends PureComponent {
                         onChange={this.onChangeEnd}
                         TextFieldComponent={CustomInput}
                         disabled={disabled}
-                    />
-                </span>
+                  />
+              </span>
             );
         };
     }
@@ -136,29 +136,29 @@ class DateTimePickerRange extends PureComponent {
         const { PickersFromProps, PickersToProps, classes, disabled, ...restProps } = this.props;
         const { start, end } = this.state;
         return (
-            <Fragment>
-                <TextField
-                    multiline
-                    rowsMax={2}
-                    InputProps={{
+            <>
+            <TextField
+                  multiline
+                  rowsMax={2}
+                  InputProps={{
                         startAdornment: (
-                            <InputAdornment position="start">
-                                <MdiIcon name="calendar-blank" />
+                          <InputAdornment position="start">
+                              <MdiIcon name="calendar-blank" />
                             </InputAdornment>
                         ),
                         endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton aria-label="Clear input" onClick={this.onClear}>
-                                    <Cancel />
+                          <InputAdornment position="end">
+                              <IconButton aria-label="Clear input" onClick={this.onClear}>
+                                  <Cancel />
                                 </IconButton>
                             </InputAdornment>
                         ),
                         inputComponent: this.buildInputs(PickersToProps, PickersFromProps, start, end, classes, disabled),
                     }}
-                    disabled={disabled}
-                    {...restProps}
+                  disabled={disabled}
+                  {...restProps}
                 />
-            </Fragment>
+          </>
         );
     }
 }

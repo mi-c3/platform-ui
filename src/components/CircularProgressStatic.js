@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-import { getFillColor } from 'utils/styles/stylesUtils';
+import { getFillColor } from '../utils/styles/stylesUtils';
 
 const styles = () => ({
     wrapper: {
@@ -24,7 +24,7 @@ const styles = () => ({
 });
 
 const CircularProgressStatic = withStyles(styles)((props) => {
-    const { size, foreignObjectContent, classes, className, foreignObjectProps, fillColor, borderWidth, ...restProps } = props; //eslint-disable-line no-unused-vars
+    const { size, foreignObjectContent, classes, className, foreignObjectProps, fillColor, borderWidth, ...restProps } = props; // eslint-disable-line no-unused-vars
     const value = props.value >= 0 && props.value <= 100 ? Math.round(props.value) : 0;
     const radius = (props.size - props.borderWidth) / 2;
     const viewBox = `0 0 ${size} ${size}`;
@@ -33,11 +33,11 @@ const CircularProgressStatic = withStyles(styles)((props) => {
     const content = foreignObjectContent ? (
         <foreignObject x="6" y="6" width="28" height="28" {...foreignObjectProps}>
             {foreignObjectContent}
-        </foreignObject>
+      </foreignObject>
     ) : (
         <text className={classes.circleText} x="50%" y="50%" dy=".3em" textAnchor="middle">
             {`${value}%`}
-        </text>
+      </text>
     );
     return (
         <div {...restProps} className={`${classes.wrapper} ${className}`}>
@@ -48,7 +48,7 @@ const CircularProgressStatic = withStyles(styles)((props) => {
                     cy={props.size / 2}
                     r={radius}
                     strokeWidth={`${props.borderWidth}px`}
-                />
+              />
                 <circle
                     className={classes.circleProgress}
                     cx={props.size / 2}
@@ -60,10 +60,10 @@ const CircularProgressStatic = withStyles(styles)((props) => {
                         strokeDasharray: dashArray,
                         strokeDashoffset: dashOffset,
                     }}
-                />
+              />
                 {content}
-            </svg>
-        </div>
+          </svg>
+      </div>
     );
 });
 

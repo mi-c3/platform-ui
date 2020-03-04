@@ -2,7 +2,7 @@ import { isDefined } from 'utils/utils';
 
 const API_KEY = 'AIzaSyAGa4L1t68r0Kbsgp4UAUb9_K2mdyF2qGk';
 const GOOGLE_API = 'https://maps.google.com/maps/api/geocode/json';
-
+/* eslint-disable camelcase */
 /**
  *
  */
@@ -79,7 +79,7 @@ class GeoCoding {
     convertDMSToDD = (degrees = 0, minutes = 0, seconds = 0, direction) => {
         let dd = (degrees || 0) + (minutes || 0) / 60 + (seconds || 0) / (60 * 60);
         if (direction === 'S' || direction === 'W') {
-            dd = dd * -1;
+            dd *= -1;
         }
         return dd;
     };
@@ -113,10 +113,12 @@ class GeoCoding {
             if (types.includes('administrative_area_level_2')) address.city = long_name;
             if (types.includes('country')) address.country = long_name.toUpperCase();
             if (types.includes('postal_code')) address.code = long_name;
-            if (types.includes('sublocality') || types.includes('locality'))
+            if (types.includes('sublocality') || types.includes('locality')) {
                 address.line2 = address.line2 ? `${address.line2} ${long_name}` : long_name;
-            if (types.includes('street_number') || types.includes('route'))
+            }
+            if (types.includes('street_number') || types.includes('route')) {
                 address.line1 = address.line1 ? `${address.line1} ${long_name}` : long_name;
+            }
         });
         return address;
     };

@@ -5,8 +5,8 @@ import { IconButton, InputAdornment } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/styles';
 
-import { createEvent } from 'utils/http/event';
-import { bind, memoize } from 'utils/decorators/decoratorUtils';
+import { createEvent } from '../utils/http/event';
+import { bind, memoize } from '../utils/decorators/decoratorUtils';
 import { colors } from 'styles/theme';
 
 const useStyles = withStyles(() => ({
@@ -50,8 +50,8 @@ class DatePicker extends PureComponent {
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
                         <Cancel className={this.props.classes.clearIcon} />
-                    </IconButton>
-                </InputAdornment>
+                  </IconButton>
+            </InputAdornment>
             )
         );
     }
@@ -75,7 +75,7 @@ class DatePicker extends PureComponent {
                     ...(InputProps || {}),
                 }}
                 onChange={this.onChange}
-            />
+          />
         );
     }
 }

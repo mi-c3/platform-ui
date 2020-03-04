@@ -3,7 +3,7 @@ import { colors } from 'styles/theme';
 
 export const getFillColor = (opacity) => ({ fillColor, priority, disabled }) => {
     if (disabled) {
-        return colors.priorityColors['disabled'];
+        return colors.priorityColors.disabled;
     }
     if (priority) {
         return opacity > -1

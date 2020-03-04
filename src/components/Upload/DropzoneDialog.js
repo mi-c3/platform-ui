@@ -7,8 +7,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { styled } from '@material-ui/styles';
 
-import Dropzone from 'components/Upload/Dropzone';
-import { bind } from 'utils/decorators/decoratorUtils';
+import Dropzone from './Dropzone';
+import { bind } from '../../utils/decorators/decoratorUtils';
 
 const DialogActionsStyled = styled(DialogActions)({
     minWidth: 300,
@@ -28,17 +28,17 @@ class DropzoneDialog extends PureComponent {
         const { open, title, onClose, fullScreen, ...restProps } = this.props;
         return (
             <Dialog open={open} onClose={onClose} fullScreen={fullScreen}>
-                {title && <DialogTitle>{title}</DialogTitle>}
+            {title && <DialogTitle>{title}</DialogTitle>}
                 <Dropzone showPreviews={false} showPreviewsInDropzone={false} showAlerts={false} {...restProps} />
                 <DialogActionsStyled>
                     <Button onClick={onClose} variant="text">
                         Cancel
-                    </Button>
+                  </Button>
                     <Button onClick={this.onSave} variant="text">
                         Save
-                    </Button>
-                </DialogActionsStyled>
-            </Dialog>
+                  </Button>
+              </DialogActionsStyled>
+          </Dialog>
         );
     }
 }

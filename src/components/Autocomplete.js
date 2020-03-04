@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import equals from 'fast-deep-equal';
 import VirtualList from 'react-tiny-virtual-list';
 
-import { bind, memoize, debounce } from 'utils/decorators/decoratorUtils';
+import { bind, memoize, debounce } from '../utils/decorators/decoratorUtils';
 import Cancel from '@material-ui/icons/Cancel';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,9 +14,9 @@ import Grow from '@material-ui/core/Grow';
 import { withStyles, styled } from '@material-ui/styles';
 
 import TextField from 'components/TextField';
-import { shallowEquals, arrayfy } from 'utils/utils';
-import { get } from 'utils/lo/lo';
-import { createEvent } from 'utils/http/event';
+import { shallowEquals, arrayfy } from '../utils/utils';
+import { get } from '../utils/lo/lo';
+import { createEvent } from '../utils/http/event';
 
 const styles = () => ({
     inputRoot: {
@@ -89,6 +89,7 @@ class Autocomplete extends PureComponent {
     }
 
     popperRef = React.createRef();
+
     inputRef = React.createRef();
 
     @bind
@@ -186,7 +187,7 @@ class Autocomplete extends PureComponent {
         let value = null;
         const { valueField, options } = this.props;
         if (valueField) {
-            value = (options || []).find((option) => null === get(option, valueField)) || value;
+            value = (options || []).find((option) => get(option, valueField) === null) || value;
         }
         this.onChange(value);
     }
@@ -230,13 +231,13 @@ class Autocomplete extends PureComponent {
                     open={openSuggestions}
                     ref={this.popperRef}
                     anchorEl={get(this.inputRef, 'current.parentNode.parentNode')}
-                >
-                    {({ TransitionProps, placement }) => (
+            >
+              {({ TransitionProps, placement }) => (
                         <Grow
                             {...TransitionProps}
                             id="menu-list-grow"
                             style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                        >
+                >
                             <Paper square style={{ width: get(this.inputRef, 'current.parentNode.clientWidth') }}>
                                 <VirtualList
                                     width="100%"
@@ -256,19 +257,19 @@ class Autocomplete extends PureComponent {
                                                     onClick={this.buildOnChange(op)}
                                                     value={op}
                                                     component="div"
-                                                >
+                                              >
                                                     {option || label}
-                                                </MenuItem>
-                                            </div>
+                                              </MenuItem>
+                                          </div>
                                         );
                                     }}
                                     {...VirtualListProps}
                                     itemSize={VirtualListProps.itemSize}
-                                />
-                            </Paper>
-                        </Grow>
+                              />
+                          </Paper>
+                </Grow>
                     )}
-                </Popper>
+            </Popper>
             )
         );
     }
@@ -303,7 +304,7 @@ class Autocomplete extends PureComponent {
                         className={classes.chip}
                         onDelete={this.buildRemoveChip(option)}
                         {...ChipProps}
-                    />
+                  />
                 );
             });
             InputProperties.classes = { root: classes.inputRoot, input: classes.inputInput };
@@ -313,7 +314,7 @@ class Autocomplete extends PureComponent {
                 InputProperties.endAdornment = selected && clearable && !disabled && (
                     <IconButton aria-label="Clear input" onClick={this.clearInput}>
                         <Cancel />
-                    </IconButton>
+                </IconButton>
                 );
             }
         }
@@ -373,18 +374,18 @@ class Autocomplete extends PureComponent {
             openSuggestions,
         });
         return (
-            <Fragment>
-                <TextField
-                    InputProps={InputProperties}
-                    InputLabelProps={{ shrink: true }}
-                    onFocus={this.onFocus}
-                    onBlur={this.onBlur}
-                    disabled={disabled}
-                    autoComplete="off"
-                    {...restProps}
+            <>
+            <TextField
+                  InputProps={InputProperties}
+                  InputLabelProps={{ shrink: true }}
+                  onFocus={this.onFocus}
+                  onBlur={this.onBlur}
+                  disabled={disabled}
+                  autoComplete="off"
+                  {...restProps}
                 />
-                {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps)}
-            </Fragment>
+            {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps)}
+          </>
         );
     }
 }

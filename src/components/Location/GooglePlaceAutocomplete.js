@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Autocomplete from 'components/Autocomplete';
-import { get } from 'utils/lo/lo';
-import { bind } from 'utils/decorators/decoratorUtils';
+import { get } from '../../utils/lo/lo';
+import { bind } from '../../utils/decorators/decoratorUtils';
 
 // eslint-disable-next-line no-unused-vars
 const { options, suggest, optiontemplate, variant, ...autocompletePropsSubSet } = (Autocomplete || {}).propTypes || {};
@@ -52,7 +52,7 @@ class GooglePlaceAutocomplete extends PureComponent {
     }
 
     render() {
-        const { onChangeCoords, geocoder, service, ...restProps } = this.props; //eslint-disable-line no-unused-vars
+        const { onChangeCoords, geocoder, service, ...restProps } = this.props; // eslint-disable-line no-unused-vars
         const { options } = this.state;
         return (
             <Autocomplete
@@ -61,7 +61,7 @@ class GooglePlaceAutocomplete extends PureComponent {
                 suggest={this.suggest}
                 optionTemplate={({ description }) => ({ label: description })}
                 variant="standard"
-            />
+          />
         );
     }
 }

@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { Grid, Typography, IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 
-import { bind } from 'utils/decorators/decoratorUtils';
-import { isImageType } from 'utils/file/file';
-import { createEvent } from 'utils/http/event';
+import { bind } from '../utils/decorators/decoratorUtils';
+import { isImageType } from '../utils/file/file';
+import { createEvent } from '../utils/http/event';
 import Slider from './Slider';
 import Avatar from './Avatar';
 import Dropzone from './Upload/Dropzone';
@@ -69,6 +69,7 @@ class AvatarEditor extends PureComponent {
     };
 
     editorRef = React.createRef();
+
     state = defaultState;
 
     @bind
@@ -157,16 +158,16 @@ class AvatarEditor extends PureComponent {
                             {...AvatarGridProps}
                             onClick={this.dropZoneClick}
                             className={`${!disabled ? classes.avatarWrapper : ''} ${AvatarGridProps.className}`}
-                        >
+                      >
                             <Avatar initials={initials} src={image} {...AvatarProps} />
                             {label && <Typography className={classes.label}>{label}</Typography>}
                             {EditButtonProps.label ? (
                                 <Button className={classes.avatarEditButton} {...EditButtonProps}>
                                     {EditButtonProps.label}
-                                </Button>
+                              </Button>
                             ) : null}
-                        </Grid>
-                    </Dropzone>
+                      </Grid>
+                  </Dropzone>
                 ) : (
                     <Fragment>
                         <ReactAvatarEditor
@@ -178,7 +179,7 @@ class AvatarEditor extends PureComponent {
                             color={styleColor}
                             className={classes.avatarEditor}
                             {...ReactAvatarEditorProps}
-                        />
+                      />
                         <Grid container direction="column" className={classes.wrapper}>
                             <Grid item container alignItems="center">
                                 <Typography>Zoom:</Typography>
@@ -189,29 +190,29 @@ class AvatarEditor extends PureComponent {
                                     value={scale}
                                     onInput={this.handleScaleChange}
                                     className={classes.slider}
-                                />
-                            </Grid>
+                              />
+                          </Grid>
                             <Grid item container justify="space-between" alignItems="center">
                                 <Typography>Rotate:</Typography>
                                 <IconButton onClick={this.handleRotateLeft}>
                                     <MdiIcon name="rotate-left" />
-                                </IconButton>
+                              </IconButton>
                                 <IconButton onClick={this.handleRotateRight}>
                                     <MdiIcon name="rotate-right" />
-                                </IconButton>
-                            </Grid>
+                              </IconButton>
+                          </Grid>
                             <Grid container justify="space-between">
                                 <Button variant="text" onClick={this.cancelUpload}>
-                                    Cancel
+                                Cancel
                                 </Button>
                                 <Button variant="text" color="primary" onClick={this.handleUpload}>
-                                    Crop and Upload
+                                Crop and Upload
                                 </Button>
-                            </Grid>
-                        </Grid>
-                    </Fragment>
+                          </Grid>
+                      </Grid>
+                  </Fragment>
                 )}
-            </Grid>
+          </Grid>
         );
     }
 }

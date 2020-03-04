@@ -49,27 +49,27 @@ const DropzoneSnackBar = (props) => {
     const { classes, className, message, onClose, variant, open, autoHideDuration } = props;
     const Icon = variantIcon[variant];
     return (
-        <Snackbar
-            anchorOrigin={{
+      <Snackbar
+          anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
             }}
-            open={open}
-            autoHideDuration={autoHideDuration}
-            onClose={onClose}
+          open={open}
+          autoHideDuration={autoHideDuration}
+          onClose={onClose}
         >
-            <SnackbarContent
-                className={`${classes[variant]} ${className}`}
-                aria-describedby="client-snackbar"
-                message={
-                    <span id="client-snackbar" className={classes.message}>
-                        <Icon className={`${classes.icon}, ${classes.iconVariant}`} />
-                        {message}
+          <SnackbarContent
+              className={`${classes[variant]} ${className}`}
+              aria-describedby="client-snackbar"
+              message={
+                  <span id="client-snackbar" className={classes.message}>
+                      <Icon className={`${classes.icon}, ${classes.iconVariant}`} />
+                      {message}
                     </span>
-                }
-                action={[
-                    <IconButton key="close" aria-label="Close" color="inherit" className={classes.close} onClick={onClose}>
-                        <CloseIcon className={classes.icon} />
+                )}
+              action={[
+                  <IconButton key="close" aria-label="Close" color="inherit" className={classes.close} onClick={onClose}>
+                      <CloseIcon className={classes.icon} />
                     </IconButton>,
                 ]}
             />

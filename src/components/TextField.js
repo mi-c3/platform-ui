@@ -5,9 +5,9 @@ import Cancel from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/styles';
 
 import MdiIcon from 'components/MdiIcon';
-import { bind, memoize } from 'utils/decorators/decoratorUtils';
-import { createEvent } from 'utils/http/event';
-import { isDefined } from 'utils/utils';
+import { bind, memoize } from '../utils/decorators/decoratorUtils';
+import { createEvent } from '../utils/http/event';
+import { isDefined } from '../utils/utils';
 import { colors } from 'styles/theme';
 
 // eslint-disable-next-line no-unused-vars
@@ -50,8 +50,8 @@ class TextField extends PureComponent {
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
                         <Cancel className={this.props.classes.clearIcon} />
-                    </IconButton>
-                </InputAdornment>
+                  </IconButton>
+            </InputAdornment>
             )
         );
     }
@@ -63,8 +63,8 @@ class TextField extends PureComponent {
             <InputAdornment position="end">
                 <IconButton aria-label="Clear input" onClick={this.onClear}>
                     <MdiIcon name="alert-circle" color="error" />
-                </IconButton>
-            </InputAdornment>
+              </IconButton>
+          </InputAdornment>
         );
     }
 
@@ -86,7 +86,7 @@ class TextField extends PureComponent {
                     ...InputProps,
                 }}
                 {...restProps}
-            />
+          />
         );
     }
 }

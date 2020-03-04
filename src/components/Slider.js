@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
-import { createEvent } from 'utils/http/event';
-import { bind } from 'utils/decorators/decoratorUtils';
-import { getFillColor } from 'utils/styles/stylesUtils';
+import { createEvent } from '../utils/http/event';
+import { bind } from '../utils/decorators/decoratorUtils';
+import { getFillColor } from '../utils/styles/stylesUtils';
 
 import { MDCSlider } from '@material/slider';
 import 'styles/materialComponentsWeb.min.css';
@@ -113,15 +113,15 @@ class Slider extends PureComponent {
                 <div
                     className="mdc-slider__track-container"
                     style={{ backgroundColor: getFillColor(26)({ fillColor, priority, disabled }) }}
-                >
+              >
                     <div className="mdc-slider__track" style={{ backgroundColor: getFillColor()({ fillColor, priority, disabled }) }} />
                     {discrete && showMarkers && <div className="mdc-slider__track-marker-container" />}
-                </div>
+              </div>
                 <div className="mdc-slider__thumb-container">
                     {discrete && (
                         <div className="mdc-slider__pin" style={{ backgroundColor: getFillColor()({ fillColor, priority, disabled }) }}>
                             <span className="mdc-slider__pin-value-marker" />
-                        </div>
+                    </div>
                     )}
                     <svg
                         style={{
@@ -131,12 +131,12 @@ class Slider extends PureComponent {
                         className="mdc-slider__thumb"
                         width="21"
                         height="21"
-                    >
+                  >
                         <circle cx="10.5" cy="10.5" r="7.875" />
-                    </svg>
+                  </svg>
                     <div className="mdc-slider__focus-ring" />
-                </div>
-            </div>
+              </div>
+          </div>
         );
     }
 }

@@ -5,8 +5,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MdiIcon from 'components/MdiIcon';
 import Autocomplete from 'components/Autocomplete';
-import { iconsList } from 'utils/data/iconsList';
-import { bind, memoize } from 'utils/decorators/decoratorUtils';
+import { iconsList } from '../utils/data/iconsList';
+import { bind, memoize } from '../utils/decorators/decoratorUtils';
 
 // eslint-disable-next-line
 const { options, optionTemplate, ...autocompletePropsSubSet } = (Autocomplete || {}).propTypes || {};
@@ -29,9 +29,9 @@ class MdiIconSelect extends PureComponent {
                 <ListItem ContainerComponent="div" dense disableGutters>
                     <ListItemIcon>
                         <MdiIcon name={value} />
-                    </ListItemIcon>
+                  </ListItemIcon>
                     <ListItemText primary={label} />
-                </ListItem>
+              </ListItem>
             ),
         };
     }
@@ -43,7 +43,7 @@ class MdiIconSelect extends PureComponent {
                 optionTemplate={this.optionTemplate}
                 placeholder="Select an icon"
                 {...this.props}
-            />
+          />
         );
     }
 }

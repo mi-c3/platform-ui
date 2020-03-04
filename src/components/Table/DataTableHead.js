@@ -7,7 +7,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { styled } from '@material-ui/styles';
-import { bind, memoize } from 'utils/decorators/decoratorUtils';
+import { bind, memoize } from '../../utils/decorators/decoratorUtils';
 
 const TableCellStyled = styled(TableCell)({
     textTransform: 'capitalize',
@@ -28,8 +28,8 @@ class DataTableHead extends PureComponent {
             <Tooltip title="Sort" placement="bottom-start" enterDelay={100}>
                 <TableSortLabel active={orderBy === field} direction={order} onClick={this.createSortHandler(field)}>
                     {header || field}
-                </TableSortLabel>
-            </Tooltip>
+              </TableSortLabel>
+          </Tooltip>
         );
     }
 
@@ -40,7 +40,7 @@ class DataTableHead extends PureComponent {
             ({ field, header, sortable }, index) => (
                 <TableCellStyled key={field} index={index} sortDirection={orderBy === field ? order : false}>
                     {sortable === false ? header || field : this.buildSortWrapper({ header, field, orderBy, order })}
-                </TableCellStyled>
+              </TableCellStyled>
             ),
             this
         );
@@ -52,7 +52,7 @@ class DataTableHead extends PureComponent {
         return (
             <TableHead>
                 <TableRow>{this.buildRows({ columnDefinitions, orderBy, order })}</TableRow>
-            </TableHead>
+          </TableHead>
         );
     }
 }

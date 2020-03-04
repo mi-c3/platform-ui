@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MuiAvatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/styles';
-import { createInitials, generateColor } from 'utils/avatar/avatar';
-import CircularProgressStatic from './CircularProgressStatic';
-import { isDefined } from 'utils/utils';
+import { createInitials, generateColor } from '../utils/avatar/avatar';
+import { isDefined } from '../utils/utils';
 import { colors } from 'styles/theme';
+import CircularProgressStatic from './CircularProgressStatic';
 
 const styles = () => ({
     primary: { backgroundColor: '#00a99d !important' },
@@ -40,9 +40,9 @@ const Avatar = withStyles(styles)(({ initials, src, classes, className, initials
             <MuiAvatar
                 className={`${generateColor(Object.values(colorClassNames), initials)} ${avatarClassName} ${className || ''}`}
                 {...restProps}
-            >
+          >
                 {createInitials(initials, initialsSeparator)}
-            </MuiAvatar>
+          </MuiAvatar>
         );
     }
     return <MuiAvatar src={src} className={`${avatarClassName} ${className || ''}`} {...restProps} />;
@@ -62,7 +62,7 @@ const CirculaAvatar = withStyles(circulaStyles)(({ classes, className, CircularP
             {...CircularProgressStaticProps}
             foreignObjectContent={<Avatar className={`${classes.avatarWithCircular} ${className}`} {...restProps} />}
             className={`${classes.circularProgress} ${CircularProgressStaticProps.className}`}
-        />
+      />
     ) : (
         <Avatar className={className} {...restProps} />
     );
