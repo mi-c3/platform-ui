@@ -13,7 +13,7 @@ import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
 import { withStyles, styled } from '@material-ui/styles';
 
-import TextField from 'components/TextField';
+import TextField from './TextField';
 import { shallowEquals, arrayfy } from '../utils/utils';
 import { get } from '../utils/lo/lo';
 import { createEvent } from '../utils/http/event';

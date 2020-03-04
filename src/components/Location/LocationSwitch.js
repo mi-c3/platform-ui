@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 
-import Switch from 'components/Switch';
-import LocationForm from 'components/Location/LocationForm';
+import Switch from '../Switch';
+import LocationForm from './LocationForm';
 import { createEvent } from '../../utils/http/event';
 import { bind } from '../../utils/decorators/decoratorUtils';
 

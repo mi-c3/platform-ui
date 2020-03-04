@@ -7,7 +7,7 @@ import { bind } from '../utils/decorators/decoratorUtils';
 import { getFillColor } from '../utils/styles/stylesUtils';
 
 import { MDCSlider } from '@material/slider';
-import 'styles/materialComponentsWeb.min.css';
+import '../styles/materialComponentsWeb.min.css';
 
 class Slider extends PureComponent {
     static propTypes = {

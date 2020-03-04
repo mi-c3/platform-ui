@@ -1,4 +1,4 @@
-import { get } from 'utils/lo/lo';
+import { get } from './lo/lo';
 
 const isObject = (value) => value && typeof value === 'object' && !Array.isArray(value);
 

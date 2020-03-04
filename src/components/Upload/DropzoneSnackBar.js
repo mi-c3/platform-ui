@@ -66,7 +66,7 @@ const DropzoneSnackBar = (props) => {
                       <Icon className={`${classes.icon}, ${classes.iconVariant}`} />
                       {message}
                     </span>
-                )}
+              }
               action={[
                   <IconButton key="close" aria-label="Close" color="inherit" className={classes.close} onClick={onClose}>
                       <CloseIcon className={classes.icon} />

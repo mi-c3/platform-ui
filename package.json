@@ -14,7 +14,7 @@
       "pre-push": "yarn lint"
     }
   },
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "repository": {
     "type": "git",
     "url": "git@gitlab.mi-c3.com:affectli-project/platform-ui.git"

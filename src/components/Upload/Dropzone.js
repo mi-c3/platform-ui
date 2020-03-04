@@ -13,7 +13,7 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 import CancelIcon from '@material-ui/icons/Cancel';
 import IconButton from '@material-ui/core/IconButton';
 
-import MdiIcon from 'components/MdiIcon';
+import MdiIcon from '../MdiIcon';
 import { bind, memoize } from '../../utils/decorators/decoratorUtils';
 import { get } from '../../utils/lo/lo';
 import { isImageType, simplifySize, resizeImage } from '../../utils/file/file';

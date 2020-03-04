@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { Autocomplete } from 'index';
+import Autocomplete from './Autocomplete';
 import { bind } from '../utils/decorators/decoratorUtils';
 
 class AutocompleteLazy extends PureComponent {

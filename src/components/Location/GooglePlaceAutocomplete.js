@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import Autocomplete from 'components/Autocomplete';
+import Autocomplete from '../Autocomplete';
 import { get } from '../../utils/lo/lo';
 import { bind } from '../../utils/decorators/decoratorUtils';
 

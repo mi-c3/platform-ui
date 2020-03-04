@@ -4,7 +4,7 @@ import MuiAvatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/styles';
 import { createInitials, generateColor } from '../utils/avatar/avatar';
 import { isDefined } from '../utils/utils';
-import { colors } from 'styles/theme';
+import { colors } from '../styles/theme';
 import CircularProgressStatic from './CircularProgressStatic';
 
 const styles = () => ({

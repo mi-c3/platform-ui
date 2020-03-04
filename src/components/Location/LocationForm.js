@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import Location from 'components/Location/Location';
-import Button from 'components/Button';
-import GPA from 'components/Location/GooglePlaceAutocomplete';
+import Location from './Location';
+import Button from '../Button';
+import GPA from './GooglePlaceAutocomplete';
 import { createEvent } from '../../utils/http/event';
 import { get, set } from '../../utils/lo/lo';
 import statefullInput from '../../utils/hoc/statefullInput';

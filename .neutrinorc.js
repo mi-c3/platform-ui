@@ -1,8 +1,8 @@
 const airbnb = require('@neutrinojs/airbnb');
-const react = require('@neutrinojs/react');
 const jest = require('@neutrinojs/jest');
 const babelMerge = require('babel-merge');
 const standardjs = require('@neutrinojs/standardjs');
+const reactComponents = require('@neutrinojs/react-components');
 
 module.exports = {
   options: {
@@ -53,11 +53,7 @@ module.exports = {
     //     }
     //   }
     // }),
-    react({
-      html: {
-        title: 'platform-ui'
-      }
-    }),
+    reactComponents(),
     neutrino => {
       neutrino.config.module
         .rule('compile')

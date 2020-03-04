@@ -4,10 +4,10 @@ import { SwatchesPicker } from 'react-color';
 
 import { ClickAwayListener, FormControlLabel, Icon } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { materialColorPalette } from 'styles/palettes';
-import { colors } from 'styles/theme';
-import { createEvent } from 'utils/http/event';
-import { bind } from 'utils/decorators/decoratorUtils';
+import { materialColorPalette } from '../styles/palettes';
+import { colors } from '../styles/theme';
+import { createEvent } from '../utils/http/event';
+import { bind } from '../utils/decorators/decoratorUtils';
 
 const styles = () => ({
     swatches: {

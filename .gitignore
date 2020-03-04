@@ -5,7 +5,7 @@ node_modules
 storybook-static
 
 #build
-dist
+build
 
 #logs
 yarn-error.log

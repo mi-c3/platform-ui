@@ -3,8 +3,8 @@ import React, { PureComponent } from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MdiIcon from 'components/MdiIcon';
-import Autocomplete from 'components/Autocomplete';
+import MdiIcon from './MdiIcon';
+import Autocomplete from './Autocomplete';
 import { iconsList } from '../utils/data/iconsList';
 import { bind, memoize } from '../utils/decorators/decoratorUtils';
 
