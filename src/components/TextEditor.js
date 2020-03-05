@@ -72,7 +72,7 @@ class TextEditor extends PureComponent {
                 {...this.props}
                 value={value}
                 onChange={this.onChange}
-          />
+            />
         );
     }
 }

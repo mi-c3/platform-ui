@@ -39,7 +39,7 @@ class Checkbox extends PureComponent {
                 onChange={this.onChange}
                 control={<MuiCheckbox color={color} {...CheckboxProps} />}
                 labelPlacement={labelPlacement || 'end'}
-          />
+            />
         );
     }
 }

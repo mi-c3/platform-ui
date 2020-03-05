@@ -238,15 +238,15 @@ class Dropzone extends PureComponent {
                 ) : (
                     <Avatar>
                         <AttachFileIcon />
-                  </Avatar>
+                    </Avatar>
                 )}
-            <ListItemText primary={files[index].name} secondary={files[index].type} />
-            <ListItemSecondaryAction>
-                  <IconButton onClick={this.handleRemove(index)} aria-label="Delete">
-                      <CancelIcon />
+                <ListItemText primary={files[index].name} secondary={files[index].type} />
+                <ListItemSecondaryAction>
+                    <IconButton onClick={this.handleRemove(index)} aria-label="Delete">
+                        <CancelIcon />
                     </IconButton>
                 </ListItemSecondaryAction>
-          </ListItem>
+            </ListItem>
         ));
     }
 
@@ -268,58 +268,58 @@ class Dropzone extends PureComponent {
         return (
             <>
                 <ReactDropzone {...restProps} onDropAccepted={this.handleDropAccepted} onDropRejected={this.handleDropRejected}>
-                  {({ getRootProps, getInputProps, isDragActive }) => {
+                    {({ getRootProps, getInputProps, isDragActive }) => {
                         return !children ? (
                             <div
-                              {...getRootProps()}
-                              className={`
+                                {...getRootProps()}
+                                className={`
                                   ${classes.dropZone}
                                   ${!disableDragActive && isDragActive && classes.dropZoneActive}
                                   ${dropZoneClasses}
                                 `}
-                        >
+                            >
                                 <input {...getInputProps()} capture={capture} multiple={multiple} />
-                          <CloudUploadIcon className={classes.dropzoneIcon} />
+                                <CloudUploadIcon className={classes.dropzoneIcon} />
                                 {!disableDragActive && isDragActive ? (
-                              <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
-                              ) : (
+                                    <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
+                                ) : (
                                     <Typography className={classes.dropzoneTypography}>{dropzoneText}</Typography>
-                              )}
-                          </div>
-                      ) : (
-                          <div
-                          {...getRootProps({
+                                )}
+                            </div>
+                        ) : (
+                            <div
+                                {...getRootProps({
                                     onClick,
                                 })}
-                              className={`
+                                className={`
                                   ${classes.relative}
                                   ${dropZoneClasses || ''}
                                   ${!disableDragActive && isDragActive && classes.dropZoneActive}
                                 `}
-                        >
-                              {!disableDragActive && isDragActive && (
-                                  <div className={classes.dropzoneBounceIcon}>
-                                      <MdiIcon color="secondary" name="arrow-down-thick" size={80} />
-                                      <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
+                            >
+                                {!disableDragActive && isDragActive && (
+                                    <div className={classes.dropzoneBounceIcon}>
+                                        <MdiIcon color="secondary" name="arrow-down-thick" size={80} />
+                                        <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
                                     </div>
-                              )}
+                                )}
                                 <input {...getInputProps()} capture={capture} multiple={multiple} />
-                              {children}
+                                {children}
                             </div>
-                      );
+                        );
                     }}
-              </ReactDropzone>
-            {showPreviews && <List>{this.buildFilesList({ files })}</List>}
-            {this.props.showAlerts && (
+                </ReactDropzone>
+                {showPreviews && <List>{this.buildFilesList({ files })}</List>}
+                {this.props.showAlerts && (
                     <DropzoneSnackBar
                         open={this.state.openSnackbar}
                         autoHideDuration={6000}
                         onClose={this.onCloseSnackbar}
                         variant={this.state.snackbarVariant}
                         message={this.state.snackbarMessage}
-                />
+                    />
                 )}
-          </>
+            </>
         );
     }
 }

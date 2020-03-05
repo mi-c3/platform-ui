@@ -40,9 +40,9 @@ const Avatar = withStyles(styles)(({ initials, src, classes, className, initials
             <MuiAvatar
                 className={`${generateColor(Object.values(colorClassNames), initials)} ${avatarClassName} ${className || ''}`}
                 {...restProps}
-          >
+            >
                 {createInitials(initials, initialsSeparator)}
-          </MuiAvatar>
+            </MuiAvatar>
         );
     }
     return <MuiAvatar src={src} className={`${avatarClassName} ${className || ''}`} {...restProps} />;
@@ -62,7 +62,7 @@ const CirculaAvatar = withStyles(circulaStyles)(({ classes, className, CircularP
             {...CircularProgressStaticProps}
             foreignObjectContent={<Avatar className={`${classes.avatarWithCircular} ${className}`} {...restProps} />}
             className={`${classes.circularProgress} ${CircularProgressStaticProps.className}`}
-      />
+        />
     ) : (
         <Avatar className={className} {...restProps} />
     );

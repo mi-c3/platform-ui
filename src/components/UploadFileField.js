@@ -53,8 +53,8 @@ class UploadFileField extends PureComponent {
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
                         <Cancel className={this.props.classes.iconRoot} />
-                  </IconButton>
-            </InputAdornment>
+                    </IconButton>
+                </InputAdornment>
             )
         );
     }
@@ -76,9 +76,9 @@ class UploadFileField extends PureComponent {
                     <Dropzone disableDragActive accept={this.props.accept} showPreviews={false} showAlerts={false} onChange={this.onChange}>
                         <IconButton aria-label="Upload" onClick={this.onUpload}>
                             <MdiIcon name="upload" />
-                      </IconButton>
-                  </Dropzone>
-            </InputAdornment>
+                        </IconButton>
+                    </Dropzone>
+                </InputAdornment>
             )
         );
     }
@@ -106,10 +106,10 @@ class UploadFileField extends PureComponent {
                 container
                 alignItems="center"
                 className={`${fullWidth && classes.fullWidth} ${margin === 'normal' && classes.marginNormal} `}
-          >
+            >
                 <Typography className={classes.startAdornmentTypography}>
                     <MdiIcon name="earth-box" className={fullWidth && classes.startAdornment} />
-              </Typography>
+                </Typography>
                 <Grid item className={fullWidth && classes.fullWidth}>
                     <FormControl className={fullWidth && classes.fullWidth}>
                         <InputLabel>{label}</InputLabel>
@@ -120,11 +120,11 @@ class UploadFileField extends PureComponent {
                             endAdornment={value ? this.getClearAdornment(disabled) : this.getUploadAdornment(disabled)}
                             fullWidth
                             {...restProps}
-                      />
+                        />
                         <FormHelperText error={error}>{helperText}</FormHelperText>
-                  </FormControl>
-              </Grid>
-          </Grid>
+                    </FormControl>
+                </Grid>
+            </Grid>
         );
     }
 }

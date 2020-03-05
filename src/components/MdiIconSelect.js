@@ -29,9 +29,9 @@ class MdiIconSelect extends PureComponent {
                 <ListItem ContainerComponent="div" dense disableGutters>
                     <ListItemIcon>
                         <MdiIcon name={value} />
-                  </ListItemIcon>
+                    </ListItemIcon>
                     <ListItemText primary={label} />
-              </ListItem>
+                </ListItem>
             ),
         };
     }
@@ -43,7 +43,7 @@ class MdiIconSelect extends PureComponent {
                 optionTemplate={this.optionTemplate}
                 placeholder="Select an icon"
                 {...this.props}
-          />
+            />
         );
     }
 }

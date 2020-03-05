@@ -61,7 +61,7 @@ class GooglePlaceAutocomplete extends PureComponent {
                 suggest={this.suggest}
                 optionTemplate={({ description }) => ({ label: description })}
                 variant="standard"
-          />
+            />
         );
     }
 }

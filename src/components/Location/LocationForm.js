@@ -146,29 +146,29 @@ class LocationForm extends PureComponent {
                 {!disabled && withAutocomplete && this.service && (
                     <GooglePlaceAutocomplete
                         onChangeCoords={this.myCurrentLocation}
-                  placeholder="Search a location..."
+                        placeholder="Search a location..."
                         name="searchingLocation"
                         geocoder={this.geocoder}
                         service={this.service}
                         fullWidth
                         {...GooglePlaceAutocompleteProps}
-                />
+                    />
                 )}
-            <Location
-                  key={mapKey}
+                <Location
+                    key={mapKey}
                     latitude={latitude}
                     longitude={longitude}
-                  onClick={this.onMapClick}
+                    onClick={this.onMapClick}
                     onGoogleApiLoaded={this.onGoogleApiLoaded}
-                  disabled={disabled}
+                    disabled={disabled}
                     MarkerProps={MarkerProps}
                     {...LocationProps}
                 />
-            <Grid container justify="space-between">
+                <Grid container justify="space-between">
                     {showCoords ? (
                         <Grid item>
-                        {latitude && (
-                            <Typography variant="button">
+                            {latitude && (
+                                <Typography variant="button">
                                     Latitude:
                                     {latitude}
                                 </Typography>
@@ -176,23 +176,23 @@ class LocationForm extends PureComponent {
                             {longitude && (
                                 <Typography variant="button">
                                     Longitude:
-                              {longitude}
-                            </Typography>
+                                    {longitude}
+                                </Typography>
                             )}
-                      </Grid>
+                        </Grid>
                     ) : (
                         <Grid item />
                     )}
                     <Grid item>
                         <Button onClick={this.centerMap} variant="text">
                             Center map
-                      </Button>
+                        </Button>
                         <Button disabled={disabled} onClick={this.myLocation} variant="text">
                             My location
-                      </Button>
-              </Grid>
+                        </Button>
+                    </Grid>
                 </Grid>
-          </Grid>
+            </Grid>
         );
     }
 }

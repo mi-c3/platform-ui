@@ -50,8 +50,8 @@ class DateTimePicker extends PureComponent {
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
                         <Cancel className={this.props.classes.clearIcon} />
-                  </IconButton>
-            </InputAdornment>
+                    </IconButton>
+                </InputAdornment>
             )
         );
     }
@@ -75,7 +75,7 @@ class DateTimePicker extends PureComponent {
                     ...(InputProps || {}),
                 }}
                 onChange={this.onChange}
-          />
+            />
         );
     }
 }

@@ -132,18 +132,18 @@ class DateTimePickerRangeModal extends PureComponent {
                         startAdornment: (
                             <InputAdornment position="start">
                                 <MdiIcon name="calendar-blank" />
-                          </InputAdornment>
+                            </InputAdornment>
                         ),
                         endAdornment: (
                             <InputAdornment position="end">
                                 <IconButton aria-label="Clear input" onClick={this.onClear}>
                                     <Cancel />
-                              </IconButton>
-                          </InputAdornment>
+                                </IconButton>
+                            </InputAdornment>
                         ),
                     }}
                     {...TextFieldProps}
-              />
+                />
                 <Dialog open={showModal} onClose={this.toggleModal}>
                     <DialogTitle>Date time range</DialogTitle>
                     <Divider />
@@ -155,7 +155,7 @@ class DateTimePickerRangeModal extends PureComponent {
                             {...PickersFromProps}
                             value={start}
                             onChange={this.onChangeStart}
-                      />
+                        />
                         <DateTimePicker
                             showTodayButton
                             ampm={false}
@@ -163,22 +163,22 @@ class DateTimePickerRangeModal extends PureComponent {
                             {...PickersToProps}
                             value={end}
                             onChange={this.onChangeEnd}
-                      />
-                  </DialogContent>
+                        />
+                    </DialogContent>
                     <Divider />
                     <DialogActions>
                         <Button className={classes.cancelButton} onClick={this.toggleModal} variant="text">
-                        Cancel
+                            Cancel
                         </Button>
                         <Button className={classes.clearButton} onClick={this.onClear} variant="text">
-                        Clear
+                            Clear
                         </Button>
                         <Button onClick={this.onSave} variant="text">
-                        Save
+                            Save
                         </Button>
-                  </DialogActions>
-              </Dialog>
-          </Fragment>
+                    </DialogActions>
+                </Dialog>
+            </Fragment>
         );
     }
 }

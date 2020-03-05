@@ -10,7 +10,7 @@ import Marker from './Marker/Marker';
 
 const Map = ({ center, zoom, children, ...restProps }) => (
     <div style={{ height: '300px', width: '100%' }}>
-    <GoogleMapReact
+        <GoogleMapReact
             bootstrapURLKeys={{ key: 'AIzaSyAGa4L1t68r0Kbsgp4UAUb9_K2mdyF2qGk', libraries: 'places' }}
             defaultCenter={center}
             defaultZoom={zoom}
@@ -19,7 +19,7 @@ const Map = ({ center, zoom, children, ...restProps }) => (
         >
             {children}
         </GoogleMapReact>
-  </div>
+    </div>
 );
 
 Map.propTypes = {
@@ -99,9 +99,9 @@ class Location extends PureComponent {
                 onGoogleApiLoaded={onGoogleApiLoaded}
                 {...restProps}
                 onClick={this.mapClicked}
-          >
+            >
                 {marker}
-          </Map>
+            </Map>
         );
     }
 }

@@ -53,9 +53,9 @@ class Switch extends PureComponent {
                     onChange={this.onChange}
                     control={<MuiSwitch color={color} {...SwitchProps} />}
                     labelPlacement={labelPlacement || 'end'}
-              />
+                />
                 <FormHelperText {...FormHelperTextProps}>{helperText}</FormHelperText>
-          </FormControl>
+            </FormControl>
         );
     }
 }

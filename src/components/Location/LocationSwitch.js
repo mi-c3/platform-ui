@@ -49,7 +49,7 @@ class LocationSwitch extends PureComponent {
             <Grid>
                 <Switch label={label} value={checked} onChange={this.toggleSwitch} {...SwitchProps} />
                 {checked && <LocationForm {...restProps} />}
-          </Grid>
+            </Grid>
         );
     }
 }

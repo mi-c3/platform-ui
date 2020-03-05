@@ -124,10 +124,10 @@ class DataTable extends React.Component {
                 const isSelected = this.isSelected(row[dataKey]);
                 return (
                     <TableRow hover onClick={this.select(row[dataKey])} tabIndex={-1} key={row[dataKey]} selected={isSelected}>
-                    {columnDefinitions.map(({ field, renderValue }, index) => (
+                        {columnDefinitions.map(({ field, renderValue }, index) => (
                             <TableCell key={index}>{renderValue ? renderValue({ value: row[field] }) : row[field]}</TableCell>
                         ))}
-                  </TableRow>
+                    </TableRow>
                 );
             });
     }
@@ -140,30 +140,30 @@ class DataTable extends React.Component {
             <Paper className={classes.root}>
                 <DataTableToolbar
                     numSelected={selected.length}
-                rowCount={data.length}
+                    rowCount={data.length}
                     onSelectAllClick={this.handleSelectAllClick}
                     selectionMode={selectionMode}
-                title={title}
-              />
+                    title={title}
+                />
                 <div className={classes.tableWrapper}>
-                <Table className={classes.table} aria-labelledby="tableTitle">
+                    <Table className={classes.table} aria-labelledby="tableTitle">
                         <DataTableHead
-                    numSelected={selected.length}
+                            numSelected={selected.length}
                             order={order}
-                    orderBy={orderBy}
+                            orderBy={orderBy}
                             onRequestSort={this.sort}
-                    columnDefinitions={columnDefinitions}
-                  />
+                            columnDefinitions={columnDefinitions}
+                        />
                         <TableBody>
                             {this.buildRowsRenderer({ data, order, orderBy, page, pageSize, columnDefinitions, dataKey })}
-                    {emptyRows > 0 && (
+                            {emptyRows > 0 && (
                                 <TableRow style={{ height: 49 * emptyRows }}>
                                     <TableCell colSpan={6} />
-                    </TableRow>
+                                </TableRow>
                             )}
-                  </TableBody>
+                        </TableBody>
                     </Table>
-              </div>
+                </div>
                 <TablePagination
                     component="div"
                     count={data.length}
@@ -174,8 +174,8 @@ class DataTable extends React.Component {
                     rowsPerPage={pageSize}
                     rowsPerPageOptions={[5, 10, 25]}
                     onChangeRowsPerPage={this.handleChangePageSize}
-              />
-          </Paper>
+                />
+            </Paper>
         );
     }
 }

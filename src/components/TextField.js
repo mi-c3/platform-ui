@@ -50,8 +50,8 @@ class TextField extends PureComponent {
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
                         <Cancel className={this.props.classes.clearIcon} />
-                  </IconButton>
-            </InputAdornment>
+                    </IconButton>
+                </InputAdornment>
             )
         );
     }
@@ -63,8 +63,8 @@ class TextField extends PureComponent {
             <InputAdornment position="end">
                 <IconButton aria-label="Clear input" onClick={this.onClear}>
                     <MdiIcon name="alert-circle" color="error" />
-              </IconButton>
-          </InputAdornment>
+                </IconButton>
+            </InputAdornment>
         );
     }
 
@@ -86,7 +86,7 @@ class TextField extends PureComponent {
                     ...InputProps,
                 }}
                 {...restProps}
-          />
+            />
         );
     }
 }

@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment, memo } from 'react';
+import React, { PureComponent, memo } from 'react';
 import PropTypes from 'prop-types';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputBase from '@material-ui/core/InputBase';
@@ -115,7 +115,7 @@ class DateTimePickerRange extends PureComponent {
                         onChange={this.onChangeStart}
                         TextFieldComponent={CustomInput}
                         disabled={disabled}
-                  />
+                    />
                     <DateTimePicker
                         showTodayButton
                         ampm={false}
@@ -126,8 +126,8 @@ class DateTimePickerRange extends PureComponent {
                         onChange={this.onChangeEnd}
                         TextFieldComponent={CustomInput}
                         disabled={disabled}
-                  />
-              </span>
+                    />
+                </span>
             );
         };
     }
@@ -137,28 +137,28 @@ class DateTimePickerRange extends PureComponent {
         const { start, end } = this.state;
         return (
             <>
-            <TextField
-                  multiline
-                  rowsMax={2}
-                  InputProps={{
+                <TextField
+                    multiline
+                    rowsMax={2}
+                    InputProps={{
                         startAdornment: (
-                          <InputAdornment position="start">
-                              <MdiIcon name="calendar-blank" />
+                            <InputAdornment position="start">
+                                <MdiIcon name="calendar-blank" />
                             </InputAdornment>
                         ),
                         endAdornment: (
-                          <InputAdornment position="end">
-                              <IconButton aria-label="Clear input" onClick={this.onClear}>
-                                  <Cancel />
+                            <InputAdornment position="end">
+                                <IconButton aria-label="Clear input" onClick={this.onClear}>
+                                    <Cancel />
                                 </IconButton>
                             </InputAdornment>
                         ),
                         inputComponent: this.buildInputs(PickersToProps, PickersFromProps, start, end, classes, disabled),
                     }}
-                  disabled={disabled}
-                  {...restProps}
+                    disabled={disabled}
+                    {...restProps}
                 />
-          </>
+            </>
         );
     }
 }

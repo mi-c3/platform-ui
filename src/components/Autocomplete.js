@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import equals from 'fast-deep-equal';
 import VirtualList from 'react-tiny-virtual-list';
@@ -231,13 +231,13 @@ class Autocomplete extends PureComponent {
                     open={openSuggestions}
                     ref={this.popperRef}
                     anchorEl={get(this.inputRef, 'current.parentNode.parentNode')}
-            >
-              {({ TransitionProps, placement }) => (
+                >
+                    {({ TransitionProps, placement }) => (
                         <Grow
                             {...TransitionProps}
                             id="menu-list-grow"
                             style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                >
+                        >
                             <Paper square style={{ width: get(this.inputRef, 'current.parentNode.clientWidth') }}>
                                 <VirtualList
                                     width="100%"
@@ -257,19 +257,19 @@ class Autocomplete extends PureComponent {
                                                     onClick={this.buildOnChange(op)}
                                                     value={op}
                                                     component="div"
-                                              >
+                                                >
                                                     {option || label}
-                                              </MenuItem>
-                                          </div>
+                                                </MenuItem>
+                                            </div>
                                         );
                                     }}
                                     {...VirtualListProps}
                                     itemSize={VirtualListProps.itemSize}
-                              />
-                          </Paper>
-                </Grow>
+                                />
+                            </Paper>
+                        </Grow>
                     )}
-            </Popper>
+                </Popper>
             )
         );
     }
@@ -304,7 +304,7 @@ class Autocomplete extends PureComponent {
                         className={classes.chip}
                         onDelete={this.buildRemoveChip(option)}
                         {...ChipProps}
-                  />
+                    />
                 );
             });
             InputProperties.classes = { root: classes.inputRoot, input: classes.inputInput };
@@ -314,7 +314,7 @@ class Autocomplete extends PureComponent {
                 InputProperties.endAdornment = selected && clearable && !disabled && (
                     <IconButton aria-label="Clear input" onClick={this.clearInput}>
                         <Cancel />
-                </IconButton>
+                    </IconButton>
                 );
             }
         }
@@ -375,17 +375,17 @@ class Autocomplete extends PureComponent {
         });
         return (
             <>
-            <TextField
-                  InputProps={InputProperties}
-                  InputLabelProps={{ shrink: true }}
-                  onFocus={this.onFocus}
-                  onBlur={this.onBlur}
-                  disabled={disabled}
-                  autoComplete="off"
-                  {...restProps}
+                <TextField
+                    InputProps={InputProperties}
+                    InputLabelProps={{ shrink: true }}
+                    onFocus={this.onFocus}
+                    onBlur={this.onBlur}
+                    disabled={disabled}
+                    autoComplete="off"
+                    {...restProps}
                 />
-            {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps)}
-          </>
+                {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps)}
+            </>
         );
     }
 }

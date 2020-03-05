@@ -26,11 +26,11 @@ const Button = ({ iconName, children, classes, color, ...restProps }) =>
         <LinkedButton color={color} {...restProps}>
             <MdiIcon size={15} name={iconName} className={classes.icon} />
             {children}
-      </LinkedButton>
+        </LinkedButton>
     ) : (
         <LinkedButton color={color} {...restProps}>
             {children}
-      </LinkedButton>
+        </LinkedButton>
     );
 Button.propTypes = {
     iconName: PropTypes.string,
