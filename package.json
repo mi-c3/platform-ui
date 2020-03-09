@@ -6,7 +6,7 @@
     "build:watch": "webpack --mode production --watch --progress",
     "test": "jest",
     "lint": "eslint --cache --format codeframe --ext mjs,jsx,js src test",
-    "lint:fix": "eslint --fix src --ext mjs,jsx,js src test"
+    "lint:fix": "eslint --fix --cache --format codeframe --ext mjs,jsx,js src test"
   },
   "husky": {
     "hooks": {
