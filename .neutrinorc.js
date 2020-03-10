@@ -1,14 +1,15 @@
-const eslintMiddleware = require('./.eslintrc.middleware.js');
 const jest = require('@neutrinojs/jest');
-const babelMerge = require('babel-merge');
-const reactLib = require('./config/reactLib');
+
+const eslint = require('./config/eslint.middleware');
+const babel = require('./config/babel.middleware');
+const reactLib = require('./config/reactLib.middleware');
 
 module.exports = {
   options: {
     root: __dirname,
   },
   use: [
-    eslintMiddleware(),
+    eslint({ rootDir: __dirname }),
     reactLib({
       externals: {
           '@material-ui/core': 'commonjs2 @material-ui/core',
@@ -19,23 +20,9 @@ module.exports = {
           'react-router-dom': 'commonjs2 react-router-dom',
       }
     }),
-    neutrino => {
-      neutrino.config.module
-        .rule('compile')
-        .use('babel')
-        .tap(options =>
-          babelMerge(
-            {
-              plugins: [
-                [ require.resolve('@babel/plugin-proposal-decorators'), { legacy: true } ],
-                require.resolve('@babel/plugin-proposal-class-properties'),
-                [ require.resolve('@babel/plugin-transform-runtime'), { regenerator: true } ]
-              ],
-            },
-            options,
-          ),
-        )
-    },
-    jest(),
+    babel(),
+    jest({
+      setupFilesAfterEnv: ['<rootDir>/config/jest.setup.js']
+    }),
   ],
 };
