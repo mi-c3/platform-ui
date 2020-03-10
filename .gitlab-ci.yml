@@ -16,9 +16,9 @@ build-and-pack:
   stage: build
   script:
     - yarn
-    - yarn storybook:build
-    - echo "$(date +"%d-%m-%Y %H:%M:%S") - Short commit SHA ${CI_COMMIT_SHA:0:8} - Long commit SHA $CI_COMMIT_SHA - Project name $CI_PROJECT_NAME - Branch name $CI_COMMIT_REF_NAME" >> storybook-static/$CI_PROJECT_NAME-build.info
-    - tar zcf $ARTIFACT-${CI_COMMIT_SHA:0:8}.tgz -C storybook-static/ .
+    - yarn build
+    - echo "$(date +"%d-%m-%Y %H:%M:%S") - Short commit SHA ${CI_COMMIT_SHA:0:8} - Long commit SHA $CI_COMMIT_SHA - Project name $CI_PROJECT_NAME - Branch name $CI_COMMIT_REF_NAME" >> build/$CI_PROJECT_NAME-build.info
+    - tar zcf $ARTIFACT-${CI_COMMIT_SHA:0:8}.tgz -C build/ .
   only: ['development', 'qa', 'master']
   artifacts:
     paths:
@@ -56,11 +56,11 @@ deploy-to-development:
   only:
     - development
   variables:
-    GIT_STRATEGY: none    
+    GIT_STRATEGY: none
   environment:
     name: affectli-development
     url: https://affectli.dev.mi-c3.com
-    
+
 deploy-to-qa:
   tags:
     - qa
@@ -75,4 +75,4 @@ deploy-to-qa:
     GIT_STRATEGY: none
   environment:
     name: affectli-qa
-    url: https://affectli.qa.mi-c3.com    
+    url: https://affectli.qa.mi-c3.com
