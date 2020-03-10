@@ -13,6 +13,9 @@ module.exports = ({ rootDir, ...opts }) => (neutrino) => {
             style: {
                 extract: {
                     plugin: {
+                        loader: {
+                            esModule: true,
+                        },
                         // Override the @neutrinojs/react production behaviour of hashed CSS
                         // filenames, and output to the build root, not an `assets/` subdirectory.
                         filename: '[name].css',

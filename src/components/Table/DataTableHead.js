@@ -7,7 +7,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { styled } from '@material-ui/styles';
-import { bind, memoize } from '../../utils/decorators/decoratorUtils';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 const TableCellStyled = styled(TableCell)({
     textTransform: 'capitalize',

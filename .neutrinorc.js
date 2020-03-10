@@ -21,7 +21,7 @@ module.exports = {
           'react-router-dom': 'commonjs2 react-router-dom',
       }
     }),
-    babel(),
+    babel({ rootDir: __dirname }),
     jest({
       setupFilesAfterEnv: ['<rootDir>/config/jest.setup.js']
     }),

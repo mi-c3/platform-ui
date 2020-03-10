@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
-import { Typography } from '@material-ui/core';
 
-import { DarkMapTheme } from '../../styles/mapTheme';
-import { isDefined } from '../../utils/utils';
-import { bind } from '../../utils/decorators/decoratorUtils';
+import { DarkMapTheme } from 'styles/mapTheme';
+import { Typography } from '@material-ui/core';
+import { isDefined } from 'utils/utils';
+import { bind } from 'utils/decorators/decoratorUtils';
 import Marker from './Marker/Marker';
 
 const Map = ({ center, zoom, children, ...restProps }) => (
@@ -63,7 +63,7 @@ const mapOptions = ({ dark, streetViewControl }) => (maps) => {
     return options;
 };
 
-class Location extends PureComponent {
+export default class Location extends PureComponent {
     static propTypes = {
         latitude: PropTypes.number,
         longitude: PropTypes.number,
@@ -105,5 +105,3 @@ class Location extends PureComponent {
         );
     }
 }
-
-export default Location;

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MuiAvatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/styles';
-import { createInitials, generateColor } from '../utils/avatar/avatar';
-import { isDefined } from '../utils/utils';
-import { colors } from '../styles/theme';
+import { createInitials, generateColor } from 'utils/avatar/avatar';
 import CircularProgressStatic from './CircularProgressStatic';
+import { isDefined } from 'utils/utils';
+import { colors } from 'styles/theme';
 
 const styles = () => ({
     primary: { backgroundColor: '#00a99d !important' },

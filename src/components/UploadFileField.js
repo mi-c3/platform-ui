@@ -3,11 +3,11 @@ import { IconButton, InputAdornment, Grid, Typography, TextField, FormControl, F
 import Cancel from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/styles';
 
-import MdiIcon from './MdiIcon';
-import { bind, memoize } from '../utils/decorators/decoratorUtils';
-import { get } from '../utils/lo/lo';
-import { colors } from '../styles/theme';
+import MdiIcon from 'components/MdiIcon';
 import Dropzone from './Upload/Dropzone';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
+import { get } from 'utils/lo/lo';
+import { colors } from 'styles/theme';
 
 const useStyles = withStyles(() => ({
     fullWidth: {
