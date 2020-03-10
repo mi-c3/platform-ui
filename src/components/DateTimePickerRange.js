@@ -1,4 +1,4 @@
-import React, { PureComponent, memo } from 'react';
+import React, { PureComponent, Fragment, memo } from 'react';
 import PropTypes from 'prop-types';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputBase from '@material-ui/core/InputBase';
@@ -6,10 +6,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Cancel from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/styles';
 
-import { bind, memoize } from '../utils/decorators/decoratorUtils';
 import DateTimePicker from './DateTimePicker';
 import TextField from './TextField';
 import MdiIcon from './MdiIcon';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 const styles = {
     inputWrapper: { flexGrow: 1, display: 'flex', flexWrap: 'wrap' },
@@ -40,7 +40,7 @@ class DateTimePickerRange extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        const { props } = this;
+        const props = this.props;
         const [start, end] = (props.value && props.value.map((date) => new Date(date))) || [null, null];
         if (prevProps.value !== this.props.value) {
             this.setState({ start, end });
@@ -136,7 +136,7 @@ class DateTimePickerRange extends PureComponent {
         const { PickersFromProps, PickersToProps, classes, disabled, ...restProps } = this.props;
         const { start, end } = this.state;
         return (
-            <>
+            <Fragment>
                 <TextField
                     multiline
                     rowsMax={2}
@@ -158,7 +158,7 @@ class DateTimePickerRange extends PureComponent {
                     disabled={disabled}
                     {...restProps}
                 />
-            </>
+            </Fragment>
         );
     }
 }

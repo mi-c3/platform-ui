@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import Location from './Location';
-import Button from '../Button';
-import GPA from './GooglePlaceAutocomplete';
-import { createEvent } from '../../utils/http/event';
-import { get, set } from '../../utils/lo/lo';
-import statefullInput from '../../utils/hoc/statefullInput';
-import Geocode from '../../utils/maps/geocodeUtils';
-import { bind } from '../../utils/decorators/decoratorUtils';
+import Location from 'components/Location/Location';
+import Button from 'components/Button';
+import { createEvent } from 'utils/http/event';
+import { get, set } from 'utils/lo/lo';
+import statefullInput from 'utils/hoc/statefullInput';
+import Geocode from 'utils/maps/geocodeUtils';
+import GPA from 'components/Location/GooglePlaceAutocomplete';
+import { bind } from 'utils/decorators/decoratorUtils';
 
 const GooglePlaceAutocomplete = statefullInput(GPA);
 
@@ -37,13 +37,9 @@ class LocationForm extends PureComponent {
     };
 
     geocoder = null;
-
     service = null;
-
     timer = null;
-
     map = null;
-
     maps = null;
 
     state = {
@@ -66,7 +62,7 @@ class LocationForm extends PureComponent {
     @bind
     onChange(locationInfo) {
         if (this.props.onChange) {
-            const { name } = this.props;
+            const name = this.props.name;
             const value = locationInfo;
             const event = createEvent('change', { target: { name, value } });
             this.props.onChange(event);
@@ -146,7 +142,7 @@ class LocationForm extends PureComponent {
                 {!disabled && withAutocomplete && this.service && (
                     <GooglePlaceAutocomplete
                         onChangeCoords={this.myCurrentLocation}
-                        placeholder="Search a location..."
+                        placeholder={'Search a location...'}
                         name="searchingLocation"
                         geocoder={this.geocoder}
                         service={this.service}
@@ -167,18 +163,8 @@ class LocationForm extends PureComponent {
                 <Grid container justify="space-between">
                     {showCoords ? (
                         <Grid item>
-                            {latitude && (
-                                <Typography variant="button">
-                                    Latitude:
-                                    {latitude}
-                                </Typography>
-                            )}
-                            {longitude && (
-                                <Typography variant="button">
-                                    Longitude:
-                                    {longitude}
-                                </Typography>
-                            )}
+                            {latitude && <Typography variant="button">Latitude: {latitude}</Typography>}
+                            {longitude && <Typography variant="button">Longitude: {longitude}</Typography>}
                         </Grid>
                     ) : (
                         <Grid item />

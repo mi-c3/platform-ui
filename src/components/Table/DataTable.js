@@ -8,11 +8,11 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import DataTableHead from './DataTableHead';
-import DataTableToolbar from './DataTableToolbar';
-import { get } from '../../utils/lo/lo';
-import { getSorting, stableSort } from '../../utils/table/table';
-import { bind, memoize } from '../../utils/decorators/decoratorUtils';
+import DataTableHead from 'components/Table/DataTableHead';
+import DataTableToolbar from 'components/Table/DataTableToolbar';
+import { get } from 'utils/lo/lo';
+import { getSorting, stableSort } from 'utils/table/table';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 const styles = () => ({
     root: {
@@ -56,7 +56,6 @@ class DataTable extends React.Component {
             pageSize,
         };
     }
-
     @bind
     sort(event, field) {
         const { orderBy, order } = this.state;

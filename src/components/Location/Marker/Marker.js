@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MdiIcon from '../../MdiIcon';
+import MdiIcon from 'components/MdiIcon';
 
 const Marker = ({ color, size, className, name }) => <MdiIcon name={name} className={className} color={color} size={size} />;
 

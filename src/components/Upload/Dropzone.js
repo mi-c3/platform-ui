@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import ReactDropzone from 'react-dropzone';
@@ -13,13 +13,14 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 import CancelIcon from '@material-ui/icons/Cancel';
 import IconButton from '@material-ui/core/IconButton';
 
-import MdiIcon from '../MdiIcon';
-import { bind, memoize } from '../../utils/decorators/decoratorUtils';
-import { get } from '../../utils/lo/lo';
-import { isImageType, simplifySize, resizeImage } from '../../utils/file/file';
-import DropzoneSnackBar from './DropzoneSnackBar';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
+import { get } from 'utils/lo/lo';
+import { isImageType, simplifySize, resizeImage } from 'utils/file/file';
+import DropzoneSnackBar from 'components/Upload/DropzoneSnackBar';
+import MdiIcon from 'components/MdiIcon';
+import { DarkTheme } from 'styles/theme';
 
-const styles = ({ palette }) => ({
+const styles = () => ({
     dropZone: {
         position: 'relative',
         width: '100%',
@@ -45,7 +46,7 @@ const styles = ({ palette }) => ({
     dropzoneIcon: {
         width: 101,
         height: 101,
-        color: palette.primary[palette.type],
+        color: DarkTheme.palette.primary[DarkTheme.palette.type],
     },
     dropzoneBounceIcon: {
         width: '100%',
@@ -191,7 +192,7 @@ class Dropzone extends PureComponent {
                 this.props.showAlerts &&
                     this.setState({
                         openSnackbar: true,
-                        snackbarMessage: `File ${fileName} removed`,
+                        snackbarMessage: 'File ' + fileName + ' removed',
                         snackbarVariant: 'info',
                     });
             });
@@ -266,7 +267,7 @@ class Dropzone extends PureComponent {
         } = this.props; // eslint-disable-line max-len
         const { files } = this.state;
         return (
-            <>
+            <Fragment>
                 <ReactDropzone {...restProps} onDropAccepted={this.handleDropAccepted} onDropRejected={this.handleDropRejected}>
                     {({ getRootProps, getInputProps, isDragActive }) => {
                         return !children ? (
@@ -319,7 +320,7 @@ class Dropzone extends PureComponent {
                         message={this.state.snackbarMessage}
                     />
                 )}
-            </>
+            </Fragment>
         );
     }
 }

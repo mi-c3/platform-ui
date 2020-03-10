@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import MuiCircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/styles';
-import { colors } from '../styles/theme';
+import { colors } from 'styles/theme';
 
 const getFillColor = (opacity) => ({ fillColor }) => {
     if (fillColor === 'primary') {

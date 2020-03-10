@@ -2,6 +2,9 @@ import ReactDropzone from 'react-dropzone';
 import ReactMde, { commands as reactMdeCommands } from 'react-mde';
 import * as Showdown from 'showdown';
 
+import { createGenerateClassName, ThemeProvider } from '@material-ui/core/styles';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+
 import { AppBar, Backdrop } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
@@ -107,6 +110,7 @@ import withWidth from '@material-ui/core/withWidth';
 import Zoom from '@material-ui/core/Zoom';
 
 import MomentUtils from '@date-io/moment';
+import { JssProvider } from 'react-jss';
 
 import { DarkTheme, colors } from './styles/theme';
 import Avatar from './components/Avatar';
@@ -139,12 +143,15 @@ import Slider from './components/Slider';
 import UploadFileField from './components/UploadFileField';
 import TextEditor from './components/TextEditor';
 
-import '@mdi/font/css/materialdesignicons.css';
-
 export {
     // utils
     MomentUtils,
     colors,
+    createGenerateClassName,
+    // Providers
+    JssProvider,
+    ThemeProvider,
+    MuiPickersUtilsProvider,
     // Platform overrides Material UI components
     Autocomplete,
     AutocompleteLazy,
