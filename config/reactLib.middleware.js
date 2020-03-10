@@ -1,10 +1,9 @@
 const react = require('@neutrinojs/react');
 const banner = require('@neutrinojs/banner');
 const merge = require('deepmerge');
-const { extname, join, basename } = require('path');
-const { readdirSync } = require('fs');
+const { join } = require('path');
 
-module.exports = (opts = {}) => (neutrino) => {
+module.exports = ({ rootDir, ...opts }) => (neutrino) => {
     const options = merge(
         {
             html: process.env.NODE_ENV === 'development' && {
@@ -24,6 +23,7 @@ module.exports = (opts = {}) => (neutrino) => {
                 production: 'source-map',
             },
             targets: { browsers: 'ie 9' },
+            entry: join(rootDir, 'src/index.js'),
         },
         opts
     );
@@ -34,19 +34,6 @@ module.exports = (opts = {}) => (neutrino) => {
             neutrino.use(react(options));
         },
         () => {
-            const components = join(neutrino.options.source, options.components || 'components');
-
-            Object.keys(neutrino.options.mains).forEach((key) => {
-                delete neutrino.options.mains[key]; // eslint-disable-line no-param-reassign
-            });
-
-            readdirSync(components).forEach((component) => {
-                // eslint-disable-next-line no-param-reassign
-                neutrino.options.mains[basename(component, extname(component))] = {
-                    entry: join(components, component),
-                };
-            });
-
             const pkg = neutrino.options.packageJson || {};
             const hasSourceMap =
                 (pkg.dependencies && 'source-map-support' in pkg.dependencies) ||

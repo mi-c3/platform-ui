@@ -11,6 +11,7 @@ module.exports = {
   use: [
     eslint({ rootDir: __dirname }),
     reactLib({
+      rootDir: __dirname,
       externals: {
           '@material-ui/core': 'commonjs2 @material-ui/core',
           '@material-ui/pickers': 'commonjs2 @material-ui/pickers',
