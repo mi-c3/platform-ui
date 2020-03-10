@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MuiButton from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/styles';
+import MdiIcon from './MdiIcon';
 import Link from './Link';
-
-import MdiIcon from 'components/MdiIcon';
 
 const useStyles = withStyles({
     icon: {

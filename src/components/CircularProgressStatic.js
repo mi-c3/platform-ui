@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-import { getFillColor } from 'utils/styles/stylesUtils';
+import { getFillColor } from '../utils/styles/stylesUtils';
 
 const styles = () => ({
     wrapper: {
@@ -24,7 +24,7 @@ const styles = () => ({
 });
 
 const CircularProgressStatic = withStyles(styles)((props) => {
-    const { size, foreignObjectContent, classes, className, foreignObjectProps, fillColor, borderWidth, ...restProps } = props; //eslint-disable-line no-unused-vars
+    const { size, foreignObjectContent, classes, className, foreignObjectProps, fillColor, borderWidth, ...restProps } = props; // eslint-disable-line no-unused-vars
     const value = props.value >= 0 && props.value <= 100 ? Math.round(props.value) : 0;
     const radius = (props.size - props.borderWidth) / 2;
     const viewBox = `0 0 ${size} ${size}`;

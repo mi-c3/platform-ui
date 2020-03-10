@@ -2,26 +2,37 @@
   "name": "platform-ui",
   "version": "2.0.0",
   "scripts": {
-    "lint": "eslint --max-warnings=0 src",
-    "lint:fix": "eslint --max-warnings=0 src --fix",
-    "build": "export BABEL_ENV=production && rm -rf dist && babel --copy-files src --out-dir dist",
-    "build:watch": "export BABEL_ENV=development && babel --watch --copy-files src --out-dir dist",
-    "test:watch": "craco test",
-    "test": "export CI=true && craco test"
+    "build": "webpack --mode production",
+    "build:watch": "webpack --mode production --watch --progress",
+    "test": "jest",
+    "lint": "eslint --cache --format codeframe --ext mjs,jsx,js src test",
+    "lint:fix": "eslint --fix --cache --format codeframe --ext mjs,jsx,js src test"
   },
   "husky": {
     "hooks": {
       "pre-push": "yarn lint"
     }
   },
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:mi-c3/platform-ui.git"
+    "url": "git@gitlab.mi-c3.com:affectli-project/platform-ui.git"
+  },
+  "peerDependencies": {
+    "@material-ui/core": "^4.9.5",
+    "@material-ui/pickers": "^3.2.10",
+    "@material-ui/styles": "^4.9.0",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "react-router-dom": "5.1.2"
   },
   "dependencies": {
+    "@babel/runtime": "^7.8.7",
     "@date-io/moment": "1.3.13",
-    "@material-ui/icons": "^4.5.1",
+    "@material-ui/core": "^4.9.5",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/pickers": "^3.2.10",
+    "@material-ui/styles": "^4.9.0",
     "@material/slider": "4.0.0",
     "@mdi/font": "2.5.94",
     "fast-deep-equal": "2.0.1",
@@ -29,45 +40,48 @@
     "jss": "^10.0.4",
     "memoize-one": "5.1.1",
     "moment": "2.24.0",
+    "react": "16.12.0",
+    "react-avatar-editor": "^11.0.7",
     "react-chromatic": "0.8.4",
     "react-color": "^2.18.0",
+    "react-dom": "16.12.0",
     "react-dropzone": "9.0.0",
+    "react-jss": "^10.0.4",
     "react-mde": "8.0.1",
+    "react-router-dom": "5.1.2",
+    "react-tiny-virtual-list": "^2.2.0",
     "showdown": "1.9.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.8.3",
-    "@babel/core": "7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-decorators": "7.8.3",
-    "@craco/craco": "^5.6.3",
-    "babel-eslint": "10.0.3",
-    "babel-loader": "8.0.6",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@neutrinojs/airbnb": "^9.1.0",
+    "@neutrinojs/eslint": "^9.1.0",
+    "@neutrinojs/jest": "^9.1.0",
+    "@neutrinojs/react-components": "^9.1.0",
+    "@neutrinojs/standardjs": "^9.1.0",
+    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/react": "^9.4.1",
+    "@testing-library/user-event": "^10.0.0",
+    "babel-merge": "^3.0.0",
     "babel-plugin-module-resolver": "3.2.0",
-    "babel-preset-react-app": "^9.1.1",
-    "core-js": "2.6.11",
-    "eslint": "5.16.0",
+    "eslint": "^6",
     "eslint-config-prettier": "4.3.0",
     "eslint-plugin-import": "2.20.0",
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "7.18.0",
+    "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-react-hooks": "1.7.0",
     "husky": "1.3.1",
+    "jest": "^25",
     "module-resolver": "^1.0.0",
+    "neutrino": "^9.1.0",
     "prettier": "1.19.1",
+    "prop-types": "^15.7.2",
     "random-name": "0.1.2",
-    "react-scripts": "^3.4.0"
-  },
-  "peerDepenedencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-router-dom": "5.1.2",
-    "react-avatar-editor": "^11.0.7",
-    "react-jss": "^10.0.4",
-    "react-tiny-virtual-list": "^2.2.0",
-    "@material-ui/core": "^4.9.2",
-    "@material-ui/pickers": "^3.2.10",
-    "@material-ui/styles": "^4.9.0",
-    "prop-types": "^15.7.2"
+    "webpack": "^4",
+    "webpack-cli": "^3",
+    "webpack-dev-server": "^3"
   }
 }

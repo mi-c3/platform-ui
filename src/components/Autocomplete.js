@@ -1,9 +1,9 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import equals from 'fast-deep-equal';
 import VirtualList from 'react-tiny-virtual-list';
 
-import { bind, memoize, debounce } from 'utils/decorators/decoratorUtils';
+import { bind, memoize, debounce } from '../utils/decorators/decoratorUtils';
 import Cancel from '@material-ui/icons/Cancel';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,10 +13,10 @@ import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
 import { withStyles, styled } from '@material-ui/styles';
 
-import TextField from 'components/TextField';
-import { shallowEquals, arrayfy } from 'utils/utils';
-import { get } from 'utils/lo/lo';
-import { createEvent } from 'utils/http/event';
+import TextField from './TextField';
+import { shallowEquals, arrayfy } from '../utils/utils';
+import { get } from '../utils/lo/lo';
+import { createEvent } from '../utils/http/event';
 
 const styles = () => ({
     inputRoot: {
@@ -89,6 +89,7 @@ class Autocomplete extends PureComponent {
     }
 
     popperRef = React.createRef();
+
     inputRef = React.createRef();
 
     @bind
@@ -186,7 +187,7 @@ class Autocomplete extends PureComponent {
         let value = null;
         const { valueField, options } = this.props;
         if (valueField) {
-            value = (options || []).find((option) => null === get(option, valueField)) || value;
+            value = (options || []).find((option) => get(option, valueField) === null) || value;
         }
         this.onChange(value);
     }
@@ -373,7 +374,7 @@ class Autocomplete extends PureComponent {
             openSuggestions,
         });
         return (
-            <Fragment>
+            <>
                 <TextField
                     InputProps={InputProperties}
                     InputLabelProps={{ shrink: true }}
@@ -384,7 +385,7 @@ class Autocomplete extends PureComponent {
                     {...restProps}
                 />
                 {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps)}
-            </Fragment>
+            </>
         );
     }
 }

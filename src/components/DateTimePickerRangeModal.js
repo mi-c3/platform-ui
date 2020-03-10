@@ -11,7 +11,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Cancel from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/styles';
-import { bind } from 'utils/decorators/decoratorUtils';
+import { bind } from '../utils/decorators/decoratorUtils';
 
 import DateTimePicker from './DateTimePicker';
 import TextField from './TextField';
@@ -38,7 +38,7 @@ class DateTimePickerRangeModal extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        const props = this.props;
+        const { props } = this;
         const [start, end] = (props.value && props.value.map((date) => new Date(date))) || [null, null];
         if (prevProps.value !== this.props.value) {
             this.setState({ start, end });

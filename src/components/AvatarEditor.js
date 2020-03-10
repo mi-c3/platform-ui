@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { Grid, Typography, IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 
-import { bind } from 'utils/decorators/decoratorUtils';
-import { isImageType } from 'utils/file/file';
-import { createEvent } from 'utils/http/event';
+import { bind } from '../utils/decorators/decoratorUtils';
+import { isImageType } from '../utils/file/file';
+import { createEvent } from '../utils/http/event';
 import Slider from './Slider';
 import Avatar from './Avatar';
 import Dropzone from './Upload/Dropzone';
@@ -69,6 +69,7 @@ class AvatarEditor extends PureComponent {
     };
 
     editorRef = React.createRef();
+
     state = defaultState;
 
     @bind

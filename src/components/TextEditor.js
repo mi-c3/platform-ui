@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import ReactMde from 'react-mde';
 import * as Showdown from 'showdown';
 
-import { createEvent } from 'utils/http/event';
-import { bind, memoize } from 'utils/decorators/decoratorUtils';
-import 'styles/react-mde-all.css';
+import { createEvent } from '../utils/http/event';
+import { bind, memoize } from '../utils/decorators/decoratorUtils';
+import '../styles/react-mde-all.css';
 
 let converter = () => {};
 if (Showdown.Converter) {

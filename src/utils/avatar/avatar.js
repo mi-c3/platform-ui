@@ -4,9 +4,8 @@ export const generateColor = memoize((colors, name) => {
     if (name && name[0]) {
         const sum = name.split('').reduce((accumulator, value) => accumulator + value.charCodeAt(0), 0);
         return colors[sum % colors.length];
-    } else {
-        return colors[0];
     }
+    return colors[0];
 });
 
 export const createInitials = memoize((name, extraSighn = '_') => {

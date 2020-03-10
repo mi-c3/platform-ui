@@ -2,8 +2,7 @@ import ReactDropzone from 'react-dropzone';
 import ReactMde, { commands as reactMdeCommands } from 'react-mde';
 import * as Showdown from 'showdown';
 
-import AppBar from '@material-ui/core/AppBar';
-import Backdrop from '@material-ui/core/Backdrop';
+import { AppBar, Backdrop } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
@@ -109,37 +108,37 @@ import Zoom from '@material-ui/core/Zoom';
 
 import MomentUtils from '@date-io/moment';
 
-import { DarkTheme } from 'styles/theme';
-import Avatar from 'components/Avatar';
-import AvatarEditor from 'components/AvatarEditor';
-import Autocomplete from 'components/Autocomplete';
-import AutocompleteLazy from 'components/AutocompleteLazy';
-import Button from 'components/Button';
-import CircularProgress from 'components/CircularProgress';
-import CircularProgressStatic from 'components/CircularProgressStatic';
-import Checkbox from 'components/Checkbox';
-import ColorPicker from 'components/ColorPicker';
-import MdiIcon from 'components/MdiIcon';
-import Radio from 'components/Radio';
-import Switch from 'components/Switch';
-import TextField from 'components/TextField';
-import MdiIconSelect from 'components/MdiIconSelect';
-import DataTable from 'components/Table/DataTable';
-import Link from 'components/Link';
-import DateTimePickerRange from 'components/DateTimePickerRange';
-import DateTimePickerRangeModal from 'components/DateTimePickerRangeModal';
-import DateTimePicker from 'components/DateTimePicker';
-import DatePicker from 'components/DatePicker';
-import TimePicker from 'components/TimePicker';
-import Dropzone from 'components/Upload/Dropzone';
-import DropzoneDialog from 'components/Upload/DropzoneDialog';
-import Location from 'components/Location/Location';
-import LocationForm from 'components/Location/LocationForm';
-import LocationSwitch from 'components/Location/LocationSwitch';
-import Slider from 'components/Slider';
-import UploadFileField from 'components/UploadFileField';
-import TextEditor from 'components/TextEditor';
-import { colors } from 'styles/theme';
+import { DarkTheme, colors } from './styles/theme';
+import Avatar from './components/Avatar';
+import AvatarEditor from './components/AvatarEditor';
+import Autocomplete from './components/Autocomplete';
+import AutocompleteLazy from './components/AutocompleteLazy';
+import Button from './components/Button';
+import CircularProgress from './components/CircularProgress';
+import CircularProgressStatic from './components/CircularProgressStatic';
+import Checkbox from './components/Checkbox';
+import ColorPicker from './components/ColorPicker';
+import MdiIcon from './components/MdiIcon';
+import Radio from './components/Radio';
+import Switch from './components/Switch';
+import TextField from './components/TextField';
+import MdiIconSelect from './components/MdiIconSelect';
+import DataTable from './components/Table/DataTable';
+import Link from './components/Link';
+import DateTimePickerRange from './components/DateTimePickerRange';
+import DateTimePickerRangeModal from './components/DateTimePickerRangeModal';
+import DateTimePicker from './components/DateTimePicker';
+import DatePicker from './components/DatePicker';
+import TimePicker from './components/TimePicker';
+import Dropzone from './components/Upload/Dropzone';
+import DropzoneDialog from './components/Upload/DropzoneDialog';
+import Location from './components/Location/Location';
+import LocationForm from './components/Location/LocationForm';
+import LocationSwitch from './components/Location/LocationSwitch';
+import Slider from './components/Slider';
+import UploadFileField from './components/UploadFileField';
+import TextEditor from './components/TextEditor';
+
 import '@mdi/font/css/materialdesignicons.css';
 
 export {
@@ -162,7 +161,7 @@ export {
     Switch,
     TextField,
     UploadFileField,
-    //3dd library
+    // 3dd library
     AvatarEditor,
     ColorPicker,
     DatePicker,

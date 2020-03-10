@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
-import { createEvent } from 'utils/http/event';
-import { bind } from 'utils/decorators/decoratorUtils';
-import { getFillColor } from 'utils/styles/stylesUtils';
+import { createEvent } from '../utils/http/event';
+import { bind } from '../utils/decorators/decoratorUtils';
+import { getFillColor } from '../utils/styles/stylesUtils';
 
 import { MDCSlider } from '@material/slider';
-import 'styles/materialComponentsWeb.min.css';
+import '../styles/materialComponentsWeb.min.css';
 
 class Slider extends PureComponent {
     static propTypes = {

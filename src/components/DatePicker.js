@@ -5,9 +5,9 @@ import { IconButton, InputAdornment } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/styles';
 
-import { createEvent } from 'utils/http/event';
-import { bind, memoize } from 'utils/decorators/decoratorUtils';
-import { colors } from 'styles/theme';
+import { createEvent } from '../utils/http/event';
+import { bind, memoize } from '../utils/decorators/decoratorUtils';
+import { colors } from '../styles/theme';
 
 const useStyles = withStyles(() => ({
     clearIcon: {

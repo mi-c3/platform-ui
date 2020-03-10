@@ -4,11 +4,11 @@ import { TextField as MuiTextField, IconButton, Input, InputAdornment } from '@m
 import Cancel from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/styles';
 
-import MdiIcon from 'components/MdiIcon';
-import { bind, memoize } from 'utils/decorators/decoratorUtils';
-import { createEvent } from 'utils/http/event';
-import { isDefined } from 'utils/utils';
-import { colors } from 'styles/theme';
+import MdiIcon from './MdiIcon';
+import { bind, memoize } from '../utils/decorators/decoratorUtils';
+import { createEvent } from '../utils/http/event';
+import { isDefined } from '../utils/utils';
+import { colors } from '../styles/theme';
 
 // eslint-disable-next-line no-unused-vars
 const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};

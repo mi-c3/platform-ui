@@ -4,8 +4,8 @@ import MuiSwitch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import { createEvent } from 'utils/http/event';
-import { bind } from 'utils/decorators/decoratorUtils';
+import { createEvent } from '../utils/http/event';
+import { bind } from '../utils/decorators/decoratorUtils';
 
 class Switch extends PureComponent {
     static propTypes = {
