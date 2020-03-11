@@ -7,7 +7,7 @@ import Location from 'components/Location/Location';
 import Button from 'components/Button';
 import { createEvent } from 'utils/http/event';
 import { get, set } from 'utils/lo/lo';
-import statefullInput from 'storybook/utils/hoc/statefullInput';
+import statefullInput from 'utils/hoc/statefullInput';
 import Geocode from 'utils/maps/geocodeUtils';
 import GPA from 'components/Location/GooglePlaceAutocomplete';
 import { bind } from 'utils/decorators/decoratorUtils';

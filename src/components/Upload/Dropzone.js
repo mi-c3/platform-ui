@@ -18,8 +18,9 @@ import { get } from 'utils/lo/lo';
 import { isImageType, simplifySize, resizeImage } from 'utils/file/file';
 import DropzoneSnackBar from 'components/Upload/DropzoneSnackBar';
 import MdiIcon from 'components/MdiIcon';
+import { DarkTheme } from 'styles/theme';
 
-const styles = ({ palette }) => ({
+const styles = () => ({
     dropZone: {
         position: 'relative',
         width: '100%',
@@ -45,7 +46,7 @@ const styles = ({ palette }) => ({
     dropzoneIcon: {
         width: 101,
         height: 101,
-        color: palette.primary[palette.type],
+        color: DarkTheme.palette.primary[DarkTheme.palette.type],
     },
     dropzoneBounceIcon: {
         width: '100%',

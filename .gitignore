@@ -3,9 +3,10 @@ node_modules
 
 # storybook build
 storybook-static
+.eslintcache
 
 #build
-dist
+build
 
 #logs
 yarn-error.log

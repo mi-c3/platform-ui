@@ -1,9 +1,9 @@
-import { getPriorityColor } from 'utils/priority/priorityUtils';
-import { colors } from 'styles/theme';
+import { getPriorityColor } from '../priority/priorityUtils';
+import { colors } from '../../styles/theme';
 
 export const getFillColor = (opacity) => ({ fillColor, priority, disabled }) => {
     if (disabled) {
-        return colors.priorityColors['disabled'];
+        return colors.priorityColors.disabled;
     }
     if (priority) {
         return opacity > -1

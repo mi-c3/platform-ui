@@ -1,13 +1,13 @@
 export const isImageType = (type) => type && type.startsWith('image/');
 
 export const simplifySize = (filesize) => {
-    var size = '';
+    let size = '';
     if (filesize >= 1000000) {
-        size = filesize / 1000000 + ' megabytes';
+        size = `${filesize / 1000000} megabytes`;
     } else if (filesize >= 1000) {
-        size = filesize / 1000 + ' kilobytes';
+        size = `${filesize / 1000} kilobytes`;
     } else {
-        size = filesize + ' bytes';
+        size = `${filesize} bytes`;
     }
     return size;
 };
