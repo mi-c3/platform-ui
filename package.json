@@ -13,7 +13,7 @@
       "pre-push": "yarn lint"
     }
   },
-  "main": "src/index.js",
+  "main": "build/index.js",
   "module": "build/index.js",
   "files": [
     "build/index.css",
