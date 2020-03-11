@@ -11,16 +11,17 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import { lighten } from '@material-ui/core/styles/colorManipulator';
+import { DarkTheme } from 'styles/theme';
 
-const toolbarStyles = (theme) => {
+const toolbarStyles = () => {
     let highlight = {
-        color: theme.palette.text.primary,
-        backgroundColor: theme.palette.secondary.dark,
+        color: DarkTheme.palette.text.primary,
+        backgroundColor: DarkTheme.palette.secondary.dark,
     };
-    if (theme.palette.type === 'light') {
+    if (DarkTheme.palette.type === 'light') {
         highlight = {
-            color: theme.palette.secondary.main,
-            backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+            color: DarkTheme.palette.secondary.main,
+            backgroundColor: lighten(DarkTheme.palette.secondary.light, 0.85),
         };
     }
     return {
@@ -32,7 +33,7 @@ const toolbarStyles = (theme) => {
             flex: '1 1 100%',
         },
         actions: {
-            color: theme.palette.text.secondary,
+            color: DarkTheme.palette.text.secondary,
             display: 'flex',
         },
         title: {

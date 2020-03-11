@@ -9,12 +9,13 @@ import { materialColorPalette } from 'styles/palettes';
 import { withStyles } from '@material-ui/styles';
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
+import { DarkTheme } from 'styles/theme';
 
-const styles = (theme) => ({
+const styles = () => ({
     swatches: {
         width: '243px !important',
         '& > div div:nth-child(2)': {
-            background: `${theme.palette.background.default} !important`,
+            background: `${DarkTheme.palette.background.default} !important`,
         },
         '& > div div:nth-child(1) > div > span div:nth-child(1)': {
             fill: 'white !important',
