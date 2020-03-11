@@ -58,4 +58,8 @@ module.exports = ({ rootDir, ...opts }) => (neutrino) => {
                 .umdNamedDefine(true);
         }
     );
+
+    if (process.env.HOT === 'true') {
+        neutrino.config.plugin('hot').use(require.resolve('webpack/lib/HotModuleReplacementPlugin'));
+    }
 };

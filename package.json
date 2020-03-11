@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "scripts": {
     "build": "webpack --mode production",
-    "build:watch": "webpack --mode production --watch --progress",
+    "build:watch": "HOT=true webpack --mode production --watch --progress",
     "test": "jest",
     "lint": "eslint --cache --format codeframe --ext mjs,jsx,js src test",
     "lint:fix": "eslint --fix --cache --format codeframe --ext mjs,jsx,js src test"
