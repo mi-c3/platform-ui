@@ -100,11 +100,12 @@
         position: absolute;
         left: 0;
         top: 30px;
-        background-color: white;
         border: 1px solid #c8ccd0;
         padding: 5px;
         z-index: 2;
-        transform: translateX(-9px); }
+        transform: translateX(-9px);
+        background-color: #2762a5;
+      }
         .mde-header ul.mde-header-group li.mde-header-item ul.react-mde-dropdown li {
           margin: 0;
           white-space: nowrap;
@@ -123,7 +124,7 @@
               border: 0;
               text-align: left; }
               .mde-header ul.mde-header-group li.mde-header-item ul.react-mde-dropdown li button p:hover {
-                color: #4078c0; }
+                color: #c8ccd0; }
               .mde-header ul.mde-header-group li.mde-header-item ul.react-mde-dropdown li button p.header-1 {
                 font-size: 20px; }
               .mde-header ul.mde-header-group li.mde-header-item ul.react-mde-dropdown li button p.header-2 {
@@ -154,7 +155,9 @@
           transform: translateX(50%); }
 
 .mde-textarea-wrapper {
-  position: relative; }
+  position: relative;
+  background-color: #2C303A;
+}
   .mde-textarea-wrapper textarea.mde-text {
     width: 100%;
     border: 0;

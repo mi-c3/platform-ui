@@ -2,6 +2,13 @@ import React, { PureComponent } from 'react';
 import MuiSlider from '@material-ui/core/Slider';
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
+import { withStyles } from '@material-ui/styles';
+
+const styles = () => ({
+    root: {
+        color: ({ fillColor }) => fillColor || '#4BB9D9',
+    },
+});
 
 class Slider extends PureComponent {
     static propTypes = {
@@ -22,8 +29,9 @@ class Slider extends PureComponent {
     }
 
     render() {
-        return <MuiSlider {...this.props} onChange={this.onChange} />;
+        const { fillColor, ...restProps } = this.props; // eslint-disable-line no-unused-vars
+        return <MuiSlider {...restProps} onChange={this.onChange} />;
     }
 }
 
-export default Slider;
+export default withStyles(styles)(Slider);
