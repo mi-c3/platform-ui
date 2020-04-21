@@ -1,21 +1,11 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import ReactMde from 'react-mde';
-import * as Showdown from 'showdown';
+import { markdown } from 'utils/utils';
 
 import { createEvent } from 'utils/http/event';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import 'styles/react-mde-all.css';
-
-let converter = () => {};
-if (Showdown.Converter) {
-    converter = new Showdown.Converter({
-        tables: true,
-        simplifiedAutoLink: true,
-        strikethrough: true,
-        tasklists: true,
-    });
-}
 
 const Editor = styled(ReactMde)`
     ${({ disabled }) =>
@@ -74,8 +64,8 @@ class TextEditor extends PureComponent {
 
     @bind
     @memoize()
-    buildMarkDown(markdown) {
-        return Promise.resolve(converter.makeHtml(markdown));
+    buildMarkDown(text) {
+        return Promise.resolve(markdown(text));
     }
 
     render() {

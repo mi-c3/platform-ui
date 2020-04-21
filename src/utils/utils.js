@@ -1,4 +1,5 @@
 import { get } from './lo/lo';
+import marked from 'marked';
 
 const isObject = (value) => value && typeof value === 'object' && !Array.isArray(value);
 
@@ -41,4 +42,6 @@ const arrayfy = (value) => {
     return Array.isArray(value) ? value : [value];
 };
 
-export { isObject, shallowEquals, debounce, arrayfy, isDefined };
+const markdown = (text) => marked(text);
+
+export { isObject, shallowEquals, debounce, arrayfy, isDefined, markdown };
