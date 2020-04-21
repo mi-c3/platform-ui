@@ -1,6 +1,5 @@
 import ReactDropzone from 'react-dropzone';
 import ReactMde, { commands as reactMdeCommands } from 'react-mde';
-import * as Showdown from 'showdown';
 
 import { createGenerateClassName, ThemeProvider } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -112,6 +111,7 @@ import Zoom from '@material-ui/core/Zoom';
 import MomentUtils from '@date-io/moment';
 import { JssProvider } from 'react-jss';
 
+import { markdown } from 'utils/utils';
 import { DarkTheme, colors } from './styles/theme';
 import Avatar from './components/Avatar';
 import AvatarEditor from './components/AvatarEditor';
@@ -145,6 +145,7 @@ import TextEditor from './components/TextEditor';
 
 export {
     // utils
+    markdown,
     MomentUtils,
     colors,
     createGenerateClassName,
@@ -186,7 +187,6 @@ export {
     TextEditor,
     ReactMde,
     reactMdeCommands,
-    Showdown,
     // Styles
     DarkTheme,
     // Core Components
