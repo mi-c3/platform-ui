@@ -78,6 +78,7 @@ class Autocomplete extends PureComponent {
             suggestions: this.filterValue(options, value, valueId, valueField),
             openSuggestions: false,
             query: '',
+            preSelectedValue: 0,
         };
     }
 
@@ -143,7 +144,7 @@ class Autocomplete extends PureComponent {
         const { onChange, name, value: currentValue, multiple, valueField } = this.props;
         const optionValue = valueField ? get(option, valueField, null) : option;
         const value = !multiple ? optionValue : [...(arrayfy(currentValue) || []), optionValue];
-        this.setState({ query: '' }, () => onChange && onChange(createEvent('change', { target: { name, value } })));
+        this.setState({ query: '', preSelectedValue: 0 }, () => onChange && onChange(createEvent('change', { target: { name, value } })));
     }
 
     @bind
@@ -152,7 +153,7 @@ class Autocomplete extends PureComponent {
             event.persist();
         }
         const query = get(event, 'target.value');
-        this.setState({ query, openSuggestions: true }, () => this.suggest(event));
+        this.setState({ query, openSuggestions: true, preSelectedValue: 0 }, () => this.suggest(event));
     }
 
     @bind
@@ -163,7 +164,7 @@ class Autocomplete extends PureComponent {
 
     @bind
     onBlur() {
-        this.setState({ query: '', openSuggestions: false });
+        this.setState({ query: '', openSuggestions: false, preSelectedValue: 0 });
     }
 
     /**
@@ -273,6 +274,23 @@ class Autocomplete extends PureComponent {
         );
     }
 
+    @bind
+    onKeyUp(e) {
+        const { value, multiple, valueField, options } = this.props;
+        if (e.type === 'keyup' && e.key === 'Backspace' && multiple && value && value.length) {
+            const { query, preSelectedValue } = this.state;
+            if (query === '') {
+                let nextPreSelectedValue = get(value, 'length', 0);
+                if (preSelectedValue) {
+                    const selected = this.getSelectedOptions(value, valueField, options);
+                    nextPreSelectedValue = 0;
+                    this.buildRemoveChip(selected[preSelectedValue - 1])();
+                }
+                this.setState({ preSelectedValue: nextPreSelectedValue });
+            }
+        }
+    }
+
     /**
      * Builds the input component.
      */
@@ -286,13 +304,18 @@ class Autocomplete extends PureComponent {
             autoComplete: 'off',
             onChange: this.onSearching,
             value: openSuggestions ? query : label,
+            onKeyUp: this.onKeyUp,
         };
         if (multiple) {
             InputProperties.startAdornment = (arrayfy(selected) || []).map((option, index) => {
                 const { ChipProps: props, startAdornment, label } = this.optionTemplate(option);
+                const { preSelectedValue } = this.state;
                 const ChipProps = { ...(props || {}) };
                 if (startAdornment && !ChipProps.avatar) {
                     ChipProps.icon = <ChipIconStyle>{startAdornment}</ChipIconStyle>;
+                }
+                if (preSelectedValue && index === preSelectedValue - 1) {
+                    ChipProps.color = 'secondary';
                 }
                 return (
                     <Chip
