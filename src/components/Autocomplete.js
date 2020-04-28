@@ -148,18 +148,25 @@ class Autocomplete extends PureComponent {
     }
 
     @bind
-    onSearching(event) {
+    onSearching(event, openSuggestions = true) {
         if (event.persist) {
             event.persist();
         }
         const query = get(event, 'target.value');
-        this.setState({ query, openSuggestions: true, preSelectedValue: 0 }, () => this.suggest(event));
+        this.setState({ query, openSuggestions, preSelectedValue: 0 }, () => this.suggest(event));
     }
 
     @bind
     onFocus(/* event */) {
-        const { query } = this.state;
-        this.onSearching(createEvent('focus', { target: { name: this.props.name, value: query } }));
+        let { query } = this.state;
+        const { multiple } = this.props;
+        if (!multiple && !query) {
+            const { value, valueField, options } = this.props;
+            const selected = this.getSelectedOptions(value, valueField, options);
+            const { label = '' } = this.optionTemplate(selected);
+            query = label;
+        }
+        this.onSearching(createEvent('focus', { target: { name: this.props.name, value: query } }), !query);
     }
 
     @bind
@@ -206,6 +213,23 @@ class Autocomplete extends PureComponent {
                 () => onChange && onChange(createEvent('change', { target: { name: this.props.name, value: vals } }))
             );
         };
+    }
+
+    @bind
+    onKeyUp(e) {
+        const { value, multiple, valueField, options } = this.props;
+        if (e.type === 'keyup' && e.key === 'Backspace' && multiple && value && value.length) {
+            const { query, preSelectedValue } = this.state;
+            if (query === '') {
+                let nextPreSelectedValue = get(value, 'length', 0);
+                if (preSelectedValue) {
+                    const selected = this.getSelectedOptions(value, valueField, options);
+                    nextPreSelectedValue = 0;
+                    this.buildRemoveChip(selected[preSelectedValue - 1])();
+                }
+                this.setState({ preSelectedValue: nextPreSelectedValue });
+            }
+        }
     }
 
     /**
@@ -272,23 +296,6 @@ class Autocomplete extends PureComponent {
                 </Popper>
             )
         );
-    }
-
-    @bind
-    onKeyUp(e) {
-        const { value, multiple, valueField, options } = this.props;
-        if (e.type === 'keyup' && e.key === 'Backspace' && multiple && value && value.length) {
-            const { query, preSelectedValue } = this.state;
-            if (query === '') {
-                let nextPreSelectedValue = get(value, 'length', 0);
-                if (preSelectedValue) {
-                    const selected = this.getSelectedOptions(value, valueField, options);
-                    nextPreSelectedValue = 0;
-                    this.buildRemoveChip(selected[preSelectedValue - 1])();
-                }
-                this.setState({ preSelectedValue: nextPreSelectedValue });
-            }
-        }
     }
 
     /**
