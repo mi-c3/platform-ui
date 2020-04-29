@@ -79,6 +79,7 @@ class Autocomplete extends PureComponent {
             openSuggestions: false,
             query: '',
             preSelectedValue: 0,
+            selectedOption: -1,
         };
     }
 
@@ -140,11 +141,11 @@ class Autocomplete extends PureComponent {
     }
 
     @bind
-    onChange(option) {
+    onChange(option, query = '') {
         const { onChange, name, value: currentValue, multiple, valueField } = this.props;
         const optionValue = valueField ? get(option, valueField, null) : option;
         const value = !multiple ? optionValue : [...(arrayfy(currentValue) || []), optionValue];
-        this.setState({ query: '', preSelectedValue: 0 }, () => onChange && onChange(createEvent('change', { target: { name, value } })));
+        this.setState({ query, preSelectedValue: 0 }, () => onChange && onChange(createEvent('change', { target: { name, value } })));
     }
 
     @bind
@@ -218,6 +219,7 @@ class Autocomplete extends PureComponent {
     @bind
     onKeyUp(e) {
         const { value, multiple, valueField, options } = this.props;
+        const { suggestions } = this.state;
         if (e.type === 'keyup' && e.key === 'Backspace' && multiple && value && value.length) {
             const { query, preSelectedValue } = this.state;
             if (query === '') {
@@ -230,6 +232,41 @@ class Autocomplete extends PureComponent {
                 this.setState({ preSelectedValue: nextPreSelectedValue });
             }
         }
+        if (e.type === 'keyup' && e.key === 'ArrowDown') {
+            this.setState(({ selectedOption, openSuggestions }) => {
+                let nextSelectedOption = selectedOption + 1;
+                if (get(suggestions, 'length') === selectedOption) {
+                    nextSelectedOption = 0;
+                }
+                const nextState = { selectedOption: nextSelectedOption };
+                if (!openSuggestions) {
+                    nextState.openSuggestions = true;
+                    nextState.selectedOption = 0;
+                }
+
+                return nextState;
+            });
+        }
+        if (e.type === 'keyup' && e.key === 'ArrowUp') {
+            this.setState(({ selectedOption, openSuggestions }) => {
+                let nextSelectedOption = selectedOption - 1;
+                if (nextSelectedOption === -1) {
+                    nextSelectedOption = get(suggestions, 'length') - 1;
+                }
+                const nextState = { selectedOption: nextSelectedOption };
+                if (!openSuggestions) {
+                    nextState.openSuggestions = true;
+                    nextState.selectedOption = get(suggestions, 'length') - 1;
+                }
+                return nextState;
+            });
+        }
+        if (e.type === 'keyup' && e.key === 'Enter') {
+            const { selectedOption, suggestions, query } = this.state;
+            if (options[selectedOption]) {
+                this.setState({ openSuggestions: false, selectedOption: -1 }, () => this.onChange(suggestions[selectedOption], query));
+            }
+        }
     }
 
     /**
@@ -237,7 +274,7 @@ class Autocomplete extends PureComponent {
      */
     @bind
     @memoize(equals)
-    buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps) {
+    buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps, selectedOption) {
         const maxPopperHeight = 224;
         const { itemSize } = VirtualListProps;
         const maxSuggetionsHeight = suggestions.length * (itemSize + 4);
@@ -245,6 +282,8 @@ class Autocomplete extends PureComponent {
         if (popperHeight < maxPopperHeight) {
             this.popperRef.current && this.popperRef.current.popper && this.popperRef.current.popper.update();
         }
+        const withOptionStyle = { margin: '0 !important', padding: '0 !important' };
+        const withoutOptionStyle = { padding: '15px', fontSize: '16px', margin: '0 !important' };
         return (
             suggestions &&
             suggestions.length > 0 && (
@@ -267,20 +306,19 @@ class Autocomplete extends PureComponent {
                                     width="100%"
                                     height={popperHeight}
                                     itemCount={suggestions.length}
+                                    scrollToAlignment={'auto'}
+                                    scrollToIndex={selectedOption}
                                     renderItem={({ index, style }) => {
                                         const op = suggestions[index];
                                         const { label, option } = this.optionTemplate(op);
                                         return (
                                             <div key={index} style={style}>
                                                 <MenuItem
-                                                    style={
-                                                        option
-                                                            ? { margin: '0 !important', padding: '0 !important' }
-                                                            : { padding: '15px', fontSize: '16px', margin: '0 !important' }
-                                                    }
+                                                    style={option ? withOptionStyle : withoutOptionStyle}
                                                     onClick={this.buildOnChange(op)}
                                                     value={op}
                                                     component="div"
+                                                    selected={selectedOption === index}
                                                 >
                                                     {option || label}
                                                 </MenuItem>
@@ -388,7 +426,7 @@ class Autocomplete extends PureComponent {
             PopperProps,
             ...restProps
         } = this.props;
-        const { suggestions, openSuggestions, query } = this.state;
+        const { suggestions, openSuggestions, query, selectedOption } = this.state;
 
         const selected = this.getSelectedOptions(value, valueField, options);
 
@@ -413,7 +451,7 @@ class Autocomplete extends PureComponent {
                     autoComplete="off"
                     {...restProps}
                 />
-                {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps)}
+                {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps, selectedOption)}
             </Fragment>
         );
     }
