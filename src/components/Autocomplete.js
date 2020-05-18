@@ -11,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles, styled } from '@material-ui/styles';
 
 import TextField from 'components/TextField';
@@ -59,6 +60,7 @@ class Autocomplete extends PureComponent {
         valueId: PropTypes.string,
         VirtualListProps: PropTypes.object,
         PopperProps: PropTypes.object,
+        isLoading: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -341,7 +343,7 @@ class Autocomplete extends PureComponent {
      */
     @bind
     @memoize(shallowEquals)
-    buildInputProps({ selected, clearable, disabled, multiple, query, InputProps, classes, openSuggestions }) {
+    buildInputProps({ selected, clearable, disabled, multiple, query, InputProps, classes, openSuggestions, isLoading }) {
         const { startAdornment, label = '' } = !multiple ? this.optionTemplate(selected) : {};
         const InputProperties = {
             ...InputProps,
@@ -386,6 +388,10 @@ class Autocomplete extends PureComponent {
             }
         }
 
+        if (isLoading) {
+            InputProperties.endAdornment = <CircularProgress size={12} />;
+        }
+
         return InputProperties;
     }
 
@@ -424,6 +430,7 @@ class Autocomplete extends PureComponent {
             valueField,
             options,
             PopperProps,
+            isLoading,
             ...restProps
         } = this.props;
         const { suggestions, openSuggestions, query, selectedOption } = this.state;
@@ -439,6 +446,7 @@ class Autocomplete extends PureComponent {
             InputProps,
             classes,
             openSuggestions,
+            isLoading,
         });
         return (
             <Fragment>
