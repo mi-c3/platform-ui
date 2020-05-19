@@ -146,7 +146,7 @@ class DateTimePickerRange extends PureComponent {
                                 <MdiIcon name="calendar-blank" />
                             </InputAdornment>
                         ),
-                        endAdornment: (
+                        endAdornment: !disabled && (
                             <InputAdornment position="end">
                                 <IconButton aria-label="Clear input" onClick={this.onClear}>
                                     <Cancel />

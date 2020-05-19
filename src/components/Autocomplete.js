@@ -372,6 +372,7 @@ class Autocomplete extends PureComponent {
                         tabIndex={-1}
                         className={classes.chip}
                         onDelete={this.buildRemoveChip(option)}
+                        disabled={disabled}
                         {...ChipProps}
                     />
                 );
