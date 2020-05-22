@@ -96,6 +96,7 @@ class ColorPicker extends PureComponent {
                     }
                     labelPlacement={labelPlacement || 'end'}
                     className={classes.controlLabel}
+                    disabled={disabled}
                 />
                 {!disabled && displayColorPicker && (
                     <ClickAwayListener onClickAway={this.handleSwatches}>

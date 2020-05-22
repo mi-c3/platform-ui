@@ -16,8 +16,8 @@ const styles = {
     customInput: { flexGrow: 1, marginBottom: '-10px' },
 };
 
-const CustomInput = withStyles(styles)(({ value, onClick, placeholder, classes }) => (
-    <InputBase className={classes.customInput} placeholder={placeholder} value={value} onClick={onClick} />
+const CustomInput = withStyles(styles)(({ value, onClick, placeholder, classes, disabled }) => (
+    <InputBase disabled={disabled} className={classes.customInput} placeholder={placeholder} value={value} onClick={onClick} />
 ));
 
 CustomInput.propTypes = {
