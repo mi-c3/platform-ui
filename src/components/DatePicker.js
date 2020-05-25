@@ -31,8 +31,8 @@ class DatePicker extends PureComponent {
 
     @bind
     onChange(value) {
-        const { onChange, name } = this.props;
-        onChange && onChange(createEvent('change', { target: { name, value } }));
+        const { onChange, name, type } = this.props;
+        onChange && onChange(createEvent('change', { target: { name, value, type } }));
     }
 
     @bind
