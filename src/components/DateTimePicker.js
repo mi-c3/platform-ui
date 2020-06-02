@@ -62,12 +62,12 @@ class DateTimePicker extends PureComponent {
          * TODO: open a bug in the material-ui-pickers project.
          */
         // eslint-disable-next-line no-unused-vars
-        const { showTodayButton, onClick, disabled, value, clearable, InputProps, classes, ...dateTimePickerProps } = this.props;
+        const { showTodayButton, onClick, disabled, value, clearable, InputProps, classes, type, ...dateTimePickerProps } = this.props;
         return (
             <DTPMui
                 {...dateTimePickerProps}
                 disabled={disabled}
-                value={value}
+                value={value || null}
                 clearable={clearable}
                 showTodayButton={!clearable && showTodayButton}
                 InputProps={{
