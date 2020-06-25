@@ -1,5 +1,4 @@
 import ReactDropzone from 'react-dropzone';
-import ReactMde, { commands as reactMdeCommands } from 'react-mde';
 
 import { createGenerateClassName, ThemeProvider } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -108,9 +107,6 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import withWidth from '@material-ui/core/withWidth';
 import Zoom from '@material-ui/core/Zoom';
 
-import MomentUtils from '@date-io/moment';
-import { JssProvider } from 'react-jss';
-
 import { markdown } from 'utils/utils';
 import { DarkTheme, colors } from './styles/theme';
 import Avatar from './components/Avatar';
@@ -146,11 +142,9 @@ import TextEditor from './components/TextEditor';
 export {
     // utils
     markdown,
-    MomentUtils,
     colors,
     createGenerateClassName,
     // Providers
-    JssProvider,
     ThemeProvider,
     MuiPickersUtilsProvider,
     // Platform overrides Material UI components
@@ -185,8 +179,6 @@ export {
     Slider,
     TimePicker,
     TextEditor,
-    ReactMde,
-    reactMdeCommands,
     // Styles
     DarkTheme,
     // Core Components
