@@ -1,78 +1,92 @@
-#Varis Aziri 22-01-2019 22:45 - hybrid shell and docker executor script
-
-image: node:dubnium
-
-variables:
-   ARTIFACT: "$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG"
-
+image: node:12.16.3-stretch-slim
 
 stages:
    - build
-   - use
+   - verify
+   - pack
+   - store
 
-build-and-pack:
+build:
   tags:
-    - docker
+    - docker-runner
   stage: build
   script:
-    - yarn
+    - node --version
+    - npm --version
+    - yarn --version
+    - yarn --network-timeout 600000
     - yarn build
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules
+      - build
+    policy: push
+  only: ['development', 'qa', 'tags', '/^v.*x$/i']
+
+audit:
+  tags:
+    - docker-runner
+  stage: verify
+  script:
+    - yarn audit:production
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules
+    policy: pull
+  only: ['development', 'qa', 'tags', '/^v.*x$/i']
+
+lint:
+  tags:
+    - docker-runner
+  stage: verify
+  script:
+    - yarn lint
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules
+    policy: pull
+  only: ['development', 'qa', 'tags', '/^v.*x$/i']
+
+test:
+  tags:
+    - docker-runner
+  stage: verify
+  script:
+    - yarn test
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules
+    policy: pull
+  only: ['development', 'qa', 'tags', '/^v.*x$/i']
+
+pack:
+  tags:
+    - docker-runner
+  stage: pack
+  script:
     - echo "$(date +"%d-%m-%Y %H:%M:%S") - Short commit SHA ${CI_COMMIT_SHA:0:8} - Long commit SHA $CI_COMMIT_SHA - Project name $CI_PROJECT_NAME - Branch name $CI_COMMIT_REF_NAME" >> build/$CI_PROJECT_NAME-build.info
-    - tar zcf $ARTIFACT-${CI_COMMIT_SHA:0:8}.tgz -C build/ .
-  only: ['development', 'qa', 'master']
+    - tar zcf $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG-${CI_COMMIT_SHA:0:8}.tgz -C ./build/ .
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - build
+    policy: pull
+  only: ['development', 'qa', 'tags', '/^v.*x$/i']
   artifacts:
     paths:
-    - $ARTIFACT-${CI_COMMIT_SHA:0:8}.tgz
+      - $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG-${CI_COMMIT_SHA:0:8}.tgz
     expire_in: 1 day
 
 store-artifacts:
   tags:
-    - bob_the_builder
-  stage: use
+    - shell-runner
+  stage: store
   script:
-    - sudo -u mic3 cp $ARTIFACT-${CI_COMMIT_SHA:0:8}.tgz /home/mic3/artifacts/
-  only: ['development', 'qa', 'master']
-
-make-image:
-  tags:
-    - bob_the_builder
-  stage: use
-  allow_failure: true
-  script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.mi-c3.com:4567
-    - docker build -t gitlab.mi-c3.com:4567/affectli-project/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8} .
-    - docker push gitlab.mi-c3.com:4567/affectli-project/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}
-  only: ['development', 'qa', 'master']
-  when: manual
-
-deploy-to-development:
-  tags:
-    - development
-  stage: use
-  script:
-    - "sudo rm -rf /var/www/html/storybook-static/*"
-    - sudo tar xzf $ARTIFACT-${CI_COMMIT_SHA:0:8}.tgz -C /var/www/html/storybook-static/
-    - sudo chown -R www-data:www-data /var/www/html
-  only:
-    - development
+    - sudo cp $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG-${CI_COMMIT_SHA:0:8}.tgz /opt/affectli/artifacts/
+  only: ['development', 'qa', 'tags', '/^v.*x$/i']
   variables:
     GIT_STRATEGY: none
-  environment:
-    name: affectli-development
-    url: https://affectli.dev.mi-c3.com
-
-deploy-to-qa:
-  tags:
-    - qa
-  stage: use
-  script:
-    - "sudo rm -rf /var/www/html/storybook-static/*"
-    - sudo tar xzf $ARTIFACT-${CI_COMMIT_SHA:0:8}.tgz -C /var/www/html/storybook-static/
-    - sudo chown -R www-data:www-data /var/www/html
-  only:
-    - qa
-  variables:
-    GIT_STRATEGY: none
-  environment:
-    name: affectli-qa
-    url: https://affectli.qa.mi-c3.com
