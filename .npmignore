@@ -1,0 +1,12 @@
+config
+docs
+docu
+jest.config.js
+node_modules
+package.json
+src
+test
+tsconfig.json
+webpack.config.js
+yarn.lock
+.*
