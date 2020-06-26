@@ -1,6 +1,6 @@
 {
   "name": "@mic3/platform-ui",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "scripts": {
     "build": "webpack --mode production",
     "build:watch": "HOT=true webpack --mode production --watch --progress",
@@ -24,6 +24,7 @@
     "marked": "^1.0.0",
     "memoize-one": "5.1.1",
     "moment": "2.24.0",
+    "prop-types": "^15.7.2",
     "react": "16.12.0",
     "react-avatar-editor": "^11.0.7",
     "react-color": "^2.18.0",
@@ -44,6 +45,7 @@
     "marked": "^1.0.0",
     "memoize-one": "5.1.1",
     "moment": "2.24.0",
+    "prop-types": "^15.7.2",
     "react": "16.12.0",
     "react-avatar-editor": "^11.0.7",
     "react-color": "^2.18.0",
@@ -79,7 +81,6 @@
     "module-resolver": "^1.0.0",
     "neutrino": "^9.1.0",
     "prettier": "1.19.1",
-    "prop-types": "^15.7.2",
     "webpack": "^4",
     "webpack-cli": "^3",
     "webpack-dev-server": "^3"
