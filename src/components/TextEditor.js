@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ReactMde from 'react-mde';
 import { markdown } from 'utils/utils';
@@ -25,20 +26,24 @@ const Editor = styled(ReactMde)`
 class TextEditor extends PureComponent {
     static propTypes = {
         ...(ReactMde || {}).propTypes,
+        previewDefault: PropTypes.bool,
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            selectedTab: 'write',
+            selectedTab: props.previewDefault ? 'preview' : 'write',
             value: props.value || '',
         };
     }
 
     componentDidUpdate(prevProps) {
-        const { value: newValue } = this.props;
+        const { value: newValue, previewDefault } = this.props;
         if (newValue !== prevProps.value) {
             this.setState({ value: newValue });
+        }
+        if (previewDefault !== prevProps.previewDefault) {
+            this.setState({ selectedTab: previewDefault ? 'preview' : 'write' });
         }
     }
 
