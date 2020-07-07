@@ -25,7 +25,7 @@ const styles = () => ({
         flexWrap: 'wrap',
     },
     inputInput: {
-        width: 'calc(100% - 60px)',
+        width: ({ multiple }) => `calc(100% - ${multiple ? 80 : 60}px)`,
         flexGrow: 1,
     },
     chip: {
