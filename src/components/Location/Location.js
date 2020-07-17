@@ -8,11 +8,12 @@ import { isDefined } from 'utils/utils';
 import { bind } from 'utils/decorators/decoratorUtils';
 import Marker from './Marker/Marker';
 
-const Map = ({ center, zoom, children, ...restProps }) => (
+const Map = ({ defaultCenter, center, googleApiKey, zoom, children, ...restProps }) => (
     <div style={{ height: '300px', width: '100%' }}>
         <GoogleMapReact
-            bootstrapURLKeys={{ key: 'AIzaSyAGa4L1t68r0Kbsgp4UAUb9_K2mdyF2qGk', libraries: 'places' }}
-            defaultCenter={center}
+            bootstrapURLKeys={{ key: googleApiKey, libraries: 'places' }}
+            defaultCenter={defaultCenter}
+            center={center}
             defaultZoom={zoom}
             yesIWantToUseGoogleMapApiInternals
             {...restProps}
@@ -23,12 +24,18 @@ const Map = ({ center, zoom, children, ...restProps }) => (
 );
 
 Map.propTypes = {
+    defaultCenter: PropTypes.object,
     center: PropTypes.object,
     zoom: PropTypes.number,
     children: PropTypes.any,
+    googleApiKey: PropTypes.string.isRequired,
 };
 
 Map.defaultProps = {
+    defaultCenter: {
+        lat: 59.95,
+        lng: 30.33,
+    },
     center: {
         lat: 59.95,
         lng: 30.33,
@@ -74,6 +81,7 @@ export default class Location extends PureComponent {
         dark: PropTypes.bool,
         streetViewControl: PropTypes.bool,
         MarkerProps: PropTypes.object,
+        googleApiKey: PropTypes.string.isRequired,
     };
 
     static defaultProps = {

@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Location from 'components/Location/Location';
 import Button from 'components/Button';
 import { createEvent } from 'utils/http/event';
-import { get, set } from 'utils/lo/lo';
+import { get } from 'utils/lo/lo';
 import statefullInput from 'utils/hoc/statefullInput';
 import Geocode from 'utils/maps/geocodeUtils';
 import GPA from 'components/Location/GooglePlaceAutocomplete';
@@ -29,6 +29,7 @@ class LocationForm extends PureComponent {
         LocationProps: PropTypes.shape((Location || {}).propTypes),
         GooglePlaceAutocompleteProps: PropTypes.object,
         MarkerProps: PropTypes.object,
+        googleApiKey: PropTypes.string.isRequired,
     };
 
     static defaultProps = {
@@ -69,29 +70,6 @@ class LocationForm extends PureComponent {
         }
     }
 
-    // if we don't need addres we can remove this functional
-    @bind
-    handleLatLongChange(updatedLocationInfo) {
-        clearTimeout(this.timer);
-        const lat = Number(get(updatedLocationInfo, 'latitude'));
-        const long = Number(get(updatedLocationInfo, 'longitude'));
-        this.timer = setTimeout(() => {
-            Geocode.fromLatLong(lat, long).then(
-                (response) => {
-                    // const adrs = response.results[0].formatted_address;
-                    const address = Geocode.getAddress(response.results[0].address_components);
-                    updatedLocationInfo = set(updatedLocationInfo, 'address', { add_type: 'Physical', ...address });
-                    this.onChange(updatedLocationInfo);
-                },
-                () => {
-                    const address = Geocode.getAddress();
-                    updatedLocationInfo = set(updatedLocationInfo, 'address', { add_type: 'Physical', ...address });
-                    this.onChange(updatedLocationInfo);
-                }
-            );
-        }, 300);
-    }
-
     @bind
     centerMap() {
         const { value } = this.props;
@@ -110,9 +88,7 @@ class LocationForm extends PureComponent {
 
     @bind
     myCurrentLocation(position) {
-        let updatedLocationInfo = set(this.props.value, 'latitude', position.coords.latitude);
-        updatedLocationInfo = set(updatedLocationInfo, 'longitude', position.coords.longitude);
-        this.handleLatLongChange(updatedLocationInfo);
+        this.onChange({ latitude: position.coords.latitude, longitude: position.coords.longitude });
     }
 
     @bind
@@ -133,7 +109,16 @@ class LocationForm extends PureComponent {
     }
 
     render() {
-        const { value, disabled, withAutocomplete, LocationProps, MarkerProps, GooglePlaceAutocompleteProps, showCoords } = this.props;
+        const {
+            value,
+            disabled,
+            withAutocomplete,
+            LocationProps,
+            MarkerProps,
+            GooglePlaceAutocompleteProps,
+            showCoords,
+            googleApiKey,
+        } = this.props;
         const { mapKey } = this.state;
         const latitude = get(value, 'latitude');
         const longitude = get(value, 'longitude');
@@ -152,6 +137,7 @@ class LocationForm extends PureComponent {
                 )}
                 <Location
                     key={mapKey}
+                    googleApiKey={googleApiKey}
                     latitude={latitude}
                     longitude={longitude}
                     onClick={this.onMapClick}
