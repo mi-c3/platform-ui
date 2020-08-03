@@ -5,6 +5,8 @@ import VirtualList from 'react-tiny-virtual-list';
 
 import { bind, memoize, debounce } from 'utils/decorators/decoratorUtils';
 import Cancel from '@material-ui/icons/Cancel';
+import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -98,7 +100,7 @@ class Autocomplete extends PureComponent {
     @bind
     @debounce()
     suggest(event) {
-        const { value, options, valueField, valueId, suggest } = this.props;
+        const { value, options, valueField, valueId, suggest, multiple } = this.props;
         if (suggest) {
             return suggest(event);
         }
@@ -108,7 +110,14 @@ class Autocomplete extends PureComponent {
                 .label.toLowerCase()
                 .includes(query.toLowerCase())
         );
-        this.setState({ suggestions: this.filterValue(opts, value, valueId, valueField) });
+
+        const selected = this.getSelectedOptions(value, valueField, options);
+        const { label = '' } = !multiple ? this.optionTemplate(selected) : {};
+        const isSelectedOption = label === query || selected === null;
+
+        this.setState({
+            suggestions: this.filterValue(isSelectedOption ? options : opts, value, valueId, valueField),
+        });
     }
 
     @bind
@@ -147,16 +156,27 @@ class Autocomplete extends PureComponent {
         const { onChange, name, value: currentValue, multiple, valueField } = this.props;
         const optionValue = valueField ? get(option, valueField, null) : option;
         const value = !multiple ? optionValue : [...(arrayfy(currentValue) || []), optionValue];
-        this.setState({ query, preSelectedValue: 0 }, () => onChange && onChange(createEvent('change', { target: { name, value } })));
+        this.setState(
+            { query, preSelectedValue: 0, openSuggestions: false },
+            () => onChange && onChange(createEvent('change', { target: { name, value } }))
+        );
     }
 
     @bind
-    onSearching(event, openSuggestions = true) {
+    onSearching(event) {
         if (event.persist) {
             event.persist();
         }
         const query = get(event, 'target.value');
-        this.setState({ query, openSuggestions, preSelectedValue: 0 }, () => this.suggest(event));
+
+        this.setState(
+            {
+                query,
+                preSelectedValue: 0,
+                openSuggestions: true,
+            },
+            () => this.suggest(event)
+        );
     }
 
     @bind
@@ -169,7 +189,7 @@ class Autocomplete extends PureComponent {
             const { label = '' } = this.optionTemplate(selected);
             query = label;
         }
-        this.onSearching(createEvent('focus', { target: { name: this.props.name, value: query } }), !query);
+        this.onSearching(createEvent('focus', { target: { name: this.props.name, value: query } }));
     }
 
     @bind
@@ -381,9 +401,28 @@ class Autocomplete extends PureComponent {
         } else {
             InputProperties.startAdornment = startAdornment && <AdormentStyle>{startAdornment}</AdormentStyle>;
             if (!InputProperties.endAdornment) {
-                InputProperties.endAdornment = selected && clearable && !disabled && (
-                    <IconButton aria-label="Clear input" onClick={this.clearInput}>
-                        <Cancel />
+                if (selected && clearable && !disabled) {
+                    InputProperties.endAdornment = (
+                        <IconButton aria-label="Clear input" onClick={this.clearInput}>
+                            <Cancel />
+                        </IconButton>
+                    );
+                }
+            }
+        }
+
+        if (!InputProperties.endAdornment) {
+            if ((!selected || !clearable || multiple) && !openSuggestions && !disabled) {
+                InputProperties.endAdornment = (
+                    <IconButton aria-label="Clear input" onClick={this.onFocus}>
+                        <KeyboardArrowDown />
+                    </IconButton>
+                );
+            }
+            if (openSuggestions && !disabled) {
+                InputProperties.endAdornment = (
+                    <IconButton aria-label="Clear input" onClick={this.onFocus}>
+                        <KeyboardArrowUp />
                     </IconButton>
                 );
             }
@@ -392,7 +431,6 @@ class Autocomplete extends PureComponent {
         if (isLoading) {
             InputProperties.endAdornment = <CircularProgress size={12} />;
         }
-
         return InputProperties;
     }
 
