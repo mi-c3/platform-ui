@@ -137,6 +137,7 @@ import LocationForm from './components/Location/LocationForm';
 import LocationSwitch from './components/Location/LocationSwitch';
 import Slider from './components/Slider';
 import UploadFileField from './components/UploadFileField';
+import UploadFiles from './components/UploadFiles';
 import TextEditor from './components/TextEditor';
 
 export {
@@ -163,6 +164,7 @@ export {
     Switch,
     TextField,
     UploadFileField,
+    UploadFiles,
     // 3dd library
     AvatarEditor,
     ColorPicker,
