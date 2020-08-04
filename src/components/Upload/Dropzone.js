@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { get } from 'utils/lo/lo';
-import { isImageType, simplifySize, resizeImage } from 'utils/file/file';
+import { isImageType, simplifySize } from 'utils/file/file';
 import DropzoneSnackBar from 'components/Upload/DropzoneSnackBar';
 import MdiIcon from 'components/MdiIcon';
 import { DarkTheme } from 'styles/theme';
@@ -24,7 +24,7 @@ const styles = () => ({
     dropZone: {
         position: 'relative',
         width: '100%',
-        minHeight: '250px',
+        minHeight: '150px',
         cursor: 'pointer',
         boxSizing: 'border-box',
         backgroundColor: '#50575b',
@@ -59,12 +59,14 @@ const styles = () => ({
         flexDirection: 'column',
         zIndex: 99,
     },
+    secondaryListItem: {
+        paddingLeft: 8,
+    },
 });
 
 class Dropzone extends PureComponent {
     static defaultProps = {
         accept: 'image/*,video/*,application/*',
-        imageOptions: null,
         filesLimit: 1,
         capture: true,
         maxSize: 3000000,
@@ -74,6 +76,7 @@ class Dropzone extends PureComponent {
         showAlerts: false,
         clearOnUnmount: true,
         disableDragActive: false,
+        deleteButton: true,
     };
 
     static propTypes = {
@@ -90,16 +93,14 @@ class Dropzone extends PureComponent {
         onChange: PropTypes.func,
         onDropRejected: PropTypes.func,
         onDelete: PropTypes.func,
-        imageOptions: PropTypes.shape({
-            maxWidth: PropTypes.number,
-            maxHeigth: PropTypes.number,
-            quality: PropTypes.number,
-        }),
         acceptedFiles: PropTypes.arrayOf(PropTypes.string),
         fileSizeLimit: PropTypes.number,
         classes: PropTypes.object,
         multiple: PropTypes.bool,
         children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+        filesTemplate: PropTypes.func,
+        onRemoveFile: PropTypes.func,
+        deleteButton: PropTypes.bool,
     };
 
     constructor(props) {
@@ -130,24 +131,8 @@ class Dropzone extends PureComponent {
 
     @bind
     async onChange(files) {
-        const { onChange, imageOptions } = this.props;
-
-        const { maxWidth, maxHeigth, quality } = imageOptions || {};
-
-        const postProcessFiles = files.map((file) =>
-            imageOptions && isImageType(file.type)
-                ? resizeImage({ image: file, width: maxWidth, height: maxHeigth, quality })
-                : Promise.resolve(file)
-        );
-
-        const value = [];
-        await Promise.all(
-            postProcessFiles.map(async (prom) => {
-                const blob = await prom;
-                value.push(blob);
-            })
-        );
-        onChange && onChange({ value, originalFiles: files, target: { value, name: this.props.name } });
+        const { onChange } = this.props;
+        onChange && onChange({ target: { value: files, name: this.props.name } });
     }
 
     @bind
@@ -160,7 +145,6 @@ class Dropzone extends PureComponent {
                     snackbarVariant: 'error',
                 });
             }
-
             this.setState({ files: this.state.files.concat(files) }, () => {
                 this.onChange(files);
                 let message = '';
@@ -182,19 +166,21 @@ class Dropzone extends PureComponent {
 
     @bind
     handleRemove(index) {
+        const { onRemoveFile } = this.props;
         return (event) => {
             event.stopPropagation();
             const { files } = this.state;
-            const fileName = get(files, `[${index}].name`);
+            const removedFile = files[index];
+            const fileName = get(removedFile, `name`);
             files.splice(index, 1);
             this.setState({ files }, () => {
-                this.onChange(files);
                 this.props.showAlerts &&
                     this.setState({
                         openSnackbar: true,
                         snackbarMessage: 'File ' + fileName + ' removed',
                         snackbarVariant: 'info',
                     });
+                onRemoveFile ? onRemoveFile(removedFile) : this.onChange(files);
             });
         };
     }
@@ -231,7 +217,8 @@ class Dropzone extends PureComponent {
 
     @bind
     @memoize()
-    buildFilesList({ files }) {
+    filesTemplate(files) {
+        const { fileActions, deleteButton, classes } = this.props;
         return files.map((file, index) => (
             <ListItem key={index}>
                 {isImageType(files[index].type) ? (
@@ -241,11 +228,17 @@ class Dropzone extends PureComponent {
                         <AttachFileIcon />
                     </Avatar>
                 )}
-                <ListItemText primary={files[index].name} secondary={files[index].type} />
+                <ListItemText
+                    primary={files[index].name}
+                    secondary={<span className={classes.secondaryListItem}>{files[index].type}</span>}
+                />
                 <ListItemSecondaryAction>
-                    <IconButton onClick={this.handleRemove(index)} aria-label="Delete">
-                        <CancelIcon />
-                    </IconButton>
+                    {fileActions}
+                    {deleteButton ? (
+                        <IconButton onClick={this.handleRemove(index)} aria-label="Delete">
+                            <CancelIcon />
+                        </IconButton>
+                    ) : null}
                 </ListItemSecondaryAction>
             </ListItem>
         ));
@@ -263,6 +256,7 @@ class Dropzone extends PureComponent {
             dropZoneClasses,
             onClick,
             disableDragActive,
+            filesTemplate,
             ...restProps
         } = this.props; // eslint-disable-line max-len
         const { files } = this.state;
@@ -310,7 +304,7 @@ class Dropzone extends PureComponent {
                         );
                     }}
                 </ReactDropzone>
-                {showPreviews && <List>{this.buildFilesList({ files })}</List>}
+                {showPreviews && filesTemplate ? filesTemplate(files) : <List>{this.filesTemplate(files)}</List>}
                 {this.props.showAlerts && (
                     <DropzoneSnackBar
                         open={this.state.openSnackbar}
