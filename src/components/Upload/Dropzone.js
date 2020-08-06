@@ -14,17 +14,15 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import IconButton from '@material-ui/core/IconButton';
 
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
-import { get } from 'utils/lo/lo';
-import { isImageType, simplifySize } from 'utils/file/file';
-import DropzoneSnackBar from 'components/Upload/DropzoneSnackBar';
+import { isImageType } from 'utils/file/file';
 import MdiIcon from 'components/MdiIcon';
+import Link from 'components/Link';
 import { DarkTheme } from 'styles/theme';
 
 const styles = () => ({
     dropZone: {
         position: 'relative',
         width: '100%',
-        minHeight: '150px',
         cursor: 'pointer',
         boxSizing: 'border-box',
         backgroundColor: '#50575b',
@@ -59,8 +57,18 @@ const styles = () => ({
         flexDirection: 'column',
         zIndex: 99,
     },
-    secondaryListItem: {
-        paddingLeft: 8,
+    fileListItem: {
+        '& .MuiListItemText-primary': {
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            width: 'calc(100% - 50px)',
+            display: 'inherit',
+            paddingLeft: 8,
+        },
+        '& .MuiListItemText-secondary': {
+            paddingLeft: 8,
+        },
     },
 });
 
@@ -70,10 +78,7 @@ class Dropzone extends PureComponent {
         filesLimit: 1,
         capture: true,
         maxSize: 3000000,
-        dropzoneTextHover: 'Drop files here...',
-        dropzoneText: 'Drag an image here',
         showPreviews: false, // By default previews show up under in the dialog and inside in the standalone
-        showAlerts: false,
         clearOnUnmount: true,
         disableDragActive: false,
         deleteButton: true,
@@ -88,7 +93,6 @@ class Dropzone extends PureComponent {
         dropzoneText: PropTypes.string,
         capture: PropTypes.bool,
         showPreviews: PropTypes.bool,
-        showAlerts: PropTypes.bool,
         clearOnUnmount: PropTypes.bool,
         onChange: PropTypes.func,
         onDropRejected: PropTypes.func,
@@ -103,32 +107,6 @@ class Dropzone extends PureComponent {
         deleteButton: PropTypes.bool,
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            files: props.value || [],
-            openSnackbar: false,
-            snackbarMessage: '',
-            snackbarVariant: 'success',
-        };
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.value !== this.props.value) {
-            this.setState({
-                files: this.props.value,
-            });
-        }
-    }
-
-    componentWillUnmount() {
-        if (this.props.clearOnUnmount) {
-            this.setState({
-                files: [],
-            });
-        }
-    }
-
     @bind
     async onChange(files) {
         const { onChange } = this.props;
@@ -137,30 +115,12 @@ class Dropzone extends PureComponent {
 
     @bind
     async handleDropAccepted(files) {
-        if (this.props.showPreviews) {
-            if (this.state.files.length + files.length > this.props.filesLimit) {
-                return this.setState({
-                    openSnackbar: true,
-                    snackbarMessage: `Maximum allowed number of files exceeded. Only ${this.props.filesLimit} allowed`,
-                    snackbarVariant: 'error',
-                });
-            }
-            this.setState({ files: this.state.files.concat(files) }, () => {
-                this.onChange(files);
-                let message = '';
-                files.forEach((file) => {
-                    message += `File ${file.name} successfully added.`;
-                });
-                this.props.showAlerts &&
-                    this.setState({
-                        openSnackbar: true,
-                        snackbarMessage: message,
-                        snackbarVariant: 'success',
-                    });
-            });
-        } else {
-            this.onChange(files);
+        const { filesLimit, value } = this.props;
+        let updatedFiles = [...(value || []), ...files];
+        if (filesLimit && updatedFiles.length > filesLimit) {
+            updatedFiles = updatedFiles.slice(0, filesLimit);
         }
+        this.onChange(updatedFiles);
         this.props.onDropAccepted && this.props.onDropAccepted(files);
     }
 
@@ -169,73 +129,46 @@ class Dropzone extends PureComponent {
         const { onRemoveFile } = this.props;
         return (event) => {
             event.stopPropagation();
-            const { files } = this.state;
+            const { value } = this.props;
+            const files = [...(value || [])];
             const removedFile = files[index];
-            const fileName = get(removedFile, `name`);
             files.splice(index, 1);
-            this.setState({ files }, () => {
-                this.props.showAlerts &&
-                    this.setState({
-                        openSnackbar: true,
-                        snackbarMessage: 'File ' + fileName + ' removed',
-                        snackbarVariant: 'info',
-                    });
-                onRemoveFile ? onRemoveFile(removedFile) : this.onChange(files);
-            });
+            onRemoveFile ? onRemoveFile(removedFile, index, files) : this.onChange(files);
         };
     }
 
     @bind
     handleDropRejected(rejectedFiles, evt) {
-        let message = '';
-        rejectedFiles.forEach((rejectedFile) => {
-            message = `File ${rejectedFile.name} was rejected. `;
-            if (this.props.acceptedFiles && !this.props.acceptedFiles.includes(rejectedFile.type)) {
-                message += 'File type not supported. ';
-            }
-            if (rejectedFile.size > Number(this.props.fileSizeLimit)) {
-                message += `File is too big. Size limit is ${simplifySize(this.props.fileSizeLimit)}. `;
-            }
-        });
         if (this.props.onDropRejected) {
             this.props.onDropRejected(rejectedFiles, evt);
         }
-        this.props.showAlerts &&
-            this.setState({
-                openSnackbar: true,
-                snackbarMessage: message,
-                snackbarVariant: 'error',
-            });
-    }
-
-    @bind
-    onCloseSnackbar() {
-        this.setState({
-            openSnackbar: false,
-        });
     }
 
     @bind
     @memoize()
     filesTemplate(files) {
-        const { fileActions, deleteButton, classes } = this.props;
-        return files.map((file, index) => (
+        const { fileActions, deleteButton, classes, disabled } = this.props;
+        return (files || []).map((file, index) => (
             <ListItem key={index}>
                 {isImageType(files[index].type) ? (
-                    <Avatar src={URL.createObjectURL(file)} />
+                    <Avatar src={file.src || URL.createObjectURL(file)} />
                 ) : (
                     <Avatar>
                         <AttachFileIcon />
                     </Avatar>
                 )}
-                <ListItemText
-                    primary={files[index].name}
-                    secondary={<span className={classes.secondaryListItem}>{files[index].type}</span>}
-                />
+                <ListItemText className={classes.fileListItem} primary={files[index].name} secondary={files[index].type} />
                 <ListItemSecondaryAction>
                     {fileActions}
-                    {deleteButton ? (
-                        <IconButton onClick={this.handleRemove(index)} aria-label="Delete">
+                    {file.src && (
+                        <IconButton aria-label="Download">
+                            <Link target="_blank" download href={file.src}>
+                                <MdiIcon name="download" />
+                            </Link>
+                        </IconButton>
+                    )}
+                    {deleteButton && !disabled ? (
+                        <IconButton disabled={disabled} onClick={this.handleRemove(index)} aria-label="Delete">
                             <CancelIcon />
                         </IconButton>
                     ) : null}
@@ -257,9 +190,9 @@ class Dropzone extends PureComponent {
             onClick,
             disableDragActive,
             filesTemplate,
+            value,
             ...restProps
         } = this.props; // eslint-disable-line max-len
-        const { files } = this.state;
         return (
             <Fragment>
                 <ReactDropzone {...restProps} onDropAccepted={this.handleDropAccepted} onDropRejected={this.handleDropRejected}>
@@ -304,16 +237,7 @@ class Dropzone extends PureComponent {
                         );
                     }}
                 </ReactDropzone>
-                {showPreviews && filesTemplate ? filesTemplate(files) : <List>{this.filesTemplate(files)}</List>}
-                {this.props.showAlerts && (
-                    <DropzoneSnackBar
-                        open={this.state.openSnackbar}
-                        autoHideDuration={6000}
-                        onClose={this.onCloseSnackbar}
-                        variant={this.state.snackbarVariant}
-                        message={this.state.snackbarMessage}
-                    />
-                )}
+                {showPreviews && filesTemplate ? filesTemplate(value) : <List>{this.filesTemplate(value)}</List>}
             </Fragment>
         );
     }
