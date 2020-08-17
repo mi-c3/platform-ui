@@ -1,5 +1,6 @@
 import { get } from './lo/lo';
 import marked from 'marked';
+import DOMPurify from 'dompurify';
 
 const isObject = (value) => value && typeof value === 'object' && !Array.isArray(value);
 
@@ -42,6 +43,6 @@ const arrayfy = (value) => {
     return Array.isArray(value) ? value : [value];
 };
 
-const markdown = (text) => marked(text);
+const markdown = (text) => marked(DOMPurify.sanitize(text));
 
 export { isObject, shallowEquals, debounce, arrayfy, isDefined, markdown };
