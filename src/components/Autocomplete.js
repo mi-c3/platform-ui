@@ -170,11 +170,11 @@ class Autocomplete extends PureComponent {
         const query = get(event, 'target.value');
 
         this.setState(
-            {
+            () => ({
                 query,
                 preSelectedValue: 0,
                 openSuggestions: true,
-            },
+            }),
             () => this.suggest(event)
         );
     }
@@ -194,7 +194,7 @@ class Autocomplete extends PureComponent {
 
     @bind
     onBlur() {
-        this.setState({ query: '', openSuggestions: false, preSelectedValue: 0 });
+        this.setState(() => ({ query: '', openSuggestions: false, preSelectedValue: 0 }));
     }
 
     /**
@@ -414,14 +414,14 @@ class Autocomplete extends PureComponent {
         if (!InputProperties.endAdornment) {
             if ((!selected || !clearable || multiple) && !openSuggestions && !disabled) {
                 InputProperties.endAdornment = (
-                    <IconButton aria-label="Clear input" onClick={this.onFocus}>
+                    <IconButton aria-label="Clear input" onBlur={this.onBlur} onFocus={this.onFocus} onKeyUp={this.onKeyUp}>
                         <KeyboardArrowDown />
                     </IconButton>
                 );
             }
             if (openSuggestions && !disabled) {
                 InputProperties.endAdornment = (
-                    <IconButton aria-label="Clear input" onClick={this.onFocus}>
+                    <IconButton aria-label="Clear input" onBlur={this.onBlur} onFocus={this.onFocus} onKeyUp={this.onKeyUp}>
                         <KeyboardArrowUp />
                     </IconButton>
                 );
