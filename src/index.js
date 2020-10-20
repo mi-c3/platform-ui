@@ -97,6 +97,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
+import TableContainer from '@material-ui/core/TableContainer';
 import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -279,6 +280,7 @@ export {
     TablePagination,
     TableRow,
     TableSortLabel,
+    TableContainer,
     Tabs,
     Toolbar,
     Tooltip,
