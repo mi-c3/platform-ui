@@ -13,7 +13,7 @@ const MdiIcon = ({ size, name, style, className, color, ...restProps }) => {
             fontSize: size,
             height: size,
             width: size,
-            lineHeight: `${size}px`,
+            lineHeight: size === 24 ? '18px' : `${size}px`,
         }),
         [style, size]
     );
