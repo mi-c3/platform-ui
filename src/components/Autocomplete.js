@@ -304,8 +304,21 @@ class Autocomplete extends PureComponent {
         if (popperHeight < maxPopperHeight) {
             this.popperRef.current && this.popperRef.current.popper && this.popperRef.current.popper.update();
         }
-        const withOptionStyle = { margin: '0 !important', padding: '0 !important' };
-        const withoutOptionStyle = { padding: '15px', fontSize: '16px', margin: '0 !important' };
+        const withOptionStyle = {
+            margin: '0px !important',
+            padding: '0px !important',
+            width: '100%',
+            height: '100%',
+            justifyContent: 'flex-start',
+        };
+        const withoutOptionStyle = {
+            padding: '15px',
+            fontSize: '16px',
+            margin: '0 !important',
+            width: '100%',
+            height: '100%',
+            justifyContent: 'flex-start',
+        };
         return (
             suggestions &&
             suggestions.length > 0 && (
