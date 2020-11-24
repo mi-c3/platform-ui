@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { IconButton, InputAdornment } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 import MdiIcon from 'components/MdiIcon';
 import TextField from 'components/TextField';

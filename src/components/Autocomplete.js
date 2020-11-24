@@ -14,7 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { withStyles, styled } from '@material-ui/styles';
+import { styled, withStyles } from '@material-ui/core/styles';
 
 import TextField from 'components/TextField';
 import { shallowEquals, arrayfy } from 'utils/utils';

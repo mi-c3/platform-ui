@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import ReactAvatarEditor from 'react-avatar-editor';
 import PropTypes from 'prop-types';
 import { Grid, Typography, IconButton } from '@material-ui/core';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 import { bind } from 'utils/decorators/decoratorUtils';
 import { isImageType } from 'utils/file/file';
