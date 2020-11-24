@@ -6,7 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { styled } from '@material-ui/styles';
+import { styled } from '@material-ui/core/styles';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 const TableCellStyled = styled(TableCell)({

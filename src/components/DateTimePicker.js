@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { DateTimePicker as DTPMui } from '@material-ui/pickers';
 import { IconButton, InputAdornment } from '@material-ui/core';
 import Cancel from '@material-ui/icons/Cancel';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 import { createEvent } from 'utils/http/event';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';

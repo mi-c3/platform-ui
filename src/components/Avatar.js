@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MuiAvatar from '@material-ui/core/Avatar';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { createInitials, generateColor } from 'utils/avatar/avatar';
 import CircularProgressStatic from './CircularProgressStatic';
 import { isDefined } from 'utils/utils';

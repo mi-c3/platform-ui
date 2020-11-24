@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import MuiSlider from '@material-ui/core/Slider';
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = () => ({
     root: {
