@@ -4,12 +4,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MdiIcon from 'components/MdiIcon';
-import Autocomplete from 'components/Autocomplete';
+import AutocompleteLazy from 'components/AutocompleteLazy';
 import { iconsList } from 'utils/data/iconsList';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 // eslint-disable-next-line
-const { options, optionTemplate, ...autocompletePropsSubSet } = (Autocomplete || {}).propTypes || {};
+const { options, optionTemplate, ...autocompletePropsSubSet } = (AutocompleteLazy || {}).propTypes || {};
 
 class MdiIconSelect extends PureComponent {
     static propTypes = autocompletePropsSubSet;
@@ -17,7 +17,7 @@ class MdiIconSelect extends PureComponent {
     @bind
     @memoize()
     buildOptions(iconsList) {
-        return iconsList.map((value) => ({ value, label: value }));
+        return iconsList.map((icon) => ({ value: icon, label: icon }));
     }
 
     @bind
@@ -36,10 +36,17 @@ class MdiIconSelect extends PureComponent {
         };
     }
 
+    @bind
+    async fetchData(value) {
+        const options = this.buildOptions(iconsList);
+        return options.filter((op) => op.label.toLowerCase().includes(value.toLowerCase()));
+    }
+
     render() {
         return (
-            <Autocomplete
+            <AutocompleteLazy
                 options={this.buildOptions(iconsList)}
+                fetchData={this.fetchData}
                 optionTemplate={this.optionTemplate}
                 placeholder="Select an icon"
                 {...this.props}
