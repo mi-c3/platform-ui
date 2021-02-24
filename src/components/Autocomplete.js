@@ -425,25 +425,25 @@ class Autocomplete extends PureComponent {
         }
 
         if (!InputProperties.endAdornment) {
+            let adornment = null;
             if ((!selected || !clearable || multiple) && !openSuggestions && !disabled) {
-                InputProperties.endAdornment = (
-                    <IconButton aria-label="Clear input" onBlur={this.onBlur} onFocus={this.onFocus} onKeyUp={this.onKeyUp}>
-                        <KeyboardArrowDown />
-                    </IconButton>
-                );
+                adornment = <KeyboardArrowDown />;
             }
             if (openSuggestions && !disabled) {
+                adornment = <KeyboardArrowUp />;
+            }
+            if (isLoading) {
+                adornment = <CircularProgress size={12} />;
+            }
+            if (adornment) {
                 InputProperties.endAdornment = (
-                    <IconButton aria-label="Clear input" onBlur={this.onBlur} onFocus={this.onFocus} onKeyUp={this.onKeyUp}>
-                        <KeyboardArrowUp />
+                    <IconButton aria-label="Opened" onBlur={this.onBlur} onFocus={this.onFocus} onKeyUp={this.onKeyUp}>
+                        {adornment}
                     </IconButton>
                 );
             }
         }
 
-        if (isLoading) {
-            InputProperties.endAdornment = <CircularProgress size={12} />;
-        }
         return InputProperties;
     }
 
