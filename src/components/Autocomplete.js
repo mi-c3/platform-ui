@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { styled, withStyles } from '@material-ui/core/styles';
 
 import TextField from 'components/TextField';
@@ -180,7 +181,7 @@ class Autocomplete extends PureComponent {
     }
 
     @bind
-    onFocus(/* event */) {
+    handleOpen() {
         let { query } = this.state;
         const { multiple } = this.props;
         if (!multiple && !query) {
@@ -193,8 +194,19 @@ class Autocomplete extends PureComponent {
     }
 
     @bind
-    onBlur() {
-        this.setState(() => ({ query: '', openSuggestions: false, preSelectedValue: 0 }));
+    handleClose() {
+        if (this.state.openSuggestions) {
+            this.setState(() => ({ query: '', openSuggestions: false, preSelectedValue: 0 }));
+        }
+    }
+
+    @bind
+    onClickArrow() {
+        if (this.state.openSuggestions) {
+            this.handleClose();
+        } else {
+            this.handleOpen();
+        }
     }
 
     /**
@@ -288,6 +300,9 @@ class Autocomplete extends PureComponent {
             if (options[selectedOption]) {
                 this.setState({ openSuggestions: false, selectedOption: -1 }, () => this.onChange(suggestions[selectedOption], query));
             }
+        }
+        if (e.type === 'keyup' && e.key === 'Escape') {
+            this.handleClose();
         }
     }
 
@@ -433,14 +448,10 @@ class Autocomplete extends PureComponent {
                 adornment = <KeyboardArrowUp />;
             }
             if (isLoading) {
-                adornment = <CircularProgress size={12} />;
+                adornment = <CircularProgress size={12} onClick={this.handleClose} />;
             }
             if (adornment) {
-                InputProperties.endAdornment = (
-                    <IconButton aria-label="Opened" onBlur={this.onBlur} onFocus={this.onFocus} onKeyUp={this.onKeyUp}>
-                        {adornment}
-                    </IconButton>
-                );
+                InputProperties.endAdornment = <IconButton onClick={this.onClickArrow}>{adornment}</IconButton>;
             }
         }
 
@@ -502,15 +513,16 @@ class Autocomplete extends PureComponent {
         });
         return (
             <Fragment>
-                <TextField
-                    InputProps={InputProperties}
-                    InputLabelProps={{ shrink: true }}
-                    onFocus={this.onFocus}
-                    onBlur={this.onBlur}
-                    disabled={disabled}
-                    autoComplete="off"
-                    {...restProps}
-                />
+                <ClickAwayListener onClickAway={this.handleClose}>
+                    <TextField
+                        InputProps={InputProperties}
+                        InputLabelProps={{ shrink: true }}
+                        onFocus={this.handleOpen}
+                        disabled={disabled}
+                        autoComplete="off"
+                        {...restProps}
+                    />
+                </ClickAwayListener>
                 {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps, selectedOption)}
             </Fragment>
         );
