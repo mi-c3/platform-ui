@@ -4,15 +4,22 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MdiIcon from 'components/MdiIcon';
-import AutocompleteLazy from 'components/AutocompleteLazy';
+import Autocomplete from 'components/Autocomplete';
 import { iconsList } from 'utils/data/iconsList';
-import { bind, memoize } from 'utils/decorators/decoratorUtils';
+import { bind, memoize, debounce } from 'utils/decorators/decoratorUtils';
 
 // eslint-disable-next-line
-const { options, optionTemplate, ...autocompletePropsSubSet } = (AutocompleteLazy || {}).propTypes || {};
+const { options, optionTemplate, ...autocompletePropsSubSet } = (Autocomplete || {}).propTypes || {};
 
 class MdiIconSelect extends PureComponent {
     static propTypes = autocompletePropsSubSet;
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            options: this.buildOptions(iconsList),
+        };
+    }
 
     @bind
     @memoize()
@@ -37,19 +44,22 @@ class MdiIconSelect extends PureComponent {
     }
 
     @bind
-    async fetchData(value) {
+    @debounce()
+    suggest(event) {
+        const query = event.target.value;
         const options = this.buildOptions(iconsList);
-        return options.filter((op) => op.label.toLowerCase().includes(value.toLowerCase()));
+        this.setState({ options: options.filter((op) => op.label.toLowerCase().includes(query.toLowerCase())) });
     }
 
     render() {
+        const { options } = this.state;
         return (
-            <AutocompleteLazy
-                options={this.buildOptions(iconsList)}
-                fetchData={this.fetchData}
+            <Autocomplete
                 optionTemplate={this.optionTemplate}
                 placeholder="Select an icon"
                 {...this.props}
+                suggest={this.suggest}
+                options={options}
             />
         );
     }
