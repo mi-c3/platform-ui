@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { TextField as MuiTextField, IconButton, Input, InputAdornment } from '@material-ui/core';
-import Cancel from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/core/styles';
 
 import MdiIcon from 'components/MdiIcon';
@@ -9,6 +8,7 @@ import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { createEvent } from 'utils/http/event';
 import { isDefined } from 'utils/utils';
 import { colors } from 'styles/theme';
+import { get } from 'utils/lo/lo';
 
 // eslint-disable-next-line no-unused-vars
 const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};
@@ -17,6 +17,14 @@ const useStyles = withStyles(() => ({
     clearIcon: {
         color: colors.darkGray,
     },
+    labelMargin: {
+        marginLeft: 28,
+    },
+    fieldProps: {
+        '& .MuiInputAdornment-filled.MuiInputAdornment-positionStart:not(.MuiInputAdornment-hiddenLabel)': {
+            marginTop: '0 !important',
+        },
+    },
 }));
 
 class TextField extends PureComponent {
@@ -24,6 +32,7 @@ class TextField extends PureComponent {
         ...(MuiTextField || {}).propTypes,
         InputProps: PropTypes.shape(inputPropsSubSet),
         clearable: PropTypes.bool,
+        autocompleteMultiple: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -49,7 +58,7 @@ class TextField extends PureComponent {
             this.isDefined(value) && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <Cancel className={this.props.classes.clearIcon} />
+                        <MdiIcon name="close" className={this.props.classes.clearIcon} />
                     </IconButton>
                 </InputAdornment>
             )
@@ -74,17 +83,37 @@ class TextField extends PureComponent {
 
     render() {
         // eslint-disable-next-line no-unused-vars
-        const { disabled, value, InputProps, error, clearable, classes, ...restProps } = this.props;
+        const {
+            className,
+            disabled,
+            value,
+            InputProps,
+            InputLabelProps,
+            error,
+            clearable,
+            classes,
+            autocompleteMultiple,
+            ...restProps
+        } = this.props;
         const defaultEndAdornment = error ? this.getErrorAdornment() : this.getClearAdornment(disabled, value);
         return (
             <MuiTextField
                 value={this.isDefined(value) ? value : ''}
                 disabled={disabled}
                 error={error}
+                InputLabelProps={{
+                    className: `${get(InputProps, 'startAdornment') && !autocompleteMultiple ? classes.labelMargin : ''} ${get(
+                        InputLabelProps,
+                        'className',
+                        ''
+                    )}`,
+                }}
                 InputProps={{
                     endAdornment: clearable ? defaultEndAdornment : undefined,
+                    disableUnderline: true,
                     ...InputProps,
                 }}
+                className={`${className} ${get(InputProps, 'startAdornment') ? classes.fieldProps : ''}`}
                 {...restProps}
             />
         );

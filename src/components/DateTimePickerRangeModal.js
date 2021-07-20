@@ -9,7 +9,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
-import Cancel from '@material-ui/icons/Cancel';
+
 import { withStyles } from '@material-ui/core/styles';
 import { bind } from 'utils/decorators/decoratorUtils';
 
@@ -137,7 +137,7 @@ class DateTimePickerRangeModal extends PureComponent {
                         endAdornment: (
                             <InputAdornment position="end">
                                 <IconButton aria-label="Clear input" onClick={this.onClear}>
-                                    <Cancel />
+                                    <MdiIcon name="close" />
                                 </IconButton>
                             </InputAdornment>
                         ),

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
-import Cancel from '@material-ui/icons/Cancel';
+
 import { withStyles } from '@material-ui/core/styles';
 
 import DateTimePicker from './DateTimePicker';
@@ -149,7 +149,7 @@ class DateTimePickerRange extends PureComponent {
                         endAdornment: !disabled && (
                             <InputAdornment position="end">
                                 <IconButton aria-label="Clear input" onClick={this.onClear}>
-                                    <Cancel />
+                                    <MdiIcon name="close" />
                                 </IconButton>
                             </InputAdornment>
                         ),

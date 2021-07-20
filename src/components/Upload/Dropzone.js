@@ -10,7 +10,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Avatar from '@material-ui/core/Avatar';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
-import CancelIcon from '@material-ui/icons/Cancel';
 import IconButton from '@material-ui/core/IconButton';
 
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
@@ -169,7 +168,7 @@ class Dropzone extends PureComponent {
                     )}
                     {deleteButton && !disabled ? (
                         <IconButton disabled={disabled} onClick={this.handleRemove(index)} aria-label="Delete">
-                            <CancelIcon />
+                            <MdiIcon name="close" />
                         </IconButton>
                     ) : null}
                 </ListItemSecondaryAction>

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { IconButton, InputAdornment } from '@material-ui/core';
-import Cancel from '@material-ui/icons/Cancel';
+
 import { withStyles } from '@material-ui/core/styles';
 
 import MdiIcon from 'components/MdiIcon';
@@ -39,7 +39,7 @@ class UploadFiles extends PureComponent {
             !disabled && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <Cancel className={this.props.classes.iconRoot} />
+                        <MdiIcon name="close" className={this.props.classes.iconRoot} />
                     </IconButton>
                 </InputAdornment>
             )
