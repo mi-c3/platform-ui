@@ -4,7 +4,6 @@ import equals from 'fast-deep-equal';
 import VirtualList from 'react-tiny-virtual-list';
 
 import { bind, memoize, debounce } from 'utils/decorators/decoratorUtils';
-import Cancel from '@material-ui/icons/Cancel';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import Chip from '@material-ui/core/Chip';
@@ -17,12 +16,23 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { styled, withStyles } from '@material-ui/core/styles';
 
+import MdiIcon from 'components/MdiIcon';
 import TextField from 'components/TextField';
 import { shallowEquals, arrayfy } from 'utils/utils';
 import { get } from 'utils/lo/lo';
 import { createEvent } from 'utils/http/event';
 
 const styles = () => ({
+    adormentAlign: {
+        '& .MuiFilledInput-adornedStart div:not(.MuiChip-root) > .MuiAvatar-root': {
+            position: 'relative',
+            top: -10,
+        },
+        '& .MuiFilledInput-adornedStart > div:not(.MuiChip-root) > .MuiIcon-root': {
+            position: 'relative',
+            top: -10,
+        },
+    },
     inputRoot: {
         paddingTop: '1.7rem',
         flexWrap: 'wrap',
@@ -47,6 +57,7 @@ const AdormentStyle = styled('div')({
 
 class Autocomplete extends PureComponent {
     static propTypes = {
+        className: PropTypes.string,
         classes: PropTypes.object,
         clearable: PropTypes.bool,
         disabled: PropTypes.bool,
@@ -398,6 +409,7 @@ class Autocomplete extends PureComponent {
             inputRef: this.inputRef,
             autoComplete: 'off',
             onChange: this.onSearching,
+            disableUnderline: true,
             value: openSuggestions ? query : label,
             onKeyUp: this.onKeyUp,
         };
@@ -432,7 +444,7 @@ class Autocomplete extends PureComponent {
                 if (selected && clearable && !disabled) {
                     InputProperties.endAdornment = (
                         <IconButton aria-label="Clear input" onClick={this.clearInput}>
-                            <Cancel />
+                            <MdiIcon name="close" />
                         </IconButton>
                     );
                 }
@@ -494,6 +506,7 @@ class Autocomplete extends PureComponent {
             options,
             PopperProps,
             isLoading,
+            className,
             ...restProps
         } = this.props;
         const { suggestions, openSuggestions, query, selectedOption } = this.state;
@@ -515,11 +528,13 @@ class Autocomplete extends PureComponent {
             <Fragment>
                 <ClickAwayListener onClickAway={this.handleClose}>
                     <TextField
+                        autocompleteMultiple={multiple}
                         InputProps={InputProperties}
                         InputLabelProps={{ shrink: true }}
                         onFocus={this.handleOpen}
                         disabled={disabled}
                         autoComplete="off"
+                        className={`${className || ''} ${classes.adormentAlign}`}
                         {...restProps}
                     />
                 </ClickAwayListener>

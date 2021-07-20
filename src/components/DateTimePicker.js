@@ -2,9 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DateTimePicker as DTPMui } from '@material-ui/pickers';
 import { IconButton, InputAdornment } from '@material-ui/core';
-import Cancel from '@material-ui/icons/Cancel';
+
 import { withStyles } from '@material-ui/core/styles';
 
+import MdiIcon from 'components/MdiIcon';
 import { createEvent } from 'utils/http/event';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { colors } from 'styles/theme';
@@ -49,7 +50,7 @@ class DateTimePicker extends PureComponent {
             !!value && (
                 <InputAdornment position="end">
                     <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <Cancel className={this.props.classes.clearIcon} />
+                        <MdiIcon name="close" className={this.props.classes.clearIcon} />
                     </IconButton>
                 </InputAdornment>
             )
@@ -72,6 +73,7 @@ class DateTimePicker extends PureComponent {
                 showTodayButton={!clearable && showTodayButton}
                 InputProps={{
                     endAdornment: clearable && this.getClearAdornment(disabled, value),
+                    disableUnderline: true,
                     ...(InputProps || {}),
                 }}
                 onChange={this.onChange}

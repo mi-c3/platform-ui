@@ -2,8 +2,8 @@ import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { SwatchesPicker } from 'react-color';
 
+import { Paper, FormControl, InputLabel, Input, InputAdornment } from '@material-ui/core';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Icon from '@material-ui/core/Icon';
 import { materialColorPalette } from 'styles/palettes';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,6 +12,18 @@ import { bind } from 'utils/decorators/decoratorUtils';
 import { DarkTheme } from 'styles/theme';
 
 const styles = () => ({
+    root: {
+        padding: 4,
+        '& .MuiInputAdornment-positionStart': {
+            position: 'relative',
+            top: '-10px',
+            left: '8px',
+            cursor: 'pointer',
+        },
+    },
+    label: {
+        marginLeft: 38,
+    },
     swatches: {
         width: '243px !important',
         '& > div div:nth-child(2)': {
@@ -24,9 +36,6 @@ const styles = () => ({
     icon: {
         margin: '0 8px 0 0',
         borderRadius: '5rem',
-    },
-    controlLabel: {
-        margin: '8px 0',
     },
 });
 
@@ -77,27 +86,31 @@ class ColorPicker extends PureComponent {
     }
 
     render() {
-        const { label, name, value, required, fontSize, labelPlacement, classes, disabled, ...restProps } = this.props;
+        const { label, name, value, required, fontSize, classes, disabled, ...restProps } = this.props;
         const { displayColorPicker } = this.state;
 
         return (
             <Fragment>
-                <FormControlLabel
-                    required={required}
-                    label={label}
-                    onClick={this.handleSwatches}
-                    control={
-                        <Icon
-                            fontSize={fontSize}
-                            style={{ backgroundColor: value || this.defaultValue }}
-                            name={'circle'}
-                            className={classes.icon}
+                <Paper component="form" className={classes.root}>
+                    <FormControl required={required} onClick={this.handleSwatches} disabled={disabled}>
+                        <InputLabel className={classes.label}>{label}</InputLabel>
+                        <Input
+                            id="input-with-icon-adornment"
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    <Icon
+                                        fontSize={fontSize}
+                                        style={{ backgroundColor: value || this.defaultValue }}
+                                        name={'circle'}
+                                        className={classes.icon}
+                                    />
+                                </InputAdornment>
+                            }
+                            value={value || this.defaultValue}
+                            disableUnderline
                         />
-                    }
-                    labelPlacement={labelPlacement || 'end'}
-                    className={classes.controlLabel}
-                    disabled={disabled}
-                />
+                    </FormControl>
+                </Paper>
                 {!disabled && displayColorPicker && (
                     <ClickAwayListener onClickAway={this.handleSwatches}>
                         <SwatchesPicker
