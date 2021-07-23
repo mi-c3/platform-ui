@@ -27,7 +27,7 @@ export const colors = {
     },
     darkGray: '#DADADA',
     darkBlue: '#066AB1',
-    background: '#2C303A',
+    background: '#1c263b',
     red: '#C22525',
 };
 
@@ -42,6 +42,7 @@ export const DarkTheme = responsiveFontSizes(
             background: {
                 paper: colors.background,
                 default: colors.background,
+                fields: 'rgba(255, 255, 255, 0.06)',
             },
             action: {
                 disabled: colors.background,

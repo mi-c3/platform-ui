@@ -14,6 +14,8 @@ import { DarkTheme } from 'styles/theme';
 const styles = () => ({
     root: {
         padding: 4,
+        minHeight: 56,
+        background: `${DarkTheme.palette.background.fields} !important`,
         '& .MuiInputAdornment-positionStart': {
             position: 'relative',
             top: '-10px',
@@ -26,6 +28,7 @@ const styles = () => ({
     },
     swatches: {
         width: '243px !important',
+        position: 'absolute',
         '& > div div:nth-child(2)': {
             background: `${DarkTheme.palette.background.default} !important`,
         },
@@ -37,6 +40,12 @@ const styles = () => ({
         margin: '0 8px 0 0',
         borderRadius: '5rem',
     },
+    wrapper: {
+        width: '100%',
+        marginTop: 16,
+        marginBottom: 8,
+    },
+    borderWrapper: { position: 'relative' },
 });
 
 class ColorPicker extends PureComponent {
@@ -49,6 +58,7 @@ class ColorPicker extends PureComponent {
         disabled: PropTypes.bool,
         fontSize: PropTypes.string,
         labelPlacement: PropTypes.string,
+        className: PropTypes.string,
         classes: PropTypes.object,
     };
 
@@ -86,11 +96,10 @@ class ColorPicker extends PureComponent {
     }
 
     render() {
-        const { label, name, value, required, fontSize, classes, disabled, ...restProps } = this.props;
+        const { label, name, value, required, fontSize, classes, disabled, className, ...restProps } = this.props;
         const { displayColorPicker } = this.state;
-
         return (
-            <Fragment>
+            <div className={`${className || ''} ${classes.wrapper} ColorPicker-wrapper`}>
                 <Paper component="form" className={classes.root}>
                     <FormControl required={required} onClick={this.handleSwatches} disabled={disabled}>
                         <InputLabel className={classes.label}>{label}</InputLabel>
@@ -112,18 +121,20 @@ class ColorPicker extends PureComponent {
                     </FormControl>
                 </Paper>
                 {!disabled && displayColorPicker && (
-                    <ClickAwayListener onClickAway={this.handleSwatches}>
-                        <SwatchesPicker
-                            {...restProps}
-                            name={name}
-                            color={value || this.defaultValue}
-                            colors={materialColorPalette || this.defaultColors}
-                            onChange={this.onChange}
-                            className={classes.swatches}
-                        />
-                    </ClickAwayListener>
+                    <div className={classes.borderWrapper}>
+                        <ClickAwayListener onClickAway={this.handleSwatches}>
+                            <SwatchesPicker
+                                {...restProps}
+                                name={name}
+                                color={value || this.defaultValue}
+                                colors={materialColorPalette || this.defaultColors}
+                                onChange={this.onChange}
+                                className={classes.swatches}
+                            />
+                        </ClickAwayListener>
+                    </div>
                 )}
-            </Fragment>
+            </div>
         );
     }
 }
