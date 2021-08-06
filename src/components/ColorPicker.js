@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { SwatchesPicker } from 'react-color';
 
@@ -29,6 +29,7 @@ const styles = () => ({
     swatches: {
         width: '243px !important',
         position: 'absolute',
+        zIndex: 1,
         '& > div div:nth-child(2)': {
             background: `${DarkTheme.palette.background.default} !important`,
         },
