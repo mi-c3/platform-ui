@@ -1,6 +1,6 @@
 {
   "name": "@mic3/platform-ui",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "scripts": {
     "build": "webpack --mode production",
     "build:watch": "HOT=true webpack --mode production --watch --progress",
