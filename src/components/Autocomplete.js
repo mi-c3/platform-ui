@@ -18,7 +18,7 @@ import { styled, withStyles } from '@material-ui/core/styles';
 
 import MdiIcon from 'components/MdiIcon';
 import TextField from 'components/TextField';
-import { shallowEquals, arrayfy } from 'utils/utils';
+import { shallowEquals, arrayfy, isObject } from 'utils/utils';
 import { get } from 'utils/lo/lo';
 import { createEvent } from 'utils/http/event';
 
@@ -253,7 +253,14 @@ class Autocomplete extends PureComponent {
         return () => {
             const { value, onChange } = this.props;
             const valueToRemove = this.getOptionValue(option);
-            const vals = value.filter((v) => v !== valueToRemove);
+
+            const vals = value.filter((v) => {
+                if (isObject(valueToRemove)) {
+                    return !equals(v, valueToRemove);
+                }
+                return v !== valueToRemove;
+            });
+
             this.setState(
                 { query: '' },
                 () => onChange && onChange(createEvent('change', { target: { name: this.props.name, value: vals } }))
