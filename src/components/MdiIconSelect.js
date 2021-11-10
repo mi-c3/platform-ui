@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -7,18 +8,39 @@ import MdiIcon from 'components/MdiIcon';
 import Autocomplete from 'components/Autocomplete';
 import { iconsList } from 'utils/data/iconsList';
 import { bind, memoize, debounce } from 'utils/decorators/decoratorUtils';
+import { arrayfy } from 'utils/utils';
+import { get } from 'utils/lo/lo';
 
 // eslint-disable-next-line
 const { options, optionTemplate, ...autocompletePropsSubSet } = (Autocomplete || {}).propTypes || {};
 
 class MdiIconSelect extends PureComponent {
-    static propTypes = autocompletePropsSubSet;
+    static propTypes = {
+        ...autocompletePropsSubSet,
+        randomized: PropTypes.bool,
+    };
 
     constructor(props) {
         super(props);
-        this.state = {
-            options: this.buildOptions(iconsList),
-        };
+        const options = this.buildOptions(iconsList);
+        this.state = { options };
+        if (!props.value && props.randomized) {
+            const { valueField, multiple } = props;
+            const option = options[Math.floor(Math.random() * options?.length || 0)];
+            const optionValue = valueField ? get(option, valueField, null) : option;
+            const value = !multiple ? optionValue : [...(arrayfy(props.value) || []), optionValue];
+            this.props.onChange({
+                target: { value, name: props.name },
+            });
+        }
+    }
+
+    @bind
+    onChange(value) {
+        const { onChange, name } = this.props;
+        if (onChange) {
+            onChange({ target: { name, value: value } });
+        }
     }
 
     @bind
@@ -48,7 +70,9 @@ class MdiIconSelect extends PureComponent {
     suggest(event) {
         const query = event.target.value;
         const options = this.buildOptions(iconsList);
-        this.setState({ options: options.filter((op) => op.label.toLowerCase().includes(query.toLowerCase())) });
+        if (query !== this.props.value && query !== this.props.value?.value) {
+            this.setState({ options: options.filter((op) => op.label.toLowerCase().includes(query.toLowerCase())) });
+        }
     }
 
     render() {
