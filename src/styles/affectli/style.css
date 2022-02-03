@@ -1,0 +1,344 @@
+@font-face {
+  font-family: 'affectli';
+  src:  url('./fonts/affectli.eot?6bqwv7');
+  src:  url('./fonts/affectli.eot?6bqwv7#iefix') format('embedded-opentype'),
+    url('./fonts/affectli.ttf?6bqwv7') format('truetype'),
+    url('./fonts/affectli.woff?6bqwv7') format('woff'),
+    url('./fonts/affectli.svg?6bqwv7#affectli') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="af-"], [class*=" af-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'affectli' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.af-Attribute-class:before {
+  content: "\e900";
+}
+.af-globe:before {
+  content: "\e901";
+}
+.af-Discussion:before {
+  content: "\e902";
+}
+.af-Direct-message:before {
+  content: "\e903";
+}
+.af-public-channel:before {
+  content: "\e904";
+}
+.af-private-channel:before {
+  content: "\e905";
+}
+.af-thread:before {
+  content: "\e906";
+}
+.af-Grafana:before {
+  content: "\e907";
+}
+.af-gitlab:before {
+  content: "\e908";
+}
+.af-paypal:before {
+  content: "\e909";
+}
+.af-bitbucket:before {
+  content: "\e90a";
+}
+.af-sort-group-descending:before {
+  content: "\e90b";
+}
+.af-sort-group-ascending:before {
+  content: "\e90c";
+}
+.af-sort-descending:before {
+  content: "\e90d";
+}
+.af-sort-ascending:before {
+  content: "\e90e";
+}
+.af-track:before {
+  content: "\e90f";
+}
+.af-brush-shape-circle:before {
+  content: "\e910";
+}
+.af-divider:before {
+  content: "\e911";
+}
+.af-Workspaces-ven-diagram:before {
+  content: "\e912";
+}
+.af-enumeration:before {
+  content: "\e913";
+}
+.af-relationships:before {
+  content: "\e914";
+}
+.af-relationship-one2many-B-1:before {
+  content: "\e915";
+}
+.af-relationship-one2one-B:before {
+  content: "\e916";
+}
+.af-relationship-many2one-B:before {
+  content: "\e917";
+}
+.af-relationship-one2many-B:before {
+  content: "\e918";
+}
+.af-Parent-x:before {
+  content: "\e919";
+}
+.af-Sibling:before {
+  content: "\e91a";
+}
+.af-primary-class:before {
+  content: "\e91b";
+}
+.af-class:before {
+  content: "\e91c";
+}
+.af-tower:before {
+  content: "\e91d";
+}
+.af-Search-entities:before {
+  content: "\e91e";
+}
+.af-map-search:before {
+  content: "\e91f";
+}
+.af-Map-Columbus:before {
+  content: "\e920";
+}
+.af-Map-3D:before {
+  content: "\e921";
+}
+.af-google:before {
+  content: "\e922";
+}
+.af-Kanban:before {
+  content: "\e923";
+}
+.af-script:before {
+  content: "\e924";
+}
+.af-designer:before {
+  content: "\e925";
+}
+.af-marketplace:before {
+  content: "\e926";
+}
+.af-logo:before {
+  content: "\e927";
+}
+.af-messenger:before {
+  content: "\e928";
+}
+.af-analytics:before {
+  content: "\e929";
+}
+.af-app-builder:before {
+  content: "\e92a";
+}
+.af-charts:before {
+  content: "\e92b";
+}
+.af-classification-editor:before {
+  content: "\e92c";
+}
+.af-classification-tags:before {
+  content: "\e92d";
+}
+.af-config-builder:before {
+  content: "\e92e";
+}
+.af-config-builder-edit:before {
+  content: "\e92f";
+}
+.af-config-builder2:before {
+  content: "\e930";
+}
+.af-dashboard:before {
+  content: "\e931";
+}
+.af-data-source-builder:before {
+  content: "\e932";
+}
+.af-data-source:before {
+  content: "\e933";
+}
+.af-duplicate-app:before {
+  content: "\e934";
+}
+.af-event-dashboard:before {
+  content: "\e935";
+}
+.af-event-monitor:before {
+  content: "\e936";
+}
+.af-events:before {
+  content: "\e937";
+}
+.af-file-builder:before {
+  content: "\e938";
+}
+.af-form-builder:before {
+  content: "\e939";
+}
+.af-form-edit:before {
+  content: "\e93a";
+}
+.af-form:before {
+  content: "\e93b";
+}
+.af-hr:before {
+  content: "\e93c";
+}
+.af-job-profiling:before {
+  content: "\e93d";
+}
+.af-maps:before {
+  content: "\e93e";
+}
+.af-stream:before {
+  content: "\e93f";
+}
+.af-multiple-apps:before {
+  content: "\e940";
+}
+.af-process-builder:before {
+  content: "\e941";
+}
+.af-processes:before {
+  content: "\e942";
+}
+.af-projects:before {
+  content: "\e943";
+}
+.af-stream-file:before {
+  content: "\e944";
+}
+.af-script-builder:before {
+  content: "\e945";
+}
+.af-awareness-drawing:before {
+  content: "\e946";
+}
+.af-situational-awareness:before {
+  content: "\e947";
+}
+.af-situational-intelligence:before {
+  content: "\e948";
+}
+.af-table:before {
+  content: "\e949";
+}
+.af-tagngo:before {
+  content: "\e94a";
+}
+.af-task-list:before {
+  content: "\e94b";
+}
+.af-task:before {
+  content: "\e94c";
+}
+.af-teams:before {
+  content: "\e94d";
+}
+.af-things:before {
+  content: "\e94e";
+}
+.af-user-management:before {
+  content: "\e94f";
+}
+.af-widget-builder:before {
+  content: "\e950";
+}
+.af-settings:before {
+  content: "\e951";
+}
+.af-admin:before {
+  content: "\e952";
+}
+.af-affectli:before {
+  content: "\e953";
+}
+.af-baidu:before {
+  content: "\e954";
+}
+.af-apps:before {
+  content: "\e955";
+}
+.af-uniE936:before {
+  content: "\e956";
+}
+.af-entities:before {
+  content: "\e957";
+}
+.af-events-dashboard:before {
+  content: "\e958";
+}
+.af-event-monitor-card:before {
+  content: "\e959";
+}
+.af-file:before {
+  content: "\e95a";
+}
+.af-hcm:before {
+  content: "\e95b";
+}
+.af-hmc-briefcase:before {
+  content: "\e95c";
+}
+.af-intelligent-property:before {
+  content: "\e95d";
+}
+.af-maybery:before {
+  content: "\e95e";
+}
+.af-gab:before {
+  content: "\e95f";
+}
+.af-organisations:before {
+  content: "\e960";
+}
+.af-people:before {
+  content: "\e961";
+}
+.af-Things:before {
+  content: "\e962";
+}
+.af-reports:before {
+  content: "\e963";
+}
+.af-situational-awareness2:before {
+  content: "\e964";
+}
+.af-situational-intelligence2:before {
+  content: "\e965";
+}
+.af-situation-awareness-drawing:before {
+  content: "\e966";
+}
+.af-tag-n-go:before {
+  content: "\e967";
+}
+.af-widgets:before {
+  content: "\e968";
+}
+.af-process-type-script:before {
+  content: "\e981";
+}
