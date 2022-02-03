@@ -36,28 +36,20 @@ class MdiIconSelect extends PureComponent {
     }
 
     @bind
-    onChange(value) {
-        const { onChange, name } = this.props;
-        if (onChange) {
-            onChange({ target: { name, value: value } });
-        }
-    }
-
-    @bind
     @memoize()
     buildOptions(iconsList) {
-        return iconsList.map((icon) => ({ value: icon, label: icon }));
+        return iconsList.map((icon) => ({ value: icon.name, label: icon.name, type: icon.type }));
     }
 
     @bind
-    optionTemplate({ value, label }) {
+    optionTemplate({ value, label, type }) {
         return {
-            startAdornment: <MdiIcon size={19} name={value} />,
+            startAdornment: <MdiIcon size={19} name={value} type={type} />,
             label,
             option: (
                 <ListItem ContainerComponent="div" dense disableGutters>
                     <ListItemIcon>
-                        <MdiIcon name={value} />
+                        <MdiIcon name={value} type={type} />
                     </ListItemIcon>
                     <ListItemText primary={label} />
                 </ListItem>
