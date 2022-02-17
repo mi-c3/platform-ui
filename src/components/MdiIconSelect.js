@@ -24,7 +24,7 @@ class MdiIconSelect extends PureComponent {
         super(props);
         const options = this.buildOptions(iconsList);
         this.state = { options };
-        if(!props.value) {
+        if (!props.value) {
             let option = options[0];
             if (props.randomized) {
                 option = options[Math.floor(Math.random() * options?.length || 0)];
