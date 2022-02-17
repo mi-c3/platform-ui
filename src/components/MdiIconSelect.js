@@ -24,15 +24,16 @@ class MdiIconSelect extends PureComponent {
         super(props);
         const options = this.buildOptions(iconsList);
         this.state = { options };
+        let option = options[0];
         if (!props.value && props.randomized) {
-            const { valueField, multiple } = props;
-            const option = options[Math.floor(Math.random() * options?.length || 0)];
-            const optionValue = valueField ? get(option, valueField, null) : option;
-            const value = !multiple ? optionValue : [...(arrayfy(props.value) || []), optionValue];
-            this.props.onChange({
-                target: { value, name: props.name },
-            });
+            option = options[Math.floor(Math.random() * options?.length || 0)];
         }
+        const { valueField, multiple } = props;
+        const optionValue = valueField ? get(option, valueField, null) : option;
+        const value = !multiple ? optionValue : [...(arrayfy(props.value) || []), optionValue];
+        this.props.onChange({
+            target: { value, name: props.name },
+        });
     }
 
     @bind
