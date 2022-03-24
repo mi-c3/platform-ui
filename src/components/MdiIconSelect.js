@@ -18,17 +18,18 @@ class MdiIconSelect extends PureComponent {
     static propTypes = {
         ...autocompletePropsSubSet,
         randomized: PropTypes.bool,
+        clearable: PropTypes.bool,
     };
 
     constructor(props) {
         super(props);
         const options = this.buildOptions(iconsList);
         this.state = { options };
-        if (!props.value) {
-            let option = options[0];
-            if (props.randomized) {
-                option = options[Math.floor(Math.random() * options?.length || 0)];
-            }
+        let option = options[0];
+        if (props.randomized) {
+            option = options[Math.floor(Math.random() * options?.length || 0)];
+        }
+        if (!props.value && (!props.clearable || props.randomized)) {
             const { valueField, multiple } = props;
             const optionValue = valueField ? get(option, valueField, null) : option;
             const value = !multiple ? optionValue : [...(arrayfy(props.value) || []), optionValue];
