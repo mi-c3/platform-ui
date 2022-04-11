@@ -14,9 +14,6 @@ import Button from './Button';
 import MdiIcon from './MdiIcon';
 
 const styles = () => ({
-    avatarEditor: {
-        borderRadius: '100rem',
-    },
     avatarWrapper: {
         cursor: 'pointer',
     },
@@ -34,7 +31,7 @@ const styles = () => ({
     },
 });
 
-const styleColor = [255, 255, 255, 1];
+const styleColor = [0, 0, 0, 0.6];
 const defaultState = {
     showAvatarEditor: false,
     imageFile: null,
@@ -48,6 +45,7 @@ class AvatarEditor extends PureComponent {
         label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
         name: PropTypes.string,
         disabled: PropTypes.bool,
+        isButton: PropTypes.bool,
         withEditButton: PropTypes.bool,
         image: PropTypes.string,
         initials: PropTypes.string,
@@ -143,7 +141,7 @@ class AvatarEditor extends PureComponent {
     }
 
     render() {
-        const { image, classes, initials, label, disabled, AvatarProps, ReactAvatarEditorProps, AvatarGridProps, EditButtonProps, GridProps } = this.props; // eslint-disable-line prettier/prettier
+        const { isButton, image, classes, initials, label, disabled, AvatarProps, ReactAvatarEditorProps, AvatarGridProps, EditButtonProps, GridProps } = this.props; // eslint-disable-line prettier/prettier,max-len
         const { showAvatarEditor, imageFile, scale, rotate } = this.state;
         return (
             <Grid container direction="column" alignItems={showAvatarEditor ? 'center' : 'flex-start'} {...GridProps}>
@@ -158,13 +156,26 @@ class AvatarEditor extends PureComponent {
                             onClick={this.dropZoneClick}
                             className={`${!disabled ? classes.avatarWrapper : ''} ${AvatarGridProps.className}`}
                         >
-                            <Avatar initials={initials} src={image} {...AvatarProps} />
-                            {label && <Typography className={classes.label}>{label}</Typography>}
-                            {EditButtonProps.label ? (
-                                <Button className={classes.avatarEditButton} {...EditButtonProps}>
-                                    {EditButtonProps.label}
+                            {isButton ? (
+                                <Button
+                                    iconName={!EditButtonProps.withoutIcon ? 'upload' : ''}
+                                    variant="text"
+                                    className={classes.avatarEditButton}
+                                    {...EditButtonProps}
+                                >
+                                    {label}
                                 </Button>
-                            ) : null}
+                            ) : (
+                                <>
+                                    <Avatar initials={initials} src={image} {...AvatarProps} />
+                                    {label && <Typography className={classes.label}>{label}</Typography>}
+                                    {EditButtonProps.label ? (
+                                        <Button className={classes.avatarEditButton} {...EditButtonProps}>
+                                            {EditButtonProps.label}
+                                        </Button>
+                                    ) : null}
+                                </>
+                            )}
                         </Grid>
                     </Dropzone>
                 ) : (
@@ -176,7 +187,7 @@ class AvatarEditor extends PureComponent {
                             ref={this.editorRef}
                             border={0}
                             color={styleColor}
-                            className={classes.avatarEditor}
+                            borderRadius={0}
                             {...ReactAvatarEditorProps}
                         />
                         <Grid container direction="column" className={classes.wrapper}>

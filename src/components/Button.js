@@ -8,7 +8,7 @@ import MdiIcon from 'components/MdiIcon';
 
 const useStyles = withStyles({
     icon: {
-        marginTop: '-4px',
+        marginTop: '2px',
         marginRight: '5px',
         height: '20px',
     },
@@ -22,10 +22,10 @@ LinkedButton.propTypes = {
     href: PropTypes.string,
 };
 
-const Button = ({ iconName, children, classes, color, ...restProps }) =>
+const Button = ({ iconName, iconType, children, classes, color, ...restProps }) =>
     iconName ? (
         <LinkedButton color={color} {...restProps}>
-            <MdiIcon size={15} name={iconName} className={classes.icon} />
+            <MdiIcon size={15} type={iconType || 'mdi'} name={iconName} className={classes.icon} />
             {children}
         </LinkedButton>
     ) : (
@@ -34,6 +34,7 @@ const Button = ({ iconName, children, classes, color, ...restProps }) =>
         </LinkedButton>
     );
 Button.propTypes = {
+    iconType: PropTypes.string,
     iconName: PropTypes.string,
     color: PropTypes.string,
     children: PropTypes.node,
