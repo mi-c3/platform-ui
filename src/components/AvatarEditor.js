@@ -55,10 +55,12 @@ class AvatarEditor extends PureComponent {
         AvatarGridProps: PropTypes.object,
         GridProps: PropTypes.object,
         EditButtonProps: PropTypes.object,
+        EditorProps: PropTypes.object,
     };
 
     static defaultProps = {
         AvatarProps: {},
+        EditorProps: {},
         ReactAvatarEditorProps: {},
         AvatarGridProps: {},
         GridProps: {},
@@ -141,7 +143,7 @@ class AvatarEditor extends PureComponent {
     }
 
     render() {
-        const { isButton, image, classes, initials, label, disabled, AvatarProps, ReactAvatarEditorProps, AvatarGridProps, EditButtonProps, GridProps } = this.props; // eslint-disable-line prettier/prettier,max-len
+        const { isButton, image, classes, initials, label, disabled, AvatarProps, EditorProps, ReactAvatarEditorProps, AvatarGridProps, EditButtonProps, GridProps } = this.props; // eslint-disable-line prettier/prettier,max-len
         const { showAvatarEditor, imageFile, scale, rotate } = this.state;
         return (
             <Grid container direction="column" alignItems={showAvatarEditor ? 'center' : 'flex-start'} {...GridProps}>
@@ -191,32 +193,36 @@ class AvatarEditor extends PureComponent {
                             {...ReactAvatarEditorProps}
                         />
                         <Grid container direction="column" className={classes.wrapper}>
-                            <Grid item container alignItems="center">
-                                <Typography>Zoom:</Typography>
-                                <Slider
-                                    max={4}
-                                    min={1}
-                                    step={0.01}
-                                    value={scale}
-                                    onChange={this.handleScaleChange}
-                                    className={classes.slider}
-                                />
-                            </Grid>
-                            <Grid item container justify="space-between" alignItems="center">
-                                <Typography>Rotate:</Typography>
-                                <IconButton onClick={this.handleRotateLeft}>
-                                    <MdiIcon name="rotate-left" />
-                                </IconButton>
-                                <IconButton onClick={this.handleRotateRight}>
-                                    <MdiIcon name="rotate-right" />
-                                </IconButton>
-                            </Grid>
+                            {EditorProps?.disableZoom ? null : (
+                                <Grid item container alignItems="center">
+                                    <Typography>Zoom:</Typography>
+                                    <Slider
+                                        max={4}
+                                        min={1}
+                                        step={0.01}
+                                        value={scale}
+                                        onChange={this.handleScaleChange}
+                                        className={classes.slider}
+                                    />
+                                </Grid>
+                            )}
+                            {EditorProps?.diabelRotate ? null : (
+                                <Grid item container justify="space-between" alignItems="center">
+                                    <Typography>Rotate:</Typography>
+                                    <IconButton onClick={this.handleRotateLeft}>
+                                        <MdiIcon name="rotate-left" />
+                                    </IconButton>
+                                    <IconButton onClick={this.handleRotateRight}>
+                                        <MdiIcon name="rotate-right" />
+                                    </IconButton>
+                                </Grid>
+                            )}
                             <Grid container justify="space-between">
                                 <Button variant="text" onClick={this.cancelUpload}>
-                                    Cancel
+                                    {EditorProps?.cancelLabel || 'Cancel'}
                                 </Button>
                                 <Button variant="text" color="primary" onClick={this.handleUpload}>
-                                    Crop and Upload
+                                    {EditorProps?.uploadLabel || 'Crop and Upload'}
                                 </Button>
                             </Grid>
                         </Grid>
