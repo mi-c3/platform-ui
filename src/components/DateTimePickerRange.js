@@ -4,8 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -161,30 +159,28 @@ class DateTimePickerRange extends PureComponent {
         return () => {
             return (
                 <span className={classes.inputWrapper}>
-                    <MuiPickersUtilsProvider utils={MomentUtils}>
-                        <DateTimePicker
-                            showTodayButton
-                            ampm={false}
-                            placeholder="From"
-                            {...PickersFromProps}
-                            value={start}
-                            format="DD, MMM YYYY HH:mm"
-                            onChange={this.onChangeStart}
-                            TextFieldComponent={CustomInput}
-                            disabled={disabled}
-                        />
-                        <DateTimePicker
-                            showTodayButton
-                            ampm={false}
-                            placeholder="To"
-                            {...PickersToProps}
-                            value={end}
-                            format="DD, MMM YYYY HH:mm"
-                            onChange={this.onChangeEnd}
-                            TextFieldComponent={CustomInput}
-                            disabled={disabled}
-                        />
-                    </MuiPickersUtilsProvider>
+                    <DateTimePicker
+                        showTodayButton
+                        ampm={false}
+                        placeholder="From"
+                        {...PickersFromProps}
+                        value={start}
+                        format="DD, MMM YYYY HH:mm"
+                        onChange={this.onChangeStart}
+                        TextFieldComponent={CustomInput}
+                        disabled={disabled}
+                    />
+                    <DateTimePicker
+                        showTodayButton
+                        ampm={false}
+                        placeholder="To"
+                        {...PickersToProps}
+                        value={end}
+                        format="DD, MMM YYYY HH:mm"
+                        onChange={this.onChangeEnd}
+                        TextFieldComponent={CustomInput}
+                        disabled={disabled}
+                    />
                 </span>
             );
         };
