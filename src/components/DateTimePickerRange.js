@@ -4,8 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
 import moment from 'moment';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -179,60 +177,58 @@ class DateTimePickerRange extends PureComponent {
     buildInputs(restProps, PickersToProps, PickersFromProps, start, end, classes, disabled) {
         return (
             <Grid container wrap="nowrap">
-                <MuiPickersUtilsProvider utils={MomentUtils}>
-                    <TextField
-                        multiline
-                        rowsMax={2}
-                        label="From"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <MdiIcon name="calendar-blank" />
-                                </InputAdornment>
-                            ),
-                            inputComponent: () => (
-                                <DateTimePicker
-                                    showTodayButton
-                                    ampm={false}
-                                    {...PickersFromProps}
-                                    value={start}
-                                    format="DD, MMM YYYY HH:mm"
-                                    onChange={this.onChangeStart}
-                                    disabled={disabled}
-                                    TextFieldComponent={CustomInput}
-                                />
-                            ),
-                        }}
-                        disabled={disabled}
-                        required={restProps.required}
-                    />
-                    <TextField
-                        multiline
-                        rowsMax={2}
-                        label="From"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <MdiIcon name="calendar-blank" />
-                                </InputAdornment>
-                            ),
-                            inputComponent: () => (
-                                <DateTimePicker
-                                    showTodayButton
-                                    ampm={false}
-                                    {...PickersToProps}
-                                    value={end}
-                                    format="DD, MMM YYYY HH:mm"
-                                    onChange={this.onChangeEnd}
-                                    disabled={disabled}
-                                    TextFieldComponent={CustomInput}
-                                />
-                            ),
-                        }}
-                        disabled={disabled}
-                        required={restProps.required}
-                    />
-                </MuiPickersUtilsProvider>
+                <TextField
+                    multiline
+                    rowsMax={2}
+                    label="From"
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <MdiIcon name="calendar-blank" />
+                            </InputAdornment>
+                        ),
+                        inputComponent: () => (
+                            <DateTimePicker
+                                showTodayButton
+                                ampm={false}
+                                {...PickersFromProps}
+                                value={start}
+                                format="DD, MMM YYYY HH:mm"
+                                onChange={this.onChangeStart}
+                                disabled={disabled}
+                                TextFieldComponent={CustomInput}
+                            />
+                        ),
+                    }}
+                    disabled={disabled}
+                    required={restProps.required}
+                />
+                <TextField
+                    multiline
+                    rowsMax={2}
+                    label="From"
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <MdiIcon name="calendar-blank" />
+                            </InputAdornment>
+                        ),
+                        inputComponent: () => (
+                            <DateTimePicker
+                                showTodayButton
+                                ampm={false}
+                                {...PickersToProps}
+                                value={end}
+                                format="DD, MMM YYYY HH:mm"
+                                onChange={this.onChangeEnd}
+                                disabled={disabled}
+                                TextFieldComponent={CustomInput}
+                            />
+                        ),
+                    }}
+                    disabled={disabled}
+                    required={restProps.required}
+                />
             </Grid>
         );
     }
