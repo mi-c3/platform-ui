@@ -4,9 +4,14 @@ import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
+import moment from 'moment';
 
 import { withStyles } from '@material-ui/core/styles';
 
+import Button from './Button';
+import ModalDialog from './ModalDialog';
 import Autocomplete from './Autocomplete';
 import Checkbox from './Checkbox';
 import DateTimePicker from './DateTimePicker';
@@ -15,7 +20,7 @@ import MdiIcon from './MdiIcon';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 const styles = {
-    inputWrapper: { flexGrow: 1, display: 'flex', flexWrap: 'wrap' },
+    inputWrapper: { display: 'flex', flexWrap: 'wrap' },
     customInput: { flexGrow: 1, marginBottom: '-10px' },
     emptySpace: { marginRight: '4px' },
 };
@@ -33,7 +38,7 @@ CustomInput.propTypes = {
 const unitOptions = [
     { label: 'Minute(s)', value: 'mins' },
     { label: 'Hour(s)', value: 'hours' },
-    { label: 'Minute(s)', value: 'days' },
+    { label: 'Day(s)', value: 'days' },
     { label: 'Month(s)', value: 'month' },
 ];
 
@@ -59,11 +64,17 @@ class DateTimePickerRange extends PureComponent {
     constructor(props) {
         super(props);
         const [start, end] = (props.value && props.value.map((date) => new Date(date))) || [null, null];
-        this.state = { start, end, showModal: false, relative: !['all', 'standart'].includes(props.variant) };
+        this.state = {
+            start,
+            end,
+            value: props.value,
+            showModal: false,
+            relative: props.value && props.value.relative ? true : !['standart'].includes(props.variant),
+        };
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        const { value, relative, variant, name, onChange } = this.props;
+    componentDidUpdate(prevProps) {
+        const { value, relative, variant } = this.props;
         if (!value || Array.isArray(value)) {
             const [start, end] = (value && value.map((date) => new Date(date))) || [null, null];
             if (prevProps.value !== value) {
@@ -71,37 +82,38 @@ class DateTimePickerRange extends PureComponent {
             }
         }
         if (prevProps.relative !== relative || prevProps.variant !== variant) {
-            this.setState({ relative: relative || !['all', 'standart'].includes(variant) });
-        }
-        if ((prevProps.relative !== relative || prevState.relative !== this.state.relative) && value) {
-            onChange && onChange({ name, value, target: { name, value: null } });
+            this.setState({ relative: ['standart'].includes(variant) ? false : relative, value: null });
         }
     }
 
     @bind
     onClear(e) {
         e.stopPropagation();
-        this.setState({ start: null, end: null }, this.onChange);
+        this.setState({ start: null, end: null, value: null }, this.onSave);
     }
 
     @bind
-    onChange() {
+    onSave() {
         const { name, onChange } = this.props;
         if (!onChange) {
             return;
         }
+        const { value } = this.state;
+        onChange && onChange({ name, value, target: { name, value } });
+        this.closeModal();
+    }
+
+    @bind
+    onChange() {
         const { start, end } = this.state;
         const value = start && [start, end];
-        onChange && onChange({ name, value, target: { name, value } });
+        this.setState({ value });
     }
 
     @bind
     onChangeRelative(evnt) {
-        const { name, value, onChange } = this.props;
+        const { value } = this.state;
         const { target } = evnt;
-        if (!onChange) {
-            return;
-        }
         const nextValue =
             value && typeof value === 'object'
                 ? {
@@ -110,7 +122,7 @@ class DateTimePickerRange extends PureComponent {
                       [target.name]: target.value, // eslint-disable-line indent
                   } // eslint-disable-line indent
                 : { ...defaultRelativeValue, [target.name]: target.value };
-        onChange && onChange({ name, value, target: { name, value: nextValue } });
+        this.setState({ value: nextValue });
     }
 
     @bind
@@ -126,7 +138,7 @@ class DateTimePickerRange extends PureComponent {
             start = new Date(end.getTime());
         }
         start && start.setMilliseconds(0);
-        this.setState({ start, end }, this.onChange);
+        this.setState({ start, end, value: [start, end] }, this.onChange);
     }
 
     @bind
@@ -145,117 +157,183 @@ class DateTimePickerRange extends PureComponent {
             end = new Date(start.getTime());
         }
         end && end.setMilliseconds(999);
-        this.setState({ start, end }, this.onChange);
+        this.setState({ start, end, value: [start, end] }, this.onChange);
     }
 
     @bind
     toggleRelative({ target: { value } }) {
-        this.setState({ relative: value });
+        this.setState({ relative: value, value: null });
+    }
+
+    @bind
+    openModal() {
+        this.setState({ showModal: true });
+    }
+    @bind
+    closeModal() {
+        this.setState({ showModal: false });
     }
 
     @bind
     @memoize()
-    buildInputs(PickersToProps, PickersFromProps, start, end, classes, disabled) {
-        return () => {
-            return (
-                <span className={classes.inputWrapper}>
-                    <DateTimePicker
-                        showTodayButton
-                        ampm={false}
-                        placeholder="From"
-                        {...PickersFromProps}
-                        value={start}
-                        format="DD, MMM YYYY HH:mm"
-                        onChange={this.onChangeStart}
-                        TextFieldComponent={CustomInput}
-                        disabled={disabled}
-                    />
-                    <DateTimePicker
-                        showTodayButton
-                        ampm={false}
-                        placeholder="To"
-                        {...PickersToProps}
-                        value={end}
-                        format="DD, MMM YYYY HH:mm"
-                        onChange={this.onChangeEnd}
-                        TextFieldComponent={CustomInput}
-                        disabled={disabled}
-                    />
-                </span>
-            );
-        };
-    }
-
-    render() {
-        const { PickersFromProps, PickersToProps, classes, disabled, variant, value, isMobile, ...restProps } = this.props;
-        const { start, end, relative } = this.state;
+    buildInputs(restProps, PickersToProps, PickersFromProps, start, end, classes, disabled) {
         return (
-            <Fragment>
-                {variant === 'all' && (
-                    <Checkbox disabled={disabled} label="Relative time" onChange={this.toggleRelative} value={relative} />
-                )}
-                {relative && ['all', 'relative'].includes(variant) && (
-                    <Grid container wrap={isMobile ? 'wrap' : 'nowrap'} justify={isMobile ? 'flex-start' : 'space-around'}>
-                        <Autocomplete
-                            label="Range"
-                            disabled={disabled}
-                            required={restProps.required}
-                            error={restProps.error}
-                            helperText={restProps.helperText}
-                            name="range"
-                            onChange={this.onChangeRelative}
-                            options={rangeOptions}
-                            valueField="value"
-                            value={value ? value.range || null : null}
-                            clearable={false}
-                        />
-                        {!isMobile && <div className={classes.emptySpace} />}
-                        <TextField
-                            multiline
-                            rowsMax={2}
-                            disabled={disabled}
-                            required={restProps.required}
-                            name="amount"
-                            label="Amount"
-                            onChange={this.onChangeRelative}
-                            value={value ? value.amount || null : null}
-                        />
-                        {!isMobile && <div className={classes.emptySpace} />}
-                        <Autocomplete
-                            valueField="value"
-                            label="Unit"
-                            disabled={disabled}
-                            required={restProps.required}
-                            name="unit"
-                            onChange={this.onChangeRelative}
-                            options={unitOptions}
-                            value={value ? value.unit || null : null}
-                            clearable={false}
-                        />
-                    </Grid>
-                )}
-                {!relative && ['all', 'standart'].includes(variant) && (
+            <Grid container wrap="nowrap">
+                <MuiPickersUtilsProvider utils={MomentUtils}>
                     <TextField
                         multiline
                         rowsMax={2}
+                        label="From"
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
                                     <MdiIcon name="calendar-blank" />
                                 </InputAdornment>
                             ),
-                            endAdornment: !disabled && (
-                                <InputAdornment position="end">
-                                    <IconButton aria-label="Clear input" onClick={this.onClear}>
-                                        <MdiIcon name="close" />
-                                    </IconButton>
-                                </InputAdornment>
+                            inputComponent: () => (
+                                <DateTimePicker
+                                    showTodayButton
+                                    ampm={false}
+                                    {...PickersFromProps}
+                                    value={start}
+                                    format="DD, MMM YYYY HH:mm"
+                                    onChange={this.onChangeStart}
+                                    disabled={disabled}
+                                    TextFieldComponent={CustomInput}
+                                />
                             ),
-                            inputComponent: this.buildInputs(PickersToProps, PickersFromProps, start, end, classes, disabled),
                         }}
                         disabled={disabled}
-                        {...restProps}
+                        required={restProps.required}
                     />
+                    <TextField
+                        multiline
+                        rowsMax={2}
+                        label="From"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <MdiIcon name="calendar-blank" />
+                                </InputAdornment>
+                            ),
+                            inputComponent: () => (
+                                <DateTimePicker
+                                    showTodayButton
+                                    ampm={false}
+                                    {...PickersToProps}
+                                    value={end}
+                                    format="DD, MMM YYYY HH:mm"
+                                    onChange={this.onChangeEnd}
+                                    disabled={disabled}
+                                    TextFieldComponent={CustomInput}
+                                />
+                            ),
+                        }}
+                        disabled={disabled}
+                        required={restProps.required}
+                    />
+                </MuiPickersUtilsProvider>
+            </Grid>
+        );
+    }
+
+    @bind
+    buildInputsRelative(restProps, isMobile, disabled, value, classes) {
+        return (
+            <Grid container wrap={isMobile ? 'wrap' : 'nowrap'} justify={isMobile ? 'flex-start' : 'space-around'}>
+                <Autocomplete
+                    label="Range"
+                    disabled={disabled}
+                    required={restProps.required}
+                    name="range"
+                    onChange={this.onChangeRelative}
+                    options={rangeOptions}
+                    valueField="value"
+                    value={value ? value.range || null : null}
+                    clearable={false}
+                />
+                {!isMobile && <div className={classes.emptySpace} />}
+                <TextField
+                    disabled={disabled}
+                    required={restProps.required}
+                    name="amount"
+                    label="Amount"
+                    onChange={this.onChangeRelative}
+                    value={value ? value.amount || null : null}
+                />
+                {!isMobile && <div className={classes.emptySpace} />}
+                <Autocomplete
+                    valueField="value"
+                    label="Unit"
+                    disabled={disabled}
+                    required={restProps.required}
+                    name="unit"
+                    onChange={this.onChangeRelative}
+                    options={unitOptions}
+                    value={value ? value.unit || null : null}
+                    clearable={false}
+                />
+            </Grid>
+        );
+    }
+
+    render() {
+        const { PickersFromProps, PickersToProps, classes, disabled, variant, isMobile, ...restProps } = this.props;
+        const { start, end, relative, showModal, value } = this.state;
+        const oval = restProps.value;
+        return (
+            <Fragment>
+                <TextField
+                    multiline
+                    rowsMax={2}
+                    onClick={this.openModal}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <MdiIcon name="calendar-blank" />
+                            </InputAdornment>
+                        ),
+                        endAdornment: !disabled && (
+                            <InputAdornment position="end">
+                                <IconButton aria-label="Clear input" onClick={this.onClear}>
+                                    <MdiIcon name="close" />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                        inputComponent: (props) => <CustomInput disabled {...props} />,
+                        disabled: true,
+                    }}
+                    disabled={disabled}
+                    {...restProps}
+                    value={
+                        oval
+                            ? oval.relative
+                                ? `${oval.range} ${oval.amount} ${oval.unit}`
+                                : `${moment(oval[0]).format('DD, MMM YYYY HH:mm')}, ${moment(oval[1]).format('DD, MMM YYYY HH:mm')}`
+                            : ''
+                    }
+                />
+                {showModal && (
+                    <ModalDialog
+                        onClose={this.closeModal}
+                        title={restProps.label}
+                        actions={
+                            <>
+                                <Button className={classes.cancelButton} onClick={this.closeModal} variant="text">
+                                    Cancel
+                                </Button>
+                                <Button onClick={this.onSave} variant="contained" color="primary">
+                                    Save
+                                </Button>
+                            </>
+                        }
+                    >
+                        {variant === 'all' && (
+                            <Checkbox disabled={disabled} label="Relative time" onChange={this.toggleRelative} value={relative} />
+                        )}
+                        {relative && this.buildInputsRelative(restProps, isMobile, disabled, value, classes)}
+                        {!relative && this.buildInputs(restProps, PickersToProps, PickersFromProps, start, end, classes, disabled)}
+                    </ModalDialog>
                 )}
             </Fragment>
         );
