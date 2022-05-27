@@ -41,6 +41,9 @@ const StyledSmall = styled.small`
 const DialogFooter = styled.div`
     margin-top: 6px;
 `;
+const FooterDivider = styled(Divider)`
+    margin-bottom: 8px;
+`;
 
 const ModalDialog = ({
     title,
@@ -89,7 +92,7 @@ const ModalDialog = ({
             </Content>
             {footer && (
                 <DialogFooter>
-                    <Divider />
+                    <FooterDivider />
                     {footer}
                 </DialogFooter>
             )}
