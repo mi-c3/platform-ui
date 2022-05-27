@@ -75,15 +75,39 @@ class DateTimePickerRange extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        const { value, relative, variant } = this.props;
-        if (!value || Array.isArray(value)) {
+        const { value, variant } = this.props;
+        const { relative: relativeState } = this.state;
+        let nextState = null;
+        if (!relativeState && ['all', 'standart'].includes(variant) && prevProps.value !== value && (!value || Array.isArray(value))) {
             const [start, end] = (value && value.map((date) => new Date(date))) || [null, null];
-            if (prevProps.value !== value) {
-                this.setState({ start, end });
-            }
+            nextState = {
+                ...(nextState || {}),
+                start,
+                end,
+                value,
+                relative: false,
+            };
         }
-        if (prevProps.relative !== relative || prevProps.variant !== variant) {
-            this.setState({ relative: ['standart'].includes(variant) ? false : relative, value: null });
+        if (relativeState && ['all', 'relative'].includes(variant) && prevProps.value !== value && (!value || typeof value === 'object')) {
+            nextState = {
+                ...(nextState || {}),
+                value: value || null,
+                relative: true,
+                start: null,
+                end: null,
+            };
+        }
+        if (prevProps.variant !== variant) {
+            nextState = {
+                ...(nextState || {}),
+                relative: ['standart'].includes(variant) ? false : relativeState,
+                value: nextState?.value || null,
+                start: null,
+                end: null,
+            };
+        }
+        if (nextState) {
+            this.setState(nextState);
         }
     }
 
@@ -162,8 +186,19 @@ class DateTimePickerRange extends PureComponent {
     }
 
     @bind
-    toggleRelative({ target: { value } }) {
-        this.setState({ relative: value, value: null });
+    toggleRelative({ target: { value: checked } }) {
+        const { value } = this.props;
+        const nextState = { relative: checked, value: null, start: null, end: null };
+        if (checked && value && typeof value === 'object') {
+            nextState.value = value;
+        }
+        if (!checked && value && Array.isArray(value)) {
+            const [start, end] = value;
+            nextState.value = value;
+            nextState.start = start;
+            nextState.end = end;
+        }
+        this.setState(nextState);
     }
 
     @bind
