@@ -4,7 +4,10 @@ import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -51,12 +54,14 @@ class DateTimePickerRange extends PureComponent {
     static propTypes = {
         ...(DateTimePicker || {}).propTypes,
         value: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)])),
+        relative: PropTypes.boolean,
         classes: PropTypes.object.isRequired,
     };
 
     static defaultProps = {
         variant: 'standart',
         relative: false,
+        TextFieldProps: {},
     };
 
     constructor(props) {
@@ -174,61 +179,64 @@ class DateTimePickerRange extends PureComponent {
 
     @bind
     @memoize()
-    buildInputs(restProps, PickersToProps, PickersFromProps, start, end, classes, disabled) {
+    buildInputs(restProps, PickersToProps, PickersFromProps, start, end, classes, disabled, isMobile) {
         return (
-            <Grid container wrap="nowrap">
-                <TextField
-                    multiline
-                    rowsMax={2}
-                    label="From"
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <MdiIcon name="calendar-blank" />
-                            </InputAdornment>
-                        ),
-                        inputComponent: () => (
-                            <DateTimePicker
-                                showTodayButton
-                                ampm={false}
-                                {...PickersFromProps}
-                                value={start}
-                                format="DD, MMM YYYY HH:mm"
-                                onChange={this.onChangeStart}
-                                disabled={disabled}
-                                TextFieldComponent={CustomInput}
-                            />
-                        ),
-                    }}
-                    disabled={disabled}
-                    required={restProps.required}
-                />
-                <TextField
-                    multiline
-                    rowsMax={2}
-                    label="From"
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <MdiIcon name="calendar-blank" />
-                            </InputAdornment>
-                        ),
-                        inputComponent: () => (
-                            <DateTimePicker
-                                showTodayButton
-                                ampm={false}
-                                {...PickersToProps}
-                                value={end}
-                                format="DD, MMM YYYY HH:mm"
-                                onChange={this.onChangeEnd}
-                                disabled={disabled}
-                                TextFieldComponent={CustomInput}
-                            />
-                        ),
-                    }}
-                    disabled={disabled}
-                    required={restProps.required}
-                />
+            <Grid container wrap={isMobile ? 'wrap' : 'nowrap'}>
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <TextField
+                        multiline
+                        rowsMax={2}
+                        label="From"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <MdiIcon name="calendar-blank" />
+                                </InputAdornment>
+                            ),
+                            inputComponent: () => (
+                                <DateTimePicker
+                                    showTodayButton
+                                    ampm={false}
+                                    {...PickersFromProps}
+                                    value={start}
+                                    format="DD, MMM YYYY HH:mm"
+                                    onChange={this.onChangeStart}
+                                    disabled={disabled}
+                                    TextFieldComponent={CustomInput}
+                                />
+                            ),
+                        }}
+                        disabled={disabled}
+                        required={restProps.required}
+                    />
+                    {!isMobile && <div className={classes.emptySpace} />}
+                    <TextField
+                        multiline
+                        rowsMax={2}
+                        label="To"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <MdiIcon name="calendar-blank" />
+                                </InputAdornment>
+                            ),
+                            inputComponent: () => (
+                                <DateTimePicker
+                                    showTodayButton
+                                    ampm={false}
+                                    {...PickersToProps}
+                                    value={end}
+                                    format="DD, MMM YYYY HH:mm"
+                                    onChange={this.onChangeEnd}
+                                    disabled={disabled}
+                                    TextFieldComponent={CustomInput}
+                                />
+                            ),
+                        }}
+                        disabled={disabled}
+                        required={restProps.required}
+                    />
+                </MuiPickersUtilsProvider>
             </Grid>
         );
     }
@@ -274,7 +282,17 @@ class DateTimePickerRange extends PureComponent {
     }
 
     render() {
-        const { PickersFromProps, PickersToProps, classes, disabled, variant, isMobile, ...restProps } = this.props;
+        const {
+            PickersFromProps,
+            PickersToProps,
+            classes,
+            disabled,
+            variant,
+            isMobile,
+            TextFieldProps,
+            relative: rrelative, //eslint-disable-line
+            ...restProps
+        } = this.props;
         const { start, end, relative, showModal, value } = this.state;
         const oval = restProps.value;
         return (
@@ -282,7 +300,6 @@ class DateTimePickerRange extends PureComponent {
                 <TextField
                     multiline
                     rowsMax={2}
-                    onClick={this.openModal}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -296,11 +313,13 @@ class DateTimePickerRange extends PureComponent {
                                 </IconButton>
                             </InputAdornment>
                         ),
-                        inputComponent: (props) => <CustomInput disabled {...props} />,
-                        disabled: true,
+                        inputComponent: (props) => <CustomInput {...props} />,
+                        ...(TextFieldProps?.InputProps || {}),
                     }}
-                    disabled={disabled}
                     {...restProps}
+                    {...TextFieldProps}
+                    disabled={disabled}
+                    onClick={this.openModal}
                     value={
                         oval
                             ? oval.relative
@@ -323,12 +342,14 @@ class DateTimePickerRange extends PureComponent {
                                 </Button>
                             </>
                         }
+                        footer={restProps.required && <Typography variant="caption">* All fields are required</Typography>}
                     >
                         {variant === 'all' && (
                             <Checkbox disabled={disabled} label="Relative time" onChange={this.toggleRelative} value={relative} />
                         )}
                         {relative && this.buildInputsRelative(restProps, isMobile, disabled, value, classes)}
-                        {!relative && this.buildInputs(restProps, PickersToProps, PickersFromProps, start, end, classes, disabled)}
+                        {!relative &&
+                            this.buildInputs(restProps, PickersToProps, PickersFromProps, start, end, classes, disabled, isMobile)}
                     </ModalDialog>
                 )}
             </Fragment>
