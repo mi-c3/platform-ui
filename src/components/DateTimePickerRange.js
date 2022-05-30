@@ -46,6 +46,17 @@ const rangeOptions = [
     { label: 'Next', value: 'add' },
 ];
 
+const unitMap = {
+    m: 'minutes',
+    M: 'monthes',
+    d: 'days',
+    h: 'hours',
+};
+const rangeMap = {
+    subtract: 'Last',
+    add: 'Next',
+};
+
 const defaultRelativeValue = (unit = 'm') => ({ relative: true, range: 'subtract', amount: 1, unit });
 
 class DateTimePickerRange extends PureComponent {
@@ -70,9 +81,14 @@ class DateTimePickerRange extends PureComponent {
         this.state = {
             start,
             end,
-            value: props.value,
+            value: props.value || null,
             showModal: false,
-            relative: props.value && props.value.relative ? true : !['standart'].includes(props.variant),
+            relative:
+                props.value && props.value.relative
+                    ? true
+                    : props.value && Array.isArray(props.value)
+                        ? false // eslint-disable-line
+                        : !['standart'].includes(props.variant), // eslint-disable-line
         };
     }
 
@@ -357,7 +373,7 @@ class DateTimePickerRange extends PureComponent {
                     value={
                         oval
                             ? oval.relative
-                                ? `${oval.range} ${oval.amount} ${oval.unit}`
+                                ? `${rangeMap[oval.range]} ${oval.amount} ${unitMap[oval.unit]}`
                                 : `${moment(oval[0]).format('DD, MMM YYYY HH:mm')}, ${moment(oval[1]).format('DD, MMM YYYY HH:mm')}`
                             : ''
                     }
