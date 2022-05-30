@@ -64,7 +64,7 @@ class DateTimePickerRange extends PureComponent {
 
     constructor(props) {
         super(props);
-        const [start, end] = (props.value && props.value.map((date) => new Date(date))) || [null, null];
+        const [start, end] = (Array.isArray(props.value) && props.value.map((date) => new Date(date))) || [null, null];
         this.state = {
             start,
             end,
