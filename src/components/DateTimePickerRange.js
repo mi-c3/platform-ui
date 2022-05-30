@@ -35,24 +35,25 @@ CustomInput.propTypes = {
 };
 
 const unitOptions = [
-    { label: 'Minute(s)', value: 'mins' },
-    { label: 'Hour(s)', value: 'hours' },
-    { label: 'Day(s)', value: 'days' },
-    { label: 'Month(s)', value: 'month' },
+    { label: 'Minute(s)', value: 'm' },
+    { label: 'Hour(s)', value: 'h' },
+    { label: 'Day(s)', value: 'd' },
+    { label: 'Month(s)', value: 'M' },
 ];
 
 const rangeOptions = [
-    { label: 'Last', value: 'last' },
-    { label: 'Next', value: 'next' },
+    { label: 'Last', value: 'subtract' },
+    { label: 'Next', value: 'add' },
 ];
 
-const defaultRelativeValue = { relative: true, range: 'last', amount: 1, unit: 'mins' };
+const defaultRelativeValue = (unit = 'm') => ({ relative: true, range: 'subtract', amount: 1, unit });
 
 class DateTimePickerRange extends PureComponent {
     static propTypes = {
         ...(DateTimePicker || {}).propTypes,
         value: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)])),
         relative: PropTypes.boolean,
+        defaultUnit: PropTypes.string,
         classes: PropTypes.object.isRequired,
     };
 
@@ -60,6 +61,7 @@ class DateTimePickerRange extends PureComponent {
         variant: 'standart',
         relative: false,
         TextFieldProps: {},
+        defaultUnit: 'm',
     };
 
     constructor(props) {
@@ -137,16 +139,17 @@ class DateTimePickerRange extends PureComponent {
 
     @bind
     onChangeRelative(evnt) {
+        const { defaultUnit } = this.props;
         const { value } = this.state;
         const { target } = evnt;
         const nextValue =
             value && typeof value === 'object'
                 ? {
-                      ...defaultRelativeValue, // eslint-disable-line indent
+                      ...defaultRelativeValue(defaultUnit), // eslint-disable-line indent
                       ...value, // eslint-disable-line indent
                       [target.name]: target.value, // eslint-disable-line indent
                   } // eslint-disable-line indent
-                : { ...defaultRelativeValue, [target.name]: target.value };
+                : { ...defaultRelativeValue(defaultUnit), [target.name]: target.value };
         this.setState({ value: nextValue });
     }
 
