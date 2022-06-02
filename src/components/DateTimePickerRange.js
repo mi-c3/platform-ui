@@ -69,7 +69,7 @@ class DateTimePickerRange extends PureComponent {
     };
 
     static defaultProps = {
-        variant: 'standart',
+        variant: 'standard',
         relative: false,
         TextFieldProps: {},
         defaultUnit: 'm',
@@ -88,7 +88,7 @@ class DateTimePickerRange extends PureComponent {
                     ? true
                     : props.value && Array.isArray(props.value)
                         ? false // eslint-disable-line
-                        : !['standart'].includes(props.variant), // eslint-disable-line
+                        : !['standard'].includes(props.variant), // eslint-disable-line
         };
     }
 
@@ -96,7 +96,7 @@ class DateTimePickerRange extends PureComponent {
         const { value, variant } = this.props;
         const { relative: relativeState } = this.state;
         let nextState = null;
-        if (!relativeState && ['all', 'standart'].includes(variant) && prevProps.value !== value && (!value || Array.isArray(value))) {
+        if (!relativeState && ['all', 'standard'].includes(variant) && prevProps.value !== value && (!value || Array.isArray(value))) {
             const [start, end] = (value && value.map((date) => new Date(date))) || [null, null];
             nextState = {
                 ...(nextState || {}),
@@ -118,7 +118,7 @@ class DateTimePickerRange extends PureComponent {
         if (prevProps.variant !== variant) {
             nextState = {
                 ...(nextState || {}),
-                relative: ['standart'].includes(variant) ? false : relativeState,
+                relative: ['standard'].includes(variant) ? false : relativeState,
                 value: nextState?.value || null,
                 start: null,
                 end: null,
