@@ -102,6 +102,7 @@ class TextField extends PureComponent {
                 disabled={disabled}
                 error={error}
                 InputLabelProps={{
+                    ...InputLabelProps,
                     className: `${get(InputProps, 'startAdornment') && !autocompleteMultiple ? classes.labelMargin : ''} ${get(
                         InputLabelProps,
                         'className',
