@@ -48,7 +48,7 @@ const rangeOptions = [
 
 const unitMap = {
     m: 'minutes',
-    M: 'monthes',
+    M: 'months',
     d: 'days',
     h: 'hours',
 };
