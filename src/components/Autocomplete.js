@@ -55,6 +55,10 @@ const AdormentStyle = styled('div')({
     margin: '21px 7px 0 0',
 });
 
+const AdormentIconStyle = styled('div')({
+    margin: '7px 0px 0 0',
+});
+
 class Autocomplete extends PureComponent {
     static propTypes = {
         className: PropTypes.string,
@@ -445,7 +449,7 @@ class Autocomplete extends PureComponent {
                 );
             });
             InputProperties.classes = { root: classes.inputRoot, input: classes.inputInput };
-        } else {
+        } else if (!InputProps?.startAdornment) {
             InputProperties.startAdornment = startAdornment && <AdormentStyle>{startAdornment}</AdormentStyle>;
             if (!InputProperties.endAdornment) {
                 if (selected && clearable && !disabled) {
@@ -456,6 +460,8 @@ class Autocomplete extends PureComponent {
                     );
                 }
             }
+        } else if (InputProps?.startAdornment) {
+            InputProperties.startAdornment = <AdormentIconStyle>{InputProps.startAdornment}</AdormentIconStyle>;
         }
 
         if (!InputProperties.endAdornment) {
