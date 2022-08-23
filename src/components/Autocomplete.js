@@ -449,7 +449,7 @@ class Autocomplete extends PureComponent {
                 );
             });
             InputProperties.classes = { root: classes.inputRoot, input: classes.inputInput };
-        } else if (!InputProps?.startAdornment) {
+        } else if (!InputProps?.startAdornment || startAdornment) {
             InputProperties.startAdornment = startAdornment && <AdormentStyle>{startAdornment}</AdormentStyle>;
             if (!InputProperties.endAdornment) {
                 if (selected && clearable && !disabled) {
