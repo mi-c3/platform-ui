@@ -24,6 +24,8 @@ const styles = {
     inputWrapper: { display: 'flex', flexWrap: 'wrap' },
     customInput: { flexGrow: 1, marginBottom: '-10px' },
     emptySpace: { marginRight: '4px' },
+    switch: { marginLeft: '0px' },
+    closeButtonIcon: { lineHeight: '11px !important' },
     clearButtonWrapper: { margin: '8px 0px' },
 };
 
@@ -425,14 +427,20 @@ class DateTimePickerRange extends PureComponent {
                         footer={<Typography variant="caption">* All fields are required</Typography>}
                     >
                         {variant === 'all' && (
-                            <Switch disabled={disabled} label="Relative time" onChange={this.toggleRelative} value={relative} />
+                            <Switch
+                                className={classes.switch}
+                                disabled={disabled}
+                                label="Relative time"
+                                onChange={this.toggleRelative}
+                                value={relative}
+                            />
                         )}
                         {relative && this.buildInputsRelative(restProps, isMobile, disabled, value, classes, errors)}
                         {!relative &&
                             this.buildInputs(restProps, PickersToProps, PickersFromProps, start, end, classes, disabled, isMobile)}
                         <Grid container className={classes.clearButtonWrapper}>
                             <Button
-                                startIcon={<MdiIcon name="close" size={16} />}
+                                startIcon={<MdiIcon className={classes.closeButtonIcon} name="close" size={16} />}
                                 onClick={this.onClearRelative}
                                 variant="outlined"
                                 color="primary"
