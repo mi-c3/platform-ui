@@ -53,11 +53,11 @@ const rangeOptions = [
 ];
 
 const unitMap = {
-    m: 'minutes',
-    M: 'months',
-    d: 'days',
-    h: 'hours',
-    Y: 'years',
+    m: 'minute(s)',
+    M: 'month(s)',
+    d: 'day(s)',
+    h: 'hour(s)',
+    Y: 'year(s)',
 };
 const rangeMap = {
     subtract: 'Last',
