@@ -84,19 +84,9 @@ class DateTimePickerRange extends PureComponent {
 
     constructor(props) {
         super(props);
-        const [start, end] = (Array.isArray(props.value) && props.value.map((date) => new Date(date))) || [null, null];
         this.state = {
-            start,
-            end,
-            value: props.value || null,
             showModal: false,
-            errors: false,
-            relative:
-                props.value && props.value.relative
-                    ? true
-                    : props.value && Array.isArray(props.value)
-                        ? false // eslint-disable-line
-                        : !['standard'].includes(props.variant), // eslint-disable-line
+            ...this.getDefault(props),
         };
     }
 
@@ -135,6 +125,23 @@ class DateTimePickerRange extends PureComponent {
         if (nextState) {
             this.setState(nextState);
         }
+    }
+
+    @bind
+    getDefault(props) {
+        const [start, end] = (Array.isArray(props.value) && props.value.map((date) => new Date(date))) || [null, null];
+        return {
+            start,
+            end,
+            value: props.value || null,
+            errors: false,
+            relative:
+                props.value && props.value.relative
+                    ? true
+                    : props.value && Array.isArray(props.value)
+                      ? false // eslint-disable-line
+                      : !['standard'].includes(props.variant), // eslint-disable-line
+        };
     }
 
     @bind
@@ -246,7 +253,7 @@ class DateTimePickerRange extends PureComponent {
 
     @bind
     openModal() {
-        this.setState({ showModal: true });
+        this.setState({ showModal: true, ...this.getDefault(this.props) });
     }
     @bind
     closeModal() {
@@ -373,6 +380,7 @@ class DateTimePickerRange extends PureComponent {
             isMobile,
             TextFieldProps,
             relative: rrelative, //eslint-disable-line
+            defaultUnit, //eslint-disable-line
             ...restProps
         } = this.props;
         const { errors, start, end, relative, showModal, value } = this.state;
