@@ -11,6 +11,8 @@ import moment from 'moment';
 
 import { withStyles } from '@material-ui/core/styles';
 
+import { isDefined } from 'utils/utils';
+import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import Button from './Button';
 import ModalDialog from './ModalDialog';
 import Autocomplete from './Autocomplete';
@@ -18,7 +20,6 @@ import Switch from './Switch';
 import DateTimePicker from './DateTimePicker';
 import TextField from './TextField';
 import MdiIcon from './MdiIcon';
-import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
 const styles = {
     inputWrapper: { display: 'flex', flexWrap: 'wrap' },
@@ -91,7 +92,7 @@ class DateTimePickerRange extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        const { value, variant } = this.props;
+        const { value, variant, relative: relativeProps } = this.props;
         const { relative: relativeState } = this.state;
         let nextState = null;
         if (!relativeState && ['all', 'standard'].includes(variant) && prevProps.value !== value && (!value || Array.isArray(value))) {
@@ -101,14 +102,14 @@ class DateTimePickerRange extends PureComponent {
                 start,
                 end,
                 value,
-                relative: false,
+                relative: relativeProps || false,
             };
         }
         if (relativeState && ['all', 'relative'].includes(variant) && prevProps.value !== value && (!value || typeof value === 'object')) {
             nextState = {
                 ...(nextState || {}),
                 value: value || null,
-                relative: true,
+                relative: ['relative'].includes(variant) ? true : relativeProps || true,
                 start: null,
                 end: null,
             };
@@ -116,7 +117,7 @@ class DateTimePickerRange extends PureComponent {
         if (prevProps.variant !== variant) {
             nextState = {
                 ...(nextState || {}),
-                relative: ['standard'].includes(variant) ? false : relativeState,
+                relative: ['standard'].includes(variant) ? false : relativeProps || relativeState,
                 value: nextState?.value || null,
                 start: null,
                 end: null,
@@ -130,17 +131,23 @@ class DateTimePickerRange extends PureComponent {
     @bind
     getDefault(props) {
         const [start, end] = (Array.isArray(props.value) && props.value.map((date) => new Date(date))) || [null, null];
+        let relative =
+            props.value && props.value.relative
+                ? true
+                : props.value && Array.isArray(props.value)
+              ? false // eslint-disable-line
+              : !['standard'].includes(props.variant); // eslint-disable-line
+
+        if (isDefined(props.relative) && !['standard', 'relative'].includes(props.variant)) {
+            relative = props.relative ? !Array.isArray(props.value) : false;
+        }
+
         return {
             start,
             end,
             value: props.value || null,
             errors: false,
-            relative:
-                props.value && props.value.relative
-                    ? true
-                    : props.value && Array.isArray(props.value)
-                      ? false // eslint-disable-line
-                      : !['standard'].includes(props.variant), // eslint-disable-line
+            relative,
         };
     }
 
@@ -162,8 +169,25 @@ class DateTimePickerRange extends PureComponent {
             return;
         }
         const { value } = this.state;
+
+        const currentDate = new Date();
+        const calculatedRelativeDate =
+            value?.relative &&
+            moment(currentDate)
+                [value.range](value.amount, value.unit)
+                .toDate();
+
         if (value?.relative && !value?.amount) {
             return this.setState({ errors: { amount: 'Amount is required.' } });
+        }
+        if (
+            value?.relative &&
+            value?.amount &&
+            (isNaN(calculatedRelativeDate) ||
+                moment('1970-01-01', 'YYYY-MM-DD').toDate() > calculatedRelativeDate ||
+                moment('4821-12-26', 'YYYY-MM-DD').toDate() < calculatedRelativeDate)
+        ) {
+            return this.setState({ errors: { amount: 'Amout is out of range.' } });
         }
         onChange && onChange({ name, value, target: { name, value } });
         this.closeModal();
