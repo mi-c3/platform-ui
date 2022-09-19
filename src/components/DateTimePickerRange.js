@@ -187,7 +187,7 @@ class DateTimePickerRange extends PureComponent {
                 moment('1970-01-01', 'YYYY-MM-DD').toDate() > calculatedRelativeDate ||
                 moment('4821-12-26', 'YYYY-MM-DD').toDate() < calculatedRelativeDate)
         ) {
-            return this.setState({ errors: { amount: 'Amout is out of range.' } });
+            return this.setState({ errors: { amount: 'Amount is out of range.' } });
         }
         onChange && onChange({ name, value, target: { name, value } });
         this.closeModal();
