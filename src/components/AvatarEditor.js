@@ -95,19 +95,19 @@ class AvatarEditor extends PureComponent {
             const canvas = this.editorRef.current.getImage();
             const context = canvas.getContext('2d');
             context.globalCompositeOperation = 'destination-over';
-            context.fillStyle = '#fff';
+            context.fillStyle = 'rgba(0,0,0,0)';
             context.fillRect(0, 0, canvas.width, canvas.height);
             if (canvas) {
                 canvas.toBlob(
                     (blob) => {
-                        const image = new File([blob], `${name || 'profile'}.jpg`, { type: 'image/jpeg' });
+                        const image = new File([blob], `${name || 'profile'}.png`, { type: 'image/png' });
                         this.setState(defaultState, () => {
                             if (onChange) {
                                 onChange(createEvent('change', { target: { value: image, name } }));
                             }
                         });
                     },
-                    'image/jpeg',
+                    'image/png',
                     1
                 );
             }
