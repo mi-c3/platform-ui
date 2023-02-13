@@ -68,6 +68,8 @@ class MdiIconSelect extends PureComponent {
         const options = this.buildOptions(iconsList);
         if (query !== this.props.value && query !== this.props.value?.value) {
             this.setState({ options: options.filter((op) => op.label.toLowerCase().includes(query.toLowerCase())) });
+        } else {
+            this.setState({ options });
         }
     }
 
