@@ -1,5 +1,5 @@
 import { get } from './lo/lo';
-import marked from 'marked';
+import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
 const isObject = (value) => value && typeof value === 'object' && !Array.isArray(value);
