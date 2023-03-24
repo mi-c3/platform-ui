@@ -43,6 +43,6 @@ const arrayfy = (value) => {
     return Array.isArray(value) ? value : [value];
 };
 
-const markdown = (text) => marked(DOMPurify.sanitize(text));
+const markdown = (text) => marked.parse(DOMPurify.sanitize(text));
 
 export { isObject, shallowEquals, debounce, arrayfy, isDefined, markdown };
