@@ -10,15 +10,24 @@ class AutocompleteLazy extends PureComponent {
         fetchData: PropTypes.func.isRequired,
     };
 
-    state = {
-        options: [],
-    };
+    state = { options: [] };
+
+    componentDidMount() {
+        this.updateOptions();
+    }
+
+    @bind
+    async updateOptions(value) {
+        const options = await this.props.fetchData(value);
+        this.setState({ options });
+    }
 
     @bind
     async suggest(event) {
         const { value } = event.target;
-        const options = await this.props.fetchData(value);
-        this.setState({ options });
+        if (value) {
+            this.updateOptions(value);
+        }
     }
 
     render() {
