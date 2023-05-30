@@ -25,7 +25,7 @@ export const iconsList = [
     { type: 'af', name: 'relationships' },
     { type: 'af', name: 'Parent-x' },
     { type: 'af', name: 'Sibling' },
-    { type: 'af', name: 'primary-class' },
+    { type: 'af', name: 'entity-type' },
     { type: 'af', name: 'class' },
     { type: 'af', name: 'tower' },
     { type: 'af', name: 'Search-entities' },
