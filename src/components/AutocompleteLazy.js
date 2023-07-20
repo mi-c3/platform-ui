@@ -25,9 +25,7 @@ class AutocompleteLazy extends PureComponent {
     @bind
     async suggest(event) {
         const { value } = event.target;
-        if (value) {
-            this.updateOptions(value);
-        }
+        this.updateOptions(value);
     }
 
     render() {
