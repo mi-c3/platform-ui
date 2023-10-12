@@ -24,7 +24,7 @@ const styles = () => ({
         width: '100%',
         cursor: 'pointer',
         boxSizing: 'border-box',
-        backgroundColor: '#50575b',
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -73,7 +73,7 @@ const styles = () => ({
 
 class Dropzone extends PureComponent {
     static defaultProps = {
-        accept: 'image/*,video/*,application/*',
+        accept: 'image/*,video/*,application/*,audio/*,text/*',
         filesLimit: 1,
         capture: true,
         maxSize: 3000000,
