@@ -53,7 +53,7 @@ class MdiIconSelect extends PureComponent {
             option: (
                 <ListItem ContainerComponent="div" dense disableGutters>
                     <ListItemIcon>
-                        <MdiIcon name={value} type={type} />
+                        <MdiIcon name={value} type={type} size={23} />
                     </ListItemIcon>
                     <ListItemText primary={label} />
                 </ListItem>
