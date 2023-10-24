@@ -156,7 +156,7 @@ class LocationForm extends PureComponent {
                         <Grid item />
                     )}
                     <Grid item>
-                        <Button onClick={this.centerMap} variant="text">
+                        <Button disabled={disabled} onClick={this.centerMap} variant="text">
                             Center map
                         </Button>
                         <Button disabled={disabled} onClick={this.myLocation} variant="text">
