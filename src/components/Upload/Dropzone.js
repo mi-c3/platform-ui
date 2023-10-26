@@ -76,7 +76,6 @@ class Dropzone extends PureComponent {
         accept: 'image/*,video/*,application/*,audio/*,text/*',
         filesLimit: 1,
         capture: true,
-        maxSize: 3000000,
         showPreviews: false, // By default previews show up under in the dialog and inside in the standalone
         clearOnUnmount: true,
         disableDragActive: false,
