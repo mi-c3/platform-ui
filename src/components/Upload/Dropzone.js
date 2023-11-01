@@ -17,7 +17,7 @@ import { isImageType } from 'utils/file/file';
 import MdiIcon from 'components/MdiIcon';
 import Link from 'components/Link';
 import { DarkTheme } from 'styles/theme';
-import ConfirmationModal from './ConfirmationModal';
+import ConfirmationModal from '../ConfirmationModal';
 
 const styles = () => ({
     dropZone: {
