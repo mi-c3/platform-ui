@@ -17,6 +17,7 @@ import { isImageType } from 'utils/file/file';
 import MdiIcon from 'components/MdiIcon';
 import Link from 'components/Link';
 import { DarkTheme } from 'styles/theme';
+import ConfirmationModal from './ConfirmationModal';
 
 const styles = () => ({
     dropZone: {
@@ -105,6 +106,10 @@ class Dropzone extends PureComponent {
         deleteButton: PropTypes.bool,
     };
 
+    state = {
+        indexToRemove: null,
+    };
+
     @bind
     async onChange(files) {
         const { onChange } = this.props;
@@ -144,7 +149,7 @@ class Dropzone extends PureComponent {
 
     @bind
     @memoize()
-    filesTemplate(files) {
+    filesTemplate(files, indexToRemove) {
         const { fileActions, deleteButton, classes, disabled } = this.props;
         return (files || []).map((file, index) => (
             <ListItem key={index}>
@@ -166,11 +171,22 @@ class Dropzone extends PureComponent {
                         </IconButton>
                     )}
                     {deleteButton && !disabled ? (
-                        <IconButton disabled={disabled} onClick={this.handleRemove(index)} aria-label="Delete">
+                        <IconButton disabled={disabled} onClick={() => this.setState({ indexToRemove: index })} aria-label="Delete">
                             <MdiIcon name="close" />
                         </IconButton>
                     ) : null}
                 </ListItemSecondaryAction>
+                {indexToRemove === index ? (
+                    <ConfirmationModal
+                        header={files[index].name}
+                        message="Are you sure you want to delete this attachment?"
+                        open
+                        confirmButtonText="Yes"
+                        declineButtonText="No"
+                        onClose={() => this.setState({ indexToRemove: null })}
+                        onConfirm={this.handleRemove(index)}
+                    />
+                ) : null}
             </ListItem>
         ));
     }
@@ -191,6 +207,7 @@ class Dropzone extends PureComponent {
             value,
             ...restProps
         } = this.props; // eslint-disable-line max-len
+        const { indexToRemove } = this.state;
         return (
             <Fragment>
                 <ReactDropzone {...restProps} onDropAccepted={this.handleDropAccepted} onDropRejected={this.handleDropRejected}>
@@ -235,7 +252,7 @@ class Dropzone extends PureComponent {
                         );
                     }}
                 </ReactDropzone>
-                {showPreviews && filesTemplate ? filesTemplate(value) : <List>{this.filesTemplate(value)}</List>}
+                {showPreviews && filesTemplate ? filesTemplate(value) : <List>{this.filesTemplate(value, indexToRemove)}</List>}
             </Fragment>
         );
     }
