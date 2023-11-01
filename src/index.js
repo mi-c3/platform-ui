@@ -140,6 +140,7 @@ import Slider from './components/Slider';
 import UploadFileField from './components/UploadFileField';
 import UploadFiles from './components/UploadFiles';
 import TextEditor from './components/TextEditor';
+import ConfirmationModal from './components/ConfirmationModal';
 
 export {
     // utils
@@ -290,4 +291,5 @@ export {
     withMobileDialog,
     withWidth,
     Zoom,
+    ConfirmationModal,
 };
