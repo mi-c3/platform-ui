@@ -178,7 +178,7 @@ class Dropzone extends PureComponent {
                 </ListItemSecondaryAction>
                 {indexToRemove === index ? (
                     <ConfirmationModal
-                        header={files[index].name}
+                        header="Confirmation"
                         message="Are you sure you want to delete this attachment?"
                         open
                         confirmButtonText="Yes"
