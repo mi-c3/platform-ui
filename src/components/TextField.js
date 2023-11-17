@@ -26,8 +26,8 @@ const useStyles = withStyles(() => ({
         },
     },
     hiddenInput: {
-        '& .MuiInputBase-input.Mui-disabled':{
-            display:'none'
+        '& .MuiInputBase-input.Mui-disabled': {
+            display: 'none',
         },
     },
 }));
@@ -120,7 +120,7 @@ class TextField extends PureComponent {
                     ...InputProps,
                 }}
                 className={`
-                    ${(disabled & autocompleteMultiple) ? classes.hiddenInput : ''} ${className} 
+                    ${disabled & autocompleteMultiple ? classes.hiddenInput : ''} ${className} 
                     ${get(InputProps, 'startAdornment') ? classes.fieldProps : ''}
                 `}
                 {...restProps}
