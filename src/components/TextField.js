@@ -98,6 +98,7 @@ class TextField extends PureComponent {
             clearable,
             classes,
             autocompleteMultiple,
+            hideInput,
             ...restProps
         } = this.props;
         const defaultEndAdornment = error ? this.getErrorAdornment() : this.getClearAdornment(disabled, value);
@@ -120,7 +121,7 @@ class TextField extends PureComponent {
                     ...InputProps,
                 }}
                 className={`
-                    ${disabled & autocompleteMultiple ? classes.hiddenInput : ''} ${className} 
+                    ${hideInput ? classes.hiddenInput : ''} ${className} 
                     ${get(InputProps, 'startAdornment') ? classes.fieldProps : ''}
                 `}
                 {...restProps}
