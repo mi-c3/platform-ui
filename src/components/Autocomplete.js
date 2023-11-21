@@ -547,6 +547,7 @@ class Autocomplete extends PureComponent {
                         onFocus={this.handleOpen}
                         disabled={disabled}
                         autoComplete="off"
+                        hideInput={disabled}
                         className={`${className || ''} ${classes.adormentAlign}`}
                         {...restProps}
                     />
