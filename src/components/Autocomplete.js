@@ -537,6 +537,7 @@ class Autocomplete extends PureComponent {
             openSuggestions,
             isLoading,
         });
+        const hideInput = multiple ? disabled : disabled && !value;
         return (
             <Fragment>
                 <ClickAwayListener onClickAway={this.handleClose}>
@@ -547,7 +548,7 @@ class Autocomplete extends PureComponent {
                         onFocus={this.handleOpen}
                         disabled={disabled}
                         autoComplete="off"
-                        hideInput={disabled}
+                        hideInput={hideInput}
                         className={`${className || ''} ${classes.adormentAlign}`}
                         {...restProps}
                     />

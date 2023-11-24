@@ -27,7 +27,7 @@ const useStyles = withStyles(() => ({
     },
     hiddenInput: {
         '& .MuiInputBase-input.Mui-disabled': {
-            display: 'none',
+            visibility: 'hidden',
         },
     },
 }));
