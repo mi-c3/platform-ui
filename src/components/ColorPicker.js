@@ -63,6 +63,7 @@ const IconButtonStyled = styled(IconButton)`
 class ColorPicker extends PureComponent {
     static propTypes = {
         onChange: PropTypes.func,
+        onMouseDown: PropTypes.func,
         name: PropTypes.string,
         label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
         value: PropTypes.string,
@@ -146,7 +147,7 @@ class ColorPicker extends PureComponent {
     }
 
     render() {
-        const { label, name, value, required, clearable, fontSize, classes, disabled, className, ...restProps } = this.props;
+        const { label, name, value, required, clearable, fontSize, classes, disabled, className, onMouseDown, ...restProps } = this.props;
         const { displayColorPicker, wrapperWidth } = this.state;
         return (
             <div className={`${className || ''} ${classes.wrapper} ColorPicker-wrapper`} ref={this.wrapperRef}>
@@ -163,6 +164,7 @@ class ColorPicker extends PureComponent {
                             endAdornment={this.buildEndAdornment(value, clearable, disabled)}
                             value={value || ''}
                             disableUnderline
+                            onMouseDown={onMouseDown}
                         />
                     </FormControl>
                 </Paper>
