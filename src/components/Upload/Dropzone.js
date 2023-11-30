@@ -103,6 +103,7 @@ class Dropzone extends PureComponent {
         children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
         filesTemplate: PropTypes.func,
         onRemoveFile: PropTypes.func,
+        onMouseDown: PropTypes.func,
         deleteButton: PropTypes.bool,
     };
 
@@ -205,6 +206,7 @@ class Dropzone extends PureComponent {
             disableDragActive,
             filesTemplate,
             value,
+            onMouseDown,
             ...restProps
         } = this.props; // eslint-disable-line max-len
         const { indexToRemove } = this.state;
@@ -215,6 +217,9 @@ class Dropzone extends PureComponent {
                         return !children ? (
                             <div
                                 {...getRootProps()}
+                                onMouseDown={onMouseDown}
+                                role="button"
+                                tabIndex="0"
                                 className={`
                                   ${classes.dropZone}
                                   ${!disableDragActive && isDragActive && classes.dropZoneActive}
@@ -234,6 +239,9 @@ class Dropzone extends PureComponent {
                                 {...getRootProps({
                                     onClick,
                                 })}
+                                onMouseDown={onMouseDown}
+                                role="button"
+                                tabIndex="0"
                                 className={`
                                   ${classes.relative}
                                   ${dropZoneClasses || ''}
