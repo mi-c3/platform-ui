@@ -150,8 +150,7 @@ class Dropzone extends PureComponent {
 
     @bind
     @memoize()
-    filesTemplate(files, indexToRemove) {
-        const { fileActions, deleteButton, classes, disabled } = this.props;
+    filesTemplate(files, indexToRemove, fileActions, deleteButton, classes, disabled) {
         return (files || []).map((file, index) => (
             <ListItem key={index}>
                 {isImageType(files[index].type) ? (
@@ -210,6 +209,7 @@ class Dropzone extends PureComponent {
             ...restProps
         } = this.props; // eslint-disable-line max-len
         const { indexToRemove } = this.state;
+        const { fileActions, deleteButton, disabled } = restProps;
         return (
             <Fragment>
                 <ReactDropzone {...restProps} onDropAccepted={this.handleDropAccepted} onDropRejected={this.handleDropRejected}>
@@ -260,7 +260,11 @@ class Dropzone extends PureComponent {
                         );
                     }}
                 </ReactDropzone>
-                {showPreviews && filesTemplate ? filesTemplate(value) : <List>{this.filesTemplate(value, indexToRemove)}</List>}
+                {showPreviews && filesTemplate ? (
+                    filesTemplate(value)
+                ) : (
+                    <List>{this.filesTemplate(value, indexToRemove, fileActions, deleteButton, classes, disabled)}</List>
+                )}
             </Fragment>
         );
     }
