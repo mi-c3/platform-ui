@@ -8,7 +8,6 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Icon from '@material-ui/core/Icon';
 import { materialColorPalette } from 'styles/palettes';
 import { withStyles } from '@material-ui/core/styles';
-import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
 import { DarkTheme } from 'styles/theme';
 
@@ -88,7 +87,7 @@ class ColorPicker extends PureComponent {
 
         this.state = { displayColorPicker: false, wrapperWidth: '100%' };
 
-        if (!props.value && !props.randomized) {
+        if (!props.clearable && !props.value && !props.randomized) {
             this.onChange({ hex: this.defaultValue });
         }
         if (!props.value && props.randomized) {
@@ -126,7 +125,7 @@ class ColorPicker extends PureComponent {
             if (!nextValue && randomized) {
                 nextValue = this.getRandomColor();
             }
-            onChange(createEvent('change', { target: { name, value: nextValue } }));
+            onChange({ target: { name, value: nextValue } });
         }
     }
 
@@ -175,7 +174,7 @@ class ColorPicker extends PureComponent {
                                 {...restProps}
                                 width={wrapperWidth}
                                 name={name}
-                                color={value}
+                                color={value || ''}
                                 colors={materialColorPalette || this.defaultColors}
                                 onChange={this.onChange}
                                 className={classes.swatches}
