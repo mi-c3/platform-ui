@@ -14,6 +14,7 @@ import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Tooltip from '@material-ui/core/Tooltip';
 import { styled, withStyles } from '@material-ui/core/styles';
 
 import MdiIcon from 'components/MdiIcon';
@@ -436,16 +437,20 @@ class Autocomplete extends PureComponent {
                     ChipProps.color = 'secondary';
                 }
                 return (
-                    <Chip
-                        color="primary"
-                        key={index}
-                        label={label}
-                        tabIndex={-1}
-                        className={classes.chip}
-                        onDelete={this.buildRemoveChip(option)}
-                        disabled={disabled}
-                        {...ChipProps}
-                    />
+                    <>
+                        <Tooltip title={label}>
+                            <Chip
+                                color="primary"
+                                key={index}
+                                label={label}
+                                tabIndex={-1}
+                                className={classes.chip}
+                                onDelete={this.buildRemoveChip(option)}
+                                disabled={disabled}
+                                {...ChipProps}
+                            />
+                        </Tooltip>
+                    </>
                 );
             });
             InputProperties.classes = { root: classes.inputRoot, input: classes.inputInput };
