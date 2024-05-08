@@ -48,6 +48,7 @@ const ConfirmationModal = ({
     confirmButtonDisabled,
     noDecline,
     noCloseOnConfirm,
+    declineButtonProps,
 }) => {
     const handleConfirm = useCallback(
         (e) => {
@@ -70,7 +71,7 @@ const ConfirmationModal = ({
                 <DialogContent>{message}</DialogContent>
                 <DialogActions>
                     {!noDecline && (
-                        <Button onClick={onClose} color="secondary" variant="text">
+                        <Button onClick={onClose} color="secondary" variant="text" {...(declineButtonProps || {})}>
                             {declineButtonText}
                         </Button>
                     )}
@@ -84,6 +85,7 @@ const ConfirmationModal = ({
 };
 
 ConfirmationModal.propTypes = {
+    declineButtonProps: PropTypes.object,
     draftEvent: PropTypes.object,
     maxWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]), // 'lg' | 'md | 'sm' | 'xl' | 'xs' | false
     fullWidth: PropTypes.bool,
