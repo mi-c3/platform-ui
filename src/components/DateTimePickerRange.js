@@ -277,6 +277,8 @@ class DateTimePickerRange extends PureComponent {
 
     @bind
     openModal() {
+        const { disabled } = this.props;
+        if (disabled) return;
         this.setState({ showModal: true, ...this.getDefault(this.props) });
     }
     @bind
