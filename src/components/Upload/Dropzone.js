@@ -130,14 +130,14 @@ class Dropzone extends PureComponent {
 
     @bind
     handleRemove(index) {
-        const { onRemoveFile } = this.props;
+        const { onRemoveFile, name } = this.props;
         return (event) => {
             event.stopPropagation();
             const { value } = this.props;
             const files = [...(value || [])];
             const removedFile = files[index];
             files.splice(index, 1);
-            onRemoveFile ? onRemoveFile(removedFile, index, files) : this.onChange(files);
+            onRemoveFile ? onRemoveFile(removedFile, index, files, name) : this.onChange(files);
         };
     }
 
