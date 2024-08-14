@@ -137,7 +137,8 @@ class Dropzone extends PureComponent {
             const files = [...(value || [])];
             const removedFile = files[index];
             files.splice(index, 1);
-            onRemoveFile ? onRemoveFile(removedFile, index, files, name) : this.onChange(files);
+            this.onChange(files);
+            onRemoveFile && onRemoveFile(removedFile, index, files, name);
         };
     }
 
