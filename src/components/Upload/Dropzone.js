@@ -150,46 +150,60 @@ class Dropzone extends PureComponent {
     }
 
     @bind
+    buildSrc(file) {
+        let src = file.src;
+        if (!src) {
+            try {
+                src = URL.createObjectURL(file);
+            } catch (err) {} // eslint-disable-line no-empty
+        }
+        return src;
+    }
+
+    @bind
     @memoize()
     filesTemplate(files, indexToRemove, fileActions, deleteButton, classes, disabled) {
-        return (files || []).map((file, index) => (
-            <ListItem key={index}>
-                {isImageType(files[index].type) ? (
-                    <Avatar src={file.src || URL.createObjectURL(file)} />
-                ) : (
-                    <Avatar>
-                        <AttachFileIcon />
-                    </Avatar>
-                )}
-                <ListItemText className={classes.fileListItem} primary={files[index].name} secondary={files[index].type} />
-                <ListItemSecondaryAction>
-                    {fileActions}
-                    {file.src && (
-                        <IconButton aria-label="Download">
-                            <Link target="_blank" download href={file.src}>
-                                <MdiIcon name="download" />
-                            </Link>
-                        </IconButton>
+        return (files || []).map((file, index) => {
+            const src = this.buildSrc(file);
+            return (
+                <ListItem key={index}>
+                    {isImageType(files[index].type) && src ? (
+                        <Avatar src={src} />
+                    ) : (
+                        <Avatar>
+                            <AttachFileIcon />
+                        </Avatar>
                     )}
-                    {deleteButton && !disabled ? (
-                        <IconButton disabled={disabled} onClick={() => this.setState({ indexToRemove: index })} aria-label="Delete">
-                            <MdiIcon name="close" />
-                        </IconButton>
+                    <ListItemText className={classes.fileListItem} primary={files[index].name} secondary={files[index].type} />
+                    <ListItemSecondaryAction>
+                        {fileActions}
+                        {file.src && (
+                            <IconButton aria-label="Download">
+                                <Link target="_blank" download href={file.src}>
+                                    <MdiIcon name="download" />
+                                </Link>
+                            </IconButton>
+                        )}
+                        {deleteButton && !disabled ? (
+                            <IconButton disabled={disabled} onClick={() => this.setState({ indexToRemove: index })} aria-label="Delete">
+                                <MdiIcon name="close" />
+                            </IconButton>
+                        ) : null}
+                    </ListItemSecondaryAction>
+                    {indexToRemove === index ? (
+                        <ConfirmationModal
+                            header="Confirmation"
+                            message="Are you sure you want to delete this attachment?"
+                            open
+                            confirmButtonText="Yes"
+                            declineButtonText="No"
+                            onClose={() => this.setState({ indexToRemove: null })}
+                            onConfirm={this.handleRemove(index)}
+                        />
                     ) : null}
-                </ListItemSecondaryAction>
-                {indexToRemove === index ? (
-                    <ConfirmationModal
-                        header="Confirmation"
-                        message="Are you sure you want to delete this attachment?"
-                        open
-                        confirmButtonText="Yes"
-                        declineButtonText="No"
-                        onClose={() => this.setState({ indexToRemove: null })}
-                        onConfirm={this.handleRemove(index)}
-                    />
-                ) : null}
-            </ListItem>
-        ));
+                </ListItem>
+            );
+        });
     }
 
     render() {
