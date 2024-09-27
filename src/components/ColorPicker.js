@@ -104,8 +104,10 @@ class ColorPicker extends PureComponent {
     componentDidMount() {
         this.setState({ wrapperWidth: this.wrapperRef.current.scrollWidth });
         window.addEventListener('resize', () => {
-            if (this.state.wrapperWidth !== this.wrapperRef.current.scrollWidth) {
-                this.setState({ wrapperWidth: this.wrapperRef.current.scrollWidth });
+            const wrapperElement = this.wrapperRef?.current;
+            if (!wrapperElement) return;
+            if (this.state.wrapperWidth !== wrapperElement.scrollWidth) {
+                this.setState({ wrapperWidth: wrapperElement.scrollWidth });
             }
         });
     }
