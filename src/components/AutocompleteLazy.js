@@ -12,9 +12,10 @@ class AutocompleteLazy extends PureComponent {
 
     state = { options: [] };
 
-    componentDidMount() {
-        this.updateOptions();
-    }
+    // Removed preloading because it's taking time when page is loading in a lot of components
+    // componentDidMount() {
+    //     this.updateOptions();
+    // }
 
     @bind
     async updateOptions(value) {
