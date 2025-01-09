@@ -10,8 +10,8 @@ const fileLoader = (neutrino) => {
     .use('file')
     .loader('file-loader')
     .options({
-      name: 'assets/[name].[hash:8].[ext]',
-      publicPath: './', // Set publicPath to ensure the URLs are relative
+      name: 'assets/[name].[hash:8].[ext]', 
+      publicPath: '/assets/',
     });
 };
 
