@@ -11,7 +11,7 @@ const fileLoader = (neutrino) => {
     .loader('file-loader')
     .options({
       name: 'assets/[name].[hash:8].[ext]', 
-      publicPath: '/',
+      publicPath: './',
     });
 };
 
