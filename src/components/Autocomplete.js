@@ -21,7 +21,6 @@ import MdiIcon from 'components/MdiIcon';
 import TextField from 'components/TextField';
 import { shallowEquals, arrayfy, isObject } from 'utils/utils';
 import { get } from 'utils/lo/lo';
-import { createEvent } from 'utils/http/event';
 
 const styles = () => ({
     adormentAlign: {
@@ -121,7 +120,15 @@ class Autocomplete extends PureComponent {
         if (suggest) {
             return suggest(event);
         }
-        const query = get(event, 'target.value');
+        const query = get(event, 'target.value', '');
+
+        if (!query) {
+            this.setState({
+                suggestions: this.filterValue(options, value, valueId, valueField),
+            });
+            return;
+        }
+
         const opts = (options || []).filter((opt) =>
             this.optionTemplate(opt)
                 .label.toLowerCase()
@@ -130,7 +137,7 @@ class Autocomplete extends PureComponent {
 
         const selected = this.getSelectedOptions(value, valueField, options);
         const { label = '' } = !multiple ? this.optionTemplate(selected) : {};
-        const isSelectedOption = label === query || selected === null;
+        const isSelectedOption = label === query;
 
         this.setState({
             suggestions: this.filterValue(isSelectedOption ? options : opts, value, valueId, valueField),
@@ -173,10 +180,7 @@ class Autocomplete extends PureComponent {
         const { onChange, name, value: currentValue, multiple, valueField } = this.props;
         const optionValue = valueField ? get(option, valueField, null) : option;
         const value = !multiple ? optionValue : [...(arrayfy(currentValue) || []), optionValue];
-        this.setState(
-            { query, preSelectedValue: 0, openSuggestions: false },
-            () => onChange && onChange(createEvent('change', { target: { name, value } }))
-        );
+        this.setState({ query, preSelectedValue: 0, openSuggestions: false }, () => onChange && onChange({ target: { name, value } }));
     }
 
     @bind
@@ -206,7 +210,7 @@ class Autocomplete extends PureComponent {
             const { label = '' } = this.optionTemplate(selected);
             query = label;
         }
-        this.onSearching(createEvent('focus', { target: { name: this.props.name, value: query } }));
+        this.onSearching({ target: { name: this.props.name, value: query } });
     }
 
     @bind
@@ -266,10 +270,7 @@ class Autocomplete extends PureComponent {
                 return v !== valueToRemove;
             });
 
-            this.setState(
-                { query: '' },
-                () => onChange && onChange(createEvent('change', { target: { name: this.props.name, value: vals } }))
-            );
+            this.setState({ query: '' }, () => onChange && onChange({ target: { name: this.props.name, value: vals } }));
         };
     }
 
