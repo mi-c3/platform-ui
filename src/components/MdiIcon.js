@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 import Icon from '@material-ui/core/Icon';
 
-import 'styles/affectli/style.css';
-
 // Base icon colors for Material UI Icon component
 const MAIN_COLORS = ['inherit', 'primary', 'secondary', 'action', 'error', 'disabled'];
 
