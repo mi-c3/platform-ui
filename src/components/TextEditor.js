@@ -10,16 +10,16 @@ import 'styles/react-mde-all.css';
 
 const Editor = styled(ReactMde)`
     ${({ disabled }) =>
-        // eslint-disable-next-line prettier/prettier
-        disabled
-            ? `& .mde-header { display: none; }
+// eslint-disable-next-line 
+    disabled
+        ? `& .mde-header { display: none; }
                & .mde-preview { min-height: 32px !important; }`
-            : ''}
+        : ''}
     ${({ selectedTab }) =>
-        // eslint-disable-next-line prettier/prettier
-        selectedTab === 'write'
-            ? `& .mde-header .mde-tabs button:first-child { display: none; }`
-            : `& .mde-header .mde-tabs button:last-child { display: none; }
+        // eslint-disable-next-line 
+            selectedTab === 'write'
+                ? `& .mde-header .mde-tabs button:first-child { display: none; }`
+                : `& .mde-header .mde-tabs button:last-child { display: none; }
                & .mde-header ul { display: none; }`}
 `;
 

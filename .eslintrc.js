@@ -1,3 +1,3 @@
-const neutrino = require('neutrino');
+const builder = require('./config/eslint_builder.js')
 
-module.exports = neutrino().eslintrc();
+module.exports = builder();
