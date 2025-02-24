@@ -143,7 +143,7 @@ class AvatarEditor extends PureComponent {
     }
 
     render() {
-        const { isButton, image, classes, initials, label, disabled, AvatarProps, EditorProps, ReactAvatarEditorProps, AvatarGridProps, EditButtonProps, GridProps } = this.props; // eslint-disable-line prettier/prettier,max-len
+        const { isButton, image, classes, initials, label, disabled, AvatarProps, EditorProps, ReactAvatarEditorProps, AvatarGridProps, EditButtonProps, GridProps } = this.props; // eslint-disable-line ,max-len
         const { showAvatarEditor, imageFile, scale, rotate } = this.state;
         return (
             <Grid container direction="column" alignItems={showAvatarEditor ? 'center' : 'flex-start'} {...GridProps}>

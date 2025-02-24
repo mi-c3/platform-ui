@@ -1,21 +1,26 @@
-const babelMerge = require('babel-merge');
 const { join } = require('path');
+// Babel Configuration (babel.middleware.js)
 
-module.exports = ({ rootDir }) => (neutrino) => {
-    neutrino.config.module
-        .rule('compile')
-        .use('babel')
-        .tap((options) =>
-            babelMerge(
-                {
-                    plugins: [
-                        [require.resolve('@babel/plugin-proposal-decorators'), { legacy: true }],
-                        require.resolve('@babel/plugin-proposal-class-properties'),
-                        [require.resolve('@babel/plugin-transform-runtime'), { regenerator: true }],
-                        [require.resolve('babel-plugin-module-resolver'), { root: [join(rootDir, 'src')] }],
-                    ],
-                },
-                options
-            )
-        );
+module.exports = {
+    presets: [
+        require.resolve('@babel/preset-react'), 
+        ['@babel/preset-env', {
+            targets: {
+                chrome: '115' // или укажите вашу целевую версию
+            },
+            modules: false, // не транспилируем ES-модули (если поддерживается)
+            bugfixes: true, // включает некоторые исправления для современных браузеров
+            useBuiltIns: false // отключает полифиллы, если они вам не нужны
+        }]
+    ],
+    plugins: [
+        [require.resolve('@babel/plugin-proposal-decorators'), { legacy: true }],
+        [require.resolve('@babel/plugin-proposal-class-properties'), {
+            loose: true,
+            shippedProposals: true,
+        }],
+        [require.resolve('babel-plugin-module-resolver'), { root: [join(__dirname, '../src')] }],
+        require.resolve('babel-plugin-styled-components'),
+        '@babel/plugin-syntax-import-meta'
+    ],
 };
