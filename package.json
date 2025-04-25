@@ -1,6 +1,6 @@
 {
   "name": "@mic3/platform-ui",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "scripts": {
     "build": "rspack --config rspack.config.js build",
     "test": "jest",
@@ -17,7 +17,6 @@
     "@material-ui/icons": "4.9.1",
     "@material-ui/pickers": "3.2.10",
     "@material-ui/styles": "4.9.14",
-    "dompurify": "2.1.1",
     "fast-deep-equal": "2.0.1",
     "google-map-react": "1.1.5",
     "memoize-one": "5.1.1",
@@ -36,7 +35,7 @@
     "@material-ui/icons": "4.9.1",
     "@material-ui/pickers": "3.2.10",
     "@material-ui/styles": "4.9.14",
-    "dompurify": "2.1.1",
+    "dompurify": "^3.2.5",
     "fast-deep-equal": "2.0.1",
     "google-map-react": "1.1.5",
     "marked": "^4.3.0",
