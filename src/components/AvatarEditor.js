@@ -86,12 +86,13 @@ class AvatarEditor extends PureComponent {
     @bind
     cancelUpload() {
         this.setState(defaultState);
+        this.props.cancelUpload && this.props.cancelUpload();
     }
 
     @bind
-    handleUpload() {
+    handleUpload(resetState) {
         if (this.editorRef.current) {
-            const { name, onChange } = this.props;
+            const { name, onChange, onImageLoad } = this.props;
             const canvas = this.editorRef.current.getImage();
             const context = canvas.getContext('2d');
             context.globalCompositeOperation = 'destination-over';
@@ -101,11 +102,14 @@ class AvatarEditor extends PureComponent {
                 canvas.toBlob(
                     (blob) => {
                         const image = new File([blob], `${name || 'profile'}.png`, { type: 'image/png' });
-                        this.setState(defaultState, () => {
-                            if (onChange) {
-                                onChange(createEvent('change', { target: { value: image, name } }));
-                            }
-                        });
+                        if (resetState) {
+                            this.setState(defaultState, () => {
+                                onChange?.(createEvent('change', { target: { value: image, name } }));
+                            });
+                        } else if (onChange) {
+                            onChange(createEvent('change', { target: { value: image, name } }));
+                            onImageLoad && onImageLoad();
+                        }
                     },
                     'image/png',
                     1
@@ -190,6 +194,7 @@ class AvatarEditor extends PureComponent {
                             border={0}
                             color={styleColor}
                             borderRadius={0}
+                            onImageReady={() => this.handleUpload(false)}
                             {...ReactAvatarEditorProps}
                         />
                         <Grid container direction="column" className={classes.wrapper}>
@@ -221,7 +226,7 @@ class AvatarEditor extends PureComponent {
                                 <Button variant="text" onClick={this.cancelUpload}>
                                     {EditorProps?.cancelLabel || 'Cancel'}
                                 </Button>
-                                <Button variant="text" color="primary" onClick={this.handleUpload}>
+                                <Button variant="text" color="primary" onClick={() => this.handleUpload(true)}>
                                     {EditorProps?.uploadLabel || 'Crop and Upload'}
                                 </Button>
                             </Grid>
