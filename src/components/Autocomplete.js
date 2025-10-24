@@ -79,6 +79,7 @@ class Autocomplete extends PureComponent {
         VirtualListProps: PropTypes.object,
         PopperProps: PropTypes.object,
         isLoading: PropTypes.bool,
+        optionsOverflow: PropTypes.oneOf(['scroll', 'hidden']),
     };
 
     static defaultProps = {
@@ -89,6 +90,7 @@ class Autocomplete extends PureComponent {
         VirtualListProps: {
             itemSize: 50,
         },
+        optionsOverflow: 'scroll',
     };
 
     constructor(props) {
@@ -274,6 +276,21 @@ class Autocomplete extends PureComponent {
         };
     }
 
+    /**
+     * Applies overflow styles based on the optionsOverflow prop.
+     */
+    @bind
+    applyOverflowStyles(baseStyle = {}) {
+        const { optionsOverflow } = this.props;
+        const style = { ...baseStyle };
+        if (optionsOverflow === 'hidden') {
+            style.overflow = 'hidden';
+        } else if (optionsOverflow === 'scroll') {
+            style.width = 'fit-content';
+        }
+        return style;
+    }
+
     @bind
     onKeyUp(e) {
         const { value, multiple, valueField, options } = this.props;
@@ -385,10 +402,13 @@ class Autocomplete extends PureComponent {
                                     renderItem={({ index, style }) => {
                                         const op = suggestions[index];
                                         const { label, option } = this.optionTemplate(op);
+                                        const styles = option ? withOptionStyle : withoutOptionStyle;
+                                        const baseStyle = this.applyOverflowStyles(styles);
+
                                         return (
                                             <div key={index} style={style}>
                                                 <MenuItem
-                                                    style={option ? withOptionStyle : withoutOptionStyle}
+                                                    style={baseStyle}
                                                     onClick={this.buildOnChange(op)}
                                                     value={op}
                                                     component="div"
