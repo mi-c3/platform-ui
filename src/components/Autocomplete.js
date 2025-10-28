@@ -287,6 +287,7 @@ class Autocomplete extends PureComponent {
             style.overflow = 'hidden';
         } else if (optionsOverflow === 'scroll') {
             style.width = 'fit-content';
+            style.minWidth = '100%';
         }
         return style;
     }
