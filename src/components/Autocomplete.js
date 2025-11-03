@@ -113,10 +113,15 @@ class Autocomplete extends PureComponent {
         this.initVirtualListObserver();
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         const { options, value, valueField, valueId } = this.props;
         if (prevProps.options !== options || prevProps.value !== value) {
             this.setState({ suggestions: this.filterValue(options, value, valueId, valueField) });
+        }
+
+        // Recalculate width when suggestions change
+        if (prevState.suggestions !== this.state.suggestions && this.state.openSuggestions) {
+            this.updateVirtualListWidths();
         }
     }
 
@@ -133,7 +138,7 @@ class Autocomplete extends PureComponent {
             }
 
             // Initial calculation only
-            setTimeout(() => this.updateVirtualListWidths(), 100);
+            this.updateVirtualListWidths()
         };
 
         setupObserver();
