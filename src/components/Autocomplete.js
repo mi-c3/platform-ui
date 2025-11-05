@@ -101,122 +101,21 @@ class Autocomplete extends PureComponent {
             openSuggestions: false,
             query: '',
             preSelectedValue: 0,
+            virtualListKey: Math.random(),
             selectedOption: -1,
-            maxItemWidth: null,
         };
     }
 
-    popperRef = React.createRef();
-    inputRef = React.createRef();
-
-    componentDidMount() {
-        this.initVirtualListObserver();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
         const { options, value, valueField, valueId } = this.props;
         if (prevProps.options !== options || prevProps.value !== value) {
             this.setState({ suggestions: this.filterValue(options, value, valueId, valueField) });
         }
-
-        // Recalculate width when suggestions change
-        if (prevState.suggestions !== this.state.suggestions && this.state.openSuggestions) {
-            this.updateVirtualListWidths();
-        }
     }
 
-    /**
-     * Waits for the virtual list DOM to appear and triggers initial width calculation
-     */
-    @bind
-    initVirtualListObserver() {
-        const setupObserver = () => {
-            const el = document.getElementById(`autocomplete-virtual-list`);
-            if (!el) {
-                requestAnimationFrame(setupObserver);
-                return;
-            }
-
-            // Initial calculation only
-            this.updateVirtualListWidths()
-        };
-
-        setupObserver();
-    };
-
-    /**
-     * Measure all suggestions by rendering them in a hidden container
-     * This avoids VirtualList virtualization issues and flickering
-     */
-    @bind
-    measureAllSuggestions() {
-        const { suggestions } = this.state;
-        if (!suggestions || suggestions.length === 0) {
-            return;
-        }
-
-        // Get parent container width
-        const parentWidth = get(this.inputRef, 'current.parentNode.clientWidth') || 0;
-
-        // Create a hidden container to measure items
-        const measureContainer = document.createElement('div');
-        measureContainer.style.position = 'absolute';
-        measureContainer.style.visibility = 'hidden';
-        measureContainer.style.left = '-9999px';
-        measureContainer.style.top = '0';
-        measureContainer.style.whiteSpace = 'nowrap';
-        document.body.appendChild(measureContainer);
-
-        let maxWidth = 0;
-
-        try {
-            // Measure each suggestion
-            suggestions.forEach((suggestion) => {
-                const { label, option } = this.optionTemplate(suggestion);
-
-                // Create temporary item to measure
-                const tempItem = document.createElement('div');
-                tempItem.style.padding = '15px';
-                tempItem.style.fontSize = '16px';
-                tempItem.style.display = 'inline-block';
-
-                // Handle both string labels and complex options
-                if (typeof label === 'string') {
-                    tempItem.textContent = label;
-                } else {
-                    // For complex options, try to extract text content
-                    tempItem.innerHTML = option ? String(label) : label;
-                }
-
-                measureContainer.appendChild(tempItem);
-                const width = tempItem.scrollWidth;
-
-                if (width > maxWidth) {
-                    maxWidth = width;
-                }
-
-                measureContainer.removeChild(tempItem);
-            });
-        } finally {
-            // Clean up
-            document.body.removeChild(measureContainer);
-        }
-
-        // Ensure width is at least as wide as the parent container
-        const finalWidth = Math.max(maxWidth, parentWidth);
-
-        this.setState({ maxItemWidth: finalWidth });
-    };
-
-    /**
-     * Recalculate inner widths so long text is visible
-     * and all items align to the largest width to fix the hover color and click effect for small items
-     */
-    @bind
-    updateVirtualListWidths() {
-        this.measureAllSuggestions();
-    };
-
+    popperRef = React.createRef();
+    inputRef = React.createRef();
+    virtualListRef = React.createRef();
 
     @bind
     @debounce()
@@ -297,6 +196,7 @@ class Autocomplete extends PureComponent {
 
         this.setState(
             () => ({
+                virtualListKey: Math.random(),
                 query,
                 preSelectedValue: 0,
                 openSuggestions: true,
@@ -379,6 +279,59 @@ class Autocomplete extends PureComponent {
         };
     }
 
+    /**
+     * Applies overflow styles based on the optionsOverflow prop.
+     */
+    @bind
+    applyOverflowStyles(baseStyle = {}) {
+        const { optionsOverflow } = this.props;
+        const style = { ...baseStyle };
+        if (optionsOverflow === 'hidden') {
+            style.overflow = 'hidden';
+            style.textOverflow = 'ellipsis';
+            style.whiteSpace = 'nowrap';
+        } else if (optionsOverflow === 'scroll') {
+            // Force width to be fit-content initially, then JavaScript will set actual width
+            style.width = 'fit-content';
+            style.minWidth = '100%';
+        }
+        return style;
+    }
+
+    /**
+     * Synchronizes all MenuItem widths to match the widest item after render.
+     */
+    @bind
+    @debounce()
+    syncMenuItemWidths() {
+        if (this.virtualListRef.current && this.virtualListRef.current.rootNode) {
+            const rootNode = this.virtualListRef.current.rootNode;
+            const menuItems = rootNode.querySelectorAll('.MuiMenuItem-root');
+
+            if (menuItems.length === 0) return;
+            
+            const hasVerticalScroll = rootNode.scrollHeight > rootNode.clientHeight;
+
+            // Find the maximum width
+            let maxWidth = 0;
+            menuItems.forEach(item => {
+                const itemWidth = item.scrollWidth;
+                if (itemWidth > maxWidth) {
+                    maxWidth = itemWidth;
+                }
+            });
+
+            // If there's no vertical scroll, deduct 9px for scrollbar space
+            if (!hasVerticalScroll) {
+                maxWidth = maxWidth - 9;
+            }
+
+            // Apply max width to all items
+            menuItems.forEach(item => {
+                item.style.width = `${maxWidth}px`;
+            });
+        }
+    }
 
     @bind
     onKeyUp(e) {
@@ -441,7 +394,7 @@ class Autocomplete extends PureComponent {
      */
     @bind
     @memoize(equals)
-    buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps, selectedOption, maxItemWidth) {
+    buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps, selectedOption) {
         const maxPopperHeight = 224;
         const { itemSize } = VirtualListProps;
         const maxSuggetionsHeight = suggestions.length * (itemSize + 4);
@@ -481,35 +434,21 @@ class Autocomplete extends PureComponent {
                             id="menu-list-grow"
                             style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
                         >
-                            <Paper
-                                square
-                                style={{
-                                    minWidth: get(this.inputRef, 'current.parentNode.clientWidth'),
-                                    width: 'fit-content',
-                                    maxWidth: '90vw',
-                                    overflow: 'auto'
-                                }}
-                            >
+                            <Paper square style={{ width: get(this.inputRef, 'current.parentNode.clientWidth'), overflowX: 'auto', overflowY: 'hidden' }}>
                                 <VirtualList
-                                    id="autocomplete-virtual-list"
+                                    key={this.state.virtualListKey}
+                                    ref={this.virtualListRef}
                                     width="100%"
                                     height={popperHeight}
                                     itemCount={suggestions.length}
                                     scrollToAlignment={'auto'}
                                     scrollToIndex={selectedOption}
+                                    onItemsRendered={this.syncMenuItemWidths}
                                     renderItem={({ index, style }) => {
                                         const op = suggestions[index];
                                         const { label, option } = this.optionTemplate(op);
                                         const styles = option ? withOptionStyle : withoutOptionStyle;
-
-                                        const baseStyle = {
-                                            ...styles,
-                                            ...(maxItemWidth && {
-                                                width: maxItemWidth,
-                                                minWidth: maxItemWidth,
-                                                boxSizing: 'border-box',
-                                            }),
-                                        };
+                                        const baseStyle = this.applyOverflowStyles(styles);
 
                                         return (
                                             <div key={index} style={style}>
@@ -654,7 +593,7 @@ class Autocomplete extends PureComponent {
             className,
             ...restProps
         } = this.props;
-        const { suggestions, openSuggestions, query, selectedOption, maxItemWidth } = this.state;
+        const { suggestions, openSuggestions, query, selectedOption } = this.state;
 
         const selected = this.getSelectedOptions(value, valueField, options);
 
@@ -685,7 +624,7 @@ class Autocomplete extends PureComponent {
                         {...restProps}
                     />
                 </ClickAwayListener>
-                {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps, selectedOption, maxItemWidth)}
+                {this.buildSuggestionsPopper(suggestions, openSuggestions, VirtualListProps, PopperProps, selectedOption)}
             </Fragment>
         );
     }
