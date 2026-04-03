@@ -93,7 +93,8 @@ class DateTimePickerRange extends PureComponent {
 
     componentDidUpdate(prevProps) {
         const { value, variant, relative: relativeProps } = this.props;
-        const { relative: relativeState } = this.state;
+        const { relative: relativeState, showModal } = this.state;
+        if (showModal) return; // Don't sync external value while user is actively editing
         let nextState = null;
         if (!relativeState && ['all', 'standard'].includes(variant) && prevProps.value !== value && (!value || Array.isArray(value))) {
             const [start, end] = (value && value.map((date) => new Date(date))) || [null, null];
@@ -277,13 +278,15 @@ class DateTimePickerRange extends PureComponent {
 
     @bind
     openModal() {
-        const { disabled } = this.props;
+        const { disabled, onOpen } = this.props;
         if (disabled) return;
         this.setState({ showModal: true, ...this.getDefault(this.props) });
+        onOpen?.();
     }
     @bind
     closeModal() {
         this.setState({ showModal: false });
+        this.props.onClose?.();
     }
 
     @bind
