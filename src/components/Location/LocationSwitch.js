@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 
 import Switch from 'components/Switch';
 import LocationForm from 'components/Location/LocationForm';

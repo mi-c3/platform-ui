@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { Divider, Dialog, Grid, IconButton, Typography } from '@mui/material';
+import { Divider, Dialog, GridLegacy as Grid, IconButton, Typography } from '@mui/material';
 
 import Loader from './Loader';
 import MdiIcon from './MdiIcon';

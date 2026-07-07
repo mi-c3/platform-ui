@@ -8,6 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 import {
+    GridLegacy as Grid,
     Accordion,
     AccordionActions,
     AccordionDetails,
@@ -47,9 +48,7 @@ import {
     FormGroup,
     FormHelperText,
     FormLabel,
-    Grid,
     Grow,
-    Hidden,
     Icon,
     IconButton,
     ImageList,
@@ -241,6 +240,8 @@ export {
     ImageList as GridList,
     ImageListItem as GridListTile,
     ImageListItemBar as GridListTileBar,
+    // MUI v7 renamed the legacy grid; consumers keep the old `Grid` API
+    Grid,
     Fab,
     Fade,
     FilledInput,
@@ -249,9 +250,7 @@ export {
     FormGroup,
     FormHelperText,
     FormLabel,
-    Grid,
     Grow,
-    Hidden,
     Icon,
     IconButton,
     ImageList,

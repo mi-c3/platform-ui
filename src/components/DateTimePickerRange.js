@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment, memo } from 'react';
 import PropTypes from 'prop-types';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { IconButton, InputAdornment, Grid, Typography, TextField, FormControl, FormHelperText, InputLabel, Input } from '@mui/material';
+import { IconButton, InputAdornment, GridLegacy as Grid, Typography, TextField, FormControl, FormHelperText, InputLabel, Input } from '@mui/material';
 import styled, { css } from 'styled-components';
 
 import MdiIcon from 'components/MdiIcon';

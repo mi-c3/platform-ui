@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import ReactAvatarEditor from 'react-avatar-editor';
 import PropTypes from 'prop-types';
-import { Grid, Typography, IconButton } from '@mui/material';
+import { GridLegacy as Grid, Typography, IconButton } from '@mui/material';
 import styled, { css } from 'styled-components';
 
 import { bind } from 'utils/decorators/decoratorUtils';
