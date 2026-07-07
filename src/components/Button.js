@@ -20,14 +20,14 @@ LinkedButton.propTypes = {
     href: PropTypes.string,
 };
 
-const Button = ({ iconName, iconType, children, classes, color, ...restProps }) =>
+const Button = ({ iconName, iconType, children, classes, color = 'primary', variant = 'contained', ...restProps }) =>
     iconName ? (
-        <LinkedButton color={color} {...restProps}>
+        <LinkedButton color={color} variant={variant} {...restProps}>
             <ButtonIcon size={15} type={iconType || 'mdi'} name={iconName} className={classes && classes.icon} />
             {children}
         </LinkedButton>
     ) : (
-        <LinkedButton color={color} {...restProps}>
+        <LinkedButton color={color} variant={variant} {...restProps}>
             {children}
         </LinkedButton>
     );
@@ -39,11 +39,6 @@ Button.propTypes = {
     classes: PropTypes.object,
     to: PropTypes.string,
     href: PropTypes.string,
-};
-
-Button.defaultProps = {
-    color: 'primary',
-    variant: 'contained',
 };
 
 export default Button;

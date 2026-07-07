@@ -25,9 +25,19 @@ const Wrapper = styled.div`
 `;
 
 const CircularProgressStatic = (props) => {
-    const { size, foreignObjectContent, classes, className, foreignObjectProps, fillColor, borderWidth, ...restProps } = props; //eslint-disable-line no-unused-vars
-    const value = props.value >= 0 && props.value <= 100 ? Math.round(props.value) : 0;
-    const radius = (props.size - props.borderWidth) / 2;
+    const {
+        size = 38,
+        foreignObjectContent,
+        classes, //eslint-disable-line no-unused-vars
+        className,
+        foreignObjectProps = {},
+        fillColor,
+        borderWidth = 3,
+        value: valueProp = 0,
+        ...restProps
+    } = props;
+    const value = valueProp >= 0 && valueProp <= 100 ? Math.round(valueProp) : 0;
+    const radius = (size - borderWidth) / 2;
     const viewBox = `0 0 ${size} ${size}`;
     const dashArray = radius * Math.PI * 2;
     const dashOffset = dashArray - (dashArray * value) / 100;
@@ -42,21 +52,21 @@ const CircularProgressStatic = (props) => {
     );
     return (
         <Wrapper {...restProps} className={className} $fillColor={fillColor} $priority={props.priority} $disabled={props.disabled}>
-            <svg width={props.size} height={props.size} viewBox={viewBox} fill="none">
+            <svg width={size} height={size} viewBox={viewBox} fill="none">
                 <circle
                     className="CircularProgressStatic-circleBackground"
-                    cx={props.size / 2}
-                    cy={props.size / 2}
+                    cx={size / 2}
+                    cy={size / 2}
                     r={radius}
-                    strokeWidth={`${props.borderWidth}px`}
+                    strokeWidth={`${borderWidth}px`}
                 />
                 <circle
                     className="CircularProgressStatic-circleProgress"
-                    cx={props.size / 2}
-                    cy={props.size / 2}
+                    cx={size / 2}
+                    cy={size / 2}
                     r={radius}
-                    strokeWidth={`${props.borderWidth}px`}
-                    transform={`rotate(-90 ${props.size / 2} ${props.size / 2})`}
+                    strokeWidth={`${borderWidth}px`}
+                    transform={`rotate(-90 ${size / 2} ${size / 2})`}
                     style={{
                         strokeDasharray: dashArray,
                         strokeDashoffset: dashOffset,
@@ -66,14 +76,6 @@ const CircularProgressStatic = (props) => {
             </svg>
         </Wrapper>
     );
-};
-
-CircularProgressStatic.defaultProps = {
-    size: 38,
-    borderWidth: 3,
-    value: 0,
-    color: 'white',
-    foreignObjectProps: {},
 };
 
 CircularProgressStatic.propTypes = {

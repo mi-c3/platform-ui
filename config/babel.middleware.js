@@ -3,7 +3,7 @@ const { join } = require('path');
 
 module.exports = {
     presets: [
-        require.resolve('@babel/preset-react'), 
+        [require.resolve('@babel/preset-react'), { runtime: 'automatic' }],
         ['@babel/preset-env', {
             targets: {
                 chrome: '115' // или укажите вашу целевую версию

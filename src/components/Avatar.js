@@ -53,7 +53,7 @@ const AvatarWithCircular = styled(Avatar)`
     height: 28px !important;
 `;
 
-const CirculaAvatar = ({ className, CircularProgressStaticProps, ...restProps }) => {
+const CirculaAvatar = ({ className, CircularProgressStaticProps = {}, ...restProps }) => {
     return isDefined(CircularProgressStaticProps.value) ? (
         <CircularProgressStatic
             fillColor="primary"
@@ -77,10 +77,6 @@ Avatar.propTypes = {
 CirculaAvatar.propTypes = {
     className: PropTypes.string,
     CircularProgressStaticProps: PropTypes.object,
-};
-
-CirculaAvatar.defaultProps = {
-    CircularProgressStaticProps: {},
 };
 
 export default CirculaAvatar;
