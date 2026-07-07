@@ -6,6 +6,10 @@ Version 2.x targets React 17–19, MUI v7, styled-components 5–6, and builds a
 (`build/index.js`). All UI framework packages (react, @mui/*, @emotion/*, styled-components,
 react-router-dom, ...) are `peerDependencies` — the consuming application provides them.
 
+Documentation lives in [docs/](docs/README.md) — getting started, architecture, conventions,
+and one page per component under [docs/components/](docs/components/). AI agents: see
+[CLAUDE.md](CLAUDE.md).
+
 ## Requirements
 
 * node >= 22.11.0 < 23
