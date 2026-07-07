@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
-import InfoIcon from '@material-ui/icons/Info';
-import CloseIcon from '@material-ui/icons/Close';
-import green from '@material-ui/core/colors/green';
-import amber from '@material-ui/core/colors/amber';
-import IconButton from '@material-ui/core/IconButton';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import WarningIcon from '@material-ui/icons/Warning';
-import Snackbar from '@material-ui/core/Snackbar';
-import { withStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import InfoIcon from '@mui/icons-material/Info';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+import SnackbarContent from '@mui/material/SnackbarContent';
+import WarningIcon from '@mui/icons-material/Warning';
+import Snackbar from '@mui/material/Snackbar';
+
+import { green, amber } from '@mui/material/colors';
+
+import { DarkTheme } from 'styles/theme';
 
 const variantIcon = {
     success: CheckCircleIcon,
@@ -19,34 +21,35 @@ const variantIcon = {
     info: InfoIcon,
 };
 
-const styles = ({ palette, spacing }) => ({
-    success: {
-        backgroundColor: green[600],
-    },
-    error: {
-        backgroundColor: palette.error[palette.type],
-    },
-    info: {
-        backgroundColor: palette.primary[palette.type],
-    },
-    warning: {
-        backgroundColor: amber[700],
-    },
-    icon: {
-        fontSize: 20,
-    },
-    iconVariant: {
-        opacity: 0.9,
-        marginRight: spacing(),
-    },
-    message: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-});
+const variantBackgroundColor = {
+    success: green[600],
+    error: DarkTheme.palette.error[DarkTheme.palette.mode],
+    info: DarkTheme.palette.primary[DarkTheme.palette.mode],
+    warning: amber[700],
+};
+
+const SnackbarContentStyled = styled(SnackbarContent)`
+    &.MuiSnackbarContent-root {
+        background-color: ${({ $variant }) => variantBackgroundColor[$variant]};
+    }
+`;
+
+const MessageStyled = styled.span`
+    display: flex;
+    align-items: center;
+
+    & > svg {
+        opacity: 0.9;
+        margin-right: ${DarkTheme.spacing(1)};
+    }
+`;
+
+const CloseIconStyled = styled(CloseIcon)`
+    font-size: 20px;
+`;
 
 const DropzoneSnackBar = (props) => {
-    const { classes, className, message, onClose, variant, open, autoHideDuration } = props;
+    const { className, message, onClose, variant, open, autoHideDuration } = props;
     const Icon = variantIcon[variant];
     return (
         <Snackbar
@@ -58,18 +61,24 @@ const DropzoneSnackBar = (props) => {
             autoHideDuration={autoHideDuration}
             onClose={onClose}
         >
-            <SnackbarContent
-                className={`${classes[variant]} ${className}`}
+            <SnackbarContentStyled
+                $variant={variant}
+                className={className}
                 aria-describedby="client-snackbar"
                 message={
-                    <span id="client-snackbar" className={classes.message}>
-                        <Icon className={`${classes.icon}, ${classes.iconVariant}`} />
+                    <MessageStyled id="client-snackbar">
+                        <Icon />
                         {message}
-                    </span>
+                    </MessageStyled>
                 }
                 action={[
-                    <IconButton key="close" aria-label="Close" color="inherit" className={classes.close} onClick={onClose}>
-                        <CloseIcon className={classes.icon} />
+                    <IconButton
+                        key="close"
+                        aria-label="Close"
+                        color="inherit"
+                        onClick={onClose}
+                        size="large">
+                        <CloseIconStyled />
                     </IconButton>,
                 ]}
             />
@@ -78,7 +87,6 @@ const DropzoneSnackBar = (props) => {
 };
 
 DropzoneSnackBar.propTypes = {
-    classes: PropTypes.object.isRequired,
     className: PropTypes.string,
     message: PropTypes.node,
     onClose: PropTypes.func,
@@ -87,4 +95,4 @@ DropzoneSnackBar.propTypes = {
     autoHideDuration: PropTypes.number,
 };
 
-export default withStyles(styles)(DropzoneSnackBar);
+export default DropzoneSnackBar;

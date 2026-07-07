@@ -1,52 +1,52 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import styled, { css } from 'styled-components';
+import { lighten } from '@mui/material/styles';
 
-import Typography from '@material-ui/core/Typography';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import Checkbox from '@material-ui/core/Checkbox';
+import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import Checkbox from '@mui/material/Checkbox';
 
-import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { DarkTheme } from 'styles/theme';
 
-const toolbarStyles = () => {
-    let highlight = {
-        color: DarkTheme.palette.text.primary,
-        backgroundColor: DarkTheme.palette.secondary.dark,
-    };
-    if (DarkTheme.palette.type === 'light') {
-        highlight = {
-            color: DarkTheme.palette.secondary.main,
-            backgroundColor: lighten(DarkTheme.palette.secondary.light, 0.85),
-        };
-    }
-    return {
-        root: {
-            paddingRight: 8,
-        },
-        highlight,
-        spacer: {
-            flex: '1 1 100%',
-        },
-        actions: {
-            color: DarkTheme.palette.text.secondary,
-            display: 'flex',
-        },
-        title: {
-            flex: '0 0 auto',
-        },
-    };
-};
+const highlightCss =
+    DarkTheme.palette.mode === 'light'
+        ? css`
+              color: ${DarkTheme.palette.secondary.main};
+              background-color: ${lighten(DarkTheme.palette.secondary.light, 0.85)};
+          `
+        : css`
+              color: ${DarkTheme.palette.text.primary};
+              background-color: ${DarkTheme.palette.secondary.dark};
+          `;
+
+const StyledToolbar = styled(Toolbar)`
+    padding-right: 8px;
+    ${({ $highlight }) => ($highlight ? highlightCss : '')}
+`;
+
+const Title = styled.div`
+    flex: 0 0 auto;
+`;
+
+const Spacer = styled.div`
+    flex: 1 1 100%;
+`;
+
+const Actions = styled.div`
+    color: ${DarkTheme.palette.text.secondary};
+    display: flex;
+`;
 
 const DataTableToolbar = (props) => {
-    const { numSelected, classes, onSelectAllClick, rowCount, title, selectionMode } = props;
+    const { numSelected, onSelectAllClick, rowCount, title, selectionMode } = props;
     return (
-        <Toolbar className={`${classes.root} ${numSelected > 0 ? classes.highlight : ''}`}>
-            <div className={classes.title}>
+        <StyledToolbar $highlight={numSelected > 0}>
+            <Title>
                 {numSelected > 0 ? (
                     <Typography color="inherit" variant="subtitle1">
                         {numSelected} selected
@@ -56,9 +56,9 @@ const DataTableToolbar = (props) => {
                         {title}
                     </Typography>
                 )}
-            </div>
-            <div className={classes.spacer} />
-            <div className={classes.actions}>
+            </Title>
+            <Spacer />
+            <Actions>
                 {selectionMode === 'multiple' && (
                     <Tooltip title="Select All">
                         <Checkbox
@@ -70,25 +70,24 @@ const DataTableToolbar = (props) => {
                 )}
                 {numSelected > 0 && (
                     <Tooltip title="Delete">
-                        <IconButton aria-label="Delete">
+                        <IconButton aria-label="Delete" size="large">
                             <DeleteIcon />
                         </IconButton>
                     </Tooltip>
                 )}
                 {numSelected === 0 && (
                     <Tooltip title="Filter list">
-                        <IconButton aria-label="Filter list">
+                        <IconButton aria-label="Filter list" size="large">
                             <FilterListIcon />
                         </IconButton>
                     </Tooltip>
                 )}
-            </div>
-        </Toolbar>
+            </Actions>
+        </StyledToolbar>
     );
 };
 
 DataTableToolbar.propTypes = {
-    classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired,
     onSelectAllClick: PropTypes.func,
     rowCount: PropTypes.number,
@@ -96,4 +95,4 @@ DataTableToolbar.propTypes = {
     selectionMode: PropTypes.string,
 };
 
-export default withStyles(toolbarStyles)(DataTableToolbar);
+export default DataTableToolbar;

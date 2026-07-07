@@ -1,16 +1,17 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Button } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
+import { Button } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
 
-import { withStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
+
 import { bind } from 'utils/decorators/decoratorUtils';
 
 import DateTimePicker from './DateTimePicker';
@@ -19,16 +20,20 @@ import MdiIcon from './MdiIcon';
 
 const normilizeDate = (date) => moment(date).format('DD, MMM YYYY HH:mm');
 
-const styles = {
-    cancelButton: { color: '#999999', position: 'absolute', left: '12px' },
-    clearButton: { color: '#999999' },
-};
+const CancelButton = styled(Button)`
+    color: #999999;
+    position: absolute;
+    left: 12px;
+`;
+
+const ClearButton = styled(Button)`
+    color: #999999;
+`;
 
 class DateTimePickerRangeModal extends PureComponent {
     static propTypes = {
         ...(DateTimePicker || {}).propTypes,
         value: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)])),
-        classes: PropTypes.object.isRequired,
     };
 
     constructor(props) {
@@ -117,7 +122,7 @@ class DateTimePickerRangeModal extends PureComponent {
     }
 
     render() {
-        const { TextFieldProps, PickersFromProps, PickersToProps, classes } = this.props;
+        const { TextFieldProps, PickersFromProps, PickersToProps } = this.props;
         const { start, end, showModal, fieldLabel } = this.state;
         return (
             <Fragment>
@@ -127,7 +132,7 @@ class DateTimePickerRangeModal extends PureComponent {
                     value={fieldLabel}
                     onClick={this.toggleModal}
                     multiline
-                    rowsMax={2}
+                    maxRows={2}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -136,7 +141,7 @@ class DateTimePickerRangeModal extends PureComponent {
                         ),
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton aria-label="Clear input" onClick={this.onClear}>
+                                <IconButton aria-label="Clear input" onClick={this.onClear} size="large">
                                     <MdiIcon name="close" />
                                 </IconButton>
                             </InputAdornment>
@@ -167,12 +172,12 @@ class DateTimePickerRangeModal extends PureComponent {
                     </DialogContent>
                     <Divider />
                     <DialogActions>
-                        <Button className={classes.cancelButton} onClick={this.toggleModal} variant="text">
+                        <CancelButton onClick={this.toggleModal} variant="text">
                             Cancel
-                        </Button>
-                        <Button className={classes.clearButton} onClick={this.onClear} variant="text">
+                        </CancelButton>
+                        <ClearButton onClick={this.onClear} variant="text">
                             Clear
-                        </Button>
+                        </ClearButton>
                         <Button onClick={this.onSave} variant="text">
                             Save
                         </Button>
@@ -183,4 +188,4 @@ class DateTimePickerRangeModal extends PureComponent {
     }
 }
 
-export default withStyles(styles)(DateTimePickerRangeModal);
+export default DateTimePickerRangeModal;

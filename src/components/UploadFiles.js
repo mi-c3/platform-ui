@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
-import { IconButton, InputAdornment } from '@material-ui/core';
-
-import { withStyles } from '@material-ui/core/styles';
+import { IconButton, InputAdornment } from '@mui/material';
+import styled from 'styled-components';
 
 import MdiIcon from 'components/MdiIcon';
 import TextField from 'components/TextField';
@@ -10,11 +9,9 @@ import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { get } from 'utils/lo/lo';
 import { colors } from 'styles/theme';
 
-const useStyles = withStyles(() => ({
-    iconRoot: {
-        color: colors.darkGray,
-    },
-}));
+const ClearIconStyled = styled(MdiIcon)`
+    color: ${colors.darkGray};
+`;
 
 class UploadFiles extends PureComponent {
     static propTypes = {
@@ -35,15 +32,11 @@ class UploadFiles extends PureComponent {
     @bind
     @memoize()
     getClearAdornment(disabled) {
-        return (
-            !disabled && (
-                <InputAdornment position="end">
-                    <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <MdiIcon name="close" className={this.props.classes.iconRoot} />
-                    </IconButton>
-                </InputAdornment>
-            )
-        );
+        return (!disabled && (<InputAdornment position="end">
+            <IconButton aria-label="Clear input" onClick={this.onClear} size="large">
+                <ClearIconStyled name="close" />
+            </IconButton>
+        </InputAdornment>));
     }
 
     @bind
@@ -57,17 +50,13 @@ class UploadFiles extends PureComponent {
     @bind
     @memoize()
     getUploadAdornment(disabled) {
-        return (
-            !disabled && (
-                <InputAdornment position="end">
-                    <Dropzone disableDragActive accept={this.props.accept} showPreviews={false} showAlerts={false} onChange={this.onChange}>
-                        <IconButton aria-label="Upload" onClick={this.onUpload}>
-                            <MdiIcon name="upload" />
-                        </IconButton>
-                    </Dropzone>
-                </InputAdornment>
-            )
-        );
+        return (!disabled && (<InputAdornment position="end">
+            <Dropzone disableDragActive accept={this.props.accept} showPreviews={false} showAlerts={false} onChange={this.onChange}>
+                <IconButton aria-label="Upload" onClick={this.onUpload} size="large">
+                    <MdiIcon name="upload" />
+                </IconButton>
+            </Dropzone>
+        </InputAdornment>));
     }
 
     render() {
@@ -96,4 +85,4 @@ class UploadFiles extends PureComponent {
     }
 }
 
-export default useStyles(UploadFiles); // eslint-disable-line react-hooks/rules-of-hooks
+export default UploadFiles;

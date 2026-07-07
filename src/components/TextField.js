@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { TextField as MuiTextField, IconButton, Input, InputAdornment } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { TextField as MuiTextField, IconButton, Input, InputAdornment } from '@mui/material';
+import styled, { css } from 'styled-components';
 
 import MdiIcon from 'components/MdiIcon';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
@@ -13,24 +13,27 @@ import { get } from 'utils/lo/lo';
 // eslint-disable-next-line no-unused-vars
 const { endAdornment, ...inputPropsSubSet } = Input.propTypes || {};
 
-const useStyles = withStyles(() => ({
-    clearIcon: {
-        color: colors.darkGray,
-    },
-    labelMargin: {
-        marginLeft: 28,
-    },
-    fieldProps: {
-        '& .MuiInputAdornment-filled.MuiInputAdornment-positionStart:not(.MuiInputAdornment-hiddenLabel)': {
-            marginTop: '0 !important',
-        },
-    },
-    hiddenInput: {
-        '& .MuiInputBase-input.Mui-disabled': {
-            visibility: 'hidden',
-        },
-    },
-}));
+const ClearIcon = styled(MdiIcon)`
+    color: ${colors.darkGray};
+`;
+
+const StyledTextField = styled(MuiTextField)`
+    ${({ $labelMargin }) => $labelMargin && css`
+        & .MuiInputLabel-root {
+            margin-left: 28px;
+        }
+    `}
+    ${({ $hasStartAdornment }) => $hasStartAdornment && css`
+        & .MuiInputAdornment-filled.MuiInputAdornment-positionStart:not(.MuiInputAdornment-hiddenLabel) {
+            margin-top: 0 !important;
+        }
+    `}
+    ${({ $hideInput }) => $hideInput && css`
+        & .MuiInputBase-input.Mui-disabled {
+            visibility: hidden;
+        }
+    `}
+`;
 
 class TextField extends PureComponent {
     static propTypes = {
@@ -58,16 +61,12 @@ class TextField extends PureComponent {
     @bind
     @memoize()
     getClearAdornment(disabled, value) {
-        return (
-            !disabled &&
-            this.isDefined(value) && (
-                <InputAdornment position="end">
-                    <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <MdiIcon name="close" className={this.props.classes.clearIcon} />
-                    </IconButton>
-                </InputAdornment>
-            )
-        );
+        return (!disabled &&
+        this.isDefined(value) && (<InputAdornment position="end">
+            <IconButton aria-label="Clear input" onClick={this.onClear} size="large">
+                <ClearIcon name="close" />
+            </IconButton>
+        </InputAdornment>));
     }
 
     @bind
@@ -75,7 +74,7 @@ class TextField extends PureComponent {
     getErrorAdornment() {
         return (
             <InputAdornment position="end">
-                <IconButton aria-label="Clear input" onClick={this.onClear}>
+                <IconButton aria-label="Clear input" onClick={this.onClear} size="large">
                     <MdiIcon name="alert-circle" color="error" />
                 </IconButton>
             </InputAdornment>
@@ -103,31 +102,24 @@ class TextField extends PureComponent {
         } = this.props;
         const defaultEndAdornment = error ? this.getErrorAdornment() : this.getClearAdornment(disabled, value);
         return (
-            <MuiTextField
+            <StyledTextField
                 value={this.isDefined(value) ? value : ''}
                 disabled={disabled}
                 error={error}
-                InputLabelProps={{
-                    ...InputLabelProps,
-                    className: `${get(InputProps, 'startAdornment') && !autocompleteMultiple ? classes.labelMargin : ''} ${get(
-                        InputLabelProps,
-                        'className',
-                        ''
-                    )}`,
-                }}
+                InputLabelProps={InputLabelProps}
                 InputProps={{
                     endAdornment: clearable ? defaultEndAdornment : undefined,
                     disableUnderline: true,
                     ...InputProps,
                 }}
-                className={`
-                    ${hideInput ? classes.hiddenInput : ''} ${className} 
-                    ${get(InputProps, 'startAdornment') ? classes.fieldProps : ''}
-                `}
+                className={className}
+                $labelMargin={!!get(InputProps, 'startAdornment') && !autocompleteMultiple}
+                $hasStartAdornment={!!get(InputProps, 'startAdornment')}
+                $hideInput={!!hideInput}
                 {...restProps}
             />
         );
     }
 }
 
-export default useStyles(TextField); // eslint-disable-line react-hooks/rules-of-hooks
+export default TextField;

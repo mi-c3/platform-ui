@@ -1,29 +1,21 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import MuiCircularProgress from '@material-ui/core/CircularProgress';
-import { withStyles } from '@material-ui/core/styles';
+import MuiCircularProgress from '@mui/material/CircularProgress';
+import styled, { css } from 'styled-components';
 import { colors } from 'styles/theme';
 
-const getFillColor = (opacity) => ({ fillColor }) => {
-    if (fillColor === 'primary') {
-        return colors.primary.dark;
-    }
-    if (opacity > -1) {
-        return `${fillColor}${opacity} !important`;
-    }
-    return `${fillColor} !important`;
-};
+const fillColorCss = css`
+    color: ${({ $fillColor }) => ($fillColor === 'primary' ? colors.primary.dark : `${$fillColor} !important`)};
+`;
 
-const styles = () => ({
-    fillColor: {
-        color: getFillColor(),
-    },
-});
+const StyledCircularProgress = styled(MuiCircularProgress)`
+    ${({ $fillColor }) => ($fillColor ? fillColorCss : '')}
+`;
 
 // eslint-disable-next-line no-unused-vars
-const CircularProgress = withStyles(styles)(({ classes, className, fillColor, ...restProps }) => {
-    return <MuiCircularProgress className={`${fillColor && classes.fillColor} ${className}`} {...restProps} />;
-});
+const CircularProgress = ({ classes, className, fillColor, ...restProps }) => {
+    return <StyledCircularProgress className={className} $fillColor={fillColor} {...restProps} />;
+};
 
 CircularProgress.propTypes = {
     ...MuiCircularProgress.propTypes,

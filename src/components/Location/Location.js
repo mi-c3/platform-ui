@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
 
 import { DarkMapTheme } from 'styles/mapTheme';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { isDefined } from 'utils/utils';
 import { bind } from 'utils/decorators/decoratorUtils';
 import Marker from './Marker/Marker';

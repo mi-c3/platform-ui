@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import Icon from '@material-ui/core/Icon';
+import Icon from '@mui/material/Icon';
 
 // Base icon colors for Material UI Icon component
 const MAIN_COLORS = ['inherit', 'primary', 'secondary', 'action', 'error', 'disabled'];

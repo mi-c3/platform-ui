@@ -4,60 +4,61 @@ import equals from 'fast-deep-equal';
 import VirtualList from 'react-tiny-virtual-list';
 
 import { bind, memoize, debounce } from 'utils/decorators/decoratorUtils';
-import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
-import Chip from '@material-ui/core/Chip';
-import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import Grow from '@material-ui/core/Grow';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Tooltip from '@material-ui/core/Tooltip';
-import { styled, withStyles } from '@material-ui/core/styles';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
+import Chip from '@mui/material/Chip';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import Grow from '@mui/material/Grow';
+import CircularProgress from '@mui/material/CircularProgress';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Tooltip from '@mui/material/Tooltip';
+import styled, { css } from 'styled-components';
 
 import MdiIcon from 'components/MdiIcon';
 import TextField from 'components/TextField';
 import { shallowEquals, arrayfy, isObject } from 'utils/utils';
 import { get } from 'utils/lo/lo';
 
-const styles = () => ({
-    adormentAlign: {
-        '& .MuiFilledInput-adornedStart div:not(.MuiChip-root) > .MuiAvatar-root': {
-            position: 'relative',
-            top: -10,
-        },
-        '& .MuiFilledInput-adornedStart > div:not(.MuiChip-root) > .MuiIcon-root': {
-            position: 'relative',
-            top: -10,
-        },
-    },
-    inputRoot: {
-        paddingTop: '1.7rem',
-        flexWrap: 'wrap',
-    },
-    inputInput: {
-        width: ({ multiple }) => `calc(100% - ${multiple ? 80 : 60}px)`,
-        flexGrow: 1,
-    },
-    chip: {
-        margin: '5px 3px',
-        height: '24px',
-    },
-});
+const StyledTextField = styled(TextField)`
+    & .MuiFilledInput-root.MuiInputBase-adornedStart div:not(.MuiChip-root) > .MuiAvatar-root {
+        position: relative;
+        top: -10px;
+    }
+    & .MuiFilledInput-root.MuiInputBase-adornedStart > div:not(.MuiChip-root) > .MuiIcon-root {
+        position: relative;
+        top: -10px;
+    }
+    ${({ $multiple }) => $multiple && css`
+        & .MuiFilledInput-root {
+            padding-top: 1.7rem;
+            flex-wrap: wrap;
+        }
+        & .MuiFilledInput-input {
+            width: calc(100% - 80px);
+            flex-grow: 1;
+        }
+    `}
+`;
 
-const ChipIconStyle = styled('div')({
-    margin: '4px -4px 0 8px',
-});
+const StyledChip = styled(Chip)`
+    margin: 5px 3px;
+    height: 24px;
+`;
 
-const AdormentStyle = styled('div')({
-    margin: '21px 7px 0 0',
-});
+const ChipIconStyle = styled.div`
+    margin: 4px -4px 0 8px;
+`;
 
-const AdormentIconStyle = styled('div')({
-    margin: '7px 0px 0 0',
-});
+const AdormentStyle = styled.div`
+    margin: 21px 7px 0 0;
+`;
+
+const AdormentIconStyle = styled.div`
+    margin: 7px 0px 0 0;
+`;
 
 class Autocomplete extends PureComponent {
     static propTypes = {
@@ -480,7 +481,7 @@ class Autocomplete extends PureComponent {
      */
     @bind
     @memoize(shallowEquals)
-    buildInputProps({ selected, clearable, disabled, multiple, query, InputProps, classes, openSuggestions, isLoading }) {
+    buildInputProps({ selected, clearable, disabled, multiple, query, InputProps, openSuggestions, isLoading }) {
         const { startAdornment, label = '' } = !multiple ? this.optionTemplate(selected) : {};
         const InputProperties = {
             ...InputProps,
@@ -505,12 +506,11 @@ class Autocomplete extends PureComponent {
                 return (
                     <>
                         <Tooltip title={label}>
-                            <Chip
+                            <StyledChip
                                 color="primary"
                                 key={index}
                                 label={label}
                                 tabIndex={-1}
-                                className={classes.chip}
                                 onDelete={this.buildRemoveChip(option)}
                                 disabled={disabled}
                                 {...ChipProps}
@@ -519,13 +519,12 @@ class Autocomplete extends PureComponent {
                     </>
                 );
             });
-            InputProperties.classes = { root: classes.inputRoot, input: classes.inputInput };
         } else if (!InputProps?.startAdornment || startAdornment) {
             InputProperties.startAdornment = startAdornment && <AdormentStyle>{startAdornment}</AdormentStyle>;
             if (!InputProperties.endAdornment) {
                 if (selected && clearable && !disabled) {
                     InputProperties.endAdornment = (
-                        <IconButton aria-label="Clear input" onClick={this.clearInput}>
+                        <IconButton aria-label="Clear input" onClick={this.clearInput} size="large">
                             <MdiIcon name="close" />
                         </IconButton>
                     );
@@ -547,7 +546,7 @@ class Autocomplete extends PureComponent {
                 adornment = <CircularProgress size={12} onClick={this.handleClose} />;
             }
             if (adornment) {
-                InputProperties.endAdornment = <IconButton onClick={this.onClickArrow}>{adornment}</IconButton>;
+                InputProperties.endAdornment = <IconButton onClick={this.onClickArrow} size="large">{adornment}</IconButton>;
             }
         }
 
@@ -604,7 +603,6 @@ class Autocomplete extends PureComponent {
             multiple,
             query,
             InputProps,
-            classes,
             openSuggestions,
             isLoading,
         });
@@ -612,7 +610,7 @@ class Autocomplete extends PureComponent {
         return (
             <Fragment>
                 <ClickAwayListener onClickAway={this.handleClose}>
-                    <TextField
+                    <StyledTextField
                         autocompleteMultiple={multiple}
                         InputProps={InputProperties}
                         InputLabelProps={{ shrink: true }}
@@ -620,7 +618,8 @@ class Autocomplete extends PureComponent {
                         disabled={disabled}
                         autoComplete="off"
                         hideInput={hideInput}
-                        className={`${className || ''} ${classes.adormentAlign}`}
+                        className={className}
+                        $multiple={multiple}
                         {...restProps}
                     />
                 </ClickAwayListener>
@@ -630,4 +629,4 @@ class Autocomplete extends PureComponent {
     }
 }
 
-export default withStyles(styles)(Autocomplete);
+export default Autocomplete;

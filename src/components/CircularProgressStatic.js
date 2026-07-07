@@ -1,29 +1,30 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 import { getFillColor } from 'utils/styles/stylesUtils';
 
-const styles = () => ({
-    wrapper: {
-        '& svg': {
-            display: 'block',
-        },
-    },
-    circleBackground: {
-        stroke: getFillColor(44),
-    },
-    circleProgress: {
-        stroke: getFillColor(),
-        strokeLinecap: 'round',
-        strokeLinejoin: 'round',
-    },
-    circleText: {
-        fontSize: '0.8rem',
-        fill: 'white',
-    },
-});
+const fill = (opacity) => ({ $fillColor, $priority, $disabled }) =>
+    getFillColor(opacity)({ fillColor: $fillColor, priority: $priority, disabled: $disabled });
 
-const CircularProgressStatic = withStyles(styles)((props) => {
+const Wrapper = styled.div`
+    & svg {
+        display: block;
+    }
+    .CircularProgressStatic-circleBackground {
+        stroke: ${fill(44)};
+    }
+    .CircularProgressStatic-circleProgress {
+        stroke: ${fill()};
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+    .CircularProgressStatic-circleText {
+        font-size: 0.8rem;
+        fill: white;
+    }
+`;
+
+const CircularProgressStatic = (props) => {
     const { size, foreignObjectContent, classes, className, foreignObjectProps, fillColor, borderWidth, ...restProps } = props; //eslint-disable-line no-unused-vars
     const value = props.value >= 0 && props.value <= 100 ? Math.round(props.value) : 0;
     const radius = (props.size - props.borderWidth) / 2;
@@ -35,22 +36,22 @@ const CircularProgressStatic = withStyles(styles)((props) => {
             {foreignObjectContent}
         </foreignObject>
     ) : (
-        <text className={classes.circleText} x="50%" y="50%" dy=".3em" textAnchor="middle">
+        <text className="CircularProgressStatic-circleText" x="50%" y="50%" dy=".3em" textAnchor="middle">
             {`${value}%`}
         </text>
     );
     return (
-        <div {...restProps} className={`${classes.wrapper} ${className}`}>
+        <Wrapper {...restProps} className={className} $fillColor={fillColor} $priority={props.priority} $disabled={props.disabled}>
             <svg width={props.size} height={props.size} viewBox={viewBox} fill="none">
                 <circle
-                    className={classes.circleBackground}
+                    className="CircularProgressStatic-circleBackground"
                     cx={props.size / 2}
                     cy={props.size / 2}
                     r={radius}
                     strokeWidth={`${props.borderWidth}px`}
                 />
                 <circle
-                    className={classes.circleProgress}
+                    className="CircularProgressStatic-circleProgress"
                     cx={props.size / 2}
                     cy={props.size / 2}
                     r={radius}
@@ -63,9 +64,9 @@ const CircularProgressStatic = withStyles(styles)((props) => {
                 />
                 {content}
             </svg>
-        </div>
+        </Wrapper>
     );
-});
+};
 
 CircularProgressStatic.defaultProps = {
     size: 38,

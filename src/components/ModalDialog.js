@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { Divider, Dialog, Grid, IconButton, Typography } from '@material-ui/core';
+import { Divider, Dialog, Grid, IconButton, Typography } from '@mui/material';
 
 import Loader from './Loader';
 import MdiIcon from './MdiIcon';
@@ -72,17 +72,17 @@ const ModalDialog = ({
             bgcolor={bgcolor}
             {...dialogProps}
         >
-            <Grid container justify="space-between" alignItems="center">
+            <Grid container justifyContent="space-between" alignItems="center">
                 <Grid item container xs={8} alignItems="center" wrap="nowrap">
                     {!withoutClose && (
-                        <IconButton aria-label="close" onClick={onClose}>
+                        <IconButton aria-label="close" onClick={onClose} size="large">
                             <MdiIcon name={closeIcon ? closeIcon : 'close'} />
                         </IconButton>
                     )}
                     <Typography variant="h6">{title}</Typography>
                     <StyledSmall>{subtitle}</StyledSmall>
                 </Grid>
-                <Grid item container xs={4} justify="flex-end" alignItems="center">
+                <Grid item container xs={4} justifyContent="flex-end" alignItems="center">
                     {actions}
                 </Grid>
             </Grid>

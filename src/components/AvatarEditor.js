@@ -1,8 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import ReactAvatarEditor from 'react-avatar-editor';
 import PropTypes from 'prop-types';
-import { Grid, Typography, IconButton } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { Grid, Typography, IconButton } from '@mui/material';
+import styled, { css } from 'styled-components';
 
 import { bind } from 'utils/decorators/decoratorUtils';
 import { isImageType } from 'utils/file/file';
@@ -13,23 +13,27 @@ import Dropzone from './Upload/Dropzone';
 import Button from './Button';
 import MdiIcon from './MdiIcon';
 
-const styles = () => ({
-    avatarWrapper: {
-        cursor: 'pointer',
-    },
-    wrapper: {
-        maxWidth: 300,
-    },
-    slider: {
-        margin: '8px 0 0 0',
-    },
-    label: {
-        margin: '0 8px',
-    },
-    avatarEditButton: {
-        margin: '1rem',
-    },
-});
+const AvatarGrid = styled(Grid)`
+    ${({ $clickable }) => $clickable && css`
+        cursor: pointer;
+    `}
+`;
+
+const WrapperGrid = styled(Grid)`
+    max-width: 300px;
+`;
+
+const StyledSlider = styled(Slider)`
+    margin: 8px 0 0 0;
+`;
+
+const LabelTypography = styled(Typography)`
+    margin: 0 8px;
+`;
+
+const EditButton = styled(Button)`
+    margin: 1rem;
+`;
 
 const styleColor = [0, 0, 0, 0.6];
 const defaultState = {
@@ -49,7 +53,6 @@ class AvatarEditor extends PureComponent {
         withEditButton: PropTypes.bool,
         image: PropTypes.string,
         initials: PropTypes.string,
-        classes: PropTypes.object,
         AvatarProps: PropTypes.object,
         ReactAvatarEditorProps: PropTypes.object,
         AvatarGridProps: PropTypes.object,
@@ -147,42 +150,42 @@ class AvatarEditor extends PureComponent {
     }
 
     render() {
-        const { isButton, image, classes, initials, label, disabled, AvatarProps, EditorProps, ReactAvatarEditorProps, AvatarGridProps, EditButtonProps, GridProps } = this.props; // eslint-disable-line ,max-len
+        const { isButton, image, initials, label, disabled, AvatarProps, EditorProps, ReactAvatarEditorProps, AvatarGridProps, EditButtonProps, GridProps } = this.props; // eslint-disable-line ,max-len
         const { showAvatarEditor, imageFile, scale, rotate } = this.state;
         return (
             <Grid container direction="column" alignItems={showAvatarEditor ? 'center' : 'flex-start'} {...GridProps}>
                 {!showAvatarEditor ? (
                     <Dropzone accept="image/*" showPreviews={false} showAlerts={false} onDrop={this.handleDrop} dropzoneTextHover="...">
-                        <Grid
+                        <AvatarGrid
                             item
                             container
-                            justify="space-between"
+                            justifyContent="space-between"
                             alignItems="center"
                             {...AvatarGridProps}
                             onClick={this.dropZoneClick}
-                            className={`${!disabled ? classes.avatarWrapper : ''} ${AvatarGridProps.className}`}
+                            $clickable={!disabled}
+                            className={AvatarGridProps.className}
                         >
                             {isButton ? (
-                                <Button
+                                <EditButton
                                     iconName={!EditButtonProps.withoutIcon ? 'upload' : ''}
                                     variant="text"
-                                    className={classes.avatarEditButton}
                                     {...EditButtonProps}
                                 >
                                     {label}
-                                </Button>
+                                </EditButton>
                             ) : (
                                 <>
                                     <Avatar initials={initials} src={image} {...AvatarProps} />
-                                    {label && <Typography className={classes.label}>{label}</Typography>}
+                                    {label && <LabelTypography>{label}</LabelTypography>}
                                     {EditButtonProps.label ? (
-                                        <Button className={classes.avatarEditButton} {...EditButtonProps}>
+                                        <EditButton {...EditButtonProps}>
                                             {EditButtonProps.label}
-                                        </Button>
+                                        </EditButton>
                                     ) : null}
                                 </>
                             )}
-                        </Grid>
+                        </AvatarGrid>
                     </Dropzone>
                 ) : (
                     <Fragment>
@@ -197,32 +200,31 @@ class AvatarEditor extends PureComponent {
                             onImageReady={() => this.handleUpload(false)}
                             {...ReactAvatarEditorProps}
                         />
-                        <Grid container direction="column" className={classes.wrapper}>
+                        <WrapperGrid container direction="column">
                             {EditorProps?.disableZoom ? null : (
                                 <Grid item container alignItems="center">
                                     <Typography>Zoom:</Typography>
-                                    <Slider
+                                    <StyledSlider
                                         max={4}
                                         min={1}
                                         step={0.01}
                                         value={scale}
                                         onChange={this.handleScaleChange}
-                                        className={classes.slider}
                                     />
                                 </Grid>
                             )}
                             {EditorProps?.diabelRotate ? null : (
-                                <Grid item container justify="space-between" alignItems="center">
+                                <Grid item container justifyContent="space-between" alignItems="center">
                                     <Typography>Rotate:</Typography>
-                                    <IconButton onClick={this.handleRotateLeft}>
+                                    <IconButton onClick={this.handleRotateLeft} size="large">
                                         <MdiIcon name="rotate-left" />
                                     </IconButton>
-                                    <IconButton onClick={this.handleRotateRight}>
+                                    <IconButton onClick={this.handleRotateRight} size="large">
                                         <MdiIcon name="rotate-right" />
                                     </IconButton>
                                 </Grid>
                             )}
-                            <Grid container justify="space-between">
+                            <Grid container justifyContent="space-between">
                                 <Button variant="text" onClick={this.cancelUpload}>
                                     {EditorProps?.cancelLabel || 'Cancel'}
                                 </Button>
@@ -230,11 +232,11 @@ class AvatarEditor extends PureComponent {
                                     {EditorProps?.uploadLabel || 'Crop and Upload'}
                                 </Button>
                             </Grid>
-                        </Grid>
+                        </WrapperGrid>
                     </Fragment>
                 )}
             </Grid>
         );
     }
 }
-export default withStyles(styles)(AvatarEditor);
+export default AvatarEditor;
