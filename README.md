@@ -1,42 +1,64 @@
 # platform-ui
 
-A React UI components library based on @material-ui.
+A React UI components library based on [MUI](https://mui.com) (`@mui/material` v7, emotion engine).
+
+Version 2.x targets React 17–19, MUI v7, styled-components 5–6, and builds as an ES module
+(`build/index.js`). All UI framework packages (react, @mui/*, @emotion/*, styled-components,
+react-router-dom, ...) are `peerDependencies` — the consuming application provides them.
 
 ## Requirements
 
-* node (> 10.x.x, LTS only)
-* yarn (> v1.13.0)
+* node >= 22.11.0 < 23
+* npm (the repo ships a `package-lock.json`)
 
 ## Build
 
-### Build the UI component library
-
-Run the following commands:
-
 ```
-yarn
-yarn build
+npm install
+npm run build
 ```
 
 ## Development
 
-### Build the UI component library
-
-To re-build the UI component library after every change in the source file run the following commands:
+Rebuild on every source change:
 
 ```
-yarn
-yarn build:watch
+npm run build:watch
 ```
 
-### Link this module in another project without publish it
-
-#### Install the module
-
-Add the following dependency in the package.json:
+## Test / Lint
 
 ```
-"platform-ui": "link:../platform-ui"
+npm test
+npm run lint
 ```
 
-Where `../platform-ui` is the path to the root folder of this project.
+## Link this module into platform-v1 without publishing
+
+In platform-v1:
+
+```
+npm install ../platform-ui
+```
+
+npm installs a `file:` directory dependency as a symlink. platform-v1's `rspack.config.js`
+carries `resolve.alias` entries that pin react/@mui/@emotion/styled-components to the app's
+own `node_modules`, so the symlinked library can never load a second copy of the singletons.
+Rebuild this library (`npm run build` or `build:watch`) for changes to reach the app.
+
+Before merging platform-v1 work that depends on unpublished changes here, publish the new
+version and switch platform-v1's `package.json` from `file:../platform-ui` to it.
+
+## v2 migration notes (from 1.x)
+
+* `@material-ui/*` v4 is gone; passthrough re-exports come from `@mui/material` v7.
+* Compat aliases kept: `ExpansionPanel*` → `Accordion*`, `GridList*` → `ImageList*`,
+  `Grid` → MUI v7 `GridLegacy` (the classic `item`/`xs` API), `MuiPickersUtilsProvider` →
+  a shim over `LocalizationProvider` (moment adapter, `utils` prop ignored).
+* Removed (no consumers existed): `RootRef`, `Hidden`, `withWidth`, `withMobileDialog`,
+  `createGenerateClassName`.
+* `DatePicker`/`TimePicker`/`DateTimePicker` wrap `@mui/x-date-pickers` v8 but keep the
+  legacy v3 wrapper props (`inputVariant`, `clearable`, `showTodayButton`,
+  `TextFieldComponent`, string values) — see `src/utils/pickers/pickerProps.js`.
+* `Dropzone`/`Upload*` run on react-dropzone 14; a string `accept` prop is still supported.
+* React 19: no `defaultProps` on function components — use default parameters.
