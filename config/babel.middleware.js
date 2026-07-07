@@ -8,7 +8,7 @@ module.exports = {
             targets: {
                 chrome: '115' // или укажите вашу целевую версию
             },
-            modules: false, // не транспилируем ES-модули (если поддерживается)
+            modules: process.env.NODE_ENV === 'test' ? 'commonjs' : false,
             bugfixes: true, // включает некоторые исправления для современных браузеров
             useBuiltIns: false // отключает полифиллы, если они вам не нужны
         }]

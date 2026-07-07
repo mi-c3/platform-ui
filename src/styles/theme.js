@@ -1,4 +1,4 @@
-import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
+import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 
 export const colors = {
     primary: {
@@ -32,7 +32,7 @@ export const colors = {
 };
 
 export const DarkTheme = responsiveFontSizes(
-    createMuiTheme({
+    createTheme({
         colors,
         spacing: (factor) => `${0.25 * factor}rem`,
         palette: {

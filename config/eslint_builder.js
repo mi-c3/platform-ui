@@ -8,7 +8,6 @@ module.exports = ({ rspack } = {}) => {
             'amd': true
         },
         'plugins': [
-            'graphql',
             'react',
             'react-hooks'
         ],
