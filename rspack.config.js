@@ -1,11 +1,7 @@
-// rspack.config.js
-
-
 const path = require('path');
 const ESLintPlugin = require('eslint-rspack-plugin');
 
-const babelOptions = require('./config/babel.middleware.js');
-const fileLoader = require('./config/fileloader.middleware.js');
+const babelOptions = require('./config/babel.js');
 
 // Everything the consumer provides (peerDependencies) plus the packages we
 // declare as regular dependencies but intentionally leave external. Deep
@@ -61,7 +57,6 @@ module.exports = {
                     options: babelOptions,
                 },
             },
-            ...fileLoader,
         ],
     },
     plugins: [

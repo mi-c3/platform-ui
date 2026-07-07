@@ -1,16 +1,18 @@
 const { join } = require('path');
-// Babel Configuration (babel.middleware.js)
 
+// Shared Babel configuration, consumed by rspack (babel-loader), jest
+// (babel-jest) and the eslint parser — see config/eslint.js.
 module.exports = {
     presets: [
         [require.resolve('@babel/preset-react'), { runtime: 'automatic' }],
         ['@babel/preset-env', {
             targets: {
-                chrome: '115' // или укажите вашу целевую версию
+                chrome: '115'
             },
+            // jest needs commonjs; the library build stays ESM
             modules: process.env.NODE_ENV === 'test' ? 'commonjs' : false,
-            bugfixes: true, // включает некоторые исправления для современных браузеров
-            useBuiltIns: false // отключает полифиллы, если они вам не нужны
+            bugfixes: true,
+            useBuiltIns: false
         }]
     ],
     plugins: [
@@ -19,8 +21,8 @@ module.exports = {
             loose: true,
             shippedProposals: true,
         }],
+        // makes `utils/...`, `styles/...`, `components/...` resolve from src/
         [require.resolve('babel-plugin-module-resolver'), { root: [join(__dirname, '../src')] }],
         require.resolve('babel-plugin-styled-components'),
-        '@babel/plugin-syntax-import-meta'
     ],
 };

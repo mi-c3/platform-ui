@@ -1,3 +1,3 @@
-const builder = require('./config/eslint_builder.js')
+const builder = require('./config/eslint.js')
 
 module.exports = builder();

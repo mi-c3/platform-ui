@@ -57,7 +57,7 @@ module.exports = ({ rspack } = {}) => {
     if (!rspack) {
         config.root = true
         config.env.commonjs = true
-        config.plugins.push('babel', 'jest')
+        config.plugins.push('jest')
         config.extends.push('plugin:jest/recommended', 'plugin:ft-flow/recommended')
         config.globals = {
             'process': true,
@@ -67,7 +67,7 @@ module.exports = ({ rspack } = {}) => {
         config.parserOptions = {
             'requireConfigFile': true,
             'babelOptions': {
-                'configFile': './config/babel.middleware.js'
+                'configFile': './config/babel.js'
             },
             ...config.parserOptions
         }

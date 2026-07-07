@@ -1,12 +1,11 @@
 # dependencies
 node_modules
 
-# storybook build
-storybook-static
-.eslintcache
-
-#build
+# build output
 build
 
-#logs
-yarn-error.log
+# caches / logs / coverage
+.eslintcache
+coverage
+npm-debug.log*
+*.tgz

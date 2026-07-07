@@ -1,6 +1,6 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'test';
 
-const babelOptions = require('./config/babel.middleware.js');
+const babelOptions = require('./config/babel.js');
 
 module.exports = {
     testEnvironment: 'jsdom',
