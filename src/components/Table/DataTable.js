@@ -47,7 +47,7 @@ class DataTable extends React.Component {
         super(props);
         const order = get(props, 'gridSettings.sort[0].order');
         const orderBy = get(props, 'gridSettings.sort[0].field');
-        const pageSize = get(props, 'gridSettings.pageSize');
+        const pageSize = get(props, 'gridSettings.pageSize') || 10;
         this.state = {
             order,
             orderBy,
@@ -66,9 +66,16 @@ class DataTable extends React.Component {
     }
 
     @bind
+    getRowKey(row) {
+        const { dataKey } = this.props;
+        return dataKey ? row[dataKey] : row.id;
+    }
+
+    @bind
     handleSelectAllClick(event) {
         const { data } = this.props;
-        this.setState({ selected: event.target.checked ? data.map((n) => n.id) : [] });
+        const selected = event.target.checked ? data.map(this.getRowKey) : [];
+        this.setState({ selected }, () => this.props.onSelectionChange(selected));
     }
 
     @bind
@@ -120,9 +127,10 @@ class DataTable extends React.Component {
         return stableSort(data, getSorting(order, orderBy))
             .slice(page * pageSize, page * pageSize + pageSize)
             .map((row) => {
-                const isSelected = this.isSelected(row[dataKey]);
+                const rowKey = this.getRowKey(row);
+                const isSelected = this.isSelected(rowKey);
                 return (
-                    <TableRow hover onClick={this.select(row[dataKey])} tabIndex={-1} key={row[dataKey]} selected={isSelected}>
+                    <TableRow hover onClick={this.select(rowKey)} tabIndex={-1} key={rowKey} selected={isSelected}>
                         {columnDefinitions.map(({ field, renderValue }, index) => (
                             <TableCell key={index}>{renderValue ? renderValue({ value: row[field] }) : row[field]}</TableCell>
                         ))}

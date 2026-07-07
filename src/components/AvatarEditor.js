@@ -50,7 +50,6 @@ class AvatarEditor extends PureComponent {
         name: PropTypes.string,
         disabled: PropTypes.bool,
         isButton: PropTypes.bool,
-        withEditButton: PropTypes.bool,
         image: PropTypes.string,
         initials: PropTypes.string,
         AvatarProps: PropTypes.object,
@@ -68,7 +67,6 @@ class AvatarEditor extends PureComponent {
         AvatarGridProps: {},
         GridProps: {},
         EditButtonProps: {},
-        withEditButton: false,
     };
 
     editorRef = React.createRef();
@@ -213,7 +211,7 @@ class AvatarEditor extends PureComponent {
                                     />
                                 </Grid>
                             )}
-                            {EditorProps?.diabelRotate ? null : (
+                            {(EditorProps?.disableRotate ?? EditorProps?.diabelRotate) ? null : (
                                 <Grid item container justifyContent="space-between" alignItems="center">
                                     <Typography>Rotate:</Typography>
                                     <IconButton onClick={this.handleRotateLeft} size="large">

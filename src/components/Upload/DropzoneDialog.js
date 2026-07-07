@@ -10,7 +10,7 @@ import Dropzone from 'components/Upload/Dropzone';
 import { bind } from 'utils/decorators/decoratorUtils';
 
 // FIXME checkout https://mui.com/components/use-media-query/#using-material-uis-breakpoint-helpers
-const withMobileDialog = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="lg" fullScreen={false} />;
+const withMobileDialog = () => (WrappedComponent) => (props) => <WrappedComponent width="lg" fullScreen={false} {...props} />;
 
 const DialogActionsStyled = styled(DialogActions)({
     minWidth: 300,

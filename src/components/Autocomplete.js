@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import equals from 'fast-deep-equal';
 import VirtualList from 'react-tiny-virtual-list';
 
-import { bind, memoize, debounce } from 'utils/decorators/decoratorUtils';
+import { bind, memoize, debounce, debounceFunc } from 'utils/decorators/decoratorUtils';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import Chip from '@mui/material/Chip';
@@ -118,9 +118,11 @@ class Autocomplete extends PureComponent {
     inputRef = React.createRef();
     virtualListRef = React.createRef();
 
+    // debounced per instance so the `searchDelay` prop is honored
+    suggest = debounceFunc((event) => this.performSuggest(event), this.props.searchDelay ?? 300);
+
     @bind
-    @debounce()
-    suggest(event) {
+    performSuggest(event) {
         const { value, options, valueField, valueId, suggest, multiple } = this.props;
         if (suggest) {
             return suggest(event);
@@ -590,6 +592,7 @@ class Autocomplete extends PureComponent {
             PopperProps,
             isLoading,
             className,
+            optionsOverflow, // eslint-disable-line no-unused-vars
             ...restProps
         } = this.props;
         const { suggestions, openSuggestions, query, selectedOption } = this.state;

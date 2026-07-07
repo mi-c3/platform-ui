@@ -76,8 +76,8 @@ class UploadFileField extends PureComponent {
     @memoize()
     getUploadAdornment(disabled) {
         return (!disabled && (<InputAdornment position="end">
-            <Dropzone disableDragActive accept={this.props.accept} showPreviews={false} showAlerts={false} onChange={this.onChange}>
-                <IconButton aria-label="Upload" onClick={this.onUpload} size="large">
+            <Dropzone disableDragActive accept={this.props.accept} showPreviews={false} onChange={this.onChange}>
+                <IconButton aria-label="Upload" size="large">
                     <MdiIcon name="upload" />
                 </IconButton>
             </Dropzone>
