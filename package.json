@@ -21,6 +21,10 @@
     "type": "git",
     "url": "git@gitlab.mi-c3.com:affectli-project/platform-ui.git"
   },
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://gitlab.mi-c3.com/api/v4/projects/261/packages/npm/"
+  },
   "peerDependencies": {
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",

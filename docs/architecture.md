@@ -67,5 +67,8 @@ the current MUI idioms.**
 ## CI
 
 [.gitlab-ci.yml](../.gitlab-ci.yml): build → verify (audit, lint, test) → pack (tarball of
-`build/`) → store (copy to internal artifacts dir). Runs on `development`, `qa`, tags, and
-`v*x` maintenance branches.
+`build/`) → store (copy to internal artifacts dir) → publish. Runs on `development`, `qa`,
+tags, and `v*x` maintenance branches. The publish stage runs only on `vX.Y.Z` tags: it
+verifies the tag matches package.json's version, appends the project registry + job-token
+lines to `.npmrc` (preserving `legacy-peer-deps`), and `npm publish`es to this project's
+GitLab package registry (see [releasing.md](releasing.md)).

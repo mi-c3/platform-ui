@@ -50,8 +50,10 @@ carries `resolve.alias` entries that pin react/@mui/@emotion/styled-components t
 own `node_modules`, so the symlinked library can never load a second copy of the singletons.
 Rebuild this library (`npm run build` or `build:watch`) for changes to reach the app.
 
-Before merging platform-v1 work that depends on unpublished changes here, publish the new
-version and switch platform-v1's `package.json` from `file:../platform-ui` to it.
+Before merging platform-v1 work that depends on unpublished changes here, release the new
+version (tag `vX.Y.Z` → CI publishes to the internal GitLab package registry, see
+[docs/releasing.md](docs/releasing.md)) and switch platform-v1's `package.json` from
+`file:../platform-ui` to it.
 
 ## v2 migration notes (from 1.x)
 

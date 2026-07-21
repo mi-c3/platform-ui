@@ -8,8 +8,9 @@ the MUI core components, built as a single ES module.
 
 | Section | What's in it |
 |---------|--------------|
-| [getting-started.md](getting-started.md) | Install, develop, build, test, link into an app, publish |
+| [getting-started.md](getting-started.md) | Install, develop, build, test, link into an app |
 | [architecture.md](architecture.md) | How the library is put together: entry point, build pipeline, externals, aliases |
+| [releasing.md](releasing.md) | Versioning, tagging, and CI publishing to the internal GitLab registry |
 | [conventions.md](conventions.md) | Code style, component patterns, documentation rules |
 | [components/](components/) | One page per exported component |
 

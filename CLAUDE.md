@@ -26,7 +26,8 @@ npm run lint:fix
 - `config/eslint.js` — eslint config factory; `.eslintrc.js` and eslint-rspack-plugin both use it.
 - `docs/` — markdown docs: README (index), getting-started, architecture, conventions,
   `components/<ExportedName>.md` per exported component.
-- `build/` — generated, gitignored; the only thing published to npm (`files: ["build"]`).
+- `build/` — generated, gitignored; the only thing published (`files: ["build"]`) — to the
+  internal GitLab package registry, never public npm (see docs/releasing.md).
 
 ## Hard constraints
 
@@ -55,4 +56,6 @@ verify props against the component file. Add/extend a test in `test/` mirroring 
 - `npm run build` fails on eslint errors (eslint-rspack-plugin runs in the build).
 - `.npmrc` `legacy-peer-deps=true` is temporary (remove when react-mde /
   react-tiny-virtual-list peers modernize).
-- CI (`.gitlab-ci.yml`) runs only on `development`, `qa`, tags, and `v*x` branches.
+- CI (`.gitlab-ci.yml`) runs only on `development`, `qa`, tags, and `v*x` branches; a `vX.Y.Z`
+  tag additionally publishes to the internal GitLab package registry (public npmjs.org stays
+  frozen at 1.x).

@@ -7,6 +7,21 @@
 
 ## Install (as a consumer)
 
+2.x is published to the internal GitLab package registry, not to public npmjs.org (which
+hosts only the frozen 1.x line). Map the `@mic3` scope in the consuming project's `.npmrc`
+(commit the file):
+
+```
+@mic3:registry=https://gitlab.mi-c3.com/api/v4/projects/261/packages/npm/
+```
+
+`261` is this repository's GitLab project ID. Use the **project-level** URL exactly as shown —
+the instance-level URL (`/api/v4/packages/npm/`) silently redirects (303) to public npmjs.org.
+The registry allows anonymous pulls, so no auth token line is needed; if the instance later
+requires auth, add
+`//gitlab.mi-c3.com/api/v4/projects/261/packages/npm/:_authToken=${CI_JOB_TOKEN}` (in CI) or
+use a personal access token with `read_api` locally.
+
 `@mic3/platform-ui` declares every UI framework package as a peer dependency — the consuming
 application provides react, MUI, emotion, styled-components, and the rest:
 
@@ -51,11 +66,13 @@ react/@mui/@emotion/styled-components to the app's own `node_modules` so the sym
 cannot load a second copy of the singletons (platform-v1's `rspack.config.js` already does).
 Rebuild this library (`npm run build` or `npm run build:watch`) for changes to reach the app.
 
-Before merging app work that depends on unpublished changes here, publish the new version and
-switch the app's `package.json` from `file:../platform-ui` back to the published version.
+Before merging app work that depends on unpublished changes here, release the new version
+(see [releasing.md](releasing.md)) and switch the app's `package.json` from
+`file:../platform-ui` back to the published version.
 
 ## Publish
 
-Only the `build/` directory is published (`files` in package.json). `prepack` runs the build
-automatically, so a plain `npm publish` produces a complete package. Bump `version` first;
-CI (`.gitlab-ci.yml`) also packs a build tarball per branch/tag for internal artifacts.
+Releases are published by CI to the internal GitLab package registry when a `vX.Y.Z` tag is
+pushed — never to public npmjs.org (the 1.x line there is frozen). Only `build/` is shipped;
+`prepack` rebuilds it during publish. Full flow, tag rules, and safeguards:
+[releasing.md](releasing.md).
