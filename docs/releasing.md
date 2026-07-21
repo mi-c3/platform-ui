@@ -54,14 +54,18 @@ README.md, LICENSE, and `build/index.js` / `index.css` with their source maps.
 ## Rules
 
 - **Never republish an existing version.** The registry rejects duplicates; if a release is
-  bad, bump the patch version and tag again. Never delete and re-push a tag.
+  bad, bump the patch version and tag again.
+- **Once a version has been published, never delete and re-push its tag** — consumers cache
+  by `(name, version, integrity)`. A tag whose pipeline failed *before* the publish job ran
+  may be deleted and recreated (e.g. after a CI fix), since nothing was released under it.
 - Tags must be `vX.Y.Z` exactly. Bare `2.0.0`-style tags (used historically) still run the
   normal tag pipeline but are skipped by the publish job.
-- A failed tag pipeline burns that version — fix the problem, bump the patch, retag.
+- A failed publish burns that version — fix the problem, bump the patch, retag.
 
 ## Consumer registry configuration
 
 Consuming projects map the `@mic3` scope to the **project-level** registry URL in a committed
-`.npmrc` — see "Install (as a consumer)" in [getting-started.md](getting-started.md). Do not
-use the instance-level GitLab URL (`/api/v4/packages/npm/`): it silently redirects (303) to
-public npmjs.org, which only has the frozen 1.x line.
+`.npmrc`, plus a `CI_JOB_TOKEN` auth line — the registry rejects anonymous pulls (401). See
+"Install (as a consumer)" in [getting-started.md](getting-started.md). Do not use the
+instance-level GitLab URL (`/api/v4/packages/npm/`): it silently redirects (303) to public
+npmjs.org, which only has the frozen 1.x line.
