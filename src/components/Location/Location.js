@@ -3,12 +3,17 @@ import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
 
 import { DarkMapTheme } from 'styles/mapTheme';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { isDefined } from 'utils/utils';
 import { bind } from 'utils/decorators/decoratorUtils';
 import Marker from './Marker/Marker';
 
-const Map = ({ defaultCenter, center, googleApiKey, zoom, children, ...restProps }) => (
+const DEFAULT_MAP_CENTER = {
+    lat: 59.95,
+    lng: 30.33,
+};
+
+const Map = ({ defaultCenter = DEFAULT_MAP_CENTER, center = DEFAULT_MAP_CENTER, googleApiKey, zoom = 11, children, ...restProps }) => (
     <div style={{ height: '300px', width: '100%' }}>
         <GoogleMapReact
             bootstrapURLKeys={{ key: googleApiKey, libraries: 'places' }}
@@ -29,18 +34,6 @@ Map.propTypes = {
     zoom: PropTypes.number,
     children: PropTypes.any,
     googleApiKey: PropTypes.string.isRequired,
-};
-
-Map.defaultProps = {
-    defaultCenter: {
-        lat: 59.95,
-        lng: 30.33,
-    },
-    center: {
-        lat: 59.95,
-        lng: 30.33,
-    },
-    zoom: 11,
 };
 
 /* Map configuration */

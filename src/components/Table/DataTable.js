@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import styled from 'styled-components';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 import DataTableHead from 'components/Table/DataTableHead';
 import DataTableToolbar from 'components/Table/DataTableToolbar';
@@ -14,19 +14,19 @@ import { get } from 'utils/lo/lo';
 import { getSorting, stableSort } from 'utils/table/table';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 
-const styles = () => ({
-    root: {
-        width: '100%',
-        marginTop: '24px',
-        maxHeight: 'inherit',
-    },
-    table: {
-        minWidth: 1020,
-    },
-    tableWrapper: {
-        overflowX: 'auto',
-    },
-});
+const StyledPaper = styled(Paper)`
+    width: 100%;
+    margin-top: 24px;
+    max-height: inherit;
+`;
+
+const StyledTable = styled(Table)`
+    min-width: 1020px;
+`;
+
+const TableWrapper = styled.div`
+    overflow-x: auto;
+`;
 
 class DataTable extends React.Component {
     static propTypes = {
@@ -47,7 +47,7 @@ class DataTable extends React.Component {
         super(props);
         const order = get(props, 'gridSettings.sort[0].order');
         const orderBy = get(props, 'gridSettings.sort[0].field');
-        const pageSize = get(props, 'gridSettings.pageSize');
+        const pageSize = get(props, 'gridSettings.pageSize') || 10;
         this.state = {
             order,
             orderBy,
@@ -66,9 +66,16 @@ class DataTable extends React.Component {
     }
 
     @bind
+    getRowKey(row) {
+        const { dataKey } = this.props;
+        return dataKey ? row[dataKey] : row.id;
+    }
+
+    @bind
     handleSelectAllClick(event) {
         const { data } = this.props;
-        this.setState({ selected: event.target.checked ? data.map((n) => n.id) : [] });
+        const selected = event.target.checked ? data.map(this.getRowKey) : [];
+        this.setState({ selected }, () => this.props.onSelectionChange(selected));
     }
 
     @bind
@@ -120,9 +127,10 @@ class DataTable extends React.Component {
         return stableSort(data, getSorting(order, orderBy))
             .slice(page * pageSize, page * pageSize + pageSize)
             .map((row) => {
-                const isSelected = this.isSelected(row[dataKey]);
+                const rowKey = this.getRowKey(row);
+                const isSelected = this.isSelected(rowKey);
                 return (
-                    <TableRow hover onClick={this.select(row[dataKey])} tabIndex={-1} key={row[dataKey]} selected={isSelected}>
+                    <TableRow hover onClick={this.select(rowKey)} tabIndex={-1} key={rowKey} selected={isSelected}>
                         {columnDefinitions.map(({ field, renderValue }, index) => (
                             <TableCell key={index}>{renderValue ? renderValue({ value: row[field] }) : row[field]}</TableCell>
                         ))}
@@ -132,11 +140,11 @@ class DataTable extends React.Component {
     }
 
     render() {
-        const { classes, columnDefinitions, dataKey, data, title, selectionMode } = this.props;
+        const { columnDefinitions, dataKey, data, title, selectionMode } = this.props;
         const { order, orderBy, selected, pageSize, page } = this.state;
         const emptyRows = pageSize - Math.min(pageSize, data.length - page * pageSize);
         return (
-            <Paper className={classes.root}>
+            <StyledPaper>
                 <DataTableToolbar
                     numSelected={selected.length}
                     rowCount={data.length}
@@ -144,8 +152,8 @@ class DataTable extends React.Component {
                     selectionMode={selectionMode}
                     title={title}
                 />
-                <div className={classes.tableWrapper}>
-                    <Table className={classes.table} aria-labelledby="tableTitle">
+                <TableWrapper>
+                    <StyledTable aria-labelledby="tableTitle">
                         <DataTableHead
                             numSelected={selected.length}
                             order={order}
@@ -161,26 +169,22 @@ class DataTable extends React.Component {
                                 </TableRow>
                             )}
                         </TableBody>
-                    </Table>
-                </div>
+                    </StyledTable>
+                </TableWrapper>
                 <TablePagination
                     component="div"
                     count={data.length}
                     page={page}
                     backIconButtonProps={{ 'aria-label': 'Previous Page' }}
                     nextIconButtonProps={{ 'aria-label': 'Next Page' }}
-                    onChangePage={this.handleChangePage}
+                    onPageChange={this.handleChangePage}
                     rowsPerPage={pageSize}
                     rowsPerPageOptions={[5, 10, 25]}
-                    onChangeRowsPerPage={this.handleChangePageSize}
+                    onRowsPerPageChange={this.handleChangePageSize}
                 />
-            </Paper>
+            </StyledPaper>
         );
     }
 }
 
-DataTable.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(DataTable);
+export default DataTable;

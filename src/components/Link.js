@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import MuiLink from '@material-ui/core/Link';
+import MuiLink from '@mui/material/Link';
 import PropTypes from 'prop-types';
 
 const LinkWithRouter = (props) => <MuiLink {...props} component={RouterLink} />;

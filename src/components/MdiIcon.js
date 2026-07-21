@@ -1,12 +1,12 @@
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import Icon from '@material-ui/core/Icon';
+import Icon from '@mui/material/Icon';
 
 // Base icon colors for Material UI Icon component
 const MAIN_COLORS = ['inherit', 'primary', 'secondary', 'action', 'error', 'disabled'];
 
-const MdiIcon = ({ size, name, style, className, color, type, ...restProps }) => {
+const MdiIcon = ({ size = 24, name, style, className, color, type = 'mdi', ...restProps }) => {
     let styles = useMemo(
         () => ({
             ...(style || {}),
@@ -33,9 +33,4 @@ MdiIcon.propTypes = {
     type: PropTypes.string,
     size: PropTypes.number,
 };
-MdiIcon.defaultProps = {
-    size: 24,
-    type: 'mdi',
-};
-
 export default memo(MdiIcon);

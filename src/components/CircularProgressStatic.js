@@ -1,32 +1,43 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 import { getFillColor } from 'utils/styles/stylesUtils';
 
-const styles = () => ({
-    wrapper: {
-        '& svg': {
-            display: 'block',
-        },
-    },
-    circleBackground: {
-        stroke: getFillColor(44),
-    },
-    circleProgress: {
-        stroke: getFillColor(),
-        strokeLinecap: 'round',
-        strokeLinejoin: 'round',
-    },
-    circleText: {
-        fontSize: '0.8rem',
-        fill: 'white',
-    },
-});
+const fill = (opacity) => ({ $fillColor, $priority, $disabled }) =>
+    getFillColor(opacity)({ fillColor: $fillColor, priority: $priority, disabled: $disabled });
 
-const CircularProgressStatic = withStyles(styles)((props) => {
-    const { size, foreignObjectContent, classes, className, foreignObjectProps, fillColor, borderWidth, ...restProps } = props; //eslint-disable-line no-unused-vars
-    const value = props.value >= 0 && props.value <= 100 ? Math.round(props.value) : 0;
-    const radius = (props.size - props.borderWidth) / 2;
+const Wrapper = styled.div`
+    & svg {
+        display: block;
+    }
+    .CircularProgressStatic-circleBackground {
+        stroke: ${fill(44)};
+    }
+    .CircularProgressStatic-circleProgress {
+        stroke: ${fill()};
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+    .CircularProgressStatic-circleText {
+        font-size: 0.8rem;
+        fill: white;
+    }
+`;
+
+const CircularProgressStatic = (props) => {
+    const {
+        size = 38,
+        foreignObjectContent,
+        classes, //eslint-disable-line no-unused-vars
+        className,
+        foreignObjectProps = {},
+        fillColor,
+        borderWidth = 3,
+        value: valueProp = 0,
+        ...restProps
+    } = props;
+    const value = valueProp >= 0 && valueProp <= 100 ? Math.round(valueProp) : 0;
+    const radius = (size - borderWidth) / 2;
     const viewBox = `0 0 ${size} ${size}`;
     const dashArray = radius * Math.PI * 2;
     const dashOffset = dashArray - (dashArray * value) / 100;
@@ -35,27 +46,27 @@ const CircularProgressStatic = withStyles(styles)((props) => {
             {foreignObjectContent}
         </foreignObject>
     ) : (
-        <text className={classes.circleText} x="50%" y="50%" dy=".3em" textAnchor="middle">
+        <text className="CircularProgressStatic-circleText" x="50%" y="50%" dy=".3em" textAnchor="middle">
             {`${value}%`}
         </text>
     );
     return (
-        <div {...restProps} className={`${classes.wrapper} ${className}`}>
-            <svg width={props.size} height={props.size} viewBox={viewBox} fill="none">
+        <Wrapper {...restProps} className={className} $fillColor={fillColor} $priority={props.priority} $disabled={props.disabled}>
+            <svg width={size} height={size} viewBox={viewBox} fill="none">
                 <circle
-                    className={classes.circleBackground}
-                    cx={props.size / 2}
-                    cy={props.size / 2}
+                    className="CircularProgressStatic-circleBackground"
+                    cx={size / 2}
+                    cy={size / 2}
                     r={radius}
-                    strokeWidth={`${props.borderWidth}px`}
+                    strokeWidth={`${borderWidth}px`}
                 />
                 <circle
-                    className={classes.circleProgress}
-                    cx={props.size / 2}
-                    cy={props.size / 2}
+                    className="CircularProgressStatic-circleProgress"
+                    cx={size / 2}
+                    cy={size / 2}
                     r={radius}
-                    strokeWidth={`${props.borderWidth}px`}
-                    transform={`rotate(-90 ${props.size / 2} ${props.size / 2})`}
+                    strokeWidth={`${borderWidth}px`}
+                    transform={`rotate(-90 ${size / 2} ${size / 2})`}
                     style={{
                         strokeDasharray: dashArray,
                         strokeDashoffset: dashOffset,
@@ -63,16 +74,8 @@ const CircularProgressStatic = withStyles(styles)((props) => {
                 />
                 {content}
             </svg>
-        </div>
+        </Wrapper>
     );
-});
-
-CircularProgressStatic.defaultProps = {
-    size: 38,
-    borderWidth: 3,
-    value: 0,
-    color: 'white',
-    foreignObjectProps: {},
 };
 
 CircularProgressStatic.propTypes = {

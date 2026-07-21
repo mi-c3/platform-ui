@@ -1,16 +1,16 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 import ReactDropzone from 'react-dropzone';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Avatar from '@material-ui/core/Avatar';
-import AttachFileIcon from '@material-ui/icons/AttachFile';
-import IconButton from '@material-ui/core/IconButton';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Avatar from '@mui/material/Avatar';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import IconButton from '@mui/material/IconButton';
 
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { isImageType } from 'utils/file/file';
@@ -19,58 +19,59 @@ import Link from 'components/Link';
 import { DarkTheme } from 'styles/theme';
 import ConfirmationModal from '../ConfirmationModal';
 
-const styles = () => ({
-    dropZone: {
-        position: 'relative',
-        width: '100%',
-        cursor: 'pointer',
-        boxSizing: 'border-box',
-        backgroundColor: 'rgba(255, 255, 255, 0.06)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-    },
-    relative: {
-        position: 'relative',
-    },
-    dropZoneActive: {
-        backgroundColor: '#50575b90',
-    },
-    dropzoneTypography: {
-        fontSize: '1.4rem',
-        color: 'white',
-    },
-    dropzoneIcon: {
-        width: 101,
-        height: 101,
-        color: DarkTheme.palette.primary[DarkTheme.palette.type],
-    },
-    dropzoneBounceIcon: {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#50575bf0',
-        flexDirection: 'column',
-        zIndex: 99,
-    },
-    fileListItem: {
-        '& .MuiListItemText-primary': {
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            width: 'calc(100% - 50px)',
-            display: 'inherit',
-            paddingLeft: 8,
-        },
-        '& .MuiListItemText-secondary': {
-            paddingLeft: 8,
-        },
-    },
-});
+const DropZoneStyled = styled.div`
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+    box-sizing: border-box;
+    background-color: ${({ $dragActive }) => ($dragActive ? '#50575b90' : 'rgba(255, 255, 255, 0.06)')};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+`;
+
+const RelativeStyled = styled.div`
+    position: relative;
+    ${({ $dragActive }) => ($dragActive ? 'background-color: #50575b90;' : '')};
+`;
+
+const TypographyStyled = styled(Typography)`
+    font-size: 1.4rem;
+    color: white;
+`;
+
+const CloudUploadIconStyled = styled(CloudUploadIcon)`
+    width: 101px;
+    height: 101px;
+    color: ${DarkTheme.palette.primary[DarkTheme.palette.mode]};
+`;
+
+const BounceIconWrapperStyled = styled.div`
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #50575bf0;
+    flex-direction: column;
+    z-index: 99;
+`;
+
+const ListItemTextStyled = styled(ListItemText)`
+    & .MuiListItemText-primary {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        width: calc(100% - 50px);
+        display: inherit;
+        padding-left: 8px;
+    }
+    & .MuiListItemText-secondary {
+        padding-left: 8px;
+    }
+`;
 
 class Dropzone extends PureComponent {
     static defaultProps = {
@@ -85,7 +86,7 @@ class Dropzone extends PureComponent {
 
     static propTypes = {
         ...(ReactDropzone || {}).propTypes,
-        accept: PropTypes.string,
+        accept: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         filesLimit: PropTypes.number,
         maxSize: PropTypes.number,
         dropzoneTextHover: PropTypes.string,
@@ -98,8 +99,8 @@ class Dropzone extends PureComponent {
         onDelete: PropTypes.func,
         acceptedFiles: PropTypes.arrayOf(PropTypes.string),
         fileSizeLimit: PropTypes.number,
-        classes: PropTypes.object,
         multiple: PropTypes.bool,
+        disableClick: PropTypes.bool,
         children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
         filesTemplate: PropTypes.func,
         onRemoveFile: PropTypes.func,
@@ -110,6 +111,26 @@ class Dropzone extends PureComponent {
     state = {
         indexToRemove: null,
     };
+
+    /*
+     * react-dropzone v14 expects `accept` as an object mapping MIME types (or extensions)
+     * to arrays of extensions; the public prop stays the v9 comma separated string.
+     */
+    @bind
+    @memoize()
+    buildAccept(accept) {
+        if (!accept) {
+            return undefined;
+        }
+        if (typeof accept !== 'string') {
+            return accept;
+        }
+        return accept
+            .split(',')
+            .map((type) => type.trim())
+            .filter(Boolean)
+            .reduce((acc, type) => ({ ...acc, [type]: [] }), {});
+    }
 
     @bind
     async onChange(files) {
@@ -142,10 +163,20 @@ class Dropzone extends PureComponent {
         };
     }
 
+    /*
+     * react-dropzone v14 rejects with FileRejection objects ({ file, errors });
+     * unwrap them to keep the v9 contract of passing the plain files.
+     */
     @bind
-    handleDropRejected(rejectedFiles, evt) {
+    handleDrop(acceptedFiles, fileRejections, event) {
+        const { onDrop } = this.props;
+        onDrop && onDrop(acceptedFiles, (fileRejections || []).map(({ file }) => file), event);
+    }
+
+    @bind
+    handleDropRejected(fileRejections, evt) {
         if (this.props.onDropRejected) {
-            this.props.onDropRejected(rejectedFiles, evt);
+            this.props.onDropRejected((fileRejections || []).map(({ file }) => file), evt);
         }
     }
 
@@ -162,7 +193,7 @@ class Dropzone extends PureComponent {
 
     @bind
     @memoize()
-    filesTemplate(files, indexToRemove, fileActions, deleteButton, classes, disabled) {
+    filesTemplate(files, indexToRemove, fileActions, deleteButton, disabled) {
         return (files || []).map((file, index) => {
             const src = this.buildSrc(file);
             return (
@@ -174,18 +205,22 @@ class Dropzone extends PureComponent {
                             <AttachFileIcon />
                         </Avatar>
                     )}
-                    <ListItemText className={classes.fileListItem} primary={files[index].name} secondary={files[index].type} />
+                    <ListItemTextStyled primary={files[index].name} secondary={files[index].type} />
                     <ListItemSecondaryAction>
                         {fileActions}
                         {file.src && (
-                            <IconButton aria-label="Download">
+                            <IconButton aria-label="Download" size="large">
                                 <Link target="_blank" download href={file.src}>
                                     <MdiIcon name="download" />
                                 </Link>
                             </IconButton>
                         )}
                         {deleteButton && !disabled ? (
-                            <IconButton disabled={disabled} onClick={() => this.setState({ indexToRemove: index })} aria-label="Delete">
+                            <IconButton
+                                disabled={disabled}
+                                onClick={() => this.setState({ indexToRemove: index })}
+                                aria-label="Delete"
+                                size="large">
                                 <MdiIcon name="close" />
                             </IconButton>
                         ) : null}
@@ -208,7 +243,6 @@ class Dropzone extends PureComponent {
 
     render() {
         const {
-            classes,
             capture,
             showPreviews,
             dropzoneText,
@@ -221,68 +255,73 @@ class Dropzone extends PureComponent {
             filesTemplate,
             value,
             onMouseDown,
+            accept,
+            disableClick,
+            noClick,
+            onDrop,
             ...restProps
         } = this.props; // eslint-disable-line max-len
         const { indexToRemove } = this.state;
         const { fileActions, deleteButton, disabled } = restProps;
         return (
             <Fragment>
-                <ReactDropzone {...restProps} onDropAccepted={this.handleDropAccepted} onDropRejected={this.handleDropRejected}>
+                <ReactDropzone
+                    {...restProps}
+                    accept={this.buildAccept(accept)}
+                    noClick={noClick !== undefined ? noClick : !!disableClick}
+                    onDrop={onDrop && this.handleDrop}
+                    onDropAccepted={this.handleDropAccepted}
+                    onDropRejected={this.handleDropRejected}
+                >
                     {({ getRootProps, getInputProps, isDragActive }) => {
                         return !children ? (
-                            <div
+                            <DropZoneStyled
                                 {...getRootProps()}
                                 onMouseDown={onMouseDown}
                                 role="button"
                                 tabIndex="0"
-                                className={`
-                                  ${classes.dropZone}
-                                  ${!disableDragActive && isDragActive && classes.dropZoneActive}
-                                  ${dropZoneClasses}
-                                `}
+                                $dragActive={!disableDragActive && isDragActive}
+                                className={dropZoneClasses || ''}
                             >
                                 <input {...getInputProps()} capture={capture} multiple={multiple} />
-                                <CloudUploadIcon className={classes.dropzoneIcon} />
+                                <CloudUploadIconStyled />
                                 {!disableDragActive && isDragActive ? (
-                                    <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
+                                    <TypographyStyled>{dropzoneTextHover}</TypographyStyled>
                                 ) : (
-                                    <Typography className={classes.dropzoneTypography}>{dropzoneText}</Typography>
+                                    <TypographyStyled>{dropzoneText}</TypographyStyled>
                                 )}
-                            </div>
+                            </DropZoneStyled>
                         ) : (
-                            <div
+                            <RelativeStyled
                                 {...getRootProps({
                                     onClick,
                                 })}
                                 onMouseDown={onMouseDown}
                                 role="button"
                                 tabIndex="0"
-                                className={`
-                                  ${classes.relative}
-                                  ${dropZoneClasses || ''}
-                                  ${!disableDragActive && isDragActive && classes.dropZoneActive}
-                                `}
+                                $dragActive={!disableDragActive && isDragActive}
+                                className={dropZoneClasses || ''}
                             >
                                 {!disableDragActive && isDragActive && (
-                                    <div className={classes.dropzoneBounceIcon}>
+                                    <BounceIconWrapperStyled>
                                         <MdiIcon color="secondary" name="arrow-down-thick" size={80} />
-                                        <Typography className={classes.dropzoneTypography}>{dropzoneTextHover}</Typography>
-                                    </div>
+                                        <TypographyStyled>{dropzoneTextHover}</TypographyStyled>
+                                    </BounceIconWrapperStyled>
                                 )}
                                 <input {...getInputProps()} capture={capture} multiple={multiple} />
                                 {children}
-                            </div>
+                            </RelativeStyled>
                         );
                     }}
                 </ReactDropzone>
                 {showPreviews && filesTemplate ? (
                     filesTemplate(value)
                 ) : (
-                    <List>{this.filesTemplate(value, indexToRemove, fileActions, deleteButton, classes, disabled)}</List>
+                    <List>{this.filesTemplate(value, indexToRemove, fileActions, deleteButton, disabled)}</List>
                 )}
             </Fragment>
         );
     }
 }
 
-export default withStyles(styles)(Dropzone);
+export default Dropzone;

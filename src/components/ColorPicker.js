@@ -3,57 +3,58 @@ import PropTypes from 'prop-types';
 import { SwatchesPicker } from 'react-color';
 import styled from 'styled-components';
 
-import { IconButton, Paper, FormControl, InputLabel, Input, InputAdornment } from '@material-ui/core';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Icon from '@material-ui/core/Icon';
+import { IconButton, Paper, FormControl, InputLabel, Input, InputAdornment } from '@mui/material';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Icon from '@mui/material/Icon';
 import { materialColorPalette } from 'styles/palettes';
-import { withStyles } from '@material-ui/core/styles';
 import { bind } from 'utils/decorators/decoratorUtils';
 import { DarkTheme } from 'styles/theme';
 
 import MdiIcon from 'components/MdiIcon';
 
-const styles = () => ({
-    root: {
-        padding: 4,
-        minHeight: 56,
-        background: `${DarkTheme.palette.background.fields} !important`,
-        '& .MuiInputAdornment-positionStart': {
-            position: 'relative',
-            top: '-10px',
-            left: '8px',
-            cursor: 'pointer',
-        },
-        '& .MuiFormControl-root': {
-            width: '100%',
-        },
-    },
-    label: {
-        marginLeft: 38,
-    },
-    swatches: {
-        position: 'absolute',
-        zIndex: 1,
-        '& > div div:nth-child(2)': {
-            background: `${DarkTheme.palette.background.default} !important`,
-        },
-        '& > div div:nth-child(1) > div > span div:nth-child(1)': {
-            fill: 'white !important',
-        },
-    },
-    icon: {
-        margin: '0 8px 0 0',
-        borderRadius: '5rem',
-    },
-    wrapper: {
-        marginTop: 16,
-        marginBottom: 8,
-    },
-    borderWrapper: { position: 'relative' },
-});
+const Wrapper = styled.div`
+    margin-top: 16px;
+    margin-bottom: 8px;
+`;
+
+const StyledPaper = styled(Paper)`
+    padding: 4px;
+    min-height: 56px;
+    background: ${DarkTheme.palette.background.fields} !important;
+    .MuiInputAdornment-positionStart {
+        position: relative;
+        top: -10px;
+        left: 8px;
+        cursor: pointer;
+    }
+    .MuiFormControl-root {
+        width: 100%;
+    }
+`;
+
+const StyledInputLabel = styled(InputLabel)`
+    margin-left: 38px;
+`;
+
+const StyledIcon = styled(Icon)`
+    margin: 0 8px 0 0;
+    border-radius: 5rem;
+`;
+
+const BorderWrapper = styled.div`
+    position: relative;
+`;
 
 const SwatchesPickerStyled = styled(SwatchesPicker)`
     width: ${({ width }) => `${width}px`};
+    position: absolute;
+    z-index: 1;
+    & > div div:nth-child(2) {
+        background: ${DarkTheme.palette.background.default} !important;
+    }
+    & > div div:nth-child(1) > div > span div:nth-child(1) {
+        fill: white !important;
+    }
 `;
 const IconButtonStyled = styled(IconButton)`
     margin-top: -16px;
@@ -148,18 +149,19 @@ class ColorPicker extends PureComponent {
     }
 
     render() {
+        // eslint-disable-next-line no-unused-vars
         const { label, name, value, required, clearable, fontSize, classes, disabled, className, onMouseDown, ...restProps } = this.props;
         const { displayColorPicker, wrapperWidth } = this.state;
         return (
-            <div className={`${className || ''} ${classes.wrapper} ColorPicker-wrapper`} ref={this.wrapperRef}>
-                <Paper component="form" className={classes.root}>
+            <Wrapper className={`${className || ''} ColorPicker-wrapper`} ref={this.wrapperRef}>
+                <StyledPaper component="form">
                     <FormControl required={required} onClick={this.handleSwatches} disabled={disabled}>
-                        <InputLabel className={classes.label}>{label}</InputLabel>
+                        <StyledInputLabel>{label}</StyledInputLabel>
                         <Input
                             id="input-with-icon-adornment"
                             startAdornment={
                                 <InputAdornment position="start">
-                                    <Icon fontSize={fontSize} style={{ backgroundColor: value }} name={'circle'} className={classes.icon} />
+                                    <StyledIcon fontSize={fontSize} style={{ backgroundColor: value }} name={'circle'} />
                                 </InputAdornment>
                             }
                             endAdornment={this.buildEndAdornment(value, clearable, disabled)}
@@ -168,9 +170,9 @@ class ColorPicker extends PureComponent {
                             onMouseDown={onMouseDown}
                         />
                     </FormControl>
-                </Paper>
+                </StyledPaper>
                 {!disabled && displayColorPicker && (
-                    <div className={classes.borderWrapper} style={{ width: wrapperWidth }}>
+                    <BorderWrapper style={{ width: wrapperWidth }}>
                         <ClickAwayListener onClickAway={this.handleSwatches}>
                             <SwatchesPickerStyled
                                 {...restProps}
@@ -179,14 +181,13 @@ class ColorPicker extends PureComponent {
                                 color={value || ''}
                                 colors={materialColorPalette || this.defaultColors}
                                 onChange={this.onChange}
-                                className={classes.swatches}
                             />
                         </ClickAwayListener>
-                    </div>
+                    </BorderWrapper>
                 )}
-            </div>
+            </Wrapper>
         );
     }
 }
 
-export default withStyles(styles)(ColorPicker);
+export default ColorPicker;

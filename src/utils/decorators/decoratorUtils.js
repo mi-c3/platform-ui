@@ -18,7 +18,7 @@ export const bind = classMethodDecorator((target, key, descriptor) => ({
     },
 }));
 
-function debounceFunc(fn, delayMs) {
+export function debounceFunc(fn, delayMs) {
     const delay = delayMs && delayMs > 0 ? delayMs : 0;
     let timeoutKey;
     return function wrapper(...args) {

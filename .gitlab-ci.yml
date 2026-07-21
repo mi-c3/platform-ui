@@ -1,10 +1,11 @@
-image: node:12.16.3-stretch-slim
+image: node:22.11.0-slim
 
 stages:
-   - build
-   - verify
-   - pack
-   - store
+  - build
+  - verify
+  - pack
+  - store
+  - publish
 
 build:
   tags:
@@ -13,12 +14,12 @@ build:
   script:
     - node --version
     - npm --version
-    - yarn --version
-    - yarn --network-timeout 600000
-    - yarn build
+    - npm ci --cache .npm --prefer-offline
+    - npm run build
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
+      - .npm
       - node_modules
       - build
     policy: push
@@ -29,7 +30,7 @@ audit:
     - docker-runner
   stage: verify
   script:
-    - yarn audit:production
+    - npm audit --omit=dev --audit-level=high
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -42,7 +43,7 @@ lint:
     - docker-runner
   stage: verify
   script:
-    - yarn lint
+    - npm run lint
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -55,7 +56,7 @@ test:
     - docker-runner
   stage: verify
   script:
-    - yarn test
+    - npm test
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -90,3 +91,30 @@ store-artifacts:
   only: ['development', 'qa', 'tags', '/^v.*x$/i']
   variables:
     GIT_STRATEGY: none
+
+# Publishes to this project's GitLab npm package registry (never public npmjs.org — the 1.x
+# line there is frozen). Runs only on vX.Y.Z tags; the version guard blocks tag/version drift.
+# The registry lines are APPENDED to .npmrc so the committed legacy-peer-deps=true survives
+# for npm ci, and npm publish (via prepack) rebuilds build/ fresh.
+publish:
+  tags:
+    - docker-runner
+  stage: publish
+  script:
+    - node --version
+    - npm --version
+    - test "$(node -p 'require("./package.json").version')" = "${CI_COMMIT_TAG#v}" || { echo "package.json version does not match tag ${CI_COMMIT_TAG}"; exit 1; }
+    - npm ci --cache .npm --prefer-offline
+    - echo "@mic3:registry=https://gitlab.mi-c3.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" >> .npmrc
+    - echo "//gitlab.mi-c3.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+    - npm publish
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .npm
+    policy: pull
+  only:
+    refs:
+      - tags
+    variables:
+      - $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+$/

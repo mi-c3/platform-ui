@@ -1,29 +1,17 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { DatePicker as DPMui } from '@material-ui/pickers';
-import { IconButton, InputAdornment } from '@material-ui/core';
+import { DatePicker as DPMui } from '@mui/x-date-pickers/DatePicker';
 
-import { withStyles } from '@material-ui/core/styles';
-
-import MdiIcon from 'components/MdiIcon';
 import { createEvent } from 'utils/http/event';
-import { bind, memoize } from 'utils/decorators/decoratorUtils';
-import { colors } from 'styles/theme';
-
-const useStyles = withStyles(() => ({
-    clearIcon: {
-        color: colors.darkGray,
-    },
-}));
+import { bind } from 'utils/decorators/decoratorUtils';
+import { splitLegacyPickerProps, toMomentOrNull } from 'utils/pickers/pickerProps';
 
 class DatePicker extends PureComponent {
     static propTypes = {
-        ...(DPMui || {}).propTypes,
         onChange: PropTypes.func,
     };
 
     static defaultProps = {
-        animateYearScrolling: true,
         inputVariant: 'filled',
         margin: 'normal',
         fullWidth: true,
@@ -36,50 +24,23 @@ class DatePicker extends PureComponent {
         onChange && onChange(createEvent('change', { target: { name, value, type } }));
     }
 
-    @bind
-    onClear(e) {
-        e.stopPropagation();
-        this.onChange(null);
-    }
-
-    @bind
-    @memoize()
-    getClearAdornment(disabled, value) {
-        return (
-            !disabled &&
-            !!value && (
-                <InputAdornment position="end">
-                    <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <MdiIcon name="close" className={this.props.classes.clearIcon} />
-                    </IconButton>
-                </InputAdornment>
-            )
-        );
-    }
-
     render() {
-        /*
-         * WARNING: We need to avoid passing the onClick function because it will break the Component.
-         * TODO: open a bug in the material-ui-pickers project.
-         */
         // eslint-disable-next-line no-unused-vars
-        const { showTodayButton, onClick, clearable, disabled, value, InputProps, classes, type, ...datePickerProps } = this.props;
+        const { onClick, value, onChange, type, ...legacyProps } = this.props;
+        const { pickerProps, slots, slotProps } = splitLegacyPickerProps(legacyProps);
+        if (!slotProps.textField.InputProps || slotProps.textField.InputProps.disableUnderline === undefined) {
+            slotProps.textField.InputProps = { disableUnderline: true, ...(slotProps.textField.InputProps || {}) };
+        }
         return (
             <DPMui
-                {...datePickerProps}
-                disabled={disabled}
-                value={value || null}
-                clearable={clearable}
-                showTodayButton={!clearable && showTodayButton}
-                InputProps={{
-                    endAdornment: clearable && this.getClearAdornment(disabled, value),
-                    disableUnderline: true,
-                    ...(InputProps || {}),
-                }}
+                {...pickerProps}
+                value={toMomentOrNull(value)}
+                slots={slots}
+                slotProps={slotProps}
                 onChange={this.onChange}
             />
         );
     }
 }
 
-export default useStyles(DatePicker); // eslint-disable-line react-hooks/rules-of-hooks
+export default DatePicker;

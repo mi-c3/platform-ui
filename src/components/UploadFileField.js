@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-import { IconButton, InputAdornment, Grid, Typography, TextField, FormControl, FormHelperText, InputLabel, Input } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { IconButton, InputAdornment, GridLegacy as Grid, Typography, TextField, FormControl, FormHelperText, InputLabel, Input } from '@mui/material';
+import styled, { css } from 'styled-components';
 
 import MdiIcon from 'components/MdiIcon';
 import Dropzone from './Upload/Dropzone';
@@ -8,25 +8,35 @@ import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { get } from 'utils/lo/lo';
 import { colors } from 'styles/theme';
 
-const useStyles = withStyles(() => ({
-    fullWidth: {
-        width: '100%',
-        flexWrap: 'nowrap',
-    },
-    marginNormal: {
-        margin: '1rem 0',
-    },
-    input: {},
-    iconRoot: {
-        color: colors.darkGray,
-    },
-    startAdornment: {
-        marginRight: '17px',
-    },
-    startAdornmentTypography: {
-        marginTop: '-4px',
-    },
-}));
+const fullWidthStyle = css`
+    width: 100%;
+    flex-wrap: nowrap;
+`;
+
+const GridContainerStyled = styled(Grid)`
+    ${({ $fullWidth }) => ($fullWidth ? fullWidthStyle : '')};
+    ${({ $marginNormal }) => ($marginNormal ? 'margin: 1rem 0;' : '')};
+`;
+
+const GridItemStyled = styled(Grid)`
+    ${({ $fullWidth }) => ($fullWidth ? fullWidthStyle : '')};
+`;
+
+const FormControlStyled = styled(FormControl)`
+    ${({ $fullWidth }) => ($fullWidth ? fullWidthStyle : '')};
+`;
+
+const ClearIconStyled = styled(MdiIcon)`
+    color: ${colors.darkGray};
+`;
+
+const StartAdornmentIconStyled = styled(MdiIcon)`
+    ${({ $fullWidth }) => ($fullWidth ? 'margin-right: 17px;' : '')};
+`;
+
+const TypographyStyled = styled(Typography)`
+    margin-top: -4px;
+`;
 
 class UploadFileField extends PureComponent {
     static propTypes = {
@@ -47,15 +57,11 @@ class UploadFileField extends PureComponent {
     @bind
     @memoize()
     getClearAdornment(disabled) {
-        return (
-            !disabled && (
-                <InputAdornment position="end">
-                    <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <MdiIcon name="close" className={this.props.classes.iconRoot} />
-                    </IconButton>
-                </InputAdornment>
-            )
-        );
+        return (!disabled && (<InputAdornment position="end">
+            <IconButton aria-label="Clear input" onClick={this.onClear} size="large">
+                <ClearIconStyled name="close" />
+            </IconButton>
+        </InputAdornment>));
     }
 
     @bind
@@ -69,17 +75,13 @@ class UploadFileField extends PureComponent {
     @bind
     @memoize()
     getUploadAdornment(disabled) {
-        return (
-            !disabled && (
-                <InputAdornment position="end">
-                    <Dropzone disableDragActive accept={this.props.accept} showPreviews={false} showAlerts={false} onChange={this.onChange}>
-                        <IconButton aria-label="Upload" onClick={this.onUpload}>
-                            <MdiIcon name="upload" />
-                        </IconButton>
-                    </Dropzone>
-                </InputAdornment>
-            )
-        );
+        return (!disabled && (<InputAdornment position="end">
+            <Dropzone disableDragActive accept={this.props.accept} showPreviews={false} onChange={this.onChange}>
+                <IconButton aria-label="Upload" size="large">
+                    <MdiIcon name="upload" />
+                </IconButton>
+            </Dropzone>
+        </InputAdornment>));
     }
 
     render() {
@@ -88,7 +90,7 @@ class UploadFileField extends PureComponent {
             value,
             error,
             helperText,
-            classes,
+            classes, // eslint-disable-line no-unused-vars
             name, // eslint-disable-line no-unused-vars
             fullWidth,
             accept, // eslint-disable-line no-unused-vars
@@ -101,16 +103,17 @@ class UploadFileField extends PureComponent {
         let valueLabel = value && fileLabel ? get(value, fileLabel) : '';
         valueLabel = value && !valueLabel ? 'File uploaded' : valueLabel;
         return (
-            <Grid
+            <GridContainerStyled
                 container
                 alignItems="center"
-                className={`${fullWidth && classes.fullWidth} ${margin === 'normal' && classes.marginNormal} `}
+                $fullWidth={fullWidth}
+                $marginNormal={margin === 'normal'}
             >
-                <Typography className={classes.startAdornmentTypography}>
-                    <MdiIcon name="earth-box" className={fullWidth && classes.startAdornment} />
-                </Typography>
-                <Grid item className={fullWidth && classes.fullWidth}>
-                    <FormControl className={fullWidth && classes.fullWidth}>
+                <TypographyStyled>
+                    <StartAdornmentIconStyled name="earth-box" $fullWidth={fullWidth} />
+                </TypographyStyled>
+                <GridItemStyled item $fullWidth={fullWidth}>
+                    <FormControlStyled $fullWidth={fullWidth}>
                         <InputLabel>{label}</InputLabel>
                         <Input
                             value={valueLabel}
@@ -121,11 +124,11 @@ class UploadFileField extends PureComponent {
                             {...restProps}
                         />
                         <FormHelperText error={error}>{helperText}</FormHelperText>
-                    </FormControl>
-                </Grid>
-            </Grid>
+                    </FormControlStyled>
+                </GridItemStyled>
+            </GridContainerStyled>
         );
     }
 }
 
-export default useStyles(UploadFileField); // eslint-disable-line react-hooks/rules-of-hooks
+export default UploadFileField;

@@ -1,15 +1,12 @@
 import React, { PureComponent, Fragment, memo } from 'react';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import InputBase from '@material-ui/core/InputBase';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@mui/material/GridLegacy';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputBase from '@mui/material/InputBase';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import moment from 'moment';
-// import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-// import MomentUtils from '@date-io/moment';
-
-import { withStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 
 import { isDefined } from 'utils/utils';
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
@@ -21,18 +18,30 @@ import DateTimePicker from './DateTimePicker';
 import TextField from './TextField';
 import MdiIcon from './MdiIcon';
 
-const styles = {
-    inputWrapper: { display: 'flex', flexWrap: 'wrap' },
-    customInput: { flexGrow: 1, marginBottom: '-10px' },
-    emptySpace: { marginRight: '4px' },
-    switch: { marginLeft: '0px' },
-    closeButtonIcon: { lineHeight: '11px !important' },
-    clearButtonWrapper: { margin: '8px 0px' },
-};
+const CustomInputStyled = styled(InputBase)`
+    flex-grow: 1;
+    margin-bottom: -10px;
+`;
 
-const CustomInput = withStyles(styles)(({ value, onClick, placeholder, classes, disabled }) => (
-    <InputBase disabled={disabled} className={classes.customInput} placeholder={placeholder} value={value} onClick={onClick} />
-));
+const EmptySpace = styled.div`
+    margin-right: 4px;
+`;
+
+const SwitchStyled = styled(Switch)`
+    margin-left: 0px;
+`;
+
+const CloseButtonIcon = styled(MdiIcon)`
+    line-height: 11px !important;
+`;
+
+const ClearButtonWrapper = styled(Grid)`
+    margin: 8px 0px;
+`;
+
+const CustomInput = ({ value, onClick, placeholder, disabled }) => (
+    <CustomInputStyled disabled={disabled} placeholder={placeholder} value={value} onClick={onClick} />
+);
 
 CustomInput.propTypes = {
     value: PropTypes.any,
@@ -73,7 +82,6 @@ class DateTimePickerRange extends PureComponent {
         value: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)])),
         relative: PropTypes.boolean,
         defaultUnit: PropTypes.string,
-        classes: PropTypes.object.isRequired,
     };
 
     static defaultProps = {
@@ -291,13 +299,14 @@ class DateTimePickerRange extends PureComponent {
 
     @bind
     @memoize()
-    buildInputs(restProps, PickersToProps, PickersFromProps, start, end, classes, disabled, isMobile) {
+    buildInputs(restProps, PickersToProps, PickersFromProps, start, end, disabled, isMobile) {
         return (
             // <MuiPickersUtilsProvider utils={MomentUtils}>
+            // </MuiPickersUtilsProvider>
             <Grid container wrap={isMobile ? 'wrap' : 'nowrap'}>
                 <TextField
                     multiline
-                    rowsMax={2}
+                    maxRows={2}
                     label="From"
                     InputProps={{
                         startAdornment: (
@@ -321,10 +330,10 @@ class DateTimePickerRange extends PureComponent {
                     disabled={disabled}
                     required
                 />
-                {!isMobile && <div className={classes.emptySpace} />}
+                {!isMobile && <EmptySpace />}
                 <TextField
                     multiline
-                    rowsMax={2}
+                    maxRows={2}
                     label="To"
                     InputProps={{
                         startAdornment: (
@@ -349,14 +358,13 @@ class DateTimePickerRange extends PureComponent {
                     required
                 />
             </Grid>
-            // </MuiPickersUtilsProvider>
         );
     }
 
     @bind
-    buildInputsRelative(restProps, isMobile, disabled, value, classes, errors) {
+    buildInputsRelative(restProps, isMobile, disabled, value, errors) {
         return (
-            <Grid container wrap={isMobile ? 'wrap' : 'nowrap'} justify={isMobile ? 'flex-start' : 'space-around'}>
+            <Grid container wrap={isMobile ? 'wrap' : 'nowrap'} justifyContent={isMobile ? 'flex-start' : 'space-around'}>
                 <Autocomplete
                     error={!!errors?.range}
                     label="Range"
@@ -369,7 +377,7 @@ class DateTimePickerRange extends PureComponent {
                     value={value ? value.range || null : null}
                     clearable={false}
                 />
-                {!isMobile && <div className={classes.emptySpace} />}
+                {!isMobile && <EmptySpace />}
                 <TextField
                     error={!!errors?.amount}
                     helperText={errors?.amount}
@@ -382,7 +390,7 @@ class DateTimePickerRange extends PureComponent {
                     value={value ? value.amount || null : null}
                     clearable={false}
                 />
-                {!isMobile && <div className={classes.emptySpace} />}
+                {!isMobile && <EmptySpace />}
                 <Autocomplete
                     error={!!errors?.unit}
                     valueField="value"
@@ -403,7 +411,6 @@ class DateTimePickerRange extends PureComponent {
         const {
             PickersFromProps,
             PickersToProps,
-            classes,
             disabled,
             variant,
             isMobile,
@@ -418,7 +425,7 @@ class DateTimePickerRange extends PureComponent {
             <Fragment>
                 <TextField
                     multiline
-                    rowsMax={2}
+                    maxRows={2}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -427,7 +434,7 @@ class DateTimePickerRange extends PureComponent {
                         ),
                         endAdornment: !disabled && (
                             <InputAdornment position="end">
-                                <IconButton aria-label="Clear input" onClick={this.onClear}>
+                                <IconButton aria-label="Clear input" onClick={this.onClear} size="large">
                                     <MdiIcon name="close" />
                                 </IconButton>
                             </InputAdornment>
@@ -453,7 +460,7 @@ class DateTimePickerRange extends PureComponent {
                         title={restProps.label}
                         actions={
                             <>
-                                <Button className={classes.cancelButton} onClick={this.closeModal} variant="text">
+                                <Button onClick={this.closeModal} variant="text">
                                     Cancel
                                 </Button>
                                 <Button onClick={this.onSave} variant="contained" color="primary">
@@ -464,27 +471,26 @@ class DateTimePickerRange extends PureComponent {
                         footer={<Typography variant="caption">* All fields are required</Typography>}
                     >
                         {variant === 'all' && (
-                            <Switch
-                                className={classes.switch}
+                            <SwitchStyled
                                 disabled={disabled}
                                 label="Relative time"
                                 onChange={this.toggleRelative}
                                 value={relative}
                             />
                         )}
-                        {relative && this.buildInputsRelative(restProps, isMobile, disabled, value, classes, errors)}
+                        {relative && this.buildInputsRelative(restProps, isMobile, disabled, value, errors)}
                         {!relative &&
-                            this.buildInputs(restProps, PickersToProps, PickersFromProps, start, end, classes, disabled, isMobile)}
-                        <Grid container className={classes.clearButtonWrapper}>
+                            this.buildInputs(restProps, PickersToProps, PickersFromProps, start, end, disabled, isMobile)}
+                        <ClearButtonWrapper container>
                             <Button
-                                startIcon={<MdiIcon className={classes.closeButtonIcon} name="close" size={16} />}
+                                startIcon={<CloseButtonIcon name="close" size={16} />}
                                 onClick={this.onClearRelative}
                                 variant="outlined"
                                 color="primary"
                             >
                                 Clear
                             </Button>
-                        </Grid>
+                        </ClearButtonWrapper>
                     </ModalDialog>
                 )}
             </Fragment>
@@ -492,4 +498,4 @@ class DateTimePickerRange extends PureComponent {
     }
 }
 
-export default memo(withStyles(styles)(DateTimePickerRange));
+export default memo(DateTimePickerRange);

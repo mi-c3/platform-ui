@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
-import { IconButton, InputAdornment } from '@material-ui/core';
-
-import { withStyles } from '@material-ui/core/styles';
+import { IconButton, InputAdornment } from '@mui/material';
+import styled from 'styled-components';
 
 import MdiIcon from 'components/MdiIcon';
 import TextField from 'components/TextField';
@@ -10,11 +9,9 @@ import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import { get } from 'utils/lo/lo';
 import { colors } from 'styles/theme';
 
-const useStyles = withStyles(() => ({
-    iconRoot: {
-        color: colors.darkGray,
-    },
-}));
+const ClearIconStyled = styled(MdiIcon)`
+    color: ${colors.darkGray};
+`;
 
 class UploadFiles extends PureComponent {
     static propTypes = {
@@ -35,15 +32,11 @@ class UploadFiles extends PureComponent {
     @bind
     @memoize()
     getClearAdornment(disabled) {
-        return (
-            !disabled && (
-                <InputAdornment position="end">
-                    <IconButton aria-label="Clear input" onClick={this.onClear}>
-                        <MdiIcon name="close" className={this.props.classes.iconRoot} />
-                    </IconButton>
-                </InputAdornment>
-            )
-        );
+        return (!disabled && (<InputAdornment position="end">
+            <IconButton aria-label="Clear input" onClick={this.onClear} size="large">
+                <ClearIconStyled name="close" />
+            </IconButton>
+        </InputAdornment>));
     }
 
     @bind
@@ -51,29 +44,34 @@ class UploadFiles extends PureComponent {
         const {
             target: { value },
         } = ev;
-        this.props.onChange({ target: { value: get(value, '[0]', null), name: this.props.name } });
+        const { multiple, name } = this.props;
+        this.props.onChange({ target: { value: multiple ? value || [] : get(value, '[0]', null), name } });
     }
 
     @bind
     @memoize()
-    getUploadAdornment(disabled) {
-        return (
-            !disabled && (
-                <InputAdornment position="end">
-                    <Dropzone disableDragActive accept={this.props.accept} showPreviews={false} showAlerts={false} onChange={this.onChange}>
-                        <IconButton aria-label="Upload" onClick={this.onUpload}>
-                            <MdiIcon name="upload" />
-                        </IconButton>
-                    </Dropzone>
-                </InputAdornment>
-            )
-        );
+    getUploadAdornment(disabled, multiple) {
+        return (!disabled && (<InputAdornment position="end">
+            <Dropzone
+                disableDragActive
+                accept={this.props.accept}
+                showPreviews={false}
+                multiple={multiple}
+                filesLimit={multiple ? Infinity : 1}
+                onChange={this.onChange}
+            >
+                <IconButton aria-label="Upload" size="large">
+                    <MdiIcon name="upload" />
+                </IconButton>
+            </Dropzone>
+        </InputAdornment>));
     }
 
     render() {
         const {
             disabled,
             value,
+            multiple,
             name, // eslint-disable-line no-unused-vars
             accept, // eslint-disable-line no-unused-vars
             onChange, // eslint-disable-line no-unused-vars
@@ -81,14 +79,20 @@ class UploadFiles extends PureComponent {
             label,
             ...restProps
         } = this.props;
-        let valueLabel = value && fileLabel ? get(value, fileLabel) : '';
-        valueLabel = value && !valueLabel ? 'File uploaded' : valueLabel;
+        const hasValue = Array.isArray(value) ? value.length > 0 : !!value;
+        let valueLabel = '';
+        if (Array.isArray(value)) {
+            valueLabel = value.map((file) => (fileLabel && get(file, fileLabel)) || file.name).filter(Boolean).join(', ');
+        } else {
+            valueLabel = value && fileLabel ? get(value, fileLabel) : '';
+            valueLabel = value && !valueLabel ? 'File uploaded' : valueLabel;
+        }
         return (
             <TextField
                 label={label}
                 value={valueLabel}
                 InputProps={{
-                    endAdornment: value ? this.getClearAdornment(disabled) : this.getUploadAdornment(disabled),
+                    endAdornment: hasValue ? this.getClearAdornment(disabled) : this.getUploadAdornment(disabled, multiple),
                 }}
                 {...restProps}
             />
@@ -96,4 +100,4 @@ class UploadFiles extends PureComponent {
     }
 }
 
-export default useStyles(UploadFiles); // eslint-disable-line react-hooks/rules-of-hooks
+export default UploadFiles;

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@mui/material/GridLegacy';
+import Typography from '@mui/material/Typography';
 
 import Location from 'components/Location/Location';
 import Button from 'components/Button';
@@ -146,7 +146,7 @@ class LocationForm extends PureComponent {
                     MarkerProps={MarkerProps}
                     {...LocationProps}
                 />
-                <Grid container justify="space-between">
+                <Grid container justifyContent="space-between">
                     {showCoords ? (
                         <Grid item>
                             {latitude && <Typography variant="button">Latitude: {latitude}</Typography>}

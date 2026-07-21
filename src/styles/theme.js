@@ -1,4 +1,4 @@
-import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
+import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
 export const colors = {
     primary: {
@@ -32,11 +32,11 @@ export const colors = {
 };
 
 export const DarkTheme = responsiveFontSizes(
-    createMuiTheme({
+    createTheme({
         colors,
         spacing: (factor) => `${0.25 * factor}rem`,
         palette: {
-            type: 'dark',
+            mode: 'dark',
             primary: colors.primary,
             secondary: colors.secondary,
             background: {
@@ -52,101 +52,114 @@ export const DarkTheme = responsiveFontSizes(
                 selected: colors.background,
             },
         },
-        typography: { useNextVariants: true },
-        overrides: {
+        components: {
             MuiButton: {
-                root: {
-                    fontSize: 14,
-                },
-                containedPrimary: {
-                    color: colors.common.white,
-                },
-                containedSecondary: {
-                    color: 'rgba(0, 0, 0, 0.6)',
-                },
-                contained: {
-                    '&$disabled': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.24)',
-                        color: 'rgba(255, 255, 255, 0.38)',
+                styleOverrides: {
+                    root: {
+                        fontSize: 14,
                     },
-                },
-                outlined: {
-                    '&$disabled': {
-                        border: '1px solid rgba(255, 255, 255, 0.24)',
-                        color: 'rgba(255, 255, 255, 0.38)',
+                    containedPrimary: {
+                        color: colors.common.white,
+                    },
+                    containedSecondary: {
+                        color: 'rgba(0, 0, 0, 0.6)',
+                    },
+                    contained: {
+                        '&.Mui-disabled': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.24)',
+                            color: 'rgba(255, 255, 255, 0.38)',
+                        },
+                    },
+                    outlined: {
+                        '&.Mui-disabled': {
+                            border: '1px solid rgba(255, 255, 255, 0.24)',
+                            color: 'rgba(255, 255, 255, 0.38)',
+                        },
                     },
                 },
             },
             MuiFilledInput: {
-                root: {
-                    backgroundColor: colors.background,
-                    '&$focused': {
+                styleOverrides: {
+                    root: {
                         backgroundColor: colors.background,
+                        '&.Mui-focused': {
+                            backgroundColor: colors.background,
+                        },
+                        '&:hover': {
+                            backgroundColor: colors.background,
+                        },
+                        '&.Mui-disabled': {
+                            backgroundColor: 'transparent',
+                        },
                     },
-                    '&:hover': {
-                        backgroundColor: colors.background,
-                    },
-                    '&$disabled': {
-                        backgroundColor: 'transparent',
-                    },
-                },
-                underline: {
-                    '&$disabled:before': {
-                        borderBottom: 0,
+                    underline: {
+                        '&.Mui-disabled:before': {
+                            borderBottom: 0,
+                        },
                     },
                 },
             },
             MuiRadio: {
-                colorPrimary: {
-                    '&$disabled': {
-                        color: 'rgba(255, 255, 255, 0.38)',
+                styleOverrides: {
+                    colorPrimary: {
+                        '&.Mui-disabled': {
+                            color: 'rgba(255, 255, 255, 0.38)',
+                        },
                     },
-                },
-                colorSecondary: {
-                    '&$disabled': {
-                        color: 'rgba(255, 255, 255, 0.38)',
+                    colorSecondary: {
+                        '&.Mui-disabled': {
+                            color: 'rgba(255, 255, 255, 0.38)',
+                        },
                     },
                 },
             },
             MuiCheckbox: {
-                colorSecondary: {
-                    '&$checked': {
-                        color: colors.primary.dark,
+                styleOverrides: {
+                    colorSecondary: {
+                        '&.Mui-checked': {
+                            color: colors.primary.dark,
+                        },
+                        '&.Mui-disabled': {
+                            color: colors.darkGray,
+                        },
                     },
-                    '&$disabled': {
-                        color: colors.darkGray,
-                    },
-                },
-                colorPrimary: {
-                    '&$checked': {
-                        color: colors.primary.dark,
-                    },
-                    '&$disabled': {
-                        color: colors.darkGray,
+                    colorPrimary: {
+                        '&.Mui-checked': {
+                            color: colors.primary.dark,
+                        },
+                        '&.Mui-disabled': {
+                            color: colors.darkGray,
+                        },
                     },
                 },
             },
             MuiFormLabel: {
-                asterisk: {
-                    color: colors.red,
+                styleOverrides: {
+                    asterisk: {
+                        color: colors.red,
+                    },
                 },
             },
             MuiChip: {
-                colorPrimary: {
-                    color: colors.common.white,
-                    background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2))',
-                    backgroundColor: colors.darkBlue,
+                styleOverrides: {
+                    colorPrimary: {
+                        color: colors.common.white,
+                        background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2))',
+                        backgroundColor: colors.darkBlue,
+                    },
                 },
             },
             MuiMenuItem: {
-                root: {
-                    '&$selected': {
-                        backgroundColor: colors.darkBlue,
-                        background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2))',
-                    },
-                    '&:hover': {
-                        backgroundColor: colors.darkBlue,
-                        background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2))',
+                styleOverrides: {
+                    root: {
+                        '&.Mui-selected': {
+                            backgroundColor: colors.darkBlue,
+                            background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2))',
+                        },
+                        '&:hover': {
+                            backgroundColor: colors.darkBlue,
+                            background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2))',
+                        },
                     },
                 },
             },

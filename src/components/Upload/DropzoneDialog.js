@@ -1,14 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
-import { styled } from '@material-ui/core/styles';
+import { Button } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import { styled } from '@mui/material/styles';
 
 import Dropzone from 'components/Upload/Dropzone';
 import { bind } from 'utils/decorators/decoratorUtils';
+
+// FIXME checkout https://mui.com/components/use-media-query/#using-material-uis-breakpoint-helpers
+const withMobileDialog = () => (WrappedComponent) => (props) => <WrappedComponent width="lg" fullScreen={false} {...props} />;
 
 const DialogActionsStyled = styled(DialogActions)({
     minWidth: 300,
