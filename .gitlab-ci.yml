@@ -87,6 +87,7 @@ store-artifacts:
     - shell-runner
   stage: store
   script:
+    - sudo mkdir -p /opt/affectli/artifacts
     - sudo cp $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG-${CI_COMMIT_SHA:0:8}.tgz /opt/affectli/artifacts/
   only: ['development', 'qa', 'tags', '/^v.*x$/i']
   variables:
