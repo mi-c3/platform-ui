@@ -10,7 +10,28 @@ Documentation lives in [docs/](docs/README.md) — getting started, architecture
 and one page per component under [docs/components/](docs/components/). AI agents: see
 [CLAUDE.md](CLAUDE.md).
 
-## Requirements
+## Install (as a consumer)
+
+2.x is published to the **internal GitLab package registry** — not to public npmjs.org (which
+hosts only the frozen 1.x line). Add to the consuming project's `.npmrc` (commit the file):
+
+```
+@mic3:registry=https://gitlab.mi-c3.com/api/v4/projects/261/packages/npm/
+//gitlab.mi-c3.com/api/v4/projects/261/packages/npm/:_authToken=${CI_JOB_TOKEN}
+```
+
+The token line is required — the registry rejects anonymous pulls. In GitLab CI,
+`CI_JOB_TOKEN` is injected automatically; locally, use a GitLab token with `read_api`.
+Then:
+
+```
+npm install @mic3/platform-ui
+```
+
+All UI framework packages are peer dependencies the consuming app must provide — full list
+and details in [docs/getting-started.md](docs/getting-started.md).
+
+## Requirements (developing this repo)
 
 * node >= 22.11.0 < 23
 * npm (the repo ships a `package-lock.json`)
