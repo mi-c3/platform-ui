@@ -65,7 +65,10 @@ README.md, LICENSE, and `build/index.js` / `index.css` with their source maps.
 ## Consumer registry configuration
 
 Consuming projects map the `@mic3` scope to the **project-level** registry URL in a committed
-`.npmrc`, plus a `CI_JOB_TOKEN` auth line — the registry rejects anonymous pulls (401). See
-"Install (as a consumer)" in [getting-started.md](getting-started.md). Do not use the
-instance-level GitLab URL (`/api/v4/packages/npm/`): it silently redirects (303) to public
-npmjs.org, which only has the frozen 1.x line.
+`.npmrc` — scope mapping only, no auth token. The registry rejects anonymous pulls (401);
+auth comes from the developer's `~/.npmrc` locally and from a `before_script` appending
+`_authToken=${CI_JOB_TOKEN}` in the consumer's CI (a committed token line would override
+`~/.npmrc` and break local installs). See "Install (as a consumer)" in
+[getting-started.md](getting-started.md). Do not use the instance-level GitLab URL
+(`/api/v4/packages/npm/`): it silently redirects (303) to public npmjs.org, which only has
+the frozen 1.x line.
