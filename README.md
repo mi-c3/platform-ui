@@ -13,15 +13,18 @@ and one page per component under [docs/components/](docs/components/). AI agents
 ## Install (as a consumer)
 
 2.x is published to the **internal GitLab package registry** — not to public npmjs.org (which
-hosts only the frozen 1.x line). Add to the consuming project's `.npmrc` (commit the file):
+hosts only the frozen 1.x line). Add to the consuming project's `.npmrc` (commit the file —
+scope mapping only, **no auth token**):
 
 ```
 @mic3:registry=https://gitlab.mi-c3.com/api/v4/projects/261/packages/npm/
-//gitlab.mi-c3.com/api/v4/projects/261/packages/npm/:_authToken=${CI_JOB_TOKEN}
 ```
 
-The token line is required — the registry rejects anonymous pulls. In GitLab CI,
-`CI_JOB_TOKEN` is injected automatically; locally, use a GitLab token with `read_api`.
+Auth is required but must never be committed — locally it goes in your user-level
+`~/.npmrc`, in consumer CI it is appended at runtime. Full setup (token scopes, CI
+snippet, job token allowlist, why a committed token breaks local installs):
+["Install (as a consumer)" in docs/getting-started.md](docs/getting-started.md#install-as-a-consumer).
+
 Then:
 
 ```

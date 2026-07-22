@@ -9,19 +9,40 @@
 
 2.x is published to the internal GitLab package registry, not to public npmjs.org (which
 hosts only the frozen 1.x line). Map the `@mic3` scope in the consuming project's `.npmrc`
-(commit the file):
+(commit the file — scope mapping only, **no auth token**):
 
 ```
 @mic3:registry=https://gitlab.mi-c3.com/api/v4/projects/261/packages/npm/
-//gitlab.mi-c3.com/api/v4/projects/261/packages/npm/:_authToken=${CI_JOB_TOKEN}
 ```
 
 `261` is this repository's GitLab project ID. Use the **project-level** URL exactly as shown —
 the instance-level URL (`/api/v4/packages/npm/`) silently redirects (303) to public npmjs.org.
-The registry does **not** allow anonymous pulls (requests without a token get 401), so the
-`_authToken` line is required. In GitLab CI, `CI_JOB_TOKEN` is injected automatically; for
-local installs, point the env var (or replace it) with a GitLab token that has
-`read_api` / `read_package_registry` access to this project.
+
+The registry does **not** allow anonymous pulls (requests without a token get 401), so auth
+is required — but never commit an `_authToken` line in the project `.npmrc`: npm's config
+precedence (project > user) means it overrides every developer's `~/.npmrc` and breaks local
+installs (locally `${CI_JOB_TOKEN}` is unset, so npm sends an empty token). Configure auth
+per environment instead:
+
+- **Local installs**: add to your user-level `~/.npmrc`, using a GitLab token with
+  `read_api` / `read_package_registry` access to this project:
+
+  ```
+  //gitlab.mi-c3.com/api/v4/projects/261/packages/npm/:_authToken=<your-gitlab-token>
+  ```
+
+- **Consumer CI**: append the auth line at runtime in `before_script` on jobs that run
+  `npm ci`/`npm install` — GitLab injects `CI_JOB_TOKEN` automatically:
+
+  ```yaml
+  before_script:
+    - echo "//gitlab.mi-c3.com/api/v4/projects/261/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+  ```
+
+  (platform-v1 does this via its `.npm-auth` template in `.gitlab-ci.yml`.) The consuming
+  project must also be on **this repository's job token allowlist** (Settings → CI/CD →
+  Job token permissions on project 261) — a missing entry fails the pull with `403 Forbidden`
+  even though the token is valid.
 
 `@mic3/platform-ui` declares every UI framework package as a peer dependency — the consuming
 application provides react, MUI, emotion, styled-components, and the rest:
