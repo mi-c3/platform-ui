@@ -58,7 +58,7 @@ declared for editors in [jsconfig.json](../jsconfig.json).
 
 ## Versioning and compatibility
 
-The 2.x line targets MUI v7 / React 17–19 / styled-components 5–6. Legacy component APIs from
+The 2.x line targets MUI v7 / React 18–19 / styled-components 5–6. Legacy component APIs from
 the 1.x line (v3-era picker props such as `inputVariant`, `clearable`, string date values) are
 translated in [`src/utils/pickers/pickerProps.js`](../src/utils/pickers/pickerProps.js) rather
 than broken — the design rule is: **consumers of the old API keep working; new code should use

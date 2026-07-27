@@ -2,9 +2,9 @@
 
 A React UI components library based on [MUI](https://mui.com) (`@mui/material` v7, emotion engine).
 
-Version 2.x targets React 17–19, MUI v7, styled-components 5–6, and builds as an ES module
+Version 2.x targets React 18–19, MUI v7, styled-components 5–6, and builds as an ES module
 (`build/index.js`). All UI framework packages (react, @mui/*, @emotion/*, styled-components,
-react-router-dom, ...) are `peerDependencies` — the consuming application provides them.
+react-router, ...) are `peerDependencies` — the consuming application provides them.
 
 Documentation lives in [docs/](docs/README.md) — getting started, architecture, conventions,
 and one page per component under [docs/components/](docs/components/). AI agents: see
@@ -36,7 +36,9 @@ and details in [docs/getting-started.md](docs/getting-started.md).
 
 ## Requirements (developing this repo)
 
-* node >= 22.11.0 < 23
+* node 22.22.1 — see [.nvmrc](.nvmrc); the react-router 8 devDependency requires
+  `>= 22.22.0`. Consumers of the published package only need the wider `engines` range
+  (node >= 22.11.0 < 23), since the bundle is browser ESM.
 * npm (the repo ships a `package-lock.json`)
 
 ## Build

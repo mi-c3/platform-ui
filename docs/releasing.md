@@ -27,7 +27,9 @@ README.md, LICENSE, and `build/index.js` / `index.css` with their source maps.
 
 ## Release flow
 
-1. On a feature branch, bump `version` in package.json (semver, 2.x line).
+1. On a feature branch, bump `version` in package.json (semver, 2.x line) and add the entry
+   for it to [CHANGELOG.md](../CHANGELOG.md) — that entry is the tag's release notes, and it
+   is where a breaking change shipped under a non-major bump has to be called out.
 2. Open an MR to `master`; note that branch pipelines do not run on feature branches or
    `master`, so run the gates locally before merging:
 
