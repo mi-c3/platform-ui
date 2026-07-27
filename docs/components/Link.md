@@ -1,6 +1,6 @@
 # Link
 
-A thin wrapper around the MUI [Link](https://mui.com/material-ui/api/link/) component. When the `to` prop is set, it renders through `react-router-dom`'s `Link` (via MUI's `component` prop) so navigation is handled by the router; otherwise it behaves as a plain MUI `Link`.
+A thin wrapper around the MUI [Link](https://mui.com/material-ui/api/link/) component. When the `to` prop is set, it renders through `react-router`'s `Link` (via MUI's `component` prop) so navigation is handled by the router; otherwise it behaves as a plain MUI `Link`.
 
 ## Import
 
@@ -12,7 +12,7 @@ import { Link } from '@mic3/platform-ui';
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| to | string | undefined | Router destination (pathname, search, and hash). When set, the link is rendered through `react-router-dom`'s `Link`. When omitted, use `href` as with a normal MUI `Link`. |
+| to | string | undefined | Router destination (pathname, search, and hash). When set, the link is rendered through `react-router`'s `Link`. When omitted, use `href` as with a normal MUI `Link`. |
 
 All remaining props are passed through to the underlying MUI `Link`.
 

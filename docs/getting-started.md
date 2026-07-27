@@ -2,7 +2,8 @@
 
 ## Requirements
 
-- node >= 22.11.0 < 23
+- node >= 22.11.0 < 23 to consume the package (`engines` in package.json); node 22.22.1 to
+  develop in this repo — see [Develop (in this repo)](#develop-in-this-repo)
 - npm (the repo ships a `package-lock.json`; yarn is not used anymore)
 
 ## Install (as a consumer)
@@ -52,17 +53,22 @@ npm install @mic3/platform-ui \
   react react-dom prop-types moment \
   @mui/material @mui/icons-material @mui/x-date-pickers \
   @emotion/react @emotion/styled styled-components \
-  react-router-dom react-dropzone react-color react-mde \
+  react-router react-dropzone react-color react-mde \
   react-tiny-virtual-list google-map-react memoize-one fast-deep-equal
 ```
 
-Supported peer ranges: react 17–19, @mui/material v7, styled-components 5–6,
-react-router-dom 5–6. See `peerDependencies` in [package.json](../package.json) for the
+Supported peer ranges: react 18–19, @mui/material v7, styled-components 5–6,
+react-router 7–8. See `peerDependencies` in [package.json](../package.json) for the
 authoritative list.
 
 ## Develop (in this repo)
 
+Use the node version in [.nvmrc](../.nvmrc) (22.22.1, the same image CI runs). That floor comes
+from the react-router 8 devDependency, which declares `engines.node >= 22.22.0`; consumers of
+the published package only need the wider `engines` range in package.json.
+
 ```shell
+nvm use
 npm install
 npm run build          # one-off ES module build to build/index.js
 npm run build:watch    # rebuild on every source change

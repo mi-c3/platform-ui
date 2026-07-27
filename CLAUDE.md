@@ -1,7 +1,9 @@
 # CLAUDE.md
 
 React UI component library (`@mic3/platform-ui`): wrappers around MUI v7 plus a passthrough
-re-export of MUI core, bundled as one ES module. Node >= 22.11 < 23, npm only (no yarn).
+re-export of MUI core, bundled as one ES module. npm only (no yarn). Consumers need node
+>= 22.11 < 23 (`engines`); developing in this repo needs node 22.22.1 (`.nvmrc`, CI image) —
+the react-router 8 devDependency sets that floor, the published bundle does not.
 
 ## Commands
 
@@ -35,7 +37,8 @@ npm run lint:fix
   **peerDependencies and rspack externals** — never bundle them, never add one as a regular
   dependency. Regular `dependencies` are only small runtime libs (dompurify is bundled;
   marked and react-avatar-editor are deps but still externals).
-- Supported ranges: react 17–19, @mui/material 7, styled-components 5–6, react-router-dom 5–6.
+- Supported ranges: react 18–19, @mui/material 7, styled-components 5–6, react-router 7–8.
+  The react floor is 18 because react-router 7 peers `react >=18` — MUI 7 alone would allow 17.
 - Don't break 1.x consumer APIs. Legacy props are translated, not removed — pattern:
   `src/utils/pickers/pickerProps.js` (v3 picker props like `inputVariant`, `clearable`,
   string date values).

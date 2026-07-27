@@ -1,4 +1,7 @@
-image: node:22.11.0-slim
+# Keep in sync with .nvmrc. The floor is the react-router 8 devDependency
+# (engines.node >=22.22.0); the published bundle imposes no node requirement,
+# so package.json `engines` stays at the wider consumer-facing range.
+image: node:22.22.1-slim
 
 stages:
   - build
