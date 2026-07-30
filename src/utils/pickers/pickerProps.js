@@ -23,14 +23,52 @@ const DROPPED_V3_KEYS = [
 
 export const toMomentOrNull = (value) => (value ? moment(value) : null);
 
+const resolveSlotProps = (slotProps, ownerState) => (typeof slotProps === 'function' ? slotProps(ownerState) : slotProps);
+
+/**
+ * Merges a caller-supplied `slotProps` bag over another one, per slot, so neither side has to win
+ * outright. MUI also accepts a function per slot, resolved against ownerState; a slot where either
+ * side is one stays a function and merges what the two resolve to.
+ */
+export const mergeSlotProps = (derived, override) => {
+    const merged = { ...derived };
+    Object.keys(override || {}).forEach((slot) => {
+        const base = merged[slot];
+        const extra = override[slot];
+        merged[slot] =
+            typeof base === 'function' || typeof extra === 'function'
+                ? (ownerState) => ({ ...resolveSlotProps(base, ownerState), ...resolveSlotProps(extra, ownerState) })
+                : { ...base, ...extra };
+    });
+    return merged;
+};
+
+/**
+ * Defaults `InputProps.disableUnderline` on a `slotProps.textField` bag, which v3 rendered without
+ * one. Kept out of `splitLegacyPickerProps` because it is the picker components' default, not part
+ * of the prop translation. Handles a callback bag, which is why it can't just be assigned onto.
+ */
+export const withDisabledUnderline = (textFieldProps) => {
+    const apply = (resolved) => ({
+        ...resolved,
+        InputProps: { disableUnderline: true, ...(resolved?.InputProps || {}) },
+    });
+    return typeof textFieldProps === 'function' ? (ownerState) => apply(textFieldProps(ownerState)) : apply(textFieldProps);
+};
+
 /**
  * Splits the legacy prop bag into { pickerProps, textFieldProps, slots, slotProps }.
  * Handled specially: inputVariant, clearable, showTodayButton, disableToolbar,
- * TextFieldComponent, minDate/maxDate coercion.
+ * TextFieldComponent, minDate/maxDate coercion. A v8 `slots`/`slotProps` bag may be passed
+ * through as-is; it is merged per slot over what the legacy props produced.
  */
 export const splitLegacyPickerProps = (props) => {
     const rest = { ...props };
     const textFieldProps = {};
+    const slotsOverride = rest.slots || {};
+    const slotPropsOverride = rest.slotProps || {};
+    delete rest.slots;
+    delete rest.slotProps;
 
     TEXT_FIELD_KEYS.forEach((key) => {
         if (key in rest) {
@@ -51,6 +89,15 @@ export const splitLegacyPickerProps = (props) => {
     if (rest.TextFieldComponent) {
         slots.textField = rest.TextFieldComponent;
         delete rest.TextFieldComponent;
+    }
+    // v8 defaults `enableAccessibleFieldDOMStructure` to true, so the field expects its
+    // textField slot to render a `PickersSectionList` and THROWS ("The `sectionListRef` prop
+    // has not been initialized by `PickersSectionList`") when it renders a plain `<input />`.
+    // The legacy v3 `TextFieldComponent` contract is a single input, and a slot reaching us
+    // through the v8 `slots` bag is on the same footing — either way the caller supplied the
+    // field, so opt that structure back in unless it asked for the accessible one explicitly.
+    if ((slots.textField || slotsOverride.textField) && !('enableAccessibleFieldDOMStructure' in rest)) {
+        rest.enableAccessibleFieldDOMStructure = false;
     }
 
     const slotProps = { textField: textFieldProps };
@@ -78,5 +125,9 @@ export const splitLegacyPickerProps = (props) => {
         rest.maxDate = moment(rest.maxDate);
     }
 
-    return { pickerProps: rest, slots, slotProps };
+    return {
+        pickerProps: rest,
+        slots: { ...slots, ...slotsOverride },
+        slotProps: mergeSlotProps(slotProps, slotPropsOverride),
+    };
 };

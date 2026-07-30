@@ -63,6 +63,12 @@ README.md, LICENSE, and `build/index.js` / `index.css` with their source maps.
 - Tags must be `vX.Y.Z` exactly. Bare `2.0.0`-style tags (used historically) still run the
   normal tag pipeline but are skipped by the publish job.
 - A failed publish burns that version — fix the problem, bump the patch, retag.
+- **Re-QA the `DateTimePickerRange` modal whenever `@mui/x-date-pickers` is bumped.** Its
+  "From"/"To" pickers reproduce the v3 modal through CSS and controlled state keyed to MUI X
+  internals (view/clock dimensions, `.MuiPickersLayout-*` classes, the view-step behaviour). The
+  tests assert those rules are emitted, not that they still match, so a renamed class or a changed
+  dimension degrades the modal silently. See the Notes in
+  [components/DateTimePickerRange.md](components/DateTimePickerRange.md).
 
 ## Consumer registry configuration
 

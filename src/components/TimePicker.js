@@ -4,7 +4,7 @@ import { TimePicker as TPMui } from '@mui/x-date-pickers/TimePicker';
 
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
-import { splitLegacyPickerProps, toMomentOrNull } from 'utils/pickers/pickerProps';
+import { splitLegacyPickerProps, toMomentOrNull, withDisabledUnderline } from 'utils/pickers/pickerProps';
 
 class TimePicker extends PureComponent {
     static propTypes = {
@@ -28,9 +28,7 @@ class TimePicker extends PureComponent {
         // eslint-disable-next-line no-unused-vars
         const { onClick, value, onChange, type, ...legacyProps } = this.props;
         const { pickerProps, slots, slotProps } = splitLegacyPickerProps(legacyProps);
-        if (!slotProps.textField.InputProps || slotProps.textField.InputProps.disableUnderline === undefined) {
-            slotProps.textField.InputProps = { disableUnderline: true, ...(slotProps.textField.InputProps || {}) };
-        }
+        slotProps.textField = withDisabledUnderline(slotProps.textField);
         return (
             <TPMui
                 {...pickerProps}
