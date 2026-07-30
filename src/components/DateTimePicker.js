@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DateTimePicker as DTPMui } from '@mui/x-date-pickers/DateTimePicker';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
-import { splitLegacyPickerProps, toMomentOrNull } from 'utils/pickers/pickerProps';
+import { splitLegacyPickerProps, toMomentOrNull, withDisabledUnderline } from 'utils/pickers/pickerProps';
 
 class DateTimePicker extends PureComponent {
     static propTypes = {
@@ -26,13 +27,14 @@ class DateTimePicker extends PureComponent {
 
     render() {
         // eslint-disable-next-line no-unused-vars
-        const { onClick, value, onChange, type, ...legacyProps } = this.props;
+        const { onClick, value, onChange, type, variant, ...legacyProps } = this.props;
+        // v3 `variant="dialog"` opened the picker in a modal with a toolbar, date/time tabs and
+        // an action bar; that is v8's mobile picker. Anything else stays on the responsive one.
+        const Picker = variant === 'dialog' ? MobileDateTimePicker : DTPMui;
         const { pickerProps, slots, slotProps } = splitLegacyPickerProps(legacyProps);
-        if (!slotProps.textField.InputProps || slotProps.textField.InputProps.disableUnderline === undefined) {
-            slotProps.textField.InputProps = { disableUnderline: true, ...(slotProps.textField.InputProps || {}) };
-        }
+        slotProps.textField = withDisabledUnderline(slotProps.textField);
         return (
-            <DTPMui
+            <Picker
                 {...pickerProps}
                 value={toMomentOrNull(value)}
                 slots={slots}

@@ -19,10 +19,11 @@ import { DatePicker } from '@mic3/platform-ui';
 | `margin` | `'none'` \| `'dense'` \| `'normal'` | `'normal'` | Margin of the text field. |
 | `fullWidth` | bool | `true` | Full-width text field. |
 | `clearable` | bool | `false` | Adds a clear adornment to the field (mapped to `slotProps.field.clearable`; clearing fires `onChange` with `null`). |
-| `showTodayButton` | bool | — | Adds a "Today" action to the picker's action bar. |
+| `showTodayButton` | bool | — | Sets the picker's action bar to exactly `['today']` (`slotProps.actionBar`), replacing whatever the picker would show by default — a desktop picker has none, so this only adds "Today". Pass `slotProps.actionBar.actions` yourself to control the full list. |
 | `disableToolbar` | bool | — | Hides the picker toolbar. |
-| `TextFieldComponent` | elementType | — | Custom text field component (mapped to `slots.textField`). |
+| `TextFieldComponent` | elementType | — | Custom text field component (mapped to `slots.textField`). Passing one also sets `enableAccessibleFieldDOMStructure={false}`, since the legacy contract is a single `<input />` — the v8 default expects the slot to render a `PickersSectionList` and throws otherwise. Pass `enableAccessibleFieldDOMStructure` explicitly to override. |
 | `minDate` / `maxDate` | Date \| string \| moment | — | Coerced to `moment` before being passed to the picker. |
+| `slots` / `slotProps` | object | — | Passed through to the picker, merged per slot over what the legacy props produced (so `clearable` and a `slotProps.field` of your own both survive). A slot given as a function (MUI resolves it against `ownerState`) stays a function, and merges the same way once resolved. A `slots.textField` also sets `enableAccessibleFieldDOMStructure={false}`, exactly as `TextFieldComponent` does. |
 | `label`, `placeholder`, `helperText`, `error`, `required`, `id`, `autoFocus`, `size`, `onBlur`, `onFocus`, `InputProps`, `inputProps`, `InputLabelProps`, `className`, `style` | — | — | Forwarded to the rendered text field (`slotProps.textField`). `InputProps.disableUnderline` defaults to `true`. |
 
 All remaining props (`format`, `disablePast`, `views`, ...) are passed through to the MUI X `DatePicker`.
@@ -44,5 +45,5 @@ All remaining props (`format`, `disablePast`, `views`, ...) are passed through t
 
 ## Notes
 
-- Legacy v3-only props with no MUI X equivalent (`animateYearScrolling`, `allowKeyboardControl`, `invalidDateMessage`, `okLabel`, `cancelLabel`, `todayLabel`, `clearLabel`, `variant`, `orientation`, `keyboard`, `PopoverProps`, `DialogProps`, ...) are accepted but silently dropped.
+- Legacy v3-only props with no MUI X equivalent (`animateYearScrolling`, `allowKeyboardControl`, `invalidDateMessage`, `okLabel`, `cancelLabel`, `todayLabel`, `clearLabel`, `variant`, `orientation`, `keyboard`, `PopoverProps`, `DialogProps`, ...) are accepted but silently dropped. (`variant` is honoured only by [DateTimePicker](./DateTimePicker.md), which maps `'dialog'` to the mobile picker.)
 - The prop-splitting logic lives in `src/utils/pickers/pickerProps.js` (`splitLegacyPickerProps`).
