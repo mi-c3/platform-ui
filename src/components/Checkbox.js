@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { forwardRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import MuiCheckbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -31,9 +31,10 @@ class Checkbox extends PureComponent {
     }
 
     render() {
-        const { CheckboxProps, labelPlacement, color, value, ...restProps } = this.props;
+        const { CheckboxProps, labelPlacement, color, value, innerRef, ...restProps } = this.props;
         return (
             <FormControlLabel
+                ref={innerRef}
                 {...restProps}
                 checked={value || false}
                 onChange={this.onChange}
@@ -44,4 +45,6 @@ class Checkbox extends PureComponent {
     }
 }
 
-export default Checkbox;
+// MUI v5+ clones the child of Tooltip and of the Fade/Grow/Slide/Zoom transitions with a
+// ref and expects a DOM node back; a class component hands over its instance and MUI throws.
+export default forwardRef((props, ref) => <Checkbox {...props} innerRef={ref} />);

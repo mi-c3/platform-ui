@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { forwardRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import MuiRadio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -31,9 +31,10 @@ class Radio extends PureComponent {
     }
 
     render() {
-        const { RadioProps, labelPlacement, color, value, ...restProps } = this.props;
+        const { RadioProps, labelPlacement, color, value, innerRef, ...restProps } = this.props;
         return (
             <FormControlLabel
+                ref={innerRef}
                 {...restProps}
                 checked={value || false}
                 onChange={this.onChange}
@@ -44,4 +45,6 @@ class Radio extends PureComponent {
     }
 }
 
-export default Radio;
+// MUI v5+ clones the child of Tooltip and of the Fade/Grow/Slide/Zoom transitions with a
+// ref and expects a DOM node back; a class component hands over its instance and MUI throws.
+export default forwardRef((props, ref) => <Radio {...props} innerRef={ref} />);

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { forwardRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { TextField as MuiTextField, IconButton, Input, InputAdornment } from '@mui/material';
 import styled, { css } from 'styled-components';
@@ -98,11 +98,13 @@ class TextField extends PureComponent {
             classes,
             autocompleteMultiple,
             hideInput,
+            innerRef,
             ...restProps
         } = this.props;
         const defaultEndAdornment = error ? this.getErrorAdornment() : this.getClearAdornment(disabled, value);
         return (
             <StyledTextField
+                ref={innerRef}
                 value={this.isDefined(value) ? value : ''}
                 disabled={disabled}
                 error={error}
@@ -122,4 +124,6 @@ class TextField extends PureComponent {
     }
 }
 
-export default TextField;
+// MUI v5+ clones the child of Tooltip and of the Fade/Grow/Slide/Zoom transitions with a
+// ref and expects a DOM node back; a class component hands over its instance and MUI throws.
+export default forwardRef((props, ref) => <TextField {...props} innerRef={ref} />);

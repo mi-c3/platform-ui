@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { forwardRef, PureComponent } from 'react';
 import MuiSlider from '@mui/material/Slider';
 import styled from 'styled-components';
 import { createEvent } from 'utils/http/event';
@@ -27,9 +27,11 @@ class Slider extends PureComponent {
     }
 
     render() {
-        const { fillColor, ...restProps } = this.props;
-        return <StyledSlider {...restProps} $fillColor={fillColor} onChange={this.onChange} />;
+        const { fillColor, innerRef, ...restProps } = this.props;
+        return <StyledSlider ref={innerRef} {...restProps} $fillColor={fillColor} onChange={this.onChange} />;
     }
 }
 
-export default Slider;
+// MUI v5+ clones the child of Tooltip and of the Fade/Grow/Slide/Zoom transitions with a
+// ref and expects a DOM node back; a class component hands over its instance and MUI throws.
+export default forwardRef((props, ref) => <Slider {...props} innerRef={ref} />);

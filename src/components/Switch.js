@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { forwardRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import MuiSwitch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -43,10 +43,11 @@ class Switch extends PureComponent {
             value,
             required,
             error,
+            innerRef,
             ...restProps
         } = this.props;
         return (
-            <FormControl required={required} error={error} {...FormControlProps}>
+            <FormControl ref={innerRef} required={required} error={error} {...FormControlProps}>
                 <FormControlLabel
                     {...restProps}
                     checked={value || false}
@@ -60,4 +61,6 @@ class Switch extends PureComponent {
     }
 }
 
-export default Switch;
+// MUI v5+ clones the child of Tooltip and of the Fade/Grow/Slide/Zoom transitions with a
+// ref and expects a DOM node back; a class component hands over its instance and MUI throws.
+export default forwardRef((props, ref) => <Switch {...props} innerRef={ref} />);
