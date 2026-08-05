@@ -1,4 +1,6 @@
-import { splitLegacyPickerProps, withDisabledUnderline } from '../../src/utils/pickers/pickerProps';
+import moment from 'moment';
+
+import { createFieldStepGuard, createMomentValueCache, splitLegacyPickerProps, withDisabledUnderline } from '../../src/utils/pickers/pickerProps';
 
 const CustomInput = () => null;
 
@@ -114,5 +116,135 @@ describe('withDisabledUnderline', () => {
             helperText: 'resolved',
             InputProps: { disableUnderline: true },
         });
+    });
+});
+
+describe('createMomentValueCache', () => {
+    test('reuses the instance while the instant is unchanged', () => {
+        const toValue = createMomentValueCache();
+        const first = toValue('2026-06-15T10:00:00.000Z');
+
+        // v8 compares `value !== lastExternalValue` by reference and rebuilds the field's sections
+        // when they differ, so an equal instant has to keep the same instance across renders.
+        expect(toValue('2026-06-15T10:00:00.000Z')).toBe(first);
+        expect(toValue(new Date('2026-06-15T10:00:00.000Z'))).toBe(first);
+    });
+
+    test('gives a new instance for the same instant at a different offset', () => {
+        const toValue = createMomentValueCache();
+        const local = toValue('2026-06-15T10:00:00.000Z');
+        const shifted = toValue(moment('2026-06-15T10:00:00.000Z').utcOffset(120));
+
+        // The adapter formats a moment in its own zone, so the same instant at another offset is a
+        // different value to display.
+        expect(shifted).not.toBe(local);
+        expect(shifted.valueOf()).toBe(local.valueOf());
+    });
+
+    test('gives a new instance for a new instant, and null for an empty value', () => {
+        const toValue = createMomentValueCache();
+        const first = toValue('2026-06-15T10:00:00.000Z');
+
+        expect(toValue('2026-06-15T10:00:01.000Z')).not.toBe(first);
+        expect(toValue(null)).toBeNull();
+        expect(toValue('')).toBeNull();
+    });
+
+});
+
+describe('createFieldStepGuard', () => {
+    test('refuses a step that moved past the end of the range it was heading for', () => {
+        const guard = createFieldStepGuard();
+
+        // Up: ArrowUp, PageUp, and End (which sets the section to its maximum).
+        ['ArrowUp', 'PageUp', 'End'].forEach((key) => {
+            guard.onKeyDownCapture({ key });
+            expect(guard.refuses({ validationError: 'maxDate' })).toBe(true);
+        });
+        ['maxTime', 'disableFuture'].forEach((validationError) => {
+            guard.onKeyDownCapture({ key: 'ArrowUp' });
+            expect(guard.refuses({ validationError })).toBe(true);
+        });
+
+        // Down: ArrowDown, PageDown, and Home (which sets the section to its minimum).
+        ['ArrowDown', 'PageDown', 'Home'].forEach((key) => {
+            guard.onKeyDownCapture({ key });
+            expect(guard.refuses({ validationError: 'minDate' })).toBe(true);
+        });
+        ['minTime', 'disablePast'].forEach((validationError) => {
+            guard.onKeyDownCapture({ key: 'ArrowDown' });
+            expect(guard.refuses({ validationError })).toBe(true);
+        });
+    });
+
+    test('lets a step out of the OTHER end through, so an out-of-range value can walk back', () => {
+        const guard = createFieldStepGuard();
+
+        // A value can arrive out of range from stored data (year 2150 with maxDate 2099). Stepping
+        // down still reports `maxDate`, and refusing on the error alone would trap the field.
+        guard.onKeyDownCapture({ key: 'ArrowDown' });
+        expect(guard.refuses({ validationError: 'maxDate' })).toBe(false);
+
+        guard.onKeyDownCapture({ key: 'ArrowUp' });
+        expect(guard.refuses({ validationError: 'minDate' })).toBe(false);
+    });
+
+    test('lets a stepped change inside the range through', () => {
+        const guard = createFieldStepGuard();
+
+        guard.onKeyDownCapture({ key: 'ArrowDown' });
+        expect(guard.refuses({ validationError: null })).toBe(false);
+        // Only the range bounds: the field is still where other validation gets reported.
+        guard.onKeyDownCapture({ key: 'ArrowDown' });
+        expect(guard.refuses({ validationError: 'shouldDisableDate' })).toBe(false);
+        guard.onKeyDownCapture({ key: 'ArrowUp' });
+        expect(guard.refuses({ validationError: 'invalidDate' })).toBe(false);
+        // Not directional, so refusing it would strand the keyboard next to a disabled value
+        // instead of letting it step across.
+        guard.onKeyDownCapture({ key: 'ArrowUp' });
+        expect(guard.refuses({ validationError: 'shouldDisableYear' })).toBe(false);
+        // `minDateTime`/`maxDateTime` are not error names of their own: `validateDateTime` runs the
+        // date then the time validator, so those props report as minDate/maxDate/minTime/maxTime.
+        guard.onKeyDownCapture({ key: 'ArrowUp' });
+        expect(guard.refuses({ validationError: 'maxDateTime' })).toBe(false);
+    });
+
+    test('lets a typed out-of-range value through', () => {
+        const guard = createFieldStepGuard();
+
+        // Typing a year publishes its intermediate values (`0002` on the way to `2026`), which are
+        // out of range and must keep flowing or the digits get thrown away.
+        guard.onKeyDownCapture({ key: '2' });
+        expect(guard.refuses({ validationError: 'minDate' })).toBe(false);
+    });
+
+    test('survives the microtask checkpoint between the capture and bubble listeners', async () => {
+        const guard = createFieldStepGuard();
+
+        guard.onKeyDownCapture({ key: 'ArrowUp' });
+        // Regression: the flag used to be dropped on a microtask. React attaches its capture-phase
+        // and bubble-phase listeners to the root container as two separate native listeners, and the
+        // browser runs a microtask checkpoint when each returns — so in a real browser the reset ran
+        // before the field published the step, and the step went through (year walked past 2099).
+        // jsdom dispatches both phases in one stack, so nothing here caught it.
+        await Promise.resolve();
+        expect(guard.refuses({ validationError: 'maxDate' })).toBe(true);
+    });
+
+    test('forgets the step once it has been read', () => {
+        const guard = createFieldStepGuard();
+
+        guard.onKeyDownCapture({ key: 'ArrowUp' });
+        expect(guard.refuses({ validationError: 'maxDate' })).toBe(true);
+        // A later change from the calendar must not be attributed to that key press.
+        expect(guard.refuses({ validationError: 'maxDate' })).toBe(false);
+    });
+
+    test('forgets a step that published nothing as soon as another key is pressed', () => {
+        const guard = createFieldStepGuard();
+
+        guard.onKeyDownCapture({ key: 'ArrowUp' });
+        guard.onKeyDownCapture({ key: '2' });
+        expect(guard.refuses({ validationError: 'maxDate' })).toBe(false);
     });
 });

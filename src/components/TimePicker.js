@@ -4,7 +4,9 @@ import { TimePicker as TPMui } from '@mui/x-date-pickers/TimePicker';
 
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
-import { splitLegacyPickerProps, toMomentOrNull, withDisabledUnderline } from 'utils/pickers/pickerProps';
+import {
+    createFieldStepGuard, createMomentValueCache, splitLegacyPickerProps, withDisabledUnderline, withStepGuard,
+} from 'utils/pickers/pickerProps';
 
 class TimePicker extends PureComponent {
     static propTypes = {
@@ -18,8 +20,17 @@ class TimePicker extends PureComponent {
         clearable: false,
     };
 
+    toValue = createMomentValueCache();
+
+    stepGuard = createFieldStepGuard();
+
     @bind
-    onChange(value) {
+    onChange(value, context) {
+        // A keyboard step past minTime/maxTime (or the date bounds) is dropped instead of
+        // published — the clock cannot cross those bounds either.
+        if (this.stepGuard.refuses(context)) {
+            return;
+        }
         const { onChange, name, type } = this.props;
         onChange && onChange(createEvent('change', { target: { name, value, type } }));
     }
@@ -28,11 +39,11 @@ class TimePicker extends PureComponent {
         // eslint-disable-next-line no-unused-vars
         const { onClick, value, onChange, type, ...legacyProps } = this.props;
         const { pickerProps, slots, slotProps } = splitLegacyPickerProps(legacyProps);
-        slotProps.textField = withDisabledUnderline(slotProps.textField);
+        slotProps.textField = withStepGuard(withDisabledUnderline(slotProps.textField), this.stepGuard);
         return (
             <TPMui
                 {...pickerProps}
-                value={toMomentOrNull(value)}
+                value={this.toValue(value)}
                 slots={slots}
                 slotProps={slotProps}
                 onChange={this.onChange}
