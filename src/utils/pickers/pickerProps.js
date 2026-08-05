@@ -24,12 +24,21 @@ const DROPPED_V3_KEYS = [
 export const toMomentOrNull = (value) => (value ? moment(value) : null);
 
 // Keys the v8 field steps a section value with, and which end of the range each one moves toward
-// (`useFieldRootHandleKeyDown`: Home sets a section to its minimum, End to its maximum).
-const SECTION_STEP_DIRECTIONS = { ArrowUp: 1, PageUp: 1, End: 1, ArrowDown: -1, PageDown: -1, Home: -1 };
+// (`useFieldRootHandleKeyDown`: Home sets a section to its minimum, End to its maximum). A Map, so
+// looking up an arbitrary `event.key` cannot reach Object.prototype.
+const SECTION_STEP_DIRECTIONS = new Map([
+    ['ArrowUp', 1], ['PageUp', 1], ['End', 1],
+    ['ArrowDown', -1], ['PageDown', -1], ['Home', -1],
+]);
 
-// Validation errors that mean "past the upper / lower end of the range the picker was given".
-const UPPER_BOUND_ERRORS = ['maxDate', 'maxTime', 'maxDateTime', 'disableFuture'];
-const LOWER_BOUND_ERRORS = ['minDate', 'minTime', 'minDateTime', 'disablePast'];
+// Validation errors that mean "past the upper / lower end of the range the picker was given". These
+// are every directional bound v8 can report: `validateDateTime` runs `validateDate` then
+// `validateTime`, so a `minDateTime`/`maxDateTime` prop surfaces as one of these four rather than
+// under its own name. The non-directional errors (`shouldDisableDate`/`Month`/`Year`, `minutesStep`,
+// `invalidDate`) are deliberately absent — refusing a step onto an arbitrary disabled value would
+// strand the keyboard on the near side of it instead of letting it step across.
+const UPPER_BOUND_ERRORS = ['maxDate', 'maxTime', 'disableFuture'];
+const LOWER_BOUND_ERRORS = ['minDate', 'minTime', 'disablePast'];
 
 /**
  * Hands out the moment instance for a value, reusing the previous one while the instant is
@@ -61,7 +70,7 @@ export const createMomentValueCache = () => {
  * v8 steps a section with the arrow/page/home/end keys through that section's boundaries only:
  * `getSectionsBoundaries` caps a 4-digit year at 9999 whatever `minDate`/`maxDate` say, so the
  * keyboard crosses a bound the calendar refuses to (default `maxDate` is 2099-12-31). The step is
- * published through `onChange` synchronously inside the same keydown, so a flag raised in the
+ * published through `onChange` synchronously inside the same keydown, so recording the key in the
  * capture phase is enough to tell a stepped change from a typed one — typing stays untouched,
  * because its intermediate values (year `0002` on the way to `2026`) must keep flowing through.
  *
@@ -89,14 +98,16 @@ export const createFieldStepGuard = () => {
         // out-of-range days and the year list stops at the bounds, so a view change cannot carry a
         // range validation error in the first place.
         onKeyDownCapture: (event) => {
-            stepping = SECTION_STEP_DIRECTIONS[event.key] || 0;
+            stepping = SECTION_STEP_DIRECTIONS.get(event.key) || 0;
         },
         refuses: (context) => {
-            const error = context?.validationError;
-            const bound = stepping > 0 ? UPPER_BOUND_ERRORS : LOWER_BOUND_ERRORS;
-            const refused = stepping !== 0 && bound.includes(error);
+            const direction = stepping;
             stepping = 0;
-            return refused;
+            if (!direction) {
+                return false;
+            }
+            const bounds = direction > 0 ? UPPER_BOUND_ERRORS : LOWER_BOUND_ERRORS;
+            return bounds.includes(context?.validationError);
         },
     };
 };

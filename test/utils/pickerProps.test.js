@@ -161,7 +161,7 @@ describe('createFieldStepGuard', () => {
             guard.onKeyDownCapture({ key });
             expect(guard.refuses({ validationError: 'maxDate' })).toBe(true);
         });
-        ['maxTime', 'maxDateTime', 'disableFuture'].forEach((validationError) => {
+        ['maxTime', 'disableFuture'].forEach((validationError) => {
             guard.onKeyDownCapture({ key: 'ArrowUp' });
             expect(guard.refuses({ validationError })).toBe(true);
         });
@@ -171,7 +171,7 @@ describe('createFieldStepGuard', () => {
             guard.onKeyDownCapture({ key });
             expect(guard.refuses({ validationError: 'minDate' })).toBe(true);
         });
-        ['minTime', 'minDateTime', 'disablePast'].forEach((validationError) => {
+        ['minTime', 'disablePast'].forEach((validationError) => {
             guard.onKeyDownCapture({ key: 'ArrowDown' });
             expect(guard.refuses({ validationError })).toBe(true);
         });
@@ -199,6 +199,14 @@ describe('createFieldStepGuard', () => {
         expect(guard.refuses({ validationError: 'shouldDisableDate' })).toBe(false);
         guard.onKeyDownCapture({ key: 'ArrowUp' });
         expect(guard.refuses({ validationError: 'invalidDate' })).toBe(false);
+        // Not directional, so refusing it would strand the keyboard next to a disabled value
+        // instead of letting it step across.
+        guard.onKeyDownCapture({ key: 'ArrowUp' });
+        expect(guard.refuses({ validationError: 'shouldDisableYear' })).toBe(false);
+        // `minDateTime`/`maxDateTime` are not error names of their own: `validateDateTime` runs the
+        // date then the time validator, so those props report as minDate/maxDate/minTime/maxTime.
+        guard.onKeyDownCapture({ key: 'ArrowUp' });
+        expect(guard.refuses({ validationError: 'maxDateTime' })).toBe(false);
     });
 
     test('lets a typed out-of-range value through', () => {

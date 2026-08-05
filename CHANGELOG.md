@@ -16,9 +16,10 @@ limits.
 
 A step key (<kbd>↑</kbd>/<kbd>↓</kbd>, <kbd>PageUp</kbd>/<kbd>PageDown</kbd>,
 <kbd>Home</kbd>/<kbd>End</kbd>) that moves past the bound it is heading for —
-`maxDate`/`maxTime`/`maxDateTime`/`disableFuture` going up, `minDate`/`minTime`/`minDateTime`/
-`disablePast` going down — is now dropped instead of published, which also leaves the field showing
-the value it had: `updateSectionValue` builds the stepped sections locally and only publishes them,
+`maxDate`/`maxTime`/`disableFuture` going up, `minDate`/`minTime`/`disablePast` going down (a
+`minDateTime`/`maxDateTime` prop is validated through those, not under a name of its own) — is now
+dropped instead of published, which also leaves the field showing the value it had:
+`updateSectionValue` builds the stepped sections locally and only publishes them,
 so a step that is never published never reaches the display. Only that direction is blocked, because
 a value can arrive out of range from stored data and every step from there reports the same bound —
 stepping back toward the range still works. Typing is deliberately untouched: its intermediate values
@@ -26,14 +27,13 @@ stepping back toward the range still works. Typing is deliberately untouched: it
 as before. The handler rides on `slotProps.textField`, so a `TextFieldComponent`/`slots.textField`
 that drops unknown props does not receive it and keyboard stepping there stays unbounded.
 
-The step is recognised by a flag raised in a capture-phase `keydown` handler on the field and
-consumed when the change is read. It is not dropped on a microtask or from a bubble-phase handler on
-the same slot: React attaches its capture-phase and bubble-phase listeners to the root container as
-two separate native listeners, and a browser runs a microtask checkpoint when each of them returns,
-so a microtask reset lands *before* the step is published — while a bubble reset on
-`slotProps.textField` runs *before* the field's own handler rather than after it. jsdom dispatches
-both phases within one stack and shows neither problem, so the flag's lifetime is pinned by unit
-tests rather than by rendering.
+The step and its direction are recorded by a capture-phase `keydown` handler on the field and cleared
+when the change is read. They are not cleared on a microtask or from a bubble-phase handler on the
+same slot: React attaches its capture-phase and bubble-phase listeners to the root container as two
+separate native listeners, and a browser runs a microtask checkpoint when each of them returns, so a
+microtask reset lands *before* the step is published — while a bubble reset on `slotProps.textField`
+runs *before* the field's own handler rather than after it. jsdom dispatches both phases within one
+stack and shows neither problem, so that lifetime is pinned by unit tests rather than by rendering.
 
 Also fixed in the same components: the value handed to `@mui/x-date-pickers` was re-created with
 `moment(value)` on every render. v8 decides a value changed externally by comparing it **by
