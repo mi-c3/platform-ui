@@ -15,12 +15,16 @@ bound. Minutes and hours never showed it because their section boundaries (59, 2
 limits.
 
 A step key (<kbd>↑</kbd>/<kbd>↓</kbd>, <kbd>PageUp</kbd>/<kbd>PageDown</kbd>,
-<kbd>Home</kbd>/<kbd>End</kbd>) that lands outside `minDate`/`maxDate`/`minTime`/`maxTime`/
-`minDateTime`/`maxDateTime` is now dropped instead of published, which also leaves the field showing
-the value it had — `updateSectionValue` builds the stepped sections locally and only publishes them,
-so a step that is never published never reaches the display. Typing is deliberately untouched: its
-intermediate values (year `0002` on the way to `2026`) still reach `onChange` and are still reported
-as invalid, exactly as before.
+<kbd>Home</kbd>/<kbd>End</kbd>) that moves past the bound it is heading for —
+`maxDate`/`maxTime`/`maxDateTime`/`disableFuture` going up, `minDate`/`minTime`/`minDateTime`/
+`disablePast` going down — is now dropped instead of published, which also leaves the field showing
+the value it had: `updateSectionValue` builds the stepped sections locally and only publishes them,
+so a step that is never published never reaches the display. Only that direction is blocked, because
+a value can arrive out of range from stored data and every step from there reports the same bound —
+stepping back toward the range still works. Typing is deliberately untouched: its intermediate values
+(year `0002` on the way to `2026`) still reach `onChange` and are still reported as invalid, exactly
+as before. The handler rides on `slotProps.textField`, so a `TextFieldComponent`/`slots.textField`
+that drops unknown props does not receive it and keyboard stepping there stays unbounded.
 
 The step is recognised by a flag raised in a capture-phase `keydown` handler on the field and
 consumed when the change is read. It is not dropped on a microtask or from a bubble-phase handler on

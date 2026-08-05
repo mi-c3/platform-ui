@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import { createFieldStepGuard, createMomentValueCache, splitLegacyPickerProps, withDisabledUnderline } from '../../src/utils/pickers/pickerProps';
 
 const CustomInput = () => null;
@@ -128,6 +130,17 @@ describe('createMomentValueCache', () => {
         expect(toValue(new Date('2026-06-15T10:00:00.000Z'))).toBe(first);
     });
 
+    test('gives a new instance for the same instant at a different offset', () => {
+        const toValue = createMomentValueCache();
+        const local = toValue('2026-06-15T10:00:00.000Z');
+        const shifted = toValue(moment('2026-06-15T10:00:00.000Z').utcOffset(120));
+
+        // The adapter formats a moment in its own zone, so the same instant at another offset is a
+        // different value to display.
+        expect(shifted).not.toBe(local);
+        expect(shifted.valueOf()).toBe(local.valueOf());
+    });
+
     test('gives a new instance for a new instant, and null for an empty value', () => {
         const toValue = createMomentValueCache();
         const first = toValue('2026-06-15T10:00:00.000Z');
@@ -140,14 +153,40 @@ describe('createMomentValueCache', () => {
 });
 
 describe('createFieldStepGuard', () => {
-    test('refuses a stepped change that landed out of the picker range', () => {
+    test('refuses a step that moved past the end of the range it was heading for', () => {
         const guard = createFieldStepGuard();
 
-        guard.onKeyDownCapture({ key: 'ArrowUp' });
-        expect(guard.refuses({ validationError: 'maxDate' })).toBe(true);
+        // Up: ArrowUp, PageUp, and End (which sets the section to its maximum).
+        ['ArrowUp', 'PageUp', 'End'].forEach((key) => {
+            guard.onKeyDownCapture({ key });
+            expect(guard.refuses({ validationError: 'maxDate' })).toBe(true);
+        });
+        ['maxTime', 'maxDateTime', 'disableFuture'].forEach((validationError) => {
+            guard.onKeyDownCapture({ key: 'ArrowUp' });
+            expect(guard.refuses({ validationError })).toBe(true);
+        });
 
-        guard.onKeyDownCapture({ key: 'PageDown' });
-        expect(guard.refuses({ validationError: 'maxTime' })).toBe(true);
+        // Down: ArrowDown, PageDown, and Home (which sets the section to its minimum).
+        ['ArrowDown', 'PageDown', 'Home'].forEach((key) => {
+            guard.onKeyDownCapture({ key });
+            expect(guard.refuses({ validationError: 'minDate' })).toBe(true);
+        });
+        ['minTime', 'minDateTime', 'disablePast'].forEach((validationError) => {
+            guard.onKeyDownCapture({ key: 'ArrowDown' });
+            expect(guard.refuses({ validationError })).toBe(true);
+        });
+    });
+
+    test('lets a step out of the OTHER end through, so an out-of-range value can walk back', () => {
+        const guard = createFieldStepGuard();
+
+        // A value can arrive out of range from stored data (year 2150 with maxDate 2099). Stepping
+        // down still reports `maxDate`, and refusing on the error alone would trap the field.
+        guard.onKeyDownCapture({ key: 'ArrowDown' });
+        expect(guard.refuses({ validationError: 'maxDate' })).toBe(false);
+
+        guard.onKeyDownCapture({ key: 'ArrowUp' });
+        expect(guard.refuses({ validationError: 'minDate' })).toBe(false);
     });
 
     test('lets a stepped change inside the range through', () => {
@@ -156,7 +195,10 @@ describe('createFieldStepGuard', () => {
         guard.onKeyDownCapture({ key: 'ArrowDown' });
         expect(guard.refuses({ validationError: null })).toBe(false);
         // Only the range bounds: the field is still where other validation gets reported.
+        guard.onKeyDownCapture({ key: 'ArrowDown' });
         expect(guard.refuses({ validationError: 'shouldDisableDate' })).toBe(false);
+        guard.onKeyDownCapture({ key: 'ArrowUp' });
+        expect(guard.refuses({ validationError: 'invalidDate' })).toBe(false);
     });
 
     test('lets a typed out-of-range value through', () => {

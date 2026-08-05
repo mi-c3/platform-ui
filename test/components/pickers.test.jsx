@@ -163,6 +163,17 @@ describe.each([
         expect(year).toHaveTextContent('2099');
     });
 
+    test('lets a year already past maxDate be stepped back toward the range', () => {
+        // A value can arrive out of range from stored data. Every step reports the same bound, so
+        // refusing on the error alone would trap the field: the user could not walk back either.
+        const { onChange, year } = renderPicker('2150-06-15T10:00:00.000Z');
+
+        fireEvent.keyDown(year, { key: 'ArrowDown' });
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange.mock.calls[0][0].target.value.year()).toBe(2149);
+    });
+
     test('steps the year inside the range', () => {
         const { onChange, year } = renderPicker('2098-06-15T10:00:00.000Z');
 

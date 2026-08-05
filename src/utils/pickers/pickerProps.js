@@ -23,11 +23,13 @@ const DROPPED_V3_KEYS = [
 
 export const toMomentOrNull = (value) => (value ? moment(value) : null);
 
-// Keys the v8 field steps a section value with (`useFieldRootHandleKeyDown`).
-const SECTION_STEP_KEYS = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'];
+// Keys the v8 field steps a section value with, and which end of the range each one moves toward
+// (`useFieldRootHandleKeyDown`: Home sets a section to its minimum, End to its maximum).
+const SECTION_STEP_DIRECTIONS = { ArrowUp: 1, PageUp: 1, End: 1, ArrowDown: -1, PageDown: -1, Home: -1 };
 
-// Validation errors that mean "outside the range the picker was given".
-const RANGE_VALIDATION_ERRORS = ['minDate', 'maxDate', 'minTime', 'maxTime', 'minDateTime', 'maxDateTime'];
+// Validation errors that mean "past the upper / lower end of the range the picker was given".
+const UPPER_BOUND_ERRORS = ['maxDate', 'maxTime', 'maxDateTime', 'disableFuture'];
+const LOWER_BOUND_ERRORS = ['minDate', 'minTime', 'minDateTime', 'disablePast'];
 
 /**
  * Hands out the moment instance for a value, reusing the previous one while the instant is
@@ -42,7 +44,9 @@ export const createMomentValueCache = () => {
     let lastMoment = null;
     return (value) => {
         const next = toMomentOrNull(value);
-        const key = next ? String(next.valueOf()) : 'empty';
+        // The offset is part of the key because the adapter formats a moment in its own zone: the
+        // same instant at a different offset is a different value to display.
+        const key = next ? `${next.valueOf()}|${next.utcOffset()}` : 'empty';
         if (key !== lastKey) {
             lastKey = key;
             lastMoment = next;
@@ -61,31 +65,37 @@ export const createMomentValueCache = () => {
  * capture phase is enough to tell a stepped change from a typed one — typing stays untouched,
  * because its intermediate values (year `0002` on the way to `2026`) must keep flowing through.
  *
+ * Only a step moving AWAY from the range is refused, which is why the direction is kept rather than
+ * a bare flag: a value can arrive out of range from stored data, every step from there reports the
+ * same bound, and refusing on the error alone would leave the field unable to walk back.
+ *
  * Dropping the change is all it takes to undo the step: `updateSectionValue` builds the stepped
  * sections locally and only publishes them, while the field paints `state.sections`, which is
  * rebuilt from the value prop. A step that is never published leaves the field as it was.
  */
 export const createFieldStepGuard = () => {
-    let stepping = false;
+    let stepping = 0;
     return {
-        // Raised before the field's own keydown handler steps the section, and dropped again when
-        // the step is read below. It must NOT be dropped on a microtask or from a bubble-phase
+        // Recorded before the field's own keydown handler steps the section, and cleared again when
+        // the step is read below. It must NOT be cleared on a microtask or from a bubble-phase
         // handler on the same slot: React attaches its capture-phase and bubble-phase listeners to
         // the root container as two separate native listeners, and the browser runs a microtask
         // checkpoint when each of them returns, so a microtask reset lands BEFORE the step is
         // published — and a bubble reset on `slotProps.textField` runs before the field's own
         // handler, not after it. Either way the step went through (the year walked past 2099).
         //
-        // A step key that publishes nothing (an incomplete date) therefore leaves the flag raised
-        // until the next key press. That cannot misfire on a later view selection: the calendar
-        // disables out-of-range days and the year list stops at the bounds, so a view change cannot
-        // carry a range validation error in the first place.
+        // A step key that publishes nothing (an incomplete date) therefore stays recorded until the
+        // next key press. That cannot misfire on a later view selection: the calendar disables
+        // out-of-range days and the year list stops at the bounds, so a view change cannot carry a
+        // range validation error in the first place.
         onKeyDownCapture: (event) => {
-            stepping = SECTION_STEP_KEYS.includes(event.key);
+            stepping = SECTION_STEP_DIRECTIONS[event.key] || 0;
         },
         refuses: (context) => {
-            const refused = stepping && RANGE_VALIDATION_ERRORS.includes(context?.validationError);
-            stepping = false;
+            const error = context?.validationError;
+            const bound = stepping > 0 ? UPPER_BOUND_ERRORS : LOWER_BOUND_ERRORS;
+            const refused = stepping !== 0 && bound.includes(error);
+            stepping = 0;
             return refused;
         },
     };
