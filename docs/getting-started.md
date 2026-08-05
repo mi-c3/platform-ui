@@ -81,22 +81,42 @@ npm run lint:fix
 peers (react-mde, react-tiny-virtual-list) still declare pre-React-19 ranges. Remove that
 flag once those peers are modernized.
 
-## Link into an application without publishing
+## Install into an application without publishing
 
-In the consuming app (e.g. platform-v1):
+Build this library and install it in the consuming app as a real copy, with `--install-links`:
 
 ```shell
-npm install ../platform-ui
+# in the consuming app (platform-v1 has this as `npm run ui:local`)
+npm run build --prefix ../platform-ui \
+  && rm -rf node_modules/@mic3/platform-ui \
+  && npm i ../platform-ui --install-links --no-save
 ```
 
-npm installs a `file:` directory dependency as a symlink. The app's bundler config must alias
-react/@mui/@emotion/styled-components to the app's own `node_modules` so the symlinked library
-cannot load a second copy of the singletons (platform-v1's `rspack.config.js` already does).
-Rebuild this library (`npm run build` or `npm run build:watch`) for changes to reach the app.
+Each part matters: `--install-links` copies the package instead of symlinking it and installs only
+its own `dependencies`; `--no-save` leaves the app's `package.json`/lockfile untouched (a plain
+`npm i` restores the released version); the `rm -rf` is required because the version here does not
+change between local builds, so npm reports "up to date" and keeps the previous copy. The explicit
+build is required too — `--install-links` does not run `prepack`.
+
+Rebuilding here does not reach the app on its own: re-run that line, then restart the app's dev
+server (a watch rebuild does not re-read a swapped `node_modules` package) and hard-reload the tab.
+
+**Do not use `npm link`, and do not `npm install ../platform-ui` without `--install-links`.** Both
+give the app a symlink, and a symlinked package resolves its imports from its real path — straight
+into the peer dependencies this repo installs for its own tests. Singletons the app aliases to its
+own copies (react, react-dom, styled-components, @mui/\*, @emotion/\*) survive that; **react-router
+does not**, because it is ESM-only with an `exports` map and no `main`, so it cannot be aliased to a
+directory. The app loads two copies, the router context resolves to `null`, and everything under a
+`<Route>` dies with `Cannot read properties of null (reading 'basename')`.
+
+That whole failure mode exists for one component: [`Link`](../src/components/Link.js) renders
+`MuiLink` with `component={RouterLink}` when it is given a `to`, and that single import is why
+`react-router` is a peer dependency at all. Injecting the router link from the consuming app instead
+would drop the peer entirely and make plain `npm link` safe — at the cost of a breaking change to
+`Link`'s contract, so it has not been done.
 
 Before merging app work that depends on unpublished changes here, release the new version
-(see [releasing.md](releasing.md)) and switch the app's `package.json` from
-`file:../platform-ui` back to the published version.
+(see [releasing.md](releasing.md)) and bump the app's dependency to it.
 
 ## Publish
 

@@ -23,6 +23,74 @@ const DROPPED_V3_KEYS = [
 
 export const toMomentOrNull = (value) => (value ? moment(value) : null);
 
+// Keys the v8 field steps a section value with (`useFieldRootHandleKeyDown`).
+const SECTION_STEP_KEYS = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'];
+
+// Validation errors that mean "outside the range the picker was given".
+const RANGE_VALIDATION_ERRORS = ['minDate', 'maxDate', 'minTime', 'maxTime', 'minDateTime', 'maxDateTime'];
+
+/**
+ * Hands out the moment instance for a value, reusing the previous one while the instant is
+ * unchanged. v8 detects an externally changed value by REFERENCE — both `useFieldState` and
+ * `useValueAndOpenStates` compare `value !== lastExternalValue` — and on a new reference it
+ * rebuilds the field's sections and drops the clock's shallow selection. Converting with
+ * `moment(value)` inside render therefore looks like a new external value on every parent
+ * re-render, throwing away an edit in progress.
+ */
+export const createMomentValueCache = () => {
+    let lastKey = null;
+    let lastMoment = null;
+    return (value) => {
+        const next = toMomentOrNull(value);
+        const key = next ? String(next.valueOf()) : 'empty';
+        if (key !== lastKey) {
+            lastKey = key;
+            lastMoment = next;
+        }
+        return lastMoment;
+    };
+};
+
+/**
+ * Refuses a section step that walks out of the picker's own date/time range.
+ *
+ * v8 steps a section with the arrow/page/home/end keys through that section's boundaries only:
+ * `getSectionsBoundaries` caps a 4-digit year at 9999 whatever `minDate`/`maxDate` say, so the
+ * keyboard crosses a bound the calendar refuses to (default `maxDate` is 2099-12-31). The step is
+ * published through `onChange` synchronously inside the same keydown, so a flag raised in the
+ * capture phase is enough to tell a stepped change from a typed one — typing stays untouched,
+ * because its intermediate values (year `0002` on the way to `2026`) must keep flowing through.
+ *
+ * Dropping the change is all it takes to undo the step: `updateSectionValue` builds the stepped
+ * sections locally and only publishes them, while the field paints `state.sections`, which is
+ * rebuilt from the value prop. A step that is never published leaves the field as it was.
+ */
+export const createFieldStepGuard = () => {
+    let stepping = false;
+    return {
+        // Raised before the field's own keydown handler steps the section, and dropped again when
+        // the step is read below. It must NOT be dropped on a microtask or from a bubble-phase
+        // handler on the same slot: React attaches its capture-phase and bubble-phase listeners to
+        // the root container as two separate native listeners, and the browser runs a microtask
+        // checkpoint when each of them returns, so a microtask reset lands BEFORE the step is
+        // published — and a bubble reset on `slotProps.textField` runs before the field's own
+        // handler, not after it. Either way the step went through (the year walked past 2099).
+        //
+        // A step key that publishes nothing (an incomplete date) therefore leaves the flag raised
+        // until the next key press. That cannot misfire on a later view selection: the calendar
+        // disables out-of-range days and the year list stops at the bounds, so a view change cannot
+        // carry a range validation error in the first place.
+        onKeyDownCapture: (event) => {
+            stepping = SECTION_STEP_KEYS.includes(event.key);
+        },
+        refuses: (context) => {
+            const refused = stepping && RANGE_VALIDATION_ERRORS.includes(context?.validationError);
+            stepping = false;
+            return refused;
+        },
+    };
+};
+
 const resolveSlotProps = (slotProps, ownerState) => (typeof slotProps === 'function' ? slotProps(ownerState) : slotProps);
 
 /**
@@ -52,6 +120,22 @@ export const withDisabledUnderline = (textFieldProps) => {
     const apply = (resolved) => ({
         ...resolved,
         InputProps: { disableUnderline: true, ...(resolved?.InputProps || {}) },
+    });
+    return typeof textFieldProps === 'function' ? (ownerState) => apply(textFieldProps(ownerState)) : apply(textFieldProps);
+};
+
+/**
+ * Puts a step guard's capture-phase key handler on a `slotProps.textField` bag, keeping whatever the
+ * caller already had there. Capture, because the field's own keydown handler steps the section value
+ * and publishes it in the bubble phase.
+ */
+export const withStepGuard = (textFieldProps, guard) => {
+    const apply = (resolved) => ({
+        ...resolved,
+        onKeyDownCapture: (event) => {
+            guard.onKeyDownCapture(event);
+            resolved?.onKeyDownCapture?.(event);
+        },
     });
     return typeof textFieldProps === 'function' ? (ownerState) => apply(textFieldProps(ownerState)) : apply(textFieldProps);
 };

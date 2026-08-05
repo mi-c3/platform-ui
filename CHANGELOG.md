@@ -2,6 +2,41 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.1.3
+
+### Fixed
+
+`DatePicker`, `TimePicker` and `DateTimePicker` let the keyboard walk the field's year out of the
+range the picker enforces everywhere else: at the default `maxDate` of 2099-12-31, pressing
+<kbd>↑</kbd> on the year section moved it to 2100 and published that value. `@mui/x-date-pickers`
+steps a section through *that section's own* boundaries only — `getSectionsBoundaries` caps a
+4-digit year at 9999 whatever `minDate`/`maxDate` say — while the calendar's year list stops at the
+bound. Minutes and hours never showed it because their section boundaries (59, 23) are the real
+limits.
+
+A step key (<kbd>↑</kbd>/<kbd>↓</kbd>, <kbd>PageUp</kbd>/<kbd>PageDown</kbd>,
+<kbd>Home</kbd>/<kbd>End</kbd>) that lands outside `minDate`/`maxDate`/`minTime`/`maxTime`/
+`minDateTime`/`maxDateTime` is now dropped instead of published, which also leaves the field showing
+the value it had — `updateSectionValue` builds the stepped sections locally and only publishes them,
+so a step that is never published never reaches the display. Typing is deliberately untouched: its
+intermediate values (year `0002` on the way to `2026`) still reach `onChange` and are still reported
+as invalid, exactly as before.
+
+The step is recognised by a flag raised in a capture-phase `keydown` handler on the field and
+consumed when the change is read. It is not dropped on a microtask or from a bubble-phase handler on
+the same slot: React attaches its capture-phase and bubble-phase listeners to the root container as
+two separate native listeners, and a browser runs a microtask checkpoint when each of them returns,
+so a microtask reset lands *before* the step is published — while a bubble reset on
+`slotProps.textField` runs *before* the field's own handler rather than after it. jsdom dispatches
+both phases within one stack and shows neither problem, so the flag's lifetime is pinned by unit
+tests rather than by rendering.
+
+Also fixed in the same components: the value handed to `@mui/x-date-pickers` was re-created with
+`moment(value)` on every render. v8 decides a value changed externally by comparing it **by
+reference** (`useFieldState` and `useValueAndOpenStates` both test `value !== lastExternalValue`) and
+rebuilds the field's sections and drops the clock's shallow selection when it differs, so any parent
+re-render discarded an edit in progress. The same instant now keeps the same moment instance.
+
 ## 2.1.1
 
 ### Fixed
