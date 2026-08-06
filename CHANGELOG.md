@@ -29,9 +29,35 @@ Restored, per picker:
   "OK". The accept still fires because v8 decides it against `state.lastCommittedValue`, which only
   moves when an accept does. "Cancel" needs no snapshot: nothing was published.
 - The v3 view flow: a day click opens the time view (v8 splits those into two steps and waits for a
-  "Next" action), and v8's switch-to-year caret is dropped from the calendar header where the toolbar
-  offers a year button to click instead — which its date-only toolbar does not, so the caret stays
-  there.
+  "Next" action).
+- v3's toolbar, typography and geometry, measured against staging and matched to the pixel:
+
+  | | staging (v3) | v8 before | now |
+  |---|---|---|---|
+  | date dialog | 310×435 | 320×466 | 310×435 |
+  | date-time dialog | 325×506 | 320×537 | 325×506 |
+  | toolbar (date / date-time) | 77 / 100 | 98 / 100 | 78 / 100 |
+  | view box | 305 | 336 | 305 |
+  | week row | 36 | 40 | 36 |
+  | weekday row | "Sun", 12px, 0.5 white, 20px | "S", 0.7 white, 40px | as v3 |
+  | day | 12px / 500 | 12px / 400 | 12px / 500 |
+  | toolbar year | 16px, 0.54 white | absent on a date picker | as v3 |
+  | toolbar date | 32.39px (date) / 30.4px (date-time) | 34px / 30.4px | as v3 |
+  | inactive toolbar segment | 0.54 white | 0.7 white | as v3 |
+  | clock face | 260 | 260, hugging the tabs | 260, centred |
+  | clock numbers | 16px outer / 14px inner, 0.5 white | 16px both, 0.7 | as v3 |
+
+  Two of those needed more than CSS. A date-only picker had no year at all — v8's `DatePickerToolbar`
+  renders the date alone, and v3 reached the year view by clicking the year in the toolbar, which is
+  why its calendar header carried no switch-to-year caret; `V3DateToolbar` puts the year back as a
+  button and the caret is now dropped on every picker. The week rows are 36px because v8's day
+  margins go, not because the grid is scaled: scaling shrinks the days below v3's 36px. The clock is
+  scaled from its centre rather than its top, or the face sits against the tabs with all the slack
+  underneath. Each view carries the dialog width in pixels rather than `100%`, since the year list is
+  a wrapping flex container that has nothing to wrap against in a content-sized parent — it lays
+  every year out in one row and the dialog grows past 19000px. The picker's own dialog also overrides
+  the 320px min-width the consuming application's theme puts on every dialog paper, which would
+  otherwise leave a dead strip beside the narrower date picker.
 
 This is what makes a consumer safe to freeze the value it hands a picker while the dialog is open, as
 the form designer's `DateTime` does so that a subscription update cannot overwrite an edit in

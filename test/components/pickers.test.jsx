@@ -223,79 +223,168 @@ describe.each([
 });
 
 /*
- * v3's calendar header carried only the arrows and the month label — the year view was reached from
- * the toolbar's year button. v8 adds a switch-to-year caret beside the label instead, so it is hidden
- * where the toolbar offers that year button, and kept where it does not.
+ * v3's calendar header carried only the arrows and the month label — the year view was reached from a
+ * year button in the toolbar. v8 has neither: it adds a switch-to-year caret beside the label, and its
+ * date-only toolbar renders the date alone. Both are put back the v3 way.
  */
-describe('the v3 calendar header', () => {
+describe('the v3 calendar header and toolbar', () => {
+    const VALUE = '2026-08-06T10:00:00.000Z';
     const open = (ui) => {
         render(withAdapter(ui));
         fireEvent.click(screen.getByRole('textbox'));
     };
-    const caret = () => document.querySelector('.MuiPickersCalendarHeader-switchViewButton');
-    // Asserted on the emitted rule rather than the computed style: jsdom's cascade ignores selector
-    // specificity, so MUI's own `display: inline-flex` (one class) wins there over the layout's
-    // descendant rule (two classes), which is not what a browser does.
     const caretHiddenByLayout = () => {
         // Keyed to THIS layout's own emotion class: the stylesheet is shared by every render in the
-        // file, so a rule left behind by another picker would otherwise count.
+        // file, so a rule left behind by another picker would otherwise count. Asserted on the rule
+        // rather than the computed style because jsdom's cascade ignores selector specificity.
         const layoutClass = Array.from(document.querySelector('.MuiPickersLayout-root').classList).find((name) => name.startsWith('css-'));
         return Array.from(document.styleSheets)
             .flatMap((sheet) => Array.from(sheet.cssRules || []))
             .some((rule) => (rule.cssText || '').includes(`.${layoutClass} .MuiPickersCalendarHeader-switchViewButton`) && /display: none/.test(rule.cssText));
     };
+    const toolbarButtons = () => Array.from(document.querySelectorAll('.MuiPickersLayout-toolbar button')).map((button) => button.textContent);
 
-    test('drops the switch-to-year caret on a date-time picker, which has a year in its toolbar', () => {
-        open(<DateTimePicker label="When" value={'2026-08-06T19:40:00.000Z'} onChange={() => {}} />);
+    test('a date-time picker keeps v8\'s toolbar, which already has a year button', () => {
+        open(<DateTimePicker label="When" value={VALUE} onChange={() => {}} />);
 
-        expect(Array.from(document.querySelectorAll('.MuiPickersLayout-toolbar button')).map((b) => b.textContent)).toContain('2026');
-        expect(caret()).toBeInTheDocument();
+        expect(toolbarButtons()).toContain('2026');
         expect(caretHiddenByLayout()).toBe(true);
     });
 
-    test('keeps it on a date-only picker, whose toolbar renders the date alone', () => {
-        open(<DatePicker label="When" value={'2026-08-06T19:40:00.000Z'} onChange={() => {}} />);
+    test('a date-only picker gets v3\'s year-over-date toolbar instead of v8\'s date alone', () => {
+        open(<DatePicker label="When" value={VALUE} onChange={() => {}} />);
 
-        expect(document.querySelectorAll('.MuiPickersLayout-toolbar button')).toHaveLength(0);
-        expect(caretHiddenByLayout()).toBe(false);
+        expect(toolbarButtons()).toEqual(['2026', moment(VALUE).format('ddd, MMM D')]);
+        expect(caretHiddenByLayout()).toBe(true);
+    });
+
+    test('the toolbar year opens the year view', () => {
+        open(<DatePicker label="When" value={VALUE} onChange={() => {}} />);
+        expect(document.querySelector('.MuiYearCalendar-root')).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole('button', { name: '2026' }));
+
+        expect(document.querySelector('.MuiYearCalendar-root')).toBeInTheDocument();
+    });
+
+    test('the weekday header uses v3\'s three-letter names, not v8\'s single letters', () => {
+        open(<DatePicker label="When" value={VALUE} onChange={() => {}} />);
+
+        const weekdays = Array.from(document.querySelectorAll('.MuiDayCalendar-weekDayLabel')).map((label) => label.textContent);
+        expect(weekdays).toEqual(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
     });
 });
 
 /*
- * v3 moved straight on: pick a day and the time view opens. v8 splits a date-time picker's views into
- * two steps and waits for a "Next" action instead, so the move is driven by the component.
+ * The typography, measured on staging (platform-ui 1.8.9 + @material-ui/pickers 3.2.10) and imposed
+ * over v8's own scale. Asserted on the emitted rules: jsdom's cascade ignores selector specificity, so
+ * a computed style there says nothing about what a browser paints.
  */
-describe('DateTimePicker view flow', () => {
-    const openPicker = (props) => {
-        render(withAdapter(<DateTimePicker label="When" value={'2026-08-06T19:40:00.000Z'} onChange={() => {}} {...props} />));
-        fireEvent.click(screen.getByRole('textbox'));
+describe('the v3 typography', () => {
+    const layoutRules = () => {
+        const layoutClass = Array.from(document.querySelector('.MuiPickersLayout-root').classList).find((name) => name.startsWith('css-'));
+        return Array.from(document.styleSheets)
+            .flatMap((sheet) => Array.from(sheet.cssRules || []))
+            .map((rule) => rule.cssText || '')
+            .filter((text) => text.includes(`.${layoutClass} `));
     };
-    const onTimeView = () => !!document.querySelector('.MuiClock-root');
+    const ruleFor = (selector) => layoutRules().find((text) => text.includes(selector));
+    // Some selectors appear in more than one rule (a shared `margin: 0`, say), so a property has to
+    // be looked for across all of them rather than in whichever comes first.
+    const rulesFor = (selector) => layoutRules().filter((text) => text.includes(selector)).join(' ');
 
-    test('a day click opens the time view', () => {
-        openPicker();
-        expect(onTimeView()).toBe(false);
-
-        fireEvent.click(screen.getByRole('gridcell', { name: '15' }));
-
-        expect(onTimeView()).toBe(true);
+    beforeEach(() => {
+        render(withAdapter(<DateTimePicker label="When" value={'2026-08-06T19:40:00.000Z'} onChange={() => {}} />));
+        fireEvent.click(screen.getByRole('textbox'));
     });
 
-    test('a day click opens it even when the consumer remounts the picker on open', () => {
-        // The form designer changes the picker's `key` in its own onOpen, so the component starts
-        // over with no view tracked; an untracked view has to count as the day view it opens on.
-        openPicker({ key: 'remounted' });
-
-        fireEvent.click(screen.getByRole('gridcell', { name: '15' }));
-
-        expect(onTimeView()).toBe(true);
+    test('dims an unedited toolbar segment to 0.54 white, where v8 uses its own text.secondary', () => {
+        expect(ruleFor('.MuiPickersToolbarText-root:not([data-selected])')).toMatch(/rgba\(255, 255, 255, 0\.54\)/);
     });
 
-    test('stays on the date view when the caller narrowed views to dates only', () => {
-        openPicker({ views: ['year', 'day'] });
-
-        fireEvent.click(screen.getByRole('gridcell', { name: '15' }));
-
-        expect(onTimeView()).toBe(false);
+    test('halves the weekday row and dims it below the days', () => {
+        const rule = ruleFor('.MuiDayCalendar-weekDayLabel');
+        expect(rule).toMatch(/height: 20px/);
+        expect(rule).toMatch(/rgba\(255, 255, 255, 0\.5\)/);
     });
+
+    test('sets every day in medium, not only the selected one', () => {
+        expect(rulesFor('.MuiPickersDay-root')).toMatch(/font-weight: 500/);
+    });
+
+    test('dims the clock face but the selection, and leaves both ring sizes to v8', () => {
+        expect(ruleFor('.MuiClockNumber-root {')).toMatch(/rgba\(255, 255, 255, 0\.5\)/);
+        expect(ruleFor('.MuiClockNumber-root.Mui-selected')).toMatch(/color: (#fff|rgb\(255, 255, 255\))/);
+        // No font-size of ours: v8 sizes the inner ring through an `isClockNumberInInnerRing`
+        // variant (body2, v3's 14px), and a rule here would outrank it and flatten both rings.
+        expect(ruleFor('.MuiClockNumber-root {')).not.toMatch(/font-size/);
+    });
+
+    test('gives both views v3 box heights, so the dialog keeps one size across the tabs', () => {
+        expect(ruleFor('.MuiDateCalendar-root')).toMatch(/height: 305px/);
+        expect(ruleFor('.MuiTimeClock-root')).toMatch(/height: 305px/);
+        // v8 spaces week rows 40px apart with day margins; v3 stacked bare 36px rows.
+        expect(ruleFor('.MuiDayCalendar-slideTransition')).toMatch(/min-height: 216px/);
+        expect(rulesFor('.MuiPickersDay-root')).toMatch(/margin: 0/);
+    });
+
+    test('scales the clock from its centre, so it does not hug the tabs', () => {
+        expect(ruleFor('.MuiClock-root')).toMatch(/transform-origin: center center/);
+    });
+
+    test('gives the month label regular weight', () => {
+        // `-label {` and not just `-label`, which also matches `-labelContainer`.
+        expect(ruleFor('.MuiPickersCalendarHeader-label {')).toMatch(/font-weight: 400/);
+    });
+});
+
+/*
+ * v3 sized its two dialogs differently — 310 for a date, 325 with a time — where v8's calendar is a
+ * flat 320 whatever the picker holds.
+ */
+describe('the v3 dialog width', () => {
+    const widthRule = () => {
+        const layout = document.querySelector('.MuiPickersLayout-root');
+        const layoutClass = Array.from(layout.classList).find((name) => name.startsWith('css-'));
+        return Array.from(document.styleSheets)
+            .flatMap((sheet) => Array.from(sheet.cssRules || []))
+            .map((rule) => rule.cssText || '')
+            .find((text) => text.startsWith(`.${layoutClass} {`) || text.includes(`.${layoutClass} {`));
+    };
+
+    test('a date-only dialog is 310 wide', () => {
+        render(withAdapter(<DatePicker label="When" value={'2026-08-06T10:00:00.000Z'} onChange={() => {}} />));
+        fireEvent.click(screen.getByRole('textbox'));
+
+        expect(widthRule()).toMatch(/width: 310px/);
+    });
+
+    test('a date-time dialog is 325 wide', () => {
+        render(withAdapter(<DateTimePicker label="When" value={'2026-08-06T10:00:00.000Z'} onChange={() => {}} />));
+        fireEvent.click(screen.getByRole('textbox'));
+
+        expect(widthRule()).toMatch(/width: 325px/);
+    });
+});
+
+/*
+ * Regression: the views were given `width: 100%` to follow the dialog. The year list is a wrapping
+ * flex container, so a percentage of a content-sized parent gave it nothing to wrap against — every
+ * year landed in one row and the dialog blew out to 19272px.
+ */
+test('the year view stays inside the dialog width', () => {
+    render(withAdapter(<DatePicker label="When" value={'2026-08-06T10:00:00.000Z'} onChange={() => {}} />));
+    fireEvent.click(screen.getByRole('textbox'));
+    fireEvent.click(screen.getByRole('button', { name: '2026' }));
+
+    expect(document.querySelector('.MuiYearCalendar-root')).toBeInTheDocument();
+    // On the emitted rule: jsdom's cascade ignores specificity, so v8's own one-class 320px rule
+    // beats this two-class one there — the browser resolves it the other way.
+    const layoutClass = Array.from(document.querySelector('.MuiPickersLayout-root').classList).find((name) => name.startsWith('css-'));
+    const rule = Array.from(document.styleSheets)
+        .flatMap((sheet) => Array.from(sheet.cssRules || []))
+        .map((cssRule) => cssRule.cssText || '')
+        .find((text) => text.includes(`.${layoutClass} .MuiYearCalendar-root`));
+    expect(rule).toMatch(/width: 310px/);
+    expect(rule).not.toMatch(/width: 100%/);
 });

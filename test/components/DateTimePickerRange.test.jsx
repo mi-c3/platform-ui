@@ -290,8 +290,9 @@ describe('the modal pickers', () => {
 
         fireEvent.click(screen.getByRole('tab', { name: 'pick time' }));
 
-        // Pinned to the same box, so the dialog does not resize between the tabs.
-        expect(getComputedStyle(document.querySelector('.MuiTimeClock-root')).height).toBe('336px');
+        // Pinned to the same box, so the dialog does not resize between the tabs — v3's 305px box
+        // since 2.1.4, which also makes the dialog v3's height.
+        expect(getComputedStyle(document.querySelector('.MuiTimeClock-root')).height).toBe('305px');
         // v8 hardcodes CLOCK_WIDTH at 220; v3's face was 260 across.
         expect(getComputedStyle(document.querySelector('.MuiClock-root')).transform).toBe(`scale(${260 / 220})`);
     });

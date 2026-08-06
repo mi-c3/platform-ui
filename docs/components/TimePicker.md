@@ -53,6 +53,9 @@ The picker renders what `@material-ui/pickers` v3 did, which is what the applica
 - The action bar is `Clear` (when `clearable`) / `Today` (when `showTodayButton`) / `Cancel` / `OK`.
 - The field keeps showing the value that was last committed — never the draft — so a picker opened on
   an empty field stays empty until OK.
+- v3's proportions and typography, matched against staging to the pixel (dialog 325×506, a 305px view box,
+  36px week rows, "Sun"-style weekday names, and the toolbar/clock type scale). The figures live in
+  `src/utils/pickers/v3Modal.js`; the CHANGELOG entry for 2.1.4 tabulates them against v8's own.
 
 That commit point is what makes a consumer safe to freeze the value it passes down while the dialog is
 open (the form designer's `DateTime` does, so a subscription update cannot overwrite an edit in

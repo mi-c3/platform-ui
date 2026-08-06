@@ -4,7 +4,10 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
 import { mergeSlotProps, splitLegacyPickerProps, withDisabledUnderline } from 'utils/pickers/pickerProps';
 import V3ModalPickerBase from 'utils/pickers/V3ModalPickerBase';
-import { formatPickerValue, v3ModalActions, v3ModalPickerSlotProps, v3ModalPickerSlots } from 'utils/pickers/v3Modal';
+import {
+    V3DateToolbar, V3_DATE_DIALOG_WIDTH, V3_DATE_TOOLBAR_HEIGHT, formatPickerValue, v3DayOfWeekFormatter, v3ModalActions,
+    v3ModalPickerSlotProps, v3ModalPickerSlots,
+} from 'utils/pickers/v3Modal';
 
 // v3's date field: "Aug 6th 2026". A caller's `format` wins over it.
 const V3_DATE_FORMAT = 'MMM Do YYYY';
@@ -51,6 +54,7 @@ class DatePicker extends V3ModalPickerBase {
             <MobileDatePicker
                 format={format}
                 placeholder=""
+                dayOfWeekFormatter={v3DayOfWeekFormatter}
                 enableAccessibleFieldDOMStructure={false}
                 // v3's standalone fields carried no trigger of their own — the field WAS the
                 // trigger. A caller that wants one (the range modal keeps its leading calendar
@@ -63,10 +67,17 @@ class DatePicker extends V3ModalPickerBase {
                 open={this.open}
                 view={this.view}
                 onViewChange={this.onViewChange}
-                slots={{ ...v3ModalPickerSlots(), ...slots }}
+                slots={{ ...v3ModalPickerSlots(), toolbar: V3DateToolbar, ...slots }}
                 slotProps={mergeSlotProps(
                     {
-                        ...v3ModalPickerSlotProps({ actions: v3ModalActions({ clearable, showTodayButton }) }),
+                        ...v3ModalPickerSlotProps({
+                            actions: v3ModalActions({ clearable, showTodayButton }),
+                            // The year lives in the toolbar now, as it did in v3, so the caret beside
+                            // the month label has nothing left to offer.
+                            hideSwitchViewButton: true,
+                            toolbarHeight: V3_DATE_TOOLBAR_HEIGHT,
+                            dialogWidth: V3_DATE_DIALOG_WIDTH,
+                        }),
                         textField: {
                             onClick: this.onOpen,
                             displayValue: formatPickerValue(this.toValue(value), format),

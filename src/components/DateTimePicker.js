@@ -6,7 +6,8 @@ import { bind } from 'utils/decorators/decoratorUtils';
 import { mergeSlotProps, splitLegacyPickerProps, withDisabledUnderline } from 'utils/pickers/pickerProps';
 import V3ModalPickerBase from 'utils/pickers/V3ModalPickerBase';
 import {
-    formatPickerValue, v3ModalActions, v3ModalPickerSlotProps, v3ModalPickerSlots, v3ModalPickerViewRenderers,
+    formatPickerValue, v3DayOfWeekFormatter, v3ModalActions, v3ModalPickerSlotProps, v3ModalPickerSlots,
+    v3ModalPickerViewRenderers,
 } from 'utils/pickers/v3Modal';
 
 // v3's date-time field: "Aug 6th 2026, 19:40". A caller's `format` wins over it.
@@ -93,6 +94,7 @@ class DateTimePicker extends V3ModalPickerBase {
                 format={format}
                 // v8 derives a placeholder from the format ("MMM DD YYYY, hh:mm"); v3 showed none.
                 placeholder=""
+                dayOfWeekFormatter={v3DayOfWeekFormatter}
                 // A single input is the v3 field, and the only structure ModalPickerField can be.
                 enableAccessibleFieldDOMStructure={false}
                 // v3's standalone fields carried no trigger of their own — the field WAS the
