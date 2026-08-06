@@ -5,9 +5,7 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
-import {
-    createFieldStepGuard, createMomentValueCache, splitLegacyPickerProps, withDisabledUnderline, withStepGuard,
-} from 'utils/pickers/pickerProps';
+import { createMomentValueCache, splitLegacyPickerProps, withDisabledUnderline } from 'utils/pickers/pickerProps';
 
 class DateTimePicker extends PureComponent {
     static propTypes = {
@@ -23,15 +21,8 @@ class DateTimePicker extends PureComponent {
 
     toValue = createMomentValueCache();
 
-    stepGuard = createFieldStepGuard();
-
     @bind
-    onChange(value, context) {
-        // A keyboard step past minDate/maxDate is dropped instead of published — the calendar
-        // cannot cross those bounds either.
-        if (this.stepGuard.refuses(context)) {
-            return;
-        }
+    onChange(value) {
         const { onChange, name, type } = this.props;
         onChange && onChange(createEvent('change', { target: { name, value, type } }));
     }
@@ -43,7 +34,7 @@ class DateTimePicker extends PureComponent {
         // an action bar; that is v8's mobile picker. Anything else stays on the responsive one.
         const Picker = variant === 'dialog' ? MobileDateTimePicker : DTPMui;
         const { pickerProps, slots, slotProps } = splitLegacyPickerProps(legacyProps);
-        slotProps.textField = withStepGuard(withDisabledUnderline(slotProps.textField), this.stepGuard);
+        slotProps.textField = withDisabledUnderline(slotProps.textField);
         return (
             <Picker
                 {...pickerProps}
