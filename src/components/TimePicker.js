@@ -26,6 +26,9 @@ class TimePicker extends V3ModalPickerBase {
             onClick, value, onChange, onAccept, onClose, onOpen, onViewChange, type, variant, keyboardInput, commitOn, open,
             showTodayButton, view, format = V3_TIME_FORMAT, ...legacyProps
         } = this.props;
+        // Read, not destructured out: `splitLegacyPickerProps` needs it in the bag to map onto
+        // `slotProps.field.clearable` (the field's own clear adornment), and v3 also put a "Clear"
+        // in the action bar for a clearable picker.
         const { clearable } = this.props;
         const { pickerProps, slots, slotProps } = splitLegacyPickerProps(legacyProps);
         slotProps.textField = withDisabledUnderline(slotProps.textField);
