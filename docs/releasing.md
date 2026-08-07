@@ -63,12 +63,15 @@ README.md, LICENSE, and `build/index.js` / `index.css` with their source maps.
 - Tags must be `vX.Y.Z` exactly. Bare `2.0.0`-style tags (used historically) still run the
   normal tag pipeline but are skipped by the publish job.
 - A failed publish burns that version — fix the problem, bump the patch, retag.
-- **Re-QA the `DateTimePickerRange` modal whenever `@mui/x-date-pickers` is bumped.** Its
-  "From"/"To" pickers reproduce the v3 modal through CSS and controlled state keyed to MUI X
-  internals (view/clock dimensions, `.MuiPickersLayout-*` classes, the view-step behaviour). The
-  tests assert those rules are emitted, not that they still match, so a renamed class or a changed
-  dimension degrades the modal silently. See the Notes in
-  [components/DateTimePickerRange.md](components/DateTimePickerRange.md).
+- **Re-QA the date/time pickers whenever `@mui/x-date-pickers` is bumped.** `DatePicker`,
+  `TimePicker`, `DateTimePicker` and the `DateTimePickerRange` modal reproduce the v3 modal on top
+  of MUI X behaviour that is not part of its public contract: the two-step view grouping the
+  pickers advance across themselves, the picker context hooks the action bar and field slots read
+  (`usePickerActionsContext`, `usePickerContext`), and `.MuiPickersLayout-*` classes for the toolbar
+  and tab background. The jsdom tests cover the commit point and the field, but not the clock (MUI
+  derives its selection from pointer geometry) and not appearance, so check by hand: open each
+  picker, pick a day and an hour, press OK, press Cancel, and press OK with nothing selected. See
+  the Behaviour section in [components/DatePicker.md](components/DatePicker.md).
 
 ## Consumer registry configuration
 

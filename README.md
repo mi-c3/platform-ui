@@ -91,6 +91,10 @@ version (tag `vX.Y.Z` → CI publishes to the internal GitLab package registry, 
   `createGenerateClassName`.
 * `DatePicker`/`TimePicker`/`DateTimePicker` wrap `@mui/x-date-pickers` v8 but keep the
   legacy v3 wrapper props (`inputVariant`, `clearable`, `showTodayButton`,
-  `TextFieldComponent`, string values) — see `src/utils/pickers/pickerProps.js`.
+  `TextFieldComponent`, string values) — see `src/utils/pickers/pickerProps.js` — and, since
+  2.1.4, the v3 modal *interaction*: a read-only field that opens a dialog on a click anywhere
+  in it, and selections held as a draft until the action bar's OK
+  (`src/utils/pickers/v3Modal.js`, `V3ModalPickerBase.js`). Their appearance is v8's own.
+  `keyboardInput` opts into v8's editable field instead.
 * `Dropzone`/`Upload*` run on react-dropzone 14; a string `accept` prop is still supported.
 * React 19: no `defaultProps` on function components — use default parameters.
