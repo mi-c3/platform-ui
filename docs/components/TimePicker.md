@@ -51,11 +51,15 @@ The picker renders what `@material-ui/pickers` v3 did, which is what the applica
 - A selection is a **draft**: it lights up in the dialog, but nothing reaches `onChange` until the
   action bar's **OK**. **Cancel** discards the draft and leaves the value exactly as it was.
 - The action bar is `Clear` (when `clearable`) / `Today` (when `showTodayButton`) / `Cancel` / `OK`.
+- **OK with nothing selected commits the value the dialog opened on** — so a field that seeds "now"
+  (the form designer's does) commits "now", as v3 did. v8 would commit nothing there.
 - The field keeps showing the value that was last committed — never the draft — so a picker opened on
   an empty field stays empty until OK.
-- v3's proportions and typography, matched against staging to the pixel (dialog 325×506, a 305px view box,
-  36px week rows, "Sun"-style weekday names, and the toolbar/clock type scale). The figures live in
-  `src/utils/pickers/v3Modal.js`; the CHANGELOG entry for 2.1.4 tabulates them against v8's own.
+
+What is deliberately NOT reproduced is v3's exact geometry and type scale — dialog width, toolbar and
+view heights, clock diameter, font sizes and dim levels. Matching those meant CSS
+against MUI's internal DOM, which breaks silently on a MUI upgrade; the picker takes v8's own metrics
+instead — and so does `DateTimePickerRange`, whose modal opens these same pickers.
 
 That commit point is what makes a consumer safe to freeze the value it passes down while the dialog is
 open (the form designer's `DateTime` does, so a subscription update cannot overwrite an edit in
