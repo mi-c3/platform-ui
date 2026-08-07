@@ -2,6 +2,28 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## Unreleased
+
+### Fixed
+
+`DatePicker`, `TimePicker` and `DateTimePicker` open an EMPTY field on the current date/time again,
+so "OK" with nothing selected commits it. 2.1.4 restored that commit for a picker whose value was
+already seeded, but a genuinely empty one opened on nothing and committed nothing — v3 fell back to
+`initialFocusedDate ?? now` inside `usePickerState`, so pressing OK always produced a value. The
+standalone `time` field in the form designer was the visible case: its consumer
+(`containers/Designer/Form/components/TimePicker.js`) seeds nothing, where the `date`/`dateTime`
+fields' `DateTime` seeds its own opening value and so already behaved.
+
+The fallback is seeded once, into the draft, when the dialog opens — not derived in render, which
+v8 would read as an externally changed value and use to reset the views mid-edit. It is moved inside
+`minDate`/`maxDate` when now falls outside them (`boundedNow`), so the picker never opens a view in
+which every day is disabled. The field still shows only what the consumer has committed, so an empty
+field stays empty until OK, and Cancel leaves it empty.
+
+Unaffected: `keyboardInput`, and `commitOn="change"` — a caller that stages its own value
+(`DateTimePickerRange`) already opens each end on "now" and restores it on Cancel. So is a caller
+driving `open` itself, since MUI raises `onOpen` only for an open it performed.
+
 ## 2.1.4
 
 ### Changed
