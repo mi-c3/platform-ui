@@ -21,8 +21,12 @@ class DatePicker extends V3ModalPickerBase {
         const {
             // eslint-disable-next-line no-unused-vars
             onClick, value, onChange, onAccept, onClose, onViewChange, type, variant, keyboardInput, commitOn,
-            showTodayButton, view, format = V3_DATE_FORMAT, ...legacyProps
+            showTodayButton, view, format: formatProp, ...legacyProps
         } = this.props;
+        // `||`, not a default parameter: a default only covers `undefined`, and moment renders a
+        // FALSY format as an ISO string — a `null` from a consumer would put the date, time and
+        // offset in the field. v3 defaulted with `||`.
+        const format = formatProp || V3_DATE_FORMAT;
         // Read, not destructured out: `splitLegacyPickerProps` needs it in the bag to map onto
         // `slotProps.field.clearable` (the field's own clear adornment), and v3 also put a "Clear"
         // in the action bar for a clearable picker.

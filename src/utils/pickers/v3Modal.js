@@ -109,8 +109,14 @@ export const MODAL_PICKER_FORMAT = 'DD, MMM YYYY HH:mm';
 /** v3's weekday header: "Sun", "Mon", ... — v8 narrows it to a single letter. */
 export const v3DayOfWeekFormatter = (date) => moment(date).format('ddd');
 
-/** Formats what the field shows. The picker's own `format` wins; each one passes its v3 default. */
-export const formatPickerValue = (date, format = MODAL_PICKER_FORMAT) => (date ? moment(date).format(format) : '');
+/**
+ * Formats what the field shows. The picker's own `format` wins; each one passes its v3 default.
+ *
+ * `||` rather than a default parameter, which only covers `undefined`: moment renders a FALSY format
+ * as an ISO-8601 string, so a `null` reaching here puts "2026-08-07T19:54:00+05:00" in the field —
+ * a time on a date picker, whatever the caller asked for. v3 defaulted with `||` and never showed it.
+ */
+export const formatPickerValue = (date, format) => (date ? moment(date).format(format || MODAL_PICKER_FORMAT) : '');
 
 /**
  * v3 modal pickers: a read-only field, and a dialog with the date/time tabs plus an action bar.

@@ -321,3 +321,36 @@ describe.each([
         expect(onChange.mock.calls[0][0].target.value).toBeNull();
     });
 });
+
+/*
+ * A falsy `format`. Consumers store one, and the form designer's "Format predefined" writes `null`
+ * into it whenever "Custom" is selected. moment renders a falsy format as ISO-8601, so a default
+ * parameter — which only fires for `undefined` — let that reach the field as
+ * "2026-08-07T19:54:00+05:00": a time on a date picker, and dashes whatever the caller chose.
+ */
+describe.each([
+    ['DatePicker', DatePicker, 'MMM Do YYYY'],
+    ['TimePicker', TimePicker, 'HH:mm'],
+    ['DateTimePicker', DateTimePicker, 'MMM Do YYYY, HH:mm'],
+])('%s falsy format', (name, Picker, fallback) => {
+    const VALUE = '2026-08-07T14:54:00.000Z';
+    const displayed = (props) => {
+        render(withAdapter(<Picker label="When" name="when" value={VALUE} onChange={() => {}} {...props} />));
+        return document.querySelector('input').value;
+    };
+
+    test.each([
+        ['null', null],
+        ['an empty string', ''],
+        ['undefined', undefined],
+    ])('falls back to the v3 default when the format is %s', (label, format) => {
+        const value = displayed({ format });
+
+        expect(value).toBe(moment(VALUE).format(fallback));
+        expect(value).not.toContain('T');
+    });
+
+    test('still lets a real format win', () => {
+        expect(displayed({ format: 'DD.MM.YYYY' })).toBe(moment(VALUE).format('DD.MM.YYYY'));
+    });
+});
