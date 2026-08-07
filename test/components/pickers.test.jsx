@@ -223,6 +223,35 @@ describe.each([
 });
 
 /*
+ * What the empty-field fallback puts on screen, not just what it commits: v3 opened on the current
+ * date with it selected. Seeding a date the picker itself forbids would render a view with every day
+ * disabled, which is why the fallback is bounded.
+ */
+describe.each([
+    ['DatePicker', DatePicker],
+    ['DateTimePicker', DateTimePicker],
+])('%s empty-field fallback', (name, Picker) => {
+    const openPicker = (props) => {
+        render(withAdapter(<Picker label="When" name="when" value={null} onChange={() => {}} {...props} />));
+        fireEvent.click(screen.getByRole('textbox'));
+        return document.querySelector('.MuiPickersDay-root.Mui-selected');
+    };
+
+    test('opens the calendar on today, with today selected', () => {
+        expect(openPicker()).toHaveTextContent(String(moment().date()));
+    });
+
+    test('opens on maxDate instead when today is past it, on a day that can be picked', () => {
+        const max = moment().subtract(2, 'years').startOf('month').add(9, 'days');
+
+        const selected = openPicker({ maxDate: max.toDate() });
+
+        expect(selected).toHaveTextContent(String(max.date()));
+        expect(selected).not.toBeDisabled();
+    });
+});
+
+/*
  * v3 committed the date the dialog was opened on when "OK" was pressed with nothing selected — a
  * field that seeds "now" (the form designer's does) therefore commits "now". v8 skips `onAccept`
  * when the value matches what it last committed, so the action bar owns the commit here.
@@ -246,6 +275,29 @@ describe.each([
 
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(moment(onChange.mock.calls[0][0].target.value).toISOString()).toBe(moment(SEEDED).toISOString());
+    });
+
+    test('commits "now" when the field was empty: v3 opened an empty picker on the current date', () => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={null} onChange={onChange} />));
+        fireEvent.click(screen.getByRole('textbox'));
+
+        clickOk();
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        const published = onChange.mock.calls[0][0].target.value;
+        expect(Math.abs(published.valueOf() - Date.now())).toBeLessThan(5000);
+    });
+
+    test('leaves an empty field empty when that dialog is cancelled', () => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={null} onChange={onChange} />));
+        fireEvent.click(screen.getByRole('textbox'));
+
+        fireEvent.click(Array.from(document.querySelectorAll('.MuiPickersLayout-actionBar button')).find((b) => b.textContent === 'Cancel'));
+
+        expect(onChange).not.toHaveBeenCalled();
+        expect(document.querySelector('input').value).toBe('');
     });
 
     test('commits nothing more than that: Cancel after opening publishes nothing', () => {

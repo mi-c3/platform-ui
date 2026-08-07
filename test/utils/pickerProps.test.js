@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { createMomentValueCache, splitLegacyPickerProps, withDisabledUnderline } from '../../src/utils/pickers/pickerProps';
+import { boundedNow, createMomentValueCache, splitLegacyPickerProps, withDisabledUnderline } from '../../src/utils/pickers/pickerProps';
 
 const CustomInput = () => null;
 
@@ -150,4 +150,32 @@ describe('createMomentValueCache', () => {
         expect(toValue('')).toBeNull();
     });
 
+});
+
+describe('boundedNow', () => {
+    test('is "now" when there are no bounds, or when now already satisfies them', () => {
+        expect(Math.abs(boundedNow().valueOf() - Date.now())).toBeLessThan(5000);
+        expect(Math.abs(boundedNow('1970-01-01', '2999-01-01').valueOf() - Date.now())).toBeLessThan(5000);
+    });
+
+    test('moves up to minDate and down to maxDate, so the picker never opens on a forbidden date', () => {
+        expect(boundedNow('2999-01-31').toISOString()).toBe(moment('2999-01-31').toISOString());
+        expect(boundedNow(null, '2020-01-31').toISOString()).toBe(moment('2020-01-31').toISOString());
+    });
+
+    test('takes a bound in any of the shapes the legacy API accepts', () => {
+        const max = new Date('2020-01-31T00:00:00.000Z');
+
+        expect(boundedNow(null, max).valueOf()).toBe(max.valueOf());
+        expect(boundedNow(null, moment(max)).valueOf()).toBe(max.valueOf());
+        expect(boundedNow(null, max.toISOString()).valueOf()).toBe(max.valueOf());
+    });
+
+    test('does not hand back a bound the caller could mutate', () => {
+        const max = moment('2020-01-31');
+
+        boundedNow(null, max).add(1, 'year');
+
+        expect(max.year()).toBe(2020);
+    });
 });
