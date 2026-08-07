@@ -14,8 +14,8 @@ const V3_TIME_FORMAT = 'HH:mm';
 
 /**
  * The v3 time picker: a read-only field that opens a modal on a click anywhere in it, an analog clock
- * whose hour selection moves on to the minutes, and a selection that stays a draft until "OK"
- * accepts it. `keyboardInput` opts into v8's editable field in an inline popper instead.
+ * whose hour selection moves on to the minutes, and a selection that stays a draft until "OK" accepts
+ * it. `keyboardInput` opts into v8's editable field in an inline popper instead.
  */
 class TimePicker extends V3ModalPickerBase {
     firstView = 'hours';
@@ -23,7 +23,7 @@ class TimePicker extends V3ModalPickerBase {
     render() {
         const {
             // eslint-disable-next-line no-unused-vars
-            onClick, value, onChange, onAccept, onClose, onOpen, onViewChange, type, variant, keyboardInput, commitOn, open,
+            onClick, value, onChange, onAccept, onClose, onViewChange, type, variant, keyboardInput, commitOn,
             showTodayButton, view, format = V3_TIME_FORMAT, ...legacyProps
         } = this.props;
         // Read, not destructured out: `splitLegacyPickerProps` needs it in the bag to map onto
@@ -44,7 +44,6 @@ class TimePicker extends V3ModalPickerBase {
                     onChange={this.onChange}
                     onAccept={onAccept}
                     onClose={onClose}
-                    onOpen={onOpen}
                     onViewChange={onViewChange}
                 />
             );
@@ -55,26 +54,19 @@ class TimePicker extends V3ModalPickerBase {
                 format={format}
                 placeholder=""
                 enableAccessibleFieldDOMStructure={false}
-                // v3's standalone fields carried no trigger of their own — the field WAS the
-                // trigger. A caller that wants one (the range modal keeps its leading calendar
-                // button) supplies an open-picker slot, and then it stays.
                 disableOpenPicker={!slots.openPickerIcon && !slots.openPickerButton}
                 // The analog clock, without v8's prev/next view switcher: picking the hour moves on
                 // to the minutes by itself, as v3 did.
                 viewRenderers={v3ModalPickerViewRenderers}
                 closeOnSelect={false}
                 {...pickerProps}
-                open={this.open}
                 view={this.view}
                 onViewChange={this.onViewChange}
                 slots={{ ...v3ModalPickerSlots(), ...slots }}
                 slotProps={mergeSlotProps(
                     {
                         ...v3ModalPickerSlotProps({ actions: v3ModalActions({ clearable, showTodayButton }) }),
-                        textField: {
-                            onClick: this.onOpen,
-                            displayValue: formatPickerValue(this.toValue(value), format),
-                        },
+                        textField: { displayValue: formatPickerValue(this.toValue(value), format) },
                     },
                     slotProps
                 )}
@@ -82,7 +74,6 @@ class TimePicker extends V3ModalPickerBase {
                 onChange={this.onChange}
                 onAccept={this.onAccept}
                 onClose={this.onClose}
-                onOpen={this.onOpen}
             />
         );
     }

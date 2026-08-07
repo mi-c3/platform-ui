@@ -421,7 +421,7 @@ class DateTimePickerRange extends PureComponent {
         const fieldSlotProps = (key, PickersProps, onClick, date) =>
             mergeSlotProps(
                 {
-                    ...v3ModalPickerSlotProps({ actions: ['today', 'cancel', 'accept'], openPickerButtonPosition: 'start', hideSwitchViewButton: true }),
+                    ...v3ModalPickerSlotProps({ actions: ['today', 'cancel', 'accept'], openPickerButtonPosition: 'start' }),
                     textField: {
                         onClick,
                         // Frozen for BOTH ends while either dialog is open, not just the one being

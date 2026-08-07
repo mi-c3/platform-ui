@@ -42,8 +42,7 @@ class DateTimePicker extends V3ModalPickerBase {
         //
         // An untracked view counts as the day view: the picker opens on it, and a consumer that
         // remounts on open (the form designer changes the picker's `key` there) starts with nothing
-        // tracked at all. Once the user is on a time view, `onViewChange` has recorded it and this
-        // no longer fires — hours to minutes is within one v8 step and advances on its own.
+        // tracked at all.
         this.setState((prev) => {
             const onDayView = prev.view === undefined || prev.view === 'day';
             return onDayView && views.includes('hours') ? { view: 'hours' } : null;
@@ -61,7 +60,7 @@ class DateTimePicker extends V3ModalPickerBase {
     render() {
         const {
             // eslint-disable-next-line no-unused-vars
-            onClick, value, onChange, onAccept, onClose, onOpen, onViewChange, type, variant, keyboardInput, commitOn, open,
+            onClick, value, onChange, onAccept, onClose, onViewChange, type, variant, keyboardInput, commitOn,
             showTodayButton, view, format = V3_DATE_TIME_FORMAT, ...legacyProps
         } = this.props;
         // Read, not destructured out: `splitLegacyPickerProps` needs it in the bag to map onto
@@ -83,7 +82,6 @@ class DateTimePicker extends V3ModalPickerBase {
                     onChange={this.onChange}
                     onAccept={onAccept}
                     onClose={onClose}
-                    onOpen={onOpen}
                     onViewChange={onViewChange}
                 />
             );
@@ -97,27 +95,20 @@ class DateTimePicker extends V3ModalPickerBase {
                 dayOfWeekFormatter={v3DayOfWeekFormatter}
                 // A single input is the v3 field, and the only structure ModalPickerField can be.
                 enableAccessibleFieldDOMStructure={false}
-                // v3's standalone fields carried no trigger of their own — the field WAS the
-                // trigger. A caller that wants one (the range modal keeps its leading calendar
-                // button) supplies an open-picker slot, and then it stays.
                 disableOpenPicker={!slots.openPickerIcon && !slots.openPickerButton}
                 viewRenderers={v3ModalPickerViewRenderers}
                 // A day click has to leave the dialog open to reach the time view, as v3 did.
                 closeOnSelect={false}
                 {...pickerProps}
-                open={this.open}
                 view={this.view}
                 onViewChange={this.onViewChange}
                 slots={{ ...v3ModalPickerSlots(), ...slots }}
                 slotProps={mergeSlotProps(
                     {
-                        ...v3ModalPickerSlotProps({ actions: v3ModalActions({ clearable, showTodayButton }), hideSwitchViewButton: true }),
-                        textField: {
-                            onClick: this.onOpen,
-                            // The field shows what has been committed, never the draft: v8 renders it
-                            // from the same value as the views, and v3's input only moved on "OK".
-                            displayValue: formatPickerValue(this.toValue(value), format),
-                        },
+                        ...v3ModalPickerSlotProps({ actions: v3ModalActions({ clearable, showTodayButton }) }),
+                        // The field shows what has been committed, never the draft: v8 renders it
+                        // from the same value as the views, and v3's input only moved on "OK".
+                        textField: { displayValue: formatPickerValue(this.toValue(value), format) },
                     },
                     slotProps
                 )}
@@ -125,7 +116,6 @@ class DateTimePicker extends V3ModalPickerBase {
                 onChange={this.onDateChange}
                 onAccept={this.onAccept}
                 onClose={this.onClose}
-                onOpen={this.onOpen}
             />
         );
     }

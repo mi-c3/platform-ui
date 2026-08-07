@@ -21,7 +21,7 @@ const DROPPED_V3_KEYS = [
     'KeyboardButtonProps', 'variant', 'orientation', 'strictCompareDates',
 ];
 
-export const toMomentOrNull = (value) => (value ? moment(value) : null);
+const toMomentOrNull = (value) => (value ? moment(value) : null);
 
 /**
  * Hands out the moment instance for a value, reusing the previous one while the instant is
@@ -82,8 +82,8 @@ export const withDisabledUnderline = (textFieldProps) => {
 
 /**
  * Splits the legacy prop bag into { pickerProps, textFieldProps, slots, slotProps }.
- * Handled specially: inputVariant, clearable, showTodayButton, disableToolbar,
- * TextFieldComponent, minDate/maxDate coercion. A v8 `slots`/`slotProps` bag may be passed
+ * Handled specially: inputVariant, clearable, disableToolbar, TextFieldComponent,
+ * minDate/maxDate coercion. A v8 `slots`/`slotProps` bag may be passed
  * through as-is; it is merged per slot over what the legacy props produced.
  */
 export const splitLegacyPickerProps = (props) => {
@@ -131,10 +131,9 @@ export const splitLegacyPickerProps = (props) => {
     if (rest.clearable) {
         slotProps.field = { clearable: true };
     }
-    if (rest.showTodayButton) {
-        slotProps.actionBar = { actions: ['today'] };
-    }
     delete rest.clearable;
+    // `showTodayButton` is read by the picker components, which fold it into the action bar they
+    // build; it is dropped here only so it cannot reach the DOM.
     delete rest.showTodayButton;
 
     if (rest.disableToolbar) {
