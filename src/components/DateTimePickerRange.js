@@ -420,16 +420,15 @@ class DateTimePickerRange extends PureComponent {
         const fieldSlots = (PickersProps) => ({ ...v3ModalPickerSlots({ openPickerIcon: true }), ...PickersProps?.slots });
         const fieldSlotProps = (key, PickersProps, onClick, date) =>
             mergeSlotProps(
-                {
-                    ...v3ModalPickerSlotProps({ actions: ['today', 'cancel', 'accept'], openPickerButtonPosition: 'start' }),
-                    textField: {
-                        onClick,
-                        // Frozen for BOTH ends while either dialog is open, not just the one being
-                        // edited: picking a date auto-fills the opposite end, and that must not
-                        // surface in its field before "OK" either.
-                        displayValue: formatPickerValue(openPicker ? pickerBaseline?.[key] : date),
-                    },
-                },
+                v3ModalPickerSlotProps({
+                    actions: ['today', 'cancel', 'accept'],
+                    openPickerButtonPosition: 'start',
+                    onClick,
+                    // Frozen for BOTH ends while either dialog is open, not just the one being
+                    // edited: picking a date auto-fills the opposite end, and that must not
+                    // surface in its field before "OK" either.
+                    displayValue: formatPickerValue(openPicker ? pickerBaseline?.[key] : date),
+                }),
                 PickersProps?.slotProps
             );
         return (

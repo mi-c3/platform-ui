@@ -354,3 +354,50 @@ describe.each([
         expect(displayed({ format: 'DD.MM.YYYY' })).toBe(moment(VALUE).format('DD.MM.YYYY'));
     });
 });
+
+/*
+ * v3 put a clear icon in the field itself when `clearable`, alongside the action bar's "Clear".
+ * v8 has the same idea behind `slotProps.field.clearable`, but its field suppresses the adornment
+ * on a read-only field — and the v3 modal field always is, so nothing rendered at all.
+ */
+describe.each([
+    ['DatePicker', DatePicker],
+    ['TimePicker', TimePicker],
+    ['DateTimePicker', DateTimePicker],
+])('%s clear adornment', (name, Picker) => {
+    const VALUE = '2026-08-07T14:54:00.000Z';
+    const renderPicker = (props) => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={VALUE} onChange={onChange} {...props} />));
+        return { onChange, clear: () => screen.queryByRole('button', { name: /clear input/i }) };
+    };
+
+    test('renders a clear button in the field when clearable', () => {
+        expect(renderPicker({ clearable: true }).clear()).toBeInTheDocument();
+    });
+
+    test('renders none when the picker is not clearable', () => {
+        expect(renderPicker().clear()).not.toBeInTheDocument();
+    });
+
+    test('renders none on an empty field — there is nothing to clear', () => {
+        const { clear } = renderPicker({ clearable: true, value: null });
+
+        expect(clear()).not.toBeInTheDocument();
+    });
+
+    test('renders none when the picker is read-only or disabled', () => {
+        expect(renderPicker({ clearable: true, readOnly: true }).clear()).not.toBeInTheDocument();
+    });
+
+    test('publishes an empty value and leaves the dialog shut', () => {
+        const { onChange, clear } = renderPicker({ clearable: true });
+
+        fireEvent.click(clear());
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange.mock.calls[0][0].target.value).toBeNull();
+        // The field opens the picker on a click; clearing must not count as one.
+        expect(document.querySelector('.MuiDialog-root')).not.toBeInTheDocument();
+    });
+});
