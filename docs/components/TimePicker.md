@@ -19,7 +19,7 @@ import { TimePicker } from '@mic3/platform-ui';
 | inputVariant | `'filled'` \| `'outlined'` \| `'standard'` | `'filled'` | Variant of the rendered text field (legacy name for the text field `variant`). |
 | margin | `'none'` \| `'dense'` \| `'normal'` | `'normal'` | Margin of the text field. |
 | fullWidth | bool | true | Text field takes the full width of the container. |
-| clearable | bool | false | Adds a clear button to the field (fires `onChange` with `null`). |
+| clearable | bool | false | Adds a clear (×) button to the field AND a "Clear" action to the dialog, as v3 had. Either fires `onChange` with `null`. The field's own button is rendered by the picker rather than by MUI, whose field suppresses it on a read-only input. |
 | showTodayButton | bool | false | Adds "Today" to the action bar, left of "Cancel"/"OK" as in v3. Pass `slotProps.actionBar.actions` to control the full list. |
 | disableToolbar | bool | false | Hides the picker toolbar. |
 | keyboardInput | bool | false | Opts out of the v3 modal: renders v8's editable section field in an inline popper and publishes every selection. See [Behaviour](#behaviour-the-v3-modal). |
@@ -51,7 +51,9 @@ The picker renders what `@material-ui/pickers` v3 did, which is what the applica
 - It opens in a **modal dialog** with a toolbar over the analog clock, on the hours view. Picking the hour moves on to the minutes by itself, and v8's prev/next view switcher is dropped, as in v3.
 - A selection is a **draft**: it lights up in the dialog, but nothing reaches `onChange` until the
   action bar's **OK**. **Cancel** discards the draft and leaves the value exactly as it was.
-- The action bar is `Clear` (when `clearable`) / `Today` (when `showTodayButton`) / `Cancel` / `OK`.
+- The action bar is `Clear` (when `clearable`) / `Today` (when `showTodayButton`) / `Cancel` / `OK`,
+  and a `clearable` picker also carries a clear (×) button in the field itself. Clearing from the
+  field publishes straight away and does not open the dialog.
 - **OK with nothing selected commits the value the dialog opened on** — and an empty field opens on
   the current time, so one click fills it in. v3 did both (`usePickerState` fell back to
   `initialFocusedDate ?? now`); v8 opens on nothing and commits nothing. A caller driving `open`

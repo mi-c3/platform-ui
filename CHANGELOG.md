@@ -6,6 +6,13 @@ Notable changes per released version. Use these entries as the GitLab tag releas
 
 ### Fixed
 
+A `clearable` picker shows the clear (×) button in its field again. v3 drew one there as well as
+the "Clear" in the action bar; `clearable` maps to `slotProps.field.clearable`, and v8's field
+suppresses that adornment whenever the field is read-only — which the v3 modal field always is,
+since that is what stops the value being typed. So nothing rendered at all, on every date, time and
+dateTime field in the application. The picker now draws the adornment itself, publishing an empty
+value without opening the dialog.
+
 A falsy `format` — `null` or `''` — now falls back to the picker's v3 default instead of reaching
 moment, which renders a falsy format as an ISO-8601 string. `format={null}` put
 "2026-08-07T19:54:00+05:00" in the field: a time on a `DatePicker`, and dashes whatever format the

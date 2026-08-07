@@ -18,7 +18,7 @@ import { DateTimePicker } from '@mic3/platform-ui';
 | `inputVariant` | `'standard'` \| `'outlined'` \| `'filled'` | `'filled'` | Variant of the rendered text field (mapped to `slotProps.textField.variant`). |
 | `margin` | `'none'` \| `'dense'` \| `'normal'` | `'normal'` | Margin of the text field. |
 | `fullWidth` | bool | `true` | Full-width text field. |
-| `clearable` | bool | `false` | Adds a clear adornment to the field (mapped to `slotProps.field.clearable`; clearing fires `onChange` with `null`). |
+| `clearable` | bool | `false` | Adds a clear (×) button to the field AND a "Clear" action to the dialog, as v3 had. Either fires `onChange` with `null`. The field's own button is rendered by the picker rather than by MUI, whose field suppresses it on a read-only input. |
 | `showTodayButton` | bool | — | Adds "Today" to the action bar, left of "Cancel"/"OK" as in v3. Pass `slotProps.actionBar.actions` to control the full list. |
 | `disableToolbar` | bool | — | Hides the picker toolbar. |
 | `keyboardInput` | bool | `false` | Opts out of the v3 modal: renders v8's editable section field in an inline popper and publishes every selection. See [Behaviour](#behaviour-the-v3-modal). |
@@ -58,7 +58,9 @@ The picker renders what `@material-ui/pickers` v3 did, which is what the applica
   is the only button needed — v8 splits those views into two steps and waits for a "Next" action.
 - A selection is a **draft**: it lights up in the dialog, but nothing reaches `onChange` until the
   action bar's **OK**. **Cancel** discards the draft and leaves the value exactly as it was.
-- The action bar is `Clear` (when `clearable`) / `Today` (when `showTodayButton`) / `Cancel` / `OK`.
+- The action bar is `Clear` (when `clearable`) / `Today` (when `showTodayButton`) / `Cancel` / `OK`,
+  and a `clearable` picker also carries a clear (×) button in the field itself. Clearing from the
+  field publishes straight away and does not open the dialog.
 - **OK with nothing selected commits the value the dialog opened on** — and an empty field opens on
   the current date and time, so one click fills it in. v3 did both (`usePickerState` fell back to
   `initialFocusedDate ?? now`); v8 opens on nothing and commits nothing. The fallback is moved inside
