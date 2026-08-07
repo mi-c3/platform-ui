@@ -15,8 +15,8 @@ import { createMomentValueCache } from 'utils/pickers/pickerProps';
  * A controlled v8 picker keeps NO draft of its own: `usePicker` renders the views from the `value`
  * prop (only the clock hand gets a shallow value), so swallowing the intermediate changes without
  * feeding them back leaves every click unhighlighted. The draft is therefore held here and handed
- * down as `value` while the dialog is open, and the consumer hears nothing until the picker's action
- * bar accepts it.
+ * down as `value` while the dialog is open, and the consumer hears nothing until the action bar
+ * accepts it (`V3ModalActionBar` calls `acceptDraft`).
  *
  * "Cancel" needs no snapshot: nothing was published, so dropping the draft puts the field back on the
  * value the consumer still holds.
@@ -98,12 +98,19 @@ class V3ModalPickerBase extends PureComponent {
         this.publish(value);
     }
 
+    /**
+     * The action bar's commit. It publishes what the dialog is showing — including the date it was
+     * opened on, untouched — because that is what v3 did and what a field seeding "now" expects.
+     */
+    @bind
+    acceptDraft(value) {
+        this.publish(value === undefined ? this.pickerValue : value);
+        this.setState({ draft: undefined, view: undefined });
+    }
+
     @bind
     onAccept(value) {
         const { onAccept } = this.props;
-        if (this.holdsDraft) {
-            this.publish(value);
-        }
         this.setState({ draft: undefined, view: undefined });
         onAccept && onAccept(value);
     }

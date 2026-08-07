@@ -105,7 +105,10 @@ class DateTimePicker extends V3ModalPickerBase {
                 slots={{ ...v3ModalPickerSlots(), ...slots }}
                 slotProps={mergeSlotProps(
                     {
-                        ...v3ModalPickerSlotProps({ actions: v3ModalActions({ clearable, showTodayButton }) }),
+                        ...v3ModalPickerSlotProps({
+                            actions: v3ModalActions({ clearable, showTodayButton }),
+                            onAcceptValue: this.holdsDraft ? this.acceptDraft : undefined,
+                        }),
                         // The field shows what has been committed, never the draft: v8 renders it
                         // from the same value as the views, and v3's input only moved on "OK".
                         textField: { displayValue: formatPickerValue(this.toValue(value), format) },

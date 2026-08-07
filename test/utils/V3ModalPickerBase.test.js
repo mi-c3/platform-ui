@@ -21,6 +21,7 @@ class Probe extends V3ModalPickerBase {
                 <span data-testid="value">{String(this.pickerValue)}</span>
                 <span data-testid="view">{String(this.view)}</span>
                 <button data-testid="select" onClick={() => this.onChange(SELECTED)} />
+                <button data-testid="accept-bar" onClick={() => this.acceptDraft(this.pickerValue)} />
                 <button data-testid="accepted" onClick={() => this.onAccept(SELECTED)} />
                 <button data-testid="view-change" onClick={() => this.onViewChange('minutes')} />
                 <button data-testid="close" onClick={this.onClose} />
@@ -48,14 +49,24 @@ describe('V3ModalPickerBase', () => {
         expect(shown()).toBe(SELECTED);
     });
 
-    test('accepting publishes the draft once, as a change event carrying name and type', () => {
+    test('the action bar publishes the draft once, as a change event carrying name and type', () => {
         const { onChange } = renderProbe({ type: 'dateTime' });
 
         fireEvent.click(screen.getByTestId('select'));
-        fireEvent.click(screen.getByTestId('accepted'));
+        fireEvent.click(screen.getByTestId('accept-bar'));
 
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange.mock.calls[0][0].target).toEqual({ name: 'when', value: SELECTED, type: 'dateTime' });
+    });
+
+    test('the action bar publishes the untouched value when nothing was selected', () => {
+        // v3 committed the date the dialog opened on, so a field that seeds "now" commits "now".
+        const { onChange } = renderProbe();
+
+        fireEvent.click(screen.getByTestId('accept-bar'));
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange.mock.calls[0][0].target.value.toISOString()).toBe(new Date(HELD).toISOString());
     });
 
     test('closing drops the draft, which is all Cancel has to do', () => {
@@ -106,7 +117,7 @@ describe('V3ModalPickerBase', () => {
         const onClose = jest.fn();
         const onAccept = jest.fn();
         const onViewChange = jest.fn();
-        renderProbe({ onClose, onAccept, onViewChange, commitOn: 'change' });
+        renderProbe({ onClose, onAccept, onViewChange });
 
         fireEvent.click(screen.getByTestId('accepted'));
         fireEvent.click(screen.getByTestId('view-change'));

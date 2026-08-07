@@ -221,3 +221,51 @@ describe.each([
         expect(onChange).toHaveBeenCalledTimes(1);
     });
 });
+
+/*
+ * v3 committed the date the dialog was opened on when "OK" was pressed with nothing selected — a
+ * field that seeds "now" (the form designer's does) therefore commits "now". v8 skips `onAccept`
+ * when the value matches what it last committed, so the action bar owns the commit here.
+ */
+describe.each([
+    ['DatePicker', DatePicker],
+    ['TimePicker', TimePicker],
+    ['DateTimePicker', DateTimePicker],
+])('%s accept without a selection', (name, Picker) => {
+    const SEEDED = '2026-08-06T19:40:00.000Z';
+    const clickOk = () => fireEvent.click(
+        Array.from(document.querySelectorAll('.MuiPickersLayout-actionBar button')).find((button) => button.textContent === 'OK')
+    );
+
+    test('commits the value the dialog opened on', () => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={SEEDED} onChange={onChange} />));
+        fireEvent.click(screen.getByRole('textbox'));
+
+        clickOk();
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(moment(onChange.mock.calls[0][0].target.value).toISOString()).toBe(moment(SEEDED).toISOString());
+    });
+
+    test('commits nothing more than that: Cancel after opening publishes nothing', () => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={SEEDED} onChange={onChange} />));
+        fireEvent.click(screen.getByRole('textbox'));
+
+        fireEvent.click(Array.from(document.querySelectorAll('.MuiPickersLayout-actionBar button')).find((b) => b.textContent === 'Cancel'));
+
+        expect(onChange).not.toHaveBeenCalled();
+    });
+
+    test('Clear publishes an empty value', () => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={SEEDED} onChange={onChange} clearable />));
+        fireEvent.click(screen.getByRole('textbox'));
+
+        fireEvent.click(Array.from(document.querySelectorAll('.MuiPickersLayout-actionBar button')).find((b) => b.textContent === 'Clear'));
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange.mock.calls[0][0].target.value).toBeNull();
+    });
+});

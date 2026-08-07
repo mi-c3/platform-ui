@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
 import MuiTextField from '@mui/material/TextField';
 import moment from 'moment';
-import { usePickerActionsContext, usePickerContext } from '@mui/x-date-pickers/hooks';
+import { usePickerActionsContext, usePickerContext, usePickerTranslations } from '@mui/x-date-pickers/hooks';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 
 import MdiIcon from 'components/MdiIcon';
@@ -51,6 +53,55 @@ ModalPickerField.propTypes = {
     onClick: PropTypes.func,
 };
 
+/**
+ * The action bar, rendering v8's own actions but taking the accept for itself when the picker holds
+ * a draft (`onAcceptValue`).
+ *
+ * v8 decides whether "OK" changed anything by comparing the value against `state.lastCommittedValue`
+ * and skips `onAccept` when they match, so an untouched picker commits nothing — v3 committed the
+ * date the dialog opened on, which is what the application expects from a field that seeds "now".
+ * Owning the accept here also means the commit no longer rides on that internal comparison.
+ */
+export const V3ModalActionBar = ({ actions = [], onAcceptValue, className }) => {
+    const { clearValue, setValueToToday, acceptValueChanges, cancelValueChanges } = usePickerActionsContext();
+    const { value } = usePickerContext();
+    const translations = usePickerTranslations();
+    const handlers = {
+        clear: () => {
+            onAcceptValue?.(null);
+            clearValue();
+        },
+        today: () => {
+            onAcceptValue?.(moment());
+            setValueToToday();
+        },
+        cancel: cancelValueChanges,
+        accept: () => {
+            onAcceptValue?.(value);
+            acceptValueChanges();
+        },
+    };
+    const labels = {
+        clear: translations.clearButtonLabel,
+        today: translations.todayButtonLabel,
+        cancel: translations.cancelButtonLabel,
+        accept: translations.okButtonLabel,
+    };
+    return (
+        <DialogActions className={className}>
+            {actions.filter((action) => handlers[action]).map((action) => (
+                <Button key={action} onClick={handlers[action]}>{labels[action]}</Button>
+            ))}
+        </DialogActions>
+    );
+};
+
+V3ModalActionBar.propTypes = {
+    actions: PropTypes.arrayOf(PropTypes.oneOf(['clear', 'today', 'cancel', 'accept'])),
+    onAcceptValue: PropTypes.func,
+    className: PropTypes.string,
+};
+
 const CalendarPickerIcon = () => <MdiIcon name="calendar-blank" />;
 
 export const MODAL_PICKER_FORMAT = 'DD, MMM YYYY HH:mm';
@@ -70,6 +121,7 @@ export const formatPickerValue = (date, format = MODAL_PICKER_FORMAT) => (date ?
  */
 export const v3ModalPickerSlots = ({ openPickerIcon = false } = {}) => ({
     textField: ModalPickerField,
+    actionBar: V3ModalActionBar,
     ...(openPickerIcon ? { openPickerIcon: CalendarPickerIcon } : {}),
 });
 
@@ -91,11 +143,11 @@ const v3ModalLayoutSx = (theme) => ({
     '& .MuiPickersLayout-tabs .MuiTab-root.Mui-selected': { opacity: 1 },
 });
 
-export const v3ModalPickerSlotProps = ({ actions = ['cancel', 'accept'], openPickerButtonPosition } = {}) => ({
+export const v3ModalPickerSlotProps = ({ actions = ['cancel', 'accept'], openPickerButtonPosition, onAcceptValue } = {}) => ({
     field: { readOnly: true, ...(openPickerButtonPosition ? { openPickerButtonPosition } : {}) },
     // v3's toolbar had no title; v8 defaults it to "Select date & time".
     toolbar: { toolbarTitle: '' },
-    actionBar: { actions },
+    actionBar: { actions, onAcceptValue },
     layout: { sx: v3ModalLayoutSx },
 });
 

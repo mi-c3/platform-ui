@@ -65,7 +65,10 @@ class TimePicker extends V3ModalPickerBase {
                 slots={{ ...v3ModalPickerSlots(), ...slots }}
                 slotProps={mergeSlotProps(
                     {
-                        ...v3ModalPickerSlotProps({ actions: v3ModalActions({ clearable, showTodayButton }) }),
+                        ...v3ModalPickerSlotProps({
+                            actions: v3ModalActions({ clearable, showTodayButton }),
+                            onAcceptValue: this.holdsDraft ? this.acceptDraft : undefined,
+                        }),
                         textField: { displayValue: formatPickerValue(this.toValue(value), format) },
                     },
                     slotProps
