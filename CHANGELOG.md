@@ -6,6 +6,13 @@ Notable changes per released version. Use these entries as the GitLab tag releas
 
 ### Fixed
 
+A falsy `format` — `null` or `''` — now falls back to the picker's v3 default instead of reaching
+moment, which renders a falsy format as an ISO-8601 string. `format={null}` put
+"2026-08-07T19:54:00+05:00" in the field: a time on a `DatePicker`, and dashes whatever format the
+caller had chosen. v3 defaulted with `||`; these wrappers used an ES6 default parameter, which only
+fires for `undefined`. The form designer stores exactly that null — its "Format predefined" setting
+writes one the moment "Custom" is picked — so its `date` and `dateTime` fields showed the ISO value.
+
 `DatePicker`, `TimePicker` and `DateTimePicker` open an EMPTY field on the current date/time again,
 so "OK" with nothing selected commits it. 2.1.4 restored that commit for a picker whose value was
 already seeded, but a genuinely empty one opened on nothing and committed nothing — v3 fell back to

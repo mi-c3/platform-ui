@@ -24,7 +24,7 @@ import { TimePicker } from '@mic3/platform-ui';
 | disableToolbar | bool | false | Hides the picker toolbar. |
 | keyboardInput | bool | false | Opts out of the v3 modal: renders v8's editable section field in an inline popper and publishes every selection. See [Behaviour](#behaviour-the-v3-modal). |
 | commitOn | `'accept'` \| `'change'` | `'accept'` | Where a selection is published: the action bar's OK, or every click. `'change'` is for a caller that owns its own accept. |
-| format | string | `'HH:mm'` | How the field renders the committed value — v3's 24-hour time format. Passed through to the picker too; a 12-hour caller sets `ampm` and `format` together, as it had to under v3. |
+| format | string | `'HH:mm'` | How the field renders the committed value — v3's 24-hour time format. Passed through to the picker too; a 12-hour caller sets `ampm` and `format` together, as it had to under v3. A falsy value (`null`, `''`) falls back to the default rather than reaching moment, which renders a falsy format as an ISO-8601 string. |
 | TextFieldComponent | elementType | — | Custom component for the text field slot. Passing one also sets `enableAccessibleFieldDOMStructure={false}` (legacy single-`<input />` contract); pass that prop explicitly to override. |
 | slots / slotProps | object | — | Passed through to the picker, merged per slot over what the legacy props produced (so `clearable` and a `slotProps.field` of your own both survive). A slot given as a function (MUI resolves it against `ownerState`) stays a function, and merges the same way once resolved. A `slots.textField` also sets `enableAccessibleFieldDOMStructure={false}`, exactly as `TextFieldComponent` does. |
 
