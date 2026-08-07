@@ -78,6 +78,7 @@ class DatePicker extends V3ModalPickerBase {
                 value={this.pickerValue}
                 onChange={this.onChange}
                 onAccept={this.onAccept}
+                onOpen={this.onOpen}
                 onClose={this.onClose}
             />
         );
