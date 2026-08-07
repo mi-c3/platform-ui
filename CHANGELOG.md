@@ -2,7 +2,7 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
-## Unreleased
+## 2.1.5
 
 ### Fixed
 
