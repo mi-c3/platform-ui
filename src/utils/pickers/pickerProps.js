@@ -21,24 +21,7 @@ const DROPPED_V3_KEYS = [
     'KeyboardButtonProps', 'variant', 'orientation', 'strictCompareDates',
 ];
 
-export const toMomentOrNull = (value) => (value ? moment(value) : null);
-
-// Keys the v8 field steps a section value with, and which end of the range each one moves toward
-// (`useFieldRootHandleKeyDown`: Home sets a section to its minimum, End to its maximum). A Map, so
-// looking up an arbitrary `event.key` cannot reach Object.prototype.
-const SECTION_STEP_DIRECTIONS = new Map([
-    ['ArrowUp', 1], ['PageUp', 1], ['End', 1],
-    ['ArrowDown', -1], ['PageDown', -1], ['Home', -1],
-]);
-
-// Validation errors that mean "past the upper / lower end of the range the picker was given". These
-// are every directional bound v8 can report: `validateDateTime` runs `validateDate` then
-// `validateTime`, so a `minDateTime`/`maxDateTime` prop surfaces as one of these four rather than
-// under its own name. The non-directional errors (`shouldDisableDate`/`Month`/`Year`, `minutesStep`,
-// `invalidDate`) are deliberately absent — refusing a step onto an arbitrary disabled value would
-// strand the keyboard on the near side of it instead of letting it step across.
-const UPPER_BOUND_ERRORS = ['maxDate', 'maxTime', 'disableFuture'];
-const LOWER_BOUND_ERRORS = ['minDate', 'minTime', 'disablePast'];
+const toMomentOrNull = (value) => (value ? moment(value) : null);
 
 /**
  * Hands out the moment instance for a value, reusing the previous one while the instant is
@@ -61,54 +44,6 @@ export const createMomentValueCache = () => {
             lastMoment = next;
         }
         return lastMoment;
-    };
-};
-
-/**
- * Refuses a section step that walks out of the picker's own date/time range.
- *
- * v8 steps a section with the arrow/page/home/end keys through that section's boundaries only:
- * `getSectionsBoundaries` caps a 4-digit year at 9999 whatever `minDate`/`maxDate` say, so the
- * keyboard crosses a bound the calendar refuses to (default `maxDate` is 2099-12-31). The step is
- * published through `onChange` synchronously inside the same keydown, so recording the key in the
- * capture phase is enough to tell a stepped change from a typed one — typing stays untouched,
- * because its intermediate values (year `0002` on the way to `2026`) must keep flowing through.
- *
- * Only a step moving AWAY from the range is refused, which is why the direction is kept rather than
- * a bare flag: a value can arrive out of range from stored data, every step from there reports the
- * same bound, and refusing on the error alone would leave the field unable to walk back.
- *
- * Dropping the change is all it takes to undo the step: `updateSectionValue` builds the stepped
- * sections locally and only publishes them, while the field paints `state.sections`, which is
- * rebuilt from the value prop. A step that is never published leaves the field as it was.
- */
-export const createFieldStepGuard = () => {
-    let stepping = 0;
-    return {
-        // Recorded before the field's own keydown handler steps the section, and cleared again when
-        // the step is read below. It must NOT be cleared on a microtask or from a bubble-phase
-        // handler on the same slot: React attaches its capture-phase and bubble-phase listeners to
-        // the root container as two separate native listeners, and the browser runs a microtask
-        // checkpoint when each of them returns, so a microtask reset lands BEFORE the step is
-        // published — and a bubble reset on `slotProps.textField` runs before the field's own
-        // handler, not after it. Either way the step went through (the year walked past 2099).
-        //
-        // A step key that publishes nothing (an incomplete date) therefore stays recorded until the
-        // next key press. That cannot misfire on a later view selection: the calendar disables
-        // out-of-range days and the year list stops at the bounds, so a view change cannot carry a
-        // range validation error in the first place.
-        onKeyDownCapture: (event) => {
-            stepping = SECTION_STEP_DIRECTIONS.get(event.key) || 0;
-        },
-        refuses: (context) => {
-            const direction = stepping;
-            stepping = 0;
-            if (!direction) {
-                return false;
-            }
-            const bounds = direction > 0 ? UPPER_BOUND_ERRORS : LOWER_BOUND_ERRORS;
-            return bounds.includes(context?.validationError);
-        },
     };
 };
 
@@ -146,25 +81,9 @@ export const withDisabledUnderline = (textFieldProps) => {
 };
 
 /**
- * Puts a step guard's capture-phase key handler on a `slotProps.textField` bag, keeping whatever the
- * caller already had there. Capture, because the field's own keydown handler steps the section value
- * and publishes it in the bubble phase.
- */
-export const withStepGuard = (textFieldProps, guard) => {
-    const apply = (resolved) => ({
-        ...resolved,
-        onKeyDownCapture: (event) => {
-            guard.onKeyDownCapture(event);
-            resolved?.onKeyDownCapture?.(event);
-        },
-    });
-    return typeof textFieldProps === 'function' ? (ownerState) => apply(textFieldProps(ownerState)) : apply(textFieldProps);
-};
-
-/**
  * Splits the legacy prop bag into { pickerProps, textFieldProps, slots, slotProps }.
- * Handled specially: inputVariant, clearable, showTodayButton, disableToolbar,
- * TextFieldComponent, minDate/maxDate coercion. A v8 `slots`/`slotProps` bag may be passed
+ * Handled specially: inputVariant, clearable, disableToolbar, TextFieldComponent,
+ * minDate/maxDate coercion. A v8 `slots`/`slotProps` bag may be passed
  * through as-is; it is merged per slot over what the legacy props produced.
  */
 export const splitLegacyPickerProps = (props) => {
@@ -212,10 +131,9 @@ export const splitLegacyPickerProps = (props) => {
     if (rest.clearable) {
         slotProps.field = { clearable: true };
     }
-    if (rest.showTodayButton) {
-        slotProps.actionBar = { actions: ['today'] };
-    }
     delete rest.clearable;
+    // `showTodayButton` is read by the picker components, which fold it into the action bar they
+    // build; it is dropped here only so it cannot reach the DOM.
     delete rest.showTodayButton;
 
     if (rest.disableToolbar) {

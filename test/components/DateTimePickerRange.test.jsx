@@ -238,64 +238,6 @@ describe('the modal pickers', () => {
         expect(cssFor('MuiTab-root.Mui-selected')).toContain('opacity: 1');
     });
 
-    test('sit the calendar arrows either side of the month label', () => {
-        renderRange({ variant: 'standard' });
-        openModal();
-        openPicker(0);
-
-        // v8 renders the label left-aligned with both arrows grouped to its right; v3 had the
-        // month/year centred between them. Read off the stylesheet — jsdom resolves neither
-        // ordering nor `display: contents`.
-        expect(cssFor('MuiPickersArrowSwitcher-root')).toContain('display: contents');
-        expect(cssFor('MuiPickersArrowSwitcher-previousIconButton')).toContain('order: -1');
-        expect(cssFor('MuiPickersArrowSwitcher-nextIconButton')).toContain('order: 1');
-        expect(cssFor('MuiPickersCalendarHeader-labelContainer')).toContain('margin: 0 auto');
-
-        // The arrows must stay usable once lifted out of their container.
-        expect(screen.getByRole('button', { name: /previous month/i })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /next month/i })).toBeInTheDocument();
-
-        // v3's arrows were a 48px hit area (and hover ring) around a small glyph, against v8's 40px
-        // around a 24px icon. `padding` needs its unit: `sx` reads a bare number off the spacing
-        // scale, which turned 16 into 128px.
-        const arrowCss = cssFor('MuiPickersLayout-root .MuiPickersArrowSwitcher-button');
-        expect(arrowCss).toContain('padding: 16px');
-        expect(arrowCss).toContain('font-size: 16px');
-        // `edgeStart`/`edgeEnd` add -12px, which shifts the arrows once they are reordered.
-        expect(arrowCss).toContain('margin: 0');
-
-        // v8 pads the header 24/12 — uneven insets — and pins it to 40px, clipping a 48px button.
-        const headerCss = cssFor('MuiPickersLayout-root .MuiPickersCalendarHeader-root');
-        expect(headerCss).toContain('padding: 0');
-        expect(headerCss).toContain('min-height: 48px');
-    });
-
-    test('give the toolbar v3\'s height', () => {
-        renderRange({ variant: 'standard' });
-        openModal();
-        openPicker(0);
-
-        // v8 sizes it to its content instead.
-        expect(getComputedStyle(document.querySelector('.MuiPickersLayout-toolbar')).minHeight).toBe('100px');
-    });
-
-    test('keep both views one size, with v3\'s larger clock face', () => {
-        renderRange({ variant: 'standard' });
-        openModal();
-        openPicker(0);
-
-        // The calendar keeps its own 336px and its full-size day cells: scaling it into v3's 305
-        // shrank the days and inset the header arrows away from v3's geometry.
-        expect(getComputedStyle(document.querySelector('.MuiDateCalendar-root')).transform).toBe('');
-
-        fireEvent.click(screen.getByRole('tab', { name: 'pick time' }));
-
-        // Pinned to the same box, so the dialog does not resize between the tabs.
-        expect(getComputedStyle(document.querySelector('.MuiTimeClock-root')).height).toBe('336px');
-        // v8 hardcodes CLOCK_WIDTH at 220; v3's face was 260 across.
-        expect(getComputedStyle(document.querySelector('.MuiClock-root')).transform).toBe(`scale(${260 / 220})`);
-    });
-
     // v3 opened an empty picker on "now" and treated Cancel as discarding the whole edit.
     describe('opening one on an empty end', () => {
         const nowStamps = (formatValue) => {

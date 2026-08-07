@@ -2,6 +2,61 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.1.4
+
+### Changed
+
+`DatePicker`, `TimePicker` and `DateTimePicker` render the v3 modal picker again, by default. What
+`@material-ui/pickers` v3 gave the application — and what 1.8.9 is still serving on staging — is a
+read-only field that opens a modal on a click anywhere in it, and a dialog whose selections only
+count once its action bar accepts them. v8 replaced that with an editable, section-based field in an
+inline popper that publishes every click. Measured against staging: its `input` is `type=text
+readonly` with zero `role=spinbutton` sections against 16 on the v8 field, clicking a day left the
+field on the value it opened with and only "OK" changed it, and "Cancel" put it back.
+
+Restored, per picker:
+
+- A read-only single input (`enableAccessibleFieldDOMStructure={false}` with the shared
+  `ModalPickerField`), with no trigger of its own — `disableOpenPicker` unless a caller supplies an
+  open-picker slot, since v3 opened the picker from a click anywhere in the field.
+- The modal dialog (`MobileDatePicker`/`MobileTimePicker`/`MobileDateTimePicker`), with v8's own
+  toolbar and date/time tabs, and v3's analog clock through `viewRenderers` — the clock without its
+  prev/next view switcher, as v3 had it.
+- An action bar of `Clear` (when `clearable`) / `Today` (when `showTodayButton`) / `Cancel` / `OK`.
+- A draft that only publishes on accept, in `utils/pickers/V3ModalPickerBase.js`. A controlled v8
+  picker keeps no draft of its own — `usePicker` renders the views from the `value` prop — so the
+  selection is held there and handed back down as that prop, and the consumer hears nothing until
+  "OK". "Cancel" needs no snapshot: nothing was published.
+- The v3 view flow: a day click opens the time view (v8 splits those into two steps and waits for a
+  "Next" action).
+- Weekday names read "Sun", "Mon", ... (`dayOfWeekFormatter`), and "OK" commits the value the dialog
+  opened on even when nothing was selected — v3 did, and a field that seeds "now" depends on it. v8
+  decides an accept against its own `state.lastCommittedValue` and skips `onAccept` when the value
+  matches, so the action bar (`slots.actionBar`) owns the commit rather than that comparison.
+
+v3's exact geometry and type scale are deliberately NOT reproduced: dialog width, toolbar and view
+heights, week-row spacing, clock diameter, font sizes and dim levels all stay v8's. Matching them
+meant CSS against MUI's internal DOM — week-row margins, arrow reordering, clock scaling — which is
+the first thing a MUI upgrade breaks and the last thing to say so. `DateTimePickerRange` gives up the
+same geometry it had carried since 2.1.1: keeping it there left two different-looking pickers in one
+application, since its modal opens the very same `DateTimePicker`. All of them now share v8's metrics
+and the one piece of v3 styling that is left — the toolbar and tabs taking their own background.
+
+This is what makes a consumer safe to freeze the value it hands a picker while the dialog is open, as
+the form designer's `DateTime` does so that a subscription update cannot overwrite an edit in
+progress. Under v8's publish-on-click that freeze produced a dialog whose clicks never highlighted.
+
+`keyboardInput` opts back into v8's editable field and inline popper for a screen that wants typed
+input; `commitOn="change"` keeps the modal but publishes every selection, which is what
+`DateTimePickerRange` uses since it snapshots both ends itself. `variant="dialog"` is now a no-op —
+the modal it asked for is the default.
+
+### Removed
+
+The keyboard step guard added in 2.1.3, which bounded the arrow/page/home/end keys of the v8 section
+field to the picker's `minDate`/`maxDate`. The field it guarded no longer exists by default: there are
+no sections to step.
+
 ## 2.1.3
 
 ### Fixed

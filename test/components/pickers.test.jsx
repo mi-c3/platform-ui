@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
+import moment from 'moment';
 import InputBase from '@mui/material/InputBase';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
@@ -78,7 +79,9 @@ describe('DateTimePicker variant="dialog"', () => {
 
     test('opens the v3 modal picker: toolbar, date/time tabs, action bar', () => {
         renderDialogPicker({ slotProps: { actionBar: { actions: ['today', 'cancel', 'accept'] } } });
-        fireEvent.click(screen.getByRole('button', { name: /choose date/i }));
+        // The field is the trigger, as it was in v3: the standalone pickers render no button of
+        // their own (the range modal asks for its leading calendar icon explicitly).
+        fireEvent.click(screen.getByRole('textbox'));
 
         expect(document.querySelector('.MuiDialog-root')).toBeInTheDocument();
         expect(document.querySelector('.MuiPickersToolbar-root')).toBeInTheDocument();
@@ -88,99 +91,181 @@ describe('DateTimePicker variant="dialog"', () => {
         expect(actions.map((button) => button.textContent)).toEqual(['Today', 'Cancel', 'OK']);
     });
 
-    test('stays on the responsive picker for any other variant', () => {
+    test('opens the same modal without the variant, which is now the default', () => {
         renderDialogPicker({ variant: 'inline' });
-        fireEvent.click(screen.getByRole('button', { name: /choose date/i }));
+        fireEvent.click(screen.getByRole('textbox'));
 
-        expect(document.querySelector('.MuiDialog-root')).not.toBeInTheDocument();
-        expect(screen.queryByRole('tab', { name: 'pick date' })).not.toBeInTheDocument();
+        expect(document.querySelector('.MuiDialog-root')).toBeInTheDocument();
+        expect(screen.getByRole('tab', { name: 'pick date' })).toBeInTheDocument();
     });
 });
 
-// A consumer of these pickers owns the value: v8 renders the field and the views from what comes
-// back down, so a change that is never published has to be visible as a field that snapped back.
-const ControlledPicker = ({ Picker, initialValue, onChange, ...props }) => {
-    const [value, setValue] = React.useState(initialValue);
-    const handleChange = (event) => {
-        onChange(event);
-        setValue(event.target.value);
+/*
+ * The v3 modal contract, measured on staging (platform-ui 1.8.9 + @material-ui/pickers 3.2.10) and
+ * restored here: `input[name=dateTime]` is a read-only text box with no section spinbuttons, a click
+ * anywhere in it opens a dialog, clicking Aug 14 left the field on "Aug 6th 2026, 19:40", and only
+ * "OK" turned it into "Aug 21st 2026, 19:41". Cancel put the field back to empty.
+ */
+describe.each([
+    ['DatePicker', DatePicker, 'MMM Do YYYY'],
+    ['TimePicker', TimePicker, 'HH:mm'],
+    ['DateTimePicker', DateTimePicker, 'MMM Do YYYY, HH:mm'],
+])('%s v3 modal parity', (name, Picker, format) => {
+    const VALUE = '2026-08-06T19:40:00.000Z';
+    const renderPicker = (props) => {
+        const onChange = jest.fn();
+        const view = render(withAdapter(<Picker label="When" name="when" value={VALUE} onChange={onChange} {...props} />));
+        return { onChange, ...view };
     };
-    // `selectedSections` picks the section the arrow keys step: focus does not carry it in jsdom.
-    return <Picker label="From" value={value} onChange={handleChange} selectedSections="year" {...props} />;
-};
+    const dialogButton = (label) => Array.from(document.querySelectorAll('.MuiPickersLayout-actionBar button')).find((button) => button.textContent === label);
+    const displayed = () => document.querySelector('input').value;
 
+    test('renders one read-only input, no editable sections and no trigger button', () => {
+        renderPicker();
+
+        expect(screen.getByRole('textbox')).toHaveAttribute('readonly');
+        // v3 had no icon on a standalone field: clicking the field itself opened the picker.
+        expect(screen.queryByRole('button', { name: /choose/i })).not.toBeInTheDocument();
+        expect(screen.queryAllByRole('spinbutton')).toHaveLength(0);
+        expect(displayed()).toBe(moment(VALUE).format(format));
+    });
+
+    test('opens the dialog on a click anywhere in the field', () => {
+        renderPicker();
+        expect(document.querySelector('.MuiDialog-root')).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole('textbox'));
+
+        expect(document.querySelector('.MuiDialog-root')).toBeInTheDocument();
+    });
+
+    test('offers Clear in the action bar when clearable', () => {
+        renderPicker({ clearable: true });
+        fireEvent.click(screen.getByRole('textbox'));
+
+        expect(dialogButton('Clear')).toBeDefined();
+    });
+
+    test('keyboardInput opts back into the editable v8 field in a popper', () => {
+        renderPicker({ keyboardInput: true });
+
+        expect(screen.queryAllByRole('spinbutton').length).toBeGreaterThan(0);
+        fireEvent.click(screen.getByRole('button', { name: /choose/i }));
+        expect(document.querySelector('.MuiDialog-root')).not.toBeInTheDocument();
+    });
+
+});
+
+/*
+ * The commit point, through the real MUI stack. Only the calendar can be driven from jsdom: the clock
+ * computes its selection from pointer geometry against the face, which jsdom has no layout for — so
+ * TimePicker's half of this contract is covered by the V3ModalPickerBase unit tests, which every
+ * picker inherits from.
+ */
+describe.each([
+    ['DatePicker', DatePicker, 'MMM Do YYYY'],
+    ['DateTimePicker', DateTimePicker, 'MMM Do YYYY, HH:mm'],
+])('%s commit point', (name, Picker, format) => {
+    const VALUE = '2026-08-06T19:40:00.000Z';
+    const renderPicker = (props) => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={VALUE} onChange={onChange} {...props} />));
+        return { onChange };
+    };
+    const dialogButton = (label) => Array.from(document.querySelectorAll('.MuiPickersLayout-actionBar button')).find((button) => button.textContent === label);
+    const displayed = () => document.querySelector('input').value;
+    const pickTheFifteenth = () => fireEvent.click(screen.getByRole('gridcell', { name: '15' }));
+
+    test('holds the selection as a draft: nothing is published and the field does not move', () => {
+        const { onChange } = renderPicker();
+        fireEvent.click(screen.getByRole('textbox'));
+
+        pickTheFifteenth();
+
+        // Measured on staging: clicking Aug 14 left the field on "Aug 6th 2026, 19:40".
+        expect(onChange).not.toHaveBeenCalled();
+        expect(displayed()).toBe(moment(VALUE).format(format));
+    });
+
+    test('publishes the draft once, on OK', () => {
+        const { onChange } = renderPicker();
+        fireEvent.click(screen.getByRole('textbox'));
+        pickTheFifteenth();
+
+        fireEvent.click(dialogButton('OK'));
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        const { target } = onChange.mock.calls[0][0];
+        expect(target.name).toBe('when');
+        expect(moment(target.value).date()).toBe(15);
+    });
+
+    test('discards the draft on Cancel', () => {
+        const { onChange } = renderPicker();
+        fireEvent.click(screen.getByRole('textbox'));
+        pickTheFifteenth();
+
+        fireEvent.click(dialogButton('Cancel'));
+
+        expect(onChange).not.toHaveBeenCalled();
+        expect(displayed()).toBe(moment(VALUE).format(format));
+    });
+
+    test('publishes every selection when the caller owns the accept', () => {
+        // What DateTimePickerRange needs: it snapshots both ends itself.
+        const { onChange } = renderPicker({ commitOn: 'change' });
+        fireEvent.click(screen.getByRole('textbox'));
+
+        pickTheFifteenth();
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+    });
+});
+
+/*
+ * v3 committed the date the dialog was opened on when "OK" was pressed with nothing selected — a
+ * field that seeds "now" (the form designer's does) therefore commits "now". v8 skips `onAccept`
+ * when the value matches what it last committed, so the action bar owns the commit here.
+ */
 describe.each([
     ['DatePicker', DatePicker],
+    ['TimePicker', TimePicker],
     ['DateTimePicker', DateTimePicker],
-])('%s keyboard section stepping', (name, Picker) => {
-    const renderPicker = (initialValue, props) => {
+])('%s accept without a selection', (name, Picker) => {
+    const SEEDED = '2026-08-06T19:40:00.000Z';
+    const clickOk = () => fireEvent.click(
+        Array.from(document.querySelectorAll('.MuiPickersLayout-actionBar button')).find((button) => button.textContent === 'OK')
+    );
+
+    test('commits the value the dialog opened on', () => {
         const onChange = jest.fn();
-        render(withAdapter(<ControlledPicker Picker={Picker} initialValue={initialValue} onChange={onChange} {...props} />));
-        return { onChange, year: screen.getAllByRole('spinbutton').find((section) => section.getAttribute('aria-label') === 'Year') };
-    };
+        render(withAdapter(<Picker label="When" name="when" value={SEEDED} onChange={onChange} />));
+        fireEvent.click(screen.getByRole('textbox'));
 
-    test('refuses a year step past the default maxDate', () => {
-        // The calendar stops at 2099 (v8's default maxDate), but the field steps a 4-digit year
-        // section through 0..9999 whatever the bounds are — see `getSectionsBoundaries`.
-        const { onChange, year } = renderPicker('2099-06-15T10:00:00.000Z');
-
-        fireEvent.keyDown(year, { key: 'ArrowUp' });
-
-        expect(onChange).not.toHaveBeenCalled();
-        expect(year).toHaveTextContent('2099');
-    });
-
-    test('refuses a year step before the default minDate', () => {
-        const { onChange, year } = renderPicker('1900-06-15T10:00:00.000Z');
-
-        fireEvent.keyDown(year, { key: 'ArrowDown' });
-
-        expect(onChange).not.toHaveBeenCalled();
-        expect(year).toHaveTextContent('1900');
-    });
-
-    test('refuses a year step past an explicit maxDate', () => {
-        const { onChange, year } = renderPicker('2030-06-15T10:00:00.000Z', { maxDate: '2030-12-31' });
-
-        fireEvent.keyDown(year, { key: 'ArrowUp' });
-
-        expect(onChange).not.toHaveBeenCalled();
-        expect(year).toHaveTextContent('2030');
-    });
-
-    test('refuses a year step past the default maxDate with a microtask checkpoint mid-dispatch', async () => {
-        // What a real browser does between React's capture-phase and bubble-phase root listeners,
-        // and jsdom does not: run a microtask checkpoint. fireEvent cannot interleave one, so the
-        // flag's lifetime is asserted directly in test/utils/pickerProps.test.js — this only pins
-        // that an awaited turn around the step changes nothing.
-        const { onChange, year } = renderPicker('2099-06-15T10:00:00.000Z');
-
-        fireEvent.keyDown(year, { key: 'ArrowUp' });
-        await Promise.resolve();
-        fireEvent.keyDown(year, { key: 'ArrowUp' });
-
-        expect(onChange).not.toHaveBeenCalled();
-        expect(year).toHaveTextContent('2099');
-    });
-
-    test('lets a year already past maxDate be stepped back toward the range', () => {
-        // A value can arrive out of range from stored data. Every step reports the same bound, so
-        // refusing on the error alone would trap the field: the user could not walk back either.
-        const { onChange, year } = renderPicker('2150-06-15T10:00:00.000Z');
-
-        fireEvent.keyDown(year, { key: 'ArrowDown' });
+        clickOk();
 
         expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange.mock.calls[0][0].target.value.year()).toBe(2149);
+        expect(moment(onChange.mock.calls[0][0].target.value).toISOString()).toBe(moment(SEEDED).toISOString());
     });
 
-    test('steps the year inside the range', () => {
-        const { onChange, year } = renderPicker('2098-06-15T10:00:00.000Z');
+    test('commits nothing more than that: Cancel after opening publishes nothing', () => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={SEEDED} onChange={onChange} />));
+        fireEvent.click(screen.getByRole('textbox'));
 
-        fireEvent.keyDown(year, { key: 'ArrowUp' });
+        fireEvent.click(Array.from(document.querySelectorAll('.MuiPickersLayout-actionBar button')).find((b) => b.textContent === 'Cancel'));
+
+        expect(onChange).not.toHaveBeenCalled();
+    });
+
+    test('Clear publishes an empty value', () => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={SEEDED} onChange={onChange} clearable />));
+        fireEvent.click(screen.getByRole('textbox'));
+
+        fireEvent.click(Array.from(document.querySelectorAll('.MuiPickersLayout-actionBar button')).find((b) => b.textContent === 'Clear'));
 
         expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange.mock.calls[0][0].target.value.year()).toBe(2099);
-        expect(year).toHaveTextContent('2099');
+        expect(onChange.mock.calls[0][0].target.value).toBeNull();
     });
 });

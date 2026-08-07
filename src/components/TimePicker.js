@@ -1,52 +1,82 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { TimePicker as TPMui } from '@mui/x-date-pickers/TimePicker';
+import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
-import { createEvent } from 'utils/http/event';
-import { bind } from 'utils/decorators/decoratorUtils';
+import { mergeSlotProps, splitLegacyPickerProps, withDisabledUnderline } from 'utils/pickers/pickerProps';
+import V3ModalPickerBase from 'utils/pickers/V3ModalPickerBase';
 import {
-    createFieldStepGuard, createMomentValueCache, splitLegacyPickerProps, withDisabledUnderline, withStepGuard,
-} from 'utils/pickers/pickerProps';
+    formatPickerValue, v3ModalActions, v3ModalPickerSlotProps, v3ModalPickerSlots, v3ModalPickerViewRenderers,
+} from 'utils/pickers/v3Modal';
 
-class TimePicker extends PureComponent {
-    static propTypes = {
-        onChange: PropTypes.func,
-    };
+// v3's time field. A caller's `format` wins over it; `ampm` is passed through to the picker, so a
+// 12-hour caller should set both, exactly as it had to under v3.
+const V3_TIME_FORMAT = 'HH:mm';
 
-    static defaultProps = {
-        inputVariant: 'filled',
-        margin: 'normal',
-        fullWidth: true,
-        clearable: false,
-    };
-
-    toValue = createMomentValueCache();
-
-    stepGuard = createFieldStepGuard();
-
-    @bind
-    onChange(value, context) {
-        // A keyboard step past minTime/maxTime (or the date bounds) is dropped instead of
-        // published — the clock cannot cross those bounds either.
-        if (this.stepGuard.refuses(context)) {
-            return;
-        }
-        const { onChange, name, type } = this.props;
-        onChange && onChange(createEvent('change', { target: { name, value, type } }));
-    }
+/**
+ * The v3 time picker: a read-only field that opens a modal on a click anywhere in it, an analog clock
+ * whose hour selection moves on to the minutes, and a selection that stays a draft until "OK" accepts
+ * it. `keyboardInput` opts into v8's editable field in an inline popper instead.
+ */
+class TimePicker extends V3ModalPickerBase {
+    firstView = 'hours';
 
     render() {
-        // eslint-disable-next-line no-unused-vars
-        const { onClick, value, onChange, type, ...legacyProps } = this.props;
+        const {
+            // eslint-disable-next-line no-unused-vars
+            onClick, value, onChange, onAccept, onClose, onViewChange, type, variant, keyboardInput, commitOn,
+            showTodayButton, view, format = V3_TIME_FORMAT, ...legacyProps
+        } = this.props;
+        // Read, not destructured out: `splitLegacyPickerProps` needs it in the bag to map onto
+        // `slotProps.field.clearable` (the field's own clear adornment), and v3 also put a "Clear"
+        // in the action bar for a clearable picker.
+        const { clearable } = this.props;
         const { pickerProps, slots, slotProps } = splitLegacyPickerProps(legacyProps);
-        slotProps.textField = withStepGuard(withDisabledUnderline(slotProps.textField), this.stepGuard);
+        slotProps.textField = withDisabledUnderline(slotProps.textField);
+
+        if (keyboardInput) {
+            return (
+                <TPMui
+                    {...pickerProps}
+                    format={format}
+                    value={this.toValue(value)}
+                    slots={slots}
+                    slotProps={slotProps}
+                    onChange={this.onChange}
+                    onAccept={onAccept}
+                    onClose={onClose}
+                    onViewChange={onViewChange}
+                />
+            );
+        }
+
         return (
-            <TPMui
+            <MobileTimePicker
+                format={format}
+                placeholder=""
+                enableAccessibleFieldDOMStructure={false}
+                disableOpenPicker={!slots.openPickerIcon && !slots.openPickerButton}
+                // The analog clock, without v8's prev/next view switcher: picking the hour moves on
+                // to the minutes by itself, as v3 did.
+                viewRenderers={v3ModalPickerViewRenderers}
+                closeOnSelect={false}
                 {...pickerProps}
-                value={this.toValue(value)}
-                slots={slots}
-                slotProps={slotProps}
+                view={this.view}
+                onViewChange={this.onViewChange}
+                slots={{ ...v3ModalPickerSlots(), ...slots }}
+                slotProps={mergeSlotProps(
+                    {
+                        ...v3ModalPickerSlotProps({
+                            actions: v3ModalActions({ clearable, showTodayButton }),
+                            onAcceptValue: this.holdsDraft ? this.acceptDraft : undefined,
+                        }),
+                        textField: { displayValue: formatPickerValue(this.toValue(value), format) },
+                    },
+                    slotProps
+                )}
+                value={this.pickerValue}
                 onChange={this.onChange}
+                onAccept={this.onAccept}
+                onClose={this.onClose}
             />
         );
     }
