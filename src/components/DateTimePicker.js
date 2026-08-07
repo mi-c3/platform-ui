@@ -61,8 +61,12 @@ class DateTimePicker extends V3ModalPickerBase {
         const {
             // eslint-disable-next-line no-unused-vars
             onClick, value, onChange, onAccept, onClose, onViewChange, type, variant, keyboardInput, commitOn,
-            showTodayButton, view, format = V3_DATE_TIME_FORMAT, ...legacyProps
+            showTodayButton, view, format: formatProp, ...legacyProps
         } = this.props;
+        // `||`, not a default parameter: a default only covers `undefined`, and moment renders a
+        // FALSY format as an ISO string — a `null` from a consumer would put the date, time and
+        // offset in the field. v3 defaulted with `||`.
+        const format = formatProp || V3_DATE_TIME_FORMAT;
         // Read, not destructured out: `splitLegacyPickerProps` needs it in the bag to map onto
         // `slotProps.field.clearable` (the field's own clear adornment), and v3 also put a "Clear"
         // in the action bar for a clearable picker.
@@ -108,16 +112,18 @@ class DateTimePicker extends V3ModalPickerBase {
                         ...v3ModalPickerSlotProps({
                             actions: v3ModalActions({ clearable, showTodayButton }),
                             onAcceptValue: this.holdsDraft ? this.acceptDraft : undefined,
+                            clearable,
+                            // Shows what has been committed, never the draft: v8 renders the field
+                            // from the same value as the views, and v3's input only moved on "OK".
+                            displayValue: formatPickerValue(this.toValue(value), format),
                         }),
-                        // The field shows what has been committed, never the draft: v8 renders it
-                        // from the same value as the views, and v3's input only moved on "OK".
-                        textField: { displayValue: formatPickerValue(this.toValue(value), format) },
                     },
                     slotProps
                 )}
                 value={this.pickerValue}
                 onChange={this.onDateChange}
                 onAccept={this.onAccept}
+                onOpen={this.onOpen}
                 onClose={this.onClose}
             />
         );

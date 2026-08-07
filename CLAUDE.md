@@ -42,6 +42,13 @@ npm run lint:fix
 - Don't break 1.x consumer APIs. Legacy props are translated, not removed — pattern:
   `src/utils/pickers/pickerProps.js` (v3 picker props like `inputVariant`, `clearable`,
   string date values).
+- Restore legacy BEHAVIOUR through MUI's own props and slots, not through CSS keyed to its
+  internal DOM. The date/time pickers are the worked example (`src/utils/pickers/v3Modal.js`,
+  `V3ModalPickerBase.js`): the v3 modal interaction is reproduced with `Mobile*` pickers, slots
+  and `viewRenderers`, while spacing and type scale are left at MUI's defaults. An earlier
+  attempt matched v3 to the pixel with ~25 rules against `.MuiDayCalendar-*`,
+  `.MuiPickersArrowSwitcher-*` and the clock's fixed geometry; that degrades silently on a MUI
+  upgrade, so it was removed. Don't reintroduce it — see the 2.1.4 CHANGELOG entry.
 - React 19: no `defaultProps` on function components — use default parameters.
 - Form-like components emit `onChange({ target: { name, value } })`. Keep this event shape.
 - Class components use legacy decorators (`@bind`, `@memoize()`); babel is configured for

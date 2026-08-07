@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import MuiTextField from '@mui/material/TextField';
 import moment from 'moment';
 import { usePickerActionsContext, usePickerContext, usePickerTranslations } from '@mui/x-date-pickers/hooks';
@@ -36,8 +38,8 @@ import MdiIcon from 'components/MdiIcon';
  * It also opens the picker, which is what made v3's field a trigger. v8 opens from its own
  * open-picker button instead, and the standalone pickers turn that button off.
  */
-export const ModalPickerField = ({ displayValue, onClick, ...props }) => {
-    const { setOpen } = usePickerActionsContext();
+export const ModalPickerField = ({ displayValue, onClick, showClearAdornment, onClearValue, InputProps, ...props }) => {
+    const { setOpen, clearValue } = usePickerActionsContext();
     const { disabled, readOnly } = usePickerContext();
     const handleClick = (event) => {
         onClick?.(event);
@@ -45,12 +47,45 @@ export const ModalPickerField = ({ displayValue, onClick, ...props }) => {
             setOpen(true);
         }
     };
-    return <MuiTextField {...props} onClick={handleClick} value={displayValue ?? ''} />;
+    /*
+     * v3 put a clear icon in a `clearable` field. v8 has one, through `slotProps.field.clearable`,
+     * but its field hides it whenever the field is read-only — and this one always is, because that
+     * is what stops the value being typed. So the adornment is rendered here instead.
+     *
+     * `stopPropagation`, or clearing would also open the dialog through the field's own onClick.
+     * `onClearValue` is the action bar's commit path: while the picker holds a draft, `clearValue`
+     * alone would only empty that draft, and the consumer would never hear about it.
+     */
+    const handleClear = (event) => {
+        event.stopPropagation();
+        onClearValue?.(null);
+        clearValue();
+    };
+    const showClear = showClearAdornment && !disabled && !readOnly && !!displayValue;
+    const inputProps = showClear
+        ? {
+            ...InputProps,
+            endAdornment: (
+                <>
+                    <InputAdornment position="end">
+                        <IconButton aria-label="Clear input" size="small" edge="end" onClick={handleClear}>
+                            <MdiIcon name="close" size={20} />
+                        </IconButton>
+                    </InputAdornment>
+                    {InputProps?.endAdornment}
+                </>
+            ),
+        }
+        : InputProps;
+    return <MuiTextField {...props} InputProps={inputProps} onClick={handleClick} value={displayValue ?? ''} />;
 };
 
 ModalPickerField.propTypes = {
     displayValue: PropTypes.string,
     onClick: PropTypes.func,
+    showClearAdornment: PropTypes.bool,
+    onClearValue: PropTypes.func,
+    InputProps: PropTypes.object,
 };
 
 /**
@@ -109,8 +144,14 @@ export const MODAL_PICKER_FORMAT = 'DD, MMM YYYY HH:mm';
 /** v3's weekday header: "Sun", "Mon", ... — v8 narrows it to a single letter. */
 export const v3DayOfWeekFormatter = (date) => moment(date).format('ddd');
 
-/** Formats what the field shows. The picker's own `format` wins; each one passes its v3 default. */
-export const formatPickerValue = (date, format = MODAL_PICKER_FORMAT) => (date ? moment(date).format(format) : '');
+/**
+ * Formats what the field shows. The picker's own `format` wins; each one passes its v3 default.
+ *
+ * `||` rather than a default parameter, which only covers `undefined`: moment renders a FALSY format
+ * as an ISO-8601 string, so a `null` reaching here puts "2026-08-07T19:54:00+05:00" in the field —
+ * a time on a date picker, whatever the caller asked for. v3 defaulted with `||` and never showed it.
+ */
+export const formatPickerValue = (date, format) => (date ? moment(date).format(format || MODAL_PICKER_FORMAT) : '');
 
 /**
  * v3 modal pickers: a read-only field, and a dialog with the date/time tabs plus an action bar.
@@ -143,11 +184,22 @@ const v3ModalLayoutSx = (theme) => ({
     '& .MuiPickersLayout-tabs .MuiTab-root.Mui-selected': { opacity: 1 },
 });
 
-export const v3ModalPickerSlotProps = ({ actions = ['cancel', 'accept'], openPickerButtonPosition, onAcceptValue } = {}) => ({
+/**
+ * `displayValue` and `onClick` belong to the textField slot, and are taken here rather than merged
+ * in by the caller: this function owns that slot, and a caller adding its own `textField` entry
+ * alongside the spread would replace it wholesale — which is how the clear adornment went missing.
+ */
+export const v3ModalPickerSlotProps = ({
+    actions = ['cancel', 'accept'], openPickerButtonPosition, onAcceptValue, clearable, displayValue, onClick,
+} = {}) => ({
     field: { readOnly: true, ...(openPickerButtonPosition ? { openPickerButtonPosition } : {}) },
     // v3's toolbar had no title; v8 defaults it to "Select date & time".
     toolbar: { toolbarTitle: '' },
     actionBar: { actions, onAcceptValue },
+    // The field draws its own clear adornment — see `ModalPickerField`.
+    // `showClearAdornment`, not `clearable`: MUI's field layer consumes a `clearable` on the
+    // textField slot before the slot itself is rendered.
+    textField: { showClearAdornment: clearable, onClearValue: onAcceptValue, displayValue, onClick },
     layout: { sx: v3ModalLayoutSx },
 });
 

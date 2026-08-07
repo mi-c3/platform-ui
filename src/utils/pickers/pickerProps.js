@@ -47,6 +47,24 @@ export const createMomentValueCache = () => {
     };
 };
 
+/**
+ * "Now", moved inside the picker's own `minDate`/`maxDate`. v3 opened an empty picker on the current
+ * date; opening it on one the picker itself forbids would render a view with every day disabled, so
+ * the bound wins — which is what MUI does for its own reference date. `disablePast`/`disableFuture`
+ * need no handling (now satisfies both) and `minTime`/`maxTime` only dim part of the clock face,
+ * which stays usable; `minDateTime`/`maxDateTime` are not read here, so a caller using those and
+ * relying on the fallback should pass `minDate`/`maxDate` too.
+ */
+export const boundedNow = (minDate, maxDate) => {
+    const now = moment();
+    const min = minDate && moment(minDate);
+    if (min && now.isBefore(min)) {
+        return min;
+    }
+    const max = maxDate && moment(maxDate);
+    return max && now.isAfter(max) ? max : now;
+};
+
 const resolveSlotProps = (slotProps, ownerState) => (typeof slotProps === 'function' ? slotProps(ownerState) : slotProps);
 
 /**

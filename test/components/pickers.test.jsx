@@ -223,6 +223,35 @@ describe.each([
 });
 
 /*
+ * What the empty-field fallback puts on screen, not just what it commits: v3 opened on the current
+ * date with it selected. Seeding a date the picker itself forbids would render a view with every day
+ * disabled, which is why the fallback is bounded.
+ */
+describe.each([
+    ['DatePicker', DatePicker],
+    ['DateTimePicker', DateTimePicker],
+])('%s empty-field fallback', (name, Picker) => {
+    const openPicker = (props) => {
+        render(withAdapter(<Picker label="When" name="when" value={null} onChange={() => {}} {...props} />));
+        fireEvent.click(screen.getByRole('textbox'));
+        return document.querySelector('.MuiPickersDay-root.Mui-selected');
+    };
+
+    test('opens the calendar on today, with today selected', () => {
+        expect(openPicker()).toHaveTextContent(String(moment().date()));
+    });
+
+    test('opens on maxDate instead when today is past it, on a day that can be picked', () => {
+        const max = moment().subtract(2, 'years').startOf('month').add(9, 'days');
+
+        const selected = openPicker({ maxDate: max.toDate() });
+
+        expect(selected).toHaveTextContent(String(max.date()));
+        expect(selected).not.toBeDisabled();
+    });
+});
+
+/*
  * v3 committed the date the dialog was opened on when "OK" was pressed with nothing selected — a
  * field that seeds "now" (the form designer's does) therefore commits "now". v8 skips `onAccept`
  * when the value matches what it last committed, so the action bar owns the commit here.
@@ -248,6 +277,29 @@ describe.each([
         expect(moment(onChange.mock.calls[0][0].target.value).toISOString()).toBe(moment(SEEDED).toISOString());
     });
 
+    test('commits "now" when the field was empty: v3 opened an empty picker on the current date', () => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={null} onChange={onChange} />));
+        fireEvent.click(screen.getByRole('textbox'));
+
+        clickOk();
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        const published = onChange.mock.calls[0][0].target.value;
+        expect(Math.abs(published.valueOf() - Date.now())).toBeLessThan(5000);
+    });
+
+    test('leaves an empty field empty when that dialog is cancelled', () => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={null} onChange={onChange} />));
+        fireEvent.click(screen.getByRole('textbox'));
+
+        fireEvent.click(Array.from(document.querySelectorAll('.MuiPickersLayout-actionBar button')).find((b) => b.textContent === 'Cancel'));
+
+        expect(onChange).not.toHaveBeenCalled();
+        expect(document.querySelector('input').value).toBe('');
+    });
+
     test('commits nothing more than that: Cancel after opening publishes nothing', () => {
         const onChange = jest.fn();
         render(withAdapter(<Picker label="When" name="when" value={SEEDED} onChange={onChange} />));
@@ -267,5 +319,85 @@ describe.each([
 
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange.mock.calls[0][0].target.value).toBeNull();
+    });
+});
+
+/*
+ * A falsy `format`. Consumers store one, and the form designer's "Format predefined" writes `null`
+ * into it whenever "Custom" is selected. moment renders a falsy format as ISO-8601, so a default
+ * parameter — which only fires for `undefined` — let that reach the field as
+ * "2026-08-07T19:54:00+05:00": a time on a date picker, and dashes whatever the caller chose.
+ */
+describe.each([
+    ['DatePicker', DatePicker, 'MMM Do YYYY'],
+    ['TimePicker', TimePicker, 'HH:mm'],
+    ['DateTimePicker', DateTimePicker, 'MMM Do YYYY, HH:mm'],
+])('%s falsy format', (name, Picker, fallback) => {
+    const VALUE = '2026-08-07T14:54:00.000Z';
+    const displayed = (props) => {
+        render(withAdapter(<Picker label="When" name="when" value={VALUE} onChange={() => {}} {...props} />));
+        return document.querySelector('input').value;
+    };
+
+    test.each([
+        ['null', null],
+        ['an empty string', ''],
+        ['undefined', undefined],
+    ])('falls back to the v3 default when the format is %s', (label, format) => {
+        const value = displayed({ format });
+
+        expect(value).toBe(moment(VALUE).format(fallback));
+        expect(value).not.toContain('T');
+    });
+
+    test('still lets a real format win', () => {
+        expect(displayed({ format: 'DD.MM.YYYY' })).toBe(moment(VALUE).format('DD.MM.YYYY'));
+    });
+});
+
+/*
+ * v3 put a clear icon in the field itself when `clearable`, alongside the action bar's "Clear".
+ * v8 has the same idea behind `slotProps.field.clearable`, but its field suppresses the adornment
+ * on a read-only field — and the v3 modal field always is, so nothing rendered at all.
+ */
+describe.each([
+    ['DatePicker', DatePicker],
+    ['TimePicker', TimePicker],
+    ['DateTimePicker', DateTimePicker],
+])('%s clear adornment', (name, Picker) => {
+    const VALUE = '2026-08-07T14:54:00.000Z';
+    const renderPicker = (props) => {
+        const onChange = jest.fn();
+        render(withAdapter(<Picker label="When" name="when" value={VALUE} onChange={onChange} {...props} />));
+        return { onChange, clear: () => screen.queryByRole('button', { name: /clear input/i }) };
+    };
+
+    test('renders a clear button in the field when clearable', () => {
+        expect(renderPicker({ clearable: true }).clear()).toBeInTheDocument();
+    });
+
+    test('renders none when the picker is not clearable', () => {
+        expect(renderPicker().clear()).not.toBeInTheDocument();
+    });
+
+    test('renders none on an empty field — there is nothing to clear', () => {
+        const { clear } = renderPicker({ clearable: true, value: null });
+
+        expect(clear()).not.toBeInTheDocument();
+    });
+
+    test('renders none when the picker is read-only or disabled', () => {
+        expect(renderPicker({ clearable: true, readOnly: true }).clear()).not.toBeInTheDocument();
+    });
+
+    test('publishes an empty value and leaves the dialog shut', () => {
+        const { onChange, clear } = renderPicker({ clearable: true });
+
+        fireEvent.click(clear());
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange.mock.calls[0][0].target.value).toBeNull();
+        // The field opens the picker on a click; clearing must not count as one.
+        expect(document.querySelector('.MuiDialog-root')).not.toBeInTheDocument();
     });
 });

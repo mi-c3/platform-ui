@@ -20,6 +20,7 @@ class Probe extends V3ModalPickerBase {
             <div>
                 <span data-testid="value">{String(this.pickerValue)}</span>
                 <span data-testid="view">{String(this.view)}</span>
+                <button data-testid="open" onClick={this.onOpen} />
                 <button data-testid="select" onClick={() => this.onChange(SELECTED)} />
                 <button data-testid="accept-bar" onClick={() => this.acceptDraft(this.pickerValue)} />
                 <button data-testid="accepted" onClick={() => this.onAccept(SELECTED)} />
@@ -67,6 +68,92 @@ describe('V3ModalPickerBase', () => {
 
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange.mock.calls[0][0].target.value.toISOString()).toBe(new Date(HELD).toISOString());
+    });
+
+    test('an empty picker opens on "now", so OK with nothing selected still commits', () => {
+        // v3 fell back to the current date when the value was null; v8 opens on nothing.
+        const { onChange } = renderProbe({ value: null });
+
+        fireEvent.click(screen.getByTestId('open'));
+        fireEvent.click(screen.getByTestId('accept-bar'));
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        const published = onChange.mock.calls[0][0].target.value;
+        expect(published).not.toBeNull();
+        expect(Math.abs(published.valueOf() - Date.now())).toBeLessThan(5000);
+    });
+
+    test('the seeded "now" is a draft: Cancel leaves the empty value alone', () => {
+        const { onChange } = renderProbe({ value: null });
+
+        fireEvent.click(screen.getByTestId('open'));
+        fireEvent.click(screen.getByTestId('close'));
+
+        expect(onChange).not.toHaveBeenCalled();
+        expect(shown()).toBe('null');
+    });
+
+    test('the fallback is moved inside minDate/maxDate rather than opening a forbidden view', () => {
+        const MAX = '2020-01-31T00:00:00.000Z';
+        const { onChange } = renderProbe({ value: null, maxDate: MAX });
+
+        fireEvent.click(screen.getByTestId('open'));
+        fireEvent.click(screen.getByTestId('accept-bar'));
+
+        expect(onChange.mock.calls[0][0].target.value.toISOString()).toBe(new Date(MAX).toISOString());
+    });
+
+    test('a minDate in the future wins over "now" the same way', () => {
+        const MIN = '2999-01-31T00:00:00.000Z';
+        const { onChange } = renderProbe({ value: null, minDate: MIN });
+
+        fireEvent.click(screen.getByTestId('open'));
+        fireEvent.click(screen.getByTestId('accept-bar'));
+
+        expect(onChange.mock.calls[0][0].target.value.toISOString()).toBe(new Date(MIN).toISOString());
+    });
+
+    test('bounds that "now" already satisfies leave it alone', () => {
+        const { onChange } = renderProbe({ value: null, minDate: '1970-01-01', maxDate: '2999-01-01' });
+
+        fireEvent.click(screen.getByTestId('open'));
+        fireEvent.click(screen.getByTestId('accept-bar'));
+
+        expect(Math.abs(onChange.mock.calls[0][0].target.value.valueOf() - Date.now())).toBeLessThan(5000);
+    });
+
+    test('a second open does not reseed a draft that is already being edited', () => {
+        // MUI fires onOpen for every setOpen(true), without checking the picker was closed.
+        const { onChange } = renderProbe({ value: null });
+
+        fireEvent.click(screen.getByTestId('open'));
+        fireEvent.click(screen.getByTestId('select'));
+        fireEvent.click(screen.getByTestId('open'));
+
+        expect(shown()).toBe(SELECTED);
+        fireEvent.click(screen.getByTestId('accept-bar'));
+        expect(onChange.mock.calls[0][0].target.value).toBe(SELECTED);
+    });
+
+    test('a picker opened on a value it already holds is not reseeded', () => {
+        const { onChange } = renderProbe();
+
+        fireEvent.click(screen.getByTestId('open'));
+        fireEvent.click(screen.getByTestId('accept-bar'));
+
+        expect(onChange.mock.calls[0][0].target.value.toISOString()).toBe(new Date(HELD).toISOString());
+    });
+
+    test('commitOn="change" does not seed: the caller stages its own opening value', () => {
+        // DateTimePickerRange seeds both ends itself and restores them on Cancel.
+        const onOpen = jest.fn();
+        const { onChange } = renderProbe({ value: null, commitOn: 'change', onOpen });
+
+        fireEvent.click(screen.getByTestId('open'));
+
+        expect(onOpen).toHaveBeenCalledTimes(1);
+        expect(onChange).not.toHaveBeenCalled();
+        expect(shown()).toBe('null');
     });
 
     test('closing drops the draft, which is all Cancel has to do', () => {

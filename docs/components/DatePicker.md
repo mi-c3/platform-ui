@@ -18,17 +18,18 @@ import { DatePicker } from '@mic3/platform-ui';
 | `inputVariant` | `'standard'` \| `'outlined'` \| `'filled'` | `'filled'` | Variant of the rendered text field (mapped to `slotProps.textField.variant`). |
 | `margin` | `'none'` \| `'dense'` \| `'normal'` | `'normal'` | Margin of the text field. |
 | `fullWidth` | bool | `true` | Full-width text field. |
-| `clearable` | bool | `false` | Adds a clear adornment to the field (mapped to `slotProps.field.clearable`; clearing fires `onChange` with `null`). |
+| `clearable` | bool | `false` | Adds a clear (×) button to the field AND a "Clear" action to the dialog, as v3 had. Either fires `onChange` with `null`. The field's own button is rendered by the picker rather than by MUI, whose field suppresses it on a read-only input. |
 | `showTodayButton` | bool | — | Adds "Today" to the action bar, left of "Cancel"/"OK" as in v3. Pass `slotProps.actionBar.actions` to control the full list. |
 | `disableToolbar` | bool | — | Hides the picker toolbar. |
 | `keyboardInput` | bool | `false` | Opts out of the v3 modal: renders v8's editable section field in an inline popper and publishes every selection. See [Behaviour](#behaviour-the-v3-modal). |
 | `commitOn` | `'accept'` \| `'change'` | `'accept'` | Where a selection is published: the action bar's OK, or every click. `'change'` is for a caller that owns its own accept. |
 | `TextFieldComponent` | elementType | — | Custom text field component (mapped to `slots.textField`). Passing one also sets `enableAccessibleFieldDOMStructure={false}`, since the legacy contract is a single `<input />` — the v8 default expects the slot to render a `PickersSectionList` and throws otherwise. Pass `enableAccessibleFieldDOMStructure` explicitly to override. |
 | `minDate` / `maxDate` | Date \| string \| moment | — | Coerced to `moment` before being passed to the picker. |
+| `format` | string | `'MMM Do YYYY'` | How the field renders the committed value — v3's date format. Passed through to the picker too. A falsy value (`null`, `''`) falls back to the default rather than reaching moment, which renders a falsy format as an ISO-8601 string. |
 | `slots` / `slotProps` | object | — | Passed through to the picker, merged per slot over what the legacy props produced (so `clearable` and a `slotProps.field` of your own both survive). A slot given as a function (MUI resolves it against `ownerState`) stays a function, and merges the same way once resolved. A `slots.textField` also sets `enableAccessibleFieldDOMStructure={false}`, exactly as `TextFieldComponent` does. |
 | `label`, `placeholder`, `helperText`, `error`, `required`, `id`, `autoFocus`, `size`, `onBlur`, `onFocus`, `InputProps`, `inputProps`, `InputLabelProps`, `className`, `style` | — | — | Forwarded to the rendered text field (`slotProps.textField`). `InputProps.disableUnderline` defaults to `true`. |
 
-All remaining props (`format`, `disablePast`, `views`, ...) are passed through to the MUI X `DatePicker`.
+All remaining props (`disablePast`, `views`, `view`, `onViewChange`, `open`, ...) are passed through to the MUI X picker — `MobileDatePicker`, or `DatePicker` under `keyboardInput`. A `view`/`open` of your own takes over from the component's own tracking of them.
 
 ## Usage
 
@@ -55,15 +56,21 @@ The picker renders what `@material-ui/pickers` v3 did, which is what the applica
   view is reached from the caret beside the month label.
 - A selection is a **draft**: it lights up in the dialog, but nothing reaches `onChange` until the
   action bar's **OK**. **Cancel** discards the draft and leaves the value exactly as it was.
-- The action bar is `Clear` (when `clearable`) / `Today` (when `showTodayButton`) / `Cancel` / `OK`.
-- **OK with nothing selected commits the value the dialog opened on** — so a field that seeds "now"
-  (the form designer's does) commits "now", as v3 did. v8 would commit nothing there.
-- The field keeps showing the value that was last committed — never the draft — so a picker opened on
-  an empty field stays empty until OK.
+- The action bar is `Clear` (when `clearable`) / `Today` (when `showTodayButton`) / `Cancel` / `OK`,
+  and a `clearable` picker also carries a clear (×) button in the field itself. Clearing from the
+  field publishes straight away and does not open the dialog.
+- **OK with nothing selected commits the value the dialog opened on** — and an empty field opens on
+  today, so one click fills it in. v3 did both (`usePickerState` fell back to
+  `initialFocusedDate ?? now`); v8 opens on nothing and commits nothing. The fallback is moved inside
+  `minDate`/`maxDate` when today falls outside them, so it never opens a view the picker forbids. A
+  consumer that seeds its own opening value (the form designer's `DateTime`) passes one in and
+  overrides the fallback; so does a caller driving `open` itself, which MUI does not report as an open.
+- The field keeps showing the value that was last committed — never the draft, and never the "now"
+  an empty picker opened on — so a picker opened on an empty field stays empty until OK.
 - Weekday names read "Sun", "Mon", ... (`dayOfWeekFormatter`), as v3's did.
 
 What is deliberately NOT reproduced is v3's exact geometry and type scale — dialog width, toolbar and
-view heights, week-row spacing, clock diameter, font sizes and dim levels. Matching those meant CSS
+view heights, week-row spacing, font sizes and dim levels. Matching those meant CSS
 against MUI's internal DOM, which breaks silently on a MUI upgrade; the picker takes v8's own metrics
 instead — and so does `DateTimePickerRange`, whose modal opens these same pickers.
 

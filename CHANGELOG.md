@@ -2,6 +2,42 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.1.5
+
+### Fixed
+
+A `clearable` picker shows the clear (×) button in its field again. v3 drew one there as well as
+the "Clear" in the action bar; `clearable` maps to `slotProps.field.clearable`, and v8's field
+suppresses that adornment whenever the field is read-only — which the v3 modal field always is,
+since that is what stops the value being typed. So nothing rendered at all, on every date, time and
+dateTime field in the application. The picker now draws the adornment itself, publishing an empty
+value without opening the dialog.
+
+A falsy `format` — `null` or `''` — now falls back to the picker's v3 default instead of reaching
+moment, which renders a falsy format as an ISO-8601 string. `format={null}` put
+"2026-08-07T19:54:00+05:00" in the field: a time on a `DatePicker`, and dashes whatever format the
+caller had chosen. v3 defaulted with `||`; these wrappers used an ES6 default parameter, which only
+fires for `undefined`. The form designer stores exactly that null — its "Format predefined" setting
+writes one the moment "Custom" is picked — so its `date` and `dateTime` fields showed the ISO value.
+
+`DatePicker`, `TimePicker` and `DateTimePicker` open an EMPTY field on the current date/time again,
+so "OK" with nothing selected commits it. 2.1.4 restored that commit for a picker whose value was
+already seeded, but a genuinely empty one opened on nothing and committed nothing — v3 fell back to
+`initialFocusedDate ?? now` inside `usePickerState`, so pressing OK always produced a value. The
+standalone `time` field in the form designer was the visible case: its consumer
+(`containers/Designer/Form/components/TimePicker.js`) seeds nothing, where the `date`/`dateTime`
+fields' `DateTime` seeds its own opening value and so already behaved.
+
+The fallback is seeded once, into the draft, when the dialog opens — not derived in render, which
+v8 would read as an externally changed value and use to reset the views mid-edit. It is moved inside
+`minDate`/`maxDate` when now falls outside them (`boundedNow`), so the picker never opens a view in
+which every day is disabled. The field still shows only what the consumer has committed, so an empty
+field stays empty until OK, and Cancel leaves it empty.
+
+Unaffected: `keyboardInput`, and `commitOn="change"` — a caller that stages its own value
+(`DateTimePickerRange`) already opens each end on "now" and restores it on Cancel. So is a caller
+driving `open` itself, since MUI raises `onOpen` only for an open it performed.
+
 ## 2.1.4
 
 ### Changed

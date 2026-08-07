@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { createEvent } from 'utils/http/event';
 import { bind } from 'utils/decorators/decoratorUtils';
-import { createMomentValueCache } from 'utils/pickers/pickerProps';
+import { boundedNow, createMomentValueCache } from 'utils/pickers/pickerProps';
 
 /**
  * The commit semantics shared by the modal pickers: a selection is a draft, and only the action
@@ -28,8 +28,11 @@ class V3ModalPickerBase extends PureComponent {
     static propTypes = {
         onChange: PropTypes.func,
         onAccept: PropTypes.func,
+        onOpen: PropTypes.func,
         onClose: PropTypes.func,
         onViewChange: PropTypes.func,
+        minDate: PropTypes.any,
+        maxDate: PropTypes.any,
         // Editable v8 section field in an inline popper, publishing as it goes. Opt-in, for a screen
         // that wants typing; every existing consumer expects the v3 modal.
         keyboardInput: PropTypes.bool,
@@ -96,6 +99,30 @@ class V3ModalPickerBase extends PureComponent {
             return;
         }
         this.publish(value);
+    }
+
+    /**
+     * v3 opened an empty picker on "now" — `usePickerState` fell back to `initialFocusedDate ?? now`
+     * when the value was null — so "OK" with nothing selected still committed a value. v8 opens on
+     * nothing and commits nothing, which left an empty field unfillable without hunting for today in
+     * the calendar. Seeded ONCE, into the draft, rather than derived in render: v8 detects an
+     * externally changed value by reference, so a fresh `moment()` per render would reset the views
+     * mid-edit. The field goes on showing what the consumer holds — nothing — until "OK".
+     *
+     * Consumers that seed their own opening value (the form designer's `DateTime`, and
+     * `DateTimePickerRange`, which stages both ends itself) pass one in and are unaffected. So is a
+     * caller driving `open` itself: MUI reports `onOpen` only for an open it performed, and such a
+     * caller is running its own dialog lifecycle anyway.
+     */
+    @bind
+    onOpen() {
+        const { onOpen, value, minDate, maxDate } = this.props;
+        // `draft === undefined` also means "not already seeded": MUI fires onOpen for every
+        // `setOpen(true)`, without checking that the picker was closed.
+        if (this.holdsDraft && !value && this.state.draft === undefined) {
+            this.setState({ draft: boundedNow(minDate, maxDate) });
+        }
+        onOpen && onOpen();
     }
 
     /**

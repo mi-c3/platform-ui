@@ -1,6 +1,6 @@
 {
   "name": "@mic3/platform-ui",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Affectli React UI component library based on MUI v7",
   "main": "build/index.js",
   "files": [
