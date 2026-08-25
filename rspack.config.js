@@ -32,7 +32,15 @@ module.exports = {
                     options: babelOptions,
                 },
             },
-            ...fileLoader,              
+            ...fileLoader,
+            // Pre-built ESM in node_modules (@material-ui/core/esm/*) imports its
+            // @babel/runtime helpers without file extensions. `experiments.outputModule`
+            // below puts the graph in strict-ESM mode, where such requests must be fully
+            // specified, so relax that for dependency code we do not transpile.
+            {
+                test: /\.m?js$/,
+                resolve: { fullySpecified: false },
+            },
         ],
     },
     plugins: [
