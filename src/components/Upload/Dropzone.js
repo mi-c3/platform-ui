@@ -77,7 +77,11 @@ class Dropzone extends PureComponent {
     static defaultProps = {
         accept: 'image/*,video/*,application/*,audio/*,text/*',
         filesLimit: 1,
-        capture: true,
+        // `capture` is intentionally NOT defaulted. It is an "overloaded boolean" DOM attribute:
+        // `capture={true}` renders as `capture=""`, and iOS Safari treats the mere presence of the
+        // attribute as "go straight to the camera", skipping the native chooser (Photo Library /
+        // Take Photo / Choose File). Leaving it undefined omits the attribute and restores the
+        // chooser. Pass `capture="user"` or `capture="environment"` to opt a specific caller in.
         showPreviews: false, // By default previews show up under in the dialog and inside in the standalone
         clearOnUnmount: true,
         disableDragActive: false,
@@ -91,7 +95,7 @@ class Dropzone extends PureComponent {
         maxSize: PropTypes.number,
         dropzoneTextHover: PropTypes.string,
         dropzoneText: PropTypes.string,
-        capture: PropTypes.bool,
+        capture: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf(['user', 'environment'])]),
         showPreviews: PropTypes.bool,
         clearOnUnmount: PropTypes.bool,
         onChange: PropTypes.func,
