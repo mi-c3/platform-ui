@@ -18,7 +18,7 @@ import { Dropzone } from '@mic3/platform-ui';
 | `accept` | string \| object | `'image/*,video/*,application/*,audio/*,text/*'` | Accepted types. A comma-separated MIME string is converted to the react-dropzone v14 object format; an object is passed through as-is. |
 | `filesLimit` | number | `1` | Maximum number of files kept after a drop (excess files are discarded). |
 | `multiple` | bool | — | Allow selecting multiple files in the native file dialog. |
-| `capture` | bool | `true` | `capture` attribute on the underlying `<input>`. |
+| `capture` | bool \| `'user'` \| `'environment'` | — | `capture` attribute on the underlying `<input>`. Not set by default: iOS Safari treats the attribute's mere presence as "open the camera now" and skips the native chooser (Photo Library / Take Photo / Choose File). Pass `'user'` or `'environment'` to deliberately open a camera. |
 | `dropzoneText` | string | — | Text shown in the default drop area. |
 | `dropzoneTextHover` | string | — | Text shown while dragging files over the drop area. |
 | `children` | node \| func | — | Custom drop-target content; replaces the default upload area (a drag overlay with `dropzoneTextHover` is shown while dragging). |
