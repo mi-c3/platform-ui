@@ -568,3 +568,67 @@ describe('popup animation (legacy Grow parity)', () => {
         }
     });
 });
+
+describe('input text follows the value prop (picker-pattern regression)', () => {
+    // The legacy component derived the closed-popup input text from `props.value`
+    // (`openSuggestions ? query : label`). A "picker" consumer (relations typeahead) keeps
+    // `value` null and turns every selection into its own chip — the picked option's label
+    // must NOT stay stranded in the input.
+    test('selection the parent does not adopt leaves the input empty', () => {
+        renderNext({ onChange: jest.fn(), value: null });
+        const input = screen.getByRole('combobox');
+        openPopup(input);
+        fireEvent.click(screen.getByText('Bob'));
+        expect(input).toHaveValue('');
+    });
+
+    test('selection the parent adopts shows the option label once the value prop lands', () => {
+        const { rerender } = renderNext({ value: null });
+        const input = screen.getByRole('combobox');
+        openPopup(input);
+        fireEvent.click(screen.getByText('Bob'));
+        rerender(
+            <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} options={USERS} value={USERS[1]} />
+        );
+        expect(input).toHaveValue('Bob');
+    });
+
+    test('a clear the parent ignores keeps showing the value-prop label', () => {
+        renderNext({ value: USERS[1], clearable: true });
+        const input = screen.getByRole('combobox');
+        fireEvent.click(screen.getByLabelText('Clear'));
+        expect(input).toHaveValue('Bob');
+    });
+
+    test('multiple keeps the input empty after selecting (labels live in chips)', () => {
+        renderNext({ multiple: true, value: [], onChange: jest.fn() });
+        const input = screen.getByRole('combobox');
+        openPopup(input);
+        fireEvent.click(screen.getByText('Alice'));
+        expect(input).toHaveValue('');
+    });
+
+    test('typed text survives an async options page landing mid-search', () => {
+        const { rerender } = render(
+            <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} suggest={() => {}} options={[]} value={null} />
+        );
+        const input = screen.getByRole('combobox');
+        fireEvent.focus(input);
+        fireEvent.change(input, { target: { value: 'Al' } });
+        deliverOptions(rerender, { options: USERS, value: null });
+        expect(input).toHaveValue('Al');
+    });
+});
+
+describe('waiting-window blur (regression: popup opened later, detached from focus)', () => {
+    test('blur while the open-time load is pending abandons the session — the arriving page does not open the popup', () => {
+        const { rerender } = render(
+            <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} suggest={() => {}} options={[]} value={null} />
+        );
+        const input = screen.getByRole('combobox');
+        openPopup(input);
+        fireEvent.blur(input);
+        deliverOptions(rerender, { options: USERS, value: null });
+        expect(screen.queryByRole('listbox')).toBeNull();
+    });
+});

@@ -130,13 +130,14 @@ class AutocompleteNext extends PureComponent {
     // Keeps the clear (x) visible without hover/focus, like the legacy always-visible button.
     static PERSISTENT_CLEAR_SX = { '&& .MuiAutocomplete-clearIndicator': { visibility: 'visible' } };
 
-    state = { open: false, waitingForOptions: false, closing: false };
+    state = { open: false, waitingForOptions: false, closing: false, inputValue: '' };
 
     constructor(props) {
         super(props);
         // Last selected option per stored value: keeps the visible label/adornment correct
         // while async options are replaced or cleared by unrelated store updates.
         this.selectedOptionCache = new Map();
+        this.state.inputValue = this.displayText();
         // The query the most recent suggest() was fired with — used to detect that the
         // options currently held by the parent belong to a previous (filtered) session.
         this.lastSuggestQuery = null;
@@ -167,6 +168,14 @@ class AutocompleteNext extends PureComponent {
         // fetch, like the legacy component.
         if (this.state.waitingForOptions && (prevProps.options !== this.props.options || (prevProps.isLoading && !this.props.isLoading))) {
             this.setState({ waitingForOptions: false });
+        }
+        // Only a `value`/`multiple` change re-derives the input text — an options change must
+        // not, or an async page landing mid-search would wipe what the user is typing.
+        if (prevProps.value !== this.props.value || prevProps.multiple !== this.props.multiple) {
+            const inputValue = this.displayText();
+            if (inputValue !== this.state.inputValue) {
+                this.setState({ inputValue });
+            }
         }
     }
 
@@ -220,11 +229,32 @@ class AutocompleteNext extends PureComponent {
         onChange && onChange({ target: { name, value } });
     }
 
+    // The input text when the user is not typing: derived from the `value` PROP, like the
+    // legacy component (`openSuggestions ? query : label`). MUI's own post-select reset uses
+    // the picked OPTION instead, which strands its label in the field when the parent does
+    // not adopt the selection (the "picker" pattern — e.g. a relations typeahead that turns
+    // every pick into a chip and keeps `value` null).
+    @bind
+    displayText() {
+        const { multiple, value, options, valueField } = this.props;
+        if (multiple) {
+            return '';
+        }
+        const resolved = resolveOption(value, options || [], this.selectedOptionCache, valueField);
+        return resolved === null || resolved === undefined ? '' : this.getOptionLabel(resolved);
+    }
+
     @bind
     onInputChange(event, inputValue, reason) {
         if (reason === 'input') {
+            this.setState({ inputValue });
             this.suggestDebounced(inputValue);
+            return;
         }
+        // Every non-typing proposal from MUI (select/blur/clear resets) is replaced by the
+        // value-prop-derived text; a consumer that adopts the selection re-syncs through
+        // componentDidUpdate when the new `value` prop lands.
+        this.setState({ inputValue: this.displayText() });
     }
 
     @bind
@@ -277,6 +307,18 @@ class AutocompleteNext extends PureComponent {
         if (this.state.closing) {
             this.setState({ open: false, waitingForOptions: false, closing: false });
         }
+    }
+
+    @bind
+    abandonWaitingOnBlur(event, original) {
+        // While the open-time load is pending the controlled `open` prop is false, so MUI's
+        // own blur→close path never runs (its handleClose bails on `!open`). Without this,
+        // leaving the field mid-load lets the options page open the popup later, detached
+        // from focus. A popup that is actually visible keeps MUI's normal close handling.
+        if (this.state.waitingForOptions) {
+            this.setState({ open: false, waitingForOptions: false, closing: false });
+        }
+        original && original(event);
     }
 
     @bind
@@ -364,6 +406,7 @@ class AutocompleteNext extends PureComponent {
         const innerInputProps = {
             ...params.inputProps,
             onMouseDown: event => this.reopenDuringClosing(event, params.inputProps && params.inputProps.onMouseDown),
+            onBlur: event => this.abandonWaitingOnBlur(event, params.inputProps && params.inputProps.onBlur),
         };
         if (!multiple && !inputProps.startAdornment) {
             const { startAdornment } = this.getTemplate(this.resolvedValue);
@@ -434,6 +477,7 @@ class AutocompleteNext extends PureComponent {
                 multiple={multiple}
                 options={presentedOptions}
                 value={this.resolvedValue}
+                inputValue={this.state.inputValue}
                 open={this.props.suggest ? open && !waitingForOptions : undefined}
                 onChange={this.onChange}
                 onInputChange={this.onInputChange}
