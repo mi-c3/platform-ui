@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { Autocomplete } from 'index';
+import AutocompleteNext from 'components/AutocompleteNext/AutocompleteNext';
 import { bind } from 'utils/decorators/decoratorUtils';
 
 class AutocompleteLazy extends PureComponent {
     static propTypes = {
-        ...(Autocomplete || {}).propTypes,
+        ...(AutocompleteNext || {}).propTypes,
         fetchData: PropTypes.func.isRequired,
     };
 
@@ -36,7 +36,7 @@ class AutocompleteLazy extends PureComponent {
     render() {
         const { options } = this.state;
         const { fetchData, ...autocompleteProps } = this.props; // eslint-disable-line no-unused-vars
-        return <Autocomplete {...autocompleteProps} suggest={this.suggest} options={options} />;
+        return <AutocompleteNext {...autocompleteProps} suggest={this.suggest} options={options} />;
     }
 }
 

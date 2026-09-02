@@ -5,14 +5,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MdiIcon from 'components/MdiIcon';
-import Autocomplete from 'components/Autocomplete';
+import AutocompleteNext from 'components/AutocompleteNext/AutocompleteNext';
 import { iconsList } from 'utils/data/iconsList';
 import { bind, memoize, debounce } from 'utils/decorators/decoratorUtils';
 import { arrayfy } from 'utils/utils';
 import { get } from 'utils/lo/lo';
 
 // eslint-disable-next-line
-const { options, optionTemplate, ...autocompletePropsSubSet } = (Autocomplete || {}).propTypes || {};
+const { options, optionTemplate, ...autocompletePropsSubSet } = (AutocompleteNext || {}).propTypes || {};
 
 class MdiIconSelect extends PureComponent {
     static propTypes = {
@@ -76,7 +76,7 @@ class MdiIconSelect extends PureComponent {
     render() {
         const { options } = this.state;
         return (
-            <Autocomplete
+            <AutocompleteNext
                 optionTemplate={this.optionTemplate}
                 placeholder="Select an icon"
                 {...this.props}

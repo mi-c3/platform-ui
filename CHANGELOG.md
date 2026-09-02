@@ -2,6 +2,15 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.4.0
+
+### Changed
+
+All internal consumers now use `AutocompleteNext`: `AutocompleteLazy` (the `fetchData` shim,
+API unchanged), `DateTimePickerRange` (Range/Unit selects), `MdiIconSelect` (~7k icons — now
+virtualized), and `GooglePlaceAutocomplete`. The legacy `Autocomplete` export remains published
+and unchanged; nothing imports it internally anymore. Its removal is the 3.0.0 cutover.
+
 ## 2.3.0
 
 ### Added
