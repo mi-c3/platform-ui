@@ -22,7 +22,7 @@ import { AutocompleteNext } from '@mic3/platform-ui';
 | `value` | any | — | Selected value(s). With `valueField` set, the raw field value(s) rather than the option object(s). A value with no matching option keeps its last-selected label (internal cache), so async option churn cannot blank the field. |
 | `name` | string | — | Field name, echoed back in the `onChange` event. |
 | `multiple` | bool | — | Multi-select; values render as chips (tooltip, avatar/icon, delete). Selected options are hidden from the list. |
-| `clearable` | bool | `true` | Standard MUI clear icon (visible on hover/focus) when a value is selected. |
+| `clearable` | bool | `true` | Always-visible clear (×) replacing the popup arrow when a single value is selected (legacy parity). |
 | `disabled` | bool | — | Disable the input. An empty disabled single-select hides the input box (legacy parity). |
 | `valueField` | string | — | Path within the option object used as the stored value (e.g. `'value'`, `'uri'`, `'name'`). |
 | `optionTemplate` | func | — | `(option) => ({ label, option, startAdornment, ChipProps })`. Receives placeholder primitives for values with no matching option, like the legacy component. Defaults to `option.label`/`option.name`. |
@@ -42,7 +42,11 @@ warning and is otherwise ignored): `VirtualListProps`, `PopperProps`, `optionsOv
 2. The selected single value stays visible (highlighted) in the list; reopening shows the full list, not an empty popper.
 3. Typing over a selected value edits a clean input value (no mid-label caret corruption).
 4. Backspace deletes the last chip in one step.
-5. The clear affordance is MUI's hover/focus clear icon instead of an always-visible button.
+
+Preserved like the legacy component (validated against the live environment): opening an async
+field keeps the popup closed while the first page loads — the user sees the field spinner, then
+the options (this also prevents any stale filtered rows on reopen); a selected, clearable,
+enabled single-select shows the always-visible clear (×) and no popup arrow.
 
 ## Example
 
