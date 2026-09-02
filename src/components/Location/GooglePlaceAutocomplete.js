@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import Autocomplete from 'components/Autocomplete';
+import AutocompleteNext from 'components/AutocompleteNext/AutocompleteNext';
 import { get } from 'utils/lo/lo';
 import { bind } from 'utils/decorators/decoratorUtils';
 
 // eslint-disable-next-line no-unused-vars
-const { options, suggest, optiontemplate, variant, ...autocompletePropsSubSet } = (Autocomplete || {}).propTypes || {};
+const { options, suggest, optiontemplate, variant, ...autocompletePropsSubSet } = (AutocompleteNext || {}).propTypes || {};
 
 class GooglePlaceAutocomplete extends PureComponent {
     static propTypes = {
@@ -55,7 +55,7 @@ class GooglePlaceAutocomplete extends PureComponent {
         const { onChangeCoords, geocoder, service, ...restProps } = this.props; //eslint-disable-line no-unused-vars
         const { options } = this.state;
         return (
-            <Autocomplete
+            <AutocompleteNext
                 {...restProps}
                 options={options}
                 suggest={this.suggest}

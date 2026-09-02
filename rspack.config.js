@@ -25,7 +25,6 @@ const EXTERNAL_PACKAGES = [
     'react-dropzone',
     'react-mde',
     'react-router',
-    'react-tiny-virtual-list',
     'styled-components',
 ];
 

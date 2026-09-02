@@ -2,6 +2,45 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.2.0
+
+### Changed
+
+`Autocomplete` is now a thin adapter over MUI v7's `Autocomplete` rendered into the platform
+`TextField`; the legacy hand-rolled Popper/ClickAwayListener implementation is removed. The
+consumer contract is unchanged (`onChange({target:{name,value}})`, `valueField` primitive
+values, `multiple` arrays, async `suggest` + parent-owned `options`/`isLoading`,
+`optionTemplate`, `VirtualListProps.itemSize`) and the legacy look and behavior were validated
+pixel-for-pixel against the live environment (spinner in the opener slot, wait-first popup,
+persistent clear, Grow animation, chip metrics, row density, horizontal overflow). MUI owns the
+popup lifecycle, selection, filtering, keyboard, touch and a11y — this fixes the mobile
+typeahead selection loss (the legacy popper closed on `touchend` click-away and unmounted on
+options churn, so the browser's synthesized click landed on the field behind) and stale
+filtered rows on reopen; options are rendered through a TanStack-virtualized listbox
+(`@tanstack/react-virtual`, bundled), so large sets (~7k icons) open and scroll fluidly with
+full `aria-activedescendant` keyboard support.
+
+Compatibility notes, despite the minor bump (same convention as the 2.1.0 router note):
+
+- Legacy props with zero verified consumers — `PopperProps`, `optionsOverflow`, `valueId`,
+  `searchDelay` (debounce fixed at 300 ms) — are accepted but ignored, with a one-time dev
+  warning. A consumer that passed them gets the default behavior, not a crash.
+- The `react-tiny-virtual-list` peer dependency is dropped (no consumer action needed).
+- `AutocompleteNext` is exported as a deprecated alias of `Autocomplete` for the migration
+  window; it will be removed in 3.0.0. `AutocompleteLazy` keeps its API; internal consumers
+  (`DateTimePickerRange`, `MdiIconSelect`, `GooglePlaceAutocomplete`) render through the new
+  implementation.
+
+### Fixed
+
+- The closed-popup input text now always mirrors the `value` prop (legacy semantics): a
+  "picker" consumer that keeps `value` null and turns selections into its own chips no longer
+  strands the picked option's label in the input.
+- Blurring the field while the open-time `suggest('')` load is pending abandons the session —
+  the arriving options page no longer opens the popup detached from focus.
+- `AutocompleteLazy` catches a rejected `fetchData` and delivers an empty options page, so the
+  field spinner cannot be stranded by a failed request.
+
 ## 2.1.5
 
 ### Fixed

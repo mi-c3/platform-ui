@@ -115,7 +115,7 @@ import { markdown } from 'utils/utils';
 import { DarkTheme, colors } from './styles/theme';
 import Avatar from './components/Avatar';
 import AvatarEditor from './components/AvatarEditor';
-import Autocomplete from './components/Autocomplete';
+import Autocomplete from './components/AutocompleteNext/AutocompleteNext';
 import AutocompleteLazy from './components/AutocompleteLazy';
 import Button from './components/Button';
 import CircularProgress from './components/CircularProgress';
@@ -168,6 +168,8 @@ export {
     // Platform overrides Material UI components
     Autocomplete,
     AutocompleteLazy,
+    /** @deprecated alias of `Autocomplete` (since 2.2.0); will be removed in 3.0.0. */
+    Autocomplete as AutocompleteNext,
     Avatar,
     Button,
     Checkbox,

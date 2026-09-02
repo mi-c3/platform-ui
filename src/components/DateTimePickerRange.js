@@ -16,7 +16,7 @@ import {
 import { bind, memoize } from 'utils/decorators/decoratorUtils';
 import Button from './Button';
 import ModalDialog from './ModalDialog';
-import Autocomplete from './Autocomplete';
+import AutocompleteNext from 'components/AutocompleteNext/AutocompleteNext';
 import Switch from './Switch';
 import DateTimePicker from './DateTimePicker';
 import TextField from './TextField';
@@ -499,7 +499,7 @@ class DateTimePickerRange extends PureComponent {
     buildInputsRelative(restProps, isMobile, disabled, value, errors) {
         return (
             <Grid container wrap={isMobile ? 'wrap' : 'nowrap'} justifyContent={isMobile ? 'flex-start' : 'space-around'}>
-                <Autocomplete
+                <AutocompleteNext
                     error={!!errors?.range}
                     label="Range"
                     disabled={disabled}
@@ -525,7 +525,7 @@ class DateTimePickerRange extends PureComponent {
                     clearable={false}
                 />
                 {!isMobile && <EmptySpace />}
-                <Autocomplete
+                <AutocompleteNext
                     error={!!errors?.unit}
                     valueField="value"
                     label="Unit"
