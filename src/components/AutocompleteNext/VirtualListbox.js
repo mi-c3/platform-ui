@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import React, { forwardRef, useCallback, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
 const ESTIMATED_ROW_HEIGHT = 50;
@@ -38,7 +38,19 @@ const VirtualListbox = forwardRef(function VirtualListbox(props, ref) {
         useFlushSync: false,
     });
 
-    useImperativeHandle(ref, () => listRef.current);
+    // STABLE merged ref. MUI forks the listbox ref with its own handleListboxRef, which runs
+    // syncHighlightedIndex() -> scrollTop = 0 every time the ref re-fires. An unstable ref
+    // (e.g. useImperativeHandle recreated per render) re-fires on every virtualizer scroll
+    // frame and snaps the list back to the top — the dropdown becomes unscrollable.
+    const setRefs = useCallback(node => {
+        listRef.current = node;
+        if (typeof ref === 'function') {
+            ref(node);
+        } else if (ref) {
+            ref.current = node;
+        }
+    }, [ref]);
+
     if (scrollControllerRef) {
         scrollControllerRef.current = {
             // Bring a (possibly unrendered) option row into the virtual window. Rows that ARE
@@ -69,7 +81,7 @@ const VirtualListbox = forwardRef(function VirtualListbox(props, ref) {
     return (
         <ul
             {...other}
-            ref={listRef}
+            ref={setRefs}
             style={{ ...style, position: 'relative', padding: 0, margin: 0, overflow: 'auto' }}
         >
             <li aria-hidden style={{ height: virtualizer.getTotalSize(), padding: 0, margin: 0, listStyle: 'none' }} />

@@ -381,3 +381,20 @@ describe('virtualized listbox', () => {
         expect(screen.getByText('No options')).toBeInTheDocument();
     });
 });
+
+describe('scroll stability (regression: listbox snapped to top while scrolling)', () => {
+    test('a scroll does not get reset by MUI ref re-fires', () => {
+        const MANY = Array.from({ length: 500 }, (unused, i) => ({ id: String(i), name: `Option ${i}` }));
+        renderNext({ options: MANY });
+        openPopup(screen.getByRole('combobox'));
+        const listbox = screen.getByRole('listbox');
+        // user scrolls: the virtualizer re-renders rows; an unstable listbox ref would make
+        // MUI's handleListboxRef -> syncHighlightedIndex reset scrollTop to 0
+        listbox.scrollTop = 300;
+        fireEvent.scroll(listbox);
+        expect(listbox.scrollTop).toBe(300);
+        listbox.scrollTop = 900;
+        fireEvent.scroll(listbox);
+        expect(listbox.scrollTop).toBe(900);
+    });
+});

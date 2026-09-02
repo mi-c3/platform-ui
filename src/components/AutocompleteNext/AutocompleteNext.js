@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import MuiAutocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
+import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
 import Tooltip from '@mui/material/Tooltip';
 import styled from 'styled-components';
@@ -258,7 +259,10 @@ class AutocompleteNext extends PureComponent {
         if (!multiple && !inputProps.startAdornment) {
             const { startAdornment } = this.getTemplate(this.resolvedValue);
             if (startAdornment) {
-                inputProps.startAdornment = startAdornment;
+                // A real InputAdornment so MUI (and the platform TextField's
+                // adornment rules) vertically center it against the filled box,
+                // like the legacy selected-value avatar.
+                inputProps.startAdornment = <InputAdornment position="start">{startAdornment}</InputAdornment>;
             }
         }
         inputProps.endAdornment = (
