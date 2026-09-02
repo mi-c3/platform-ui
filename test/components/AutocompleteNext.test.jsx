@@ -69,6 +69,22 @@ const openPopup = input => {
     fireEvent.keyDown(input, { key: 'ArrowDown' });
 };
 
+// Async (suggest) consumers hold the popup closed until the parent answers the open-time
+// suggest('') with an options page — this simulates that response.
+const deliverOptions = (rerender, props = {}) => {
+    const { options = USERS, suggest = () => {}, onChange = () => {}, ...rest } = props;
+    rerender(
+        <AutocompleteNext
+            name="field"
+            onChange={onChange}
+            optionTemplate={template}
+            suggest={suggest}
+            options={[...options]}
+            {...rest}
+        />
+    );
+};
+
 describe('selection and the onChange contract', () => {
     test('single select emits {target:{name,value}} with the whole option (no valueField)', () => {
         const onChange = jest.fn();
@@ -157,6 +173,7 @@ describe('popup lifecycle under options churn (the legacy bug class)', () => {
         const { rerender } = renderNext({ suggest: () => {}, options: USERS });
         const input = screen.getByRole('combobox');
         openPopup(input);
+        deliverOptions(rerender);
         expect(screen.getByRole('listbox')).toBeInTheDocument();
 
         rerender(
@@ -175,8 +192,9 @@ describe('popup lifecycle under options churn (the legacy bug class)', () => {
     });
 
     test('no options shows the empty state instead of unmounting the popup', () => {
-        renderNext({ suggest: () => {}, options: [] });
+        const { rerender } = renderNext({ suggest: () => {}, options: [] });
         openPopup(screen.getByRole('combobox'));
+        deliverOptions(rerender, { options: [] });
         expect(screen.getByText('No options')).toBeInTheDocument();
     });
 });
@@ -232,8 +250,9 @@ describe('async suggest', () => {
         jest.useFakeTimers();
         try {
             const suggest = jest.fn();
-            renderNext({ suggest });
+            const { rerender } = renderNext({ suggest });
             openPopup(screen.getByRole('combobox'));
+            deliverOptions(rerender, { suggest });
             suggest.mockClear();
             fireEvent.click(screen.getByText('Bob'));
             act(() => {
@@ -246,8 +265,9 @@ describe('async suggest', () => {
     });
 
     test('server-filtered mode does not filter locally (selected label must not empty the list)', () => {
-        renderNext({ suggest: () => {}, value: USERS[1], options: USERS });
+        const { rerender } = renderNext({ suggest: () => {}, value: USERS[1], options: USERS });
         openPopup(screen.getByRole('combobox'));
+        deliverOptions(rerender, { value: USERS[1] });
         // input shows "Bob" but all three options stay visible
         expect(screen.getAllByRole('option')).toHaveLength(3);
     });
@@ -376,8 +396,9 @@ describe('virtualized listbox', () => {
     });
 
     test('empty list renders the no-options state, not a broken listbox', () => {
-        renderNext({ options: [], suggest: () => {} });
+        const { rerender } = renderNext({ options: [], suggest: () => {} });
         openPopup(screen.getByRole('combobox'));
+        deliverOptions(rerender, { options: [] });
         expect(screen.getByText('No options')).toBeInTheDocument();
     });
 });
@@ -399,51 +420,70 @@ describe('scroll stability (regression: listbox snapped to top while scrolling)'
     });
 });
 
-describe('reopen after filter (regression: stale filtered rows flashed before fresh page)', () => {
-    test('reopening with empty input shows loading, not the previous filtered options', () => {
+describe('open/reopen waits for the fresh page (legacy parity: spinner in field, then options)', () => {
+    test('reopening after a filter shows the field spinner — never the stale filtered rows, never a loading popup', () => {
         jest.useFakeTimers();
         try {
             const FILTERED = [{ id: '9', name: 'Abx Result', uri: 'opt/9' }];
             const suggest = jest.fn();
             const { rerender } = renderNext({ suggest, options: USERS });
             const input = screen.getByRole('combobox');
-            // open and type a filter
+            // open, receive first page, type a filter
             openPopup(input);
+            deliverOptions(rerender, { suggest });
             fireEvent.change(input, { target: { value: 'ab' } });
             act(() => {
                 jest.advanceTimersByTime(400);
             });
             expect(suggest).toHaveBeenCalledWith({ target: { name: 'field', value: 'ab' } });
-            // parent delivers the filtered page
-            rerender(
-                <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} suggest={suggest} options={FILTERED} />
-            );
+            deliverOptions(rerender, { suggest, options: FILTERED });
             expect(screen.getByText('Abx Result')).toBeInTheDocument();
-            // close the popup
+            // close, reopen without filter text
             fireEvent.keyDown(input, { key: 'Escape' });
-            // reopen without any filter text
             openPopup(input);
-            // stale filtered rows must NOT flash; the loading state shows instead
+            // popup stays CLOSED while the page loads: no stale rows, no loading popup,
+            // spinner in the field instead
             expect(screen.queryByText('Abx Result')).toBeNull();
-            expect(screen.getByText('Loading…')).toBeInTheDocument();
-            // fresh unfiltered page arrives
-            rerender(
-                <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} suggest={suggest} options={USERS} />
-            );
+            expect(screen.queryByRole('listbox')).toBeNull();
+            expect(document.querySelector('.MuiCircularProgress-root')).not.toBeNull();
+            // fresh unfiltered page arrives -> popup opens with it
+            deliverOptions(rerender, { suggest });
             expect(screen.getByText('Alice')).toBeInTheDocument();
-            expect(screen.queryByText('Loading…')).toBeNull();
         } finally {
             jest.useRealTimers();
         }
     });
 
-    test('plain reopen without a prior filter never blanks the list', () => {
+    test('plain reopen shows the list again once the page arrives', () => {
         const suggest = jest.fn();
-        renderNext({ suggest, options: USERS });
+        const { rerender } = renderNext({ suggest, options: USERS });
         const input = screen.getByRole('combobox');
         openPopup(input);
+        deliverOptions(rerender, { suggest });
         fireEvent.keyDown(input, { key: 'Escape' });
         openPopup(input);
+        deliverOptions(rerender, { suggest });
         expect(screen.getByText('Alice')).toBeInTheDocument();
+    });
+
+    test('non-async (no suggest) consumers open immediately', () => {
+        renderNext({});
+        openPopup(screen.getByRole('combobox'));
+        expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+
+    test('selected single-select shows a persistent clear icon and no popup arrow (legacy parity)', () => {
+        // jsdom does not resolve the CSS cascade for the visibility override (see the
+        // repo-wide getComputedStyle caveat) — assert the structure: the clear button is
+        // rendered and the popup arrow is suppressed; the always-visible styling is covered
+        // by the browser-side validation.
+        renderNext({ valueField: 'uri', value: 'user/bob' });
+        expect(screen.getByLabelText('Clear')).toBeInTheDocument();
+        expect(screen.queryByLabelText('Open')).toBeNull();
+    });
+
+    test('unselected single-select keeps the popup arrow', () => {
+        renderNext({});
+        expect(screen.getByLabelText('Open')).toBeInTheDocument();
     });
 });

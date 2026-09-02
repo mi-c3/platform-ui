@@ -83,7 +83,10 @@ class AutocompleteNext extends PureComponent {
         options: [],
     };
 
-    state = { refreshingOptions: false };
+    // Keeps the clear (x) visible without hover/focus, like the legacy always-visible button.
+    static PERSISTENT_CLEAR_SX = { '&& .MuiAutocomplete-clearIndicator': { visibility: 'visible' } };
+
+    state = { open: false, waitingForOptions: false };
 
     constructor(props) {
         super(props);
@@ -115,9 +118,11 @@ class AutocompleteNext extends PureComponent {
     }, 300);
 
     componentDidUpdate(prevProps) {
-        // A fresh options page (new array ref) or a completed load ends the refresh window.
-        if (this.state.refreshingOptions && (prevProps.options !== this.props.options || (prevProps.isLoading && !this.props.isLoading))) {
-            this.setState({ refreshingOptions: false });
+        // A fresh options page (new array ref) or a completed load ends the waiting window —
+        // the popup opens only now, so the field spinner (not a loading popup) covers the
+        // fetch, like the legacy component.
+        if (this.state.waitingForOptions && (prevProps.options !== this.props.options || (prevProps.isLoading && !this.props.isLoading))) {
+            this.setState({ waitingForOptions: false });
         }
     }
 
@@ -181,27 +186,22 @@ class AutocompleteNext extends PureComponent {
     @bind
     onOpen() {
         // Async consumers load their first page on open (the legacy component fired its
-        // suggest on focus). An empty query asks for the unfiltered first page — reopening a
-        // field with a selection shows the full list instead of the legacy empty popper.
+        // suggest on focus). The popup is held closed while the page loads — the user sees
+        // the field spinner, then the options, exactly like the legacy behavior; it also
+        // means a reopen after a filtered search can never flash the stale filtered rows.
         const { suggest, name } = this.props;
         if (!suggest) {
+            this.setState({ open: true });
             return;
         }
-        // The options the parent still holds were produced by a previous non-empty filter:
-        // showing them now would flash stale rows until the fresh page lands. Present the
-        // loading state instead (cleared in componentDidUpdate when new options arrive).
-        if (this.lastSuggestQuery) {
-            this.setState({ refreshingOptions: true });
-        }
+        this.setState({ open: true, waitingForOptions: true });
         this.lastSuggestQuery = '';
         suggest({ target: { name, value: '' } });
     }
 
     @bind
     onClose() {
-        if (this.state.refreshingOptions) {
-            this.setState({ refreshingOptions: false });
-        }
+        this.setState({ open: false, waitingForOptions: false });
     }
 
     @bind
@@ -297,7 +297,7 @@ class AutocompleteNext extends PureComponent {
         }
         inputProps.endAdornment = (
             <React.Fragment>
-                {isLoading ? <CircularProgress size={16} /> : null}
+                {isLoading || this.state.waitingForOptions ? <CircularProgress size={16} /> : null}
                 {params.InputProps.endAdornment}
             </React.Fragment>
         );
@@ -333,12 +333,17 @@ class AutocompleteNext extends PureComponent {
             isLoading,
             slotProps,
         } = this.props;
-        const { refreshingOptions } = this.state;
-        const presentedOptions = refreshingOptions ? [] : options || [];
+        const { open, waitingForOptions } = this.state;
+        const presentedOptions = waitingForOptions ? [] : options || [];
 
         this.resolvedValue = multiple
             ? resolveOptions(value, options, this.selectedOptionCache, valueField)
             : resolveOption(value, options, this.selectedOptionCache, valueField);
+
+        // Legacy clear affordance: a selected, clearable, enabled single-select shows the
+        // always-visible clear (x) and no popup arrow; otherwise the arrow shows.
+        const hasSingleSelection = !multiple && this.resolvedValue !== null && this.resolvedValue !== undefined;
+        const showPersistentClear = hasSingleSelection && clearable && !disabled;
 
         return (
             <MuiAutocomplete
@@ -346,6 +351,7 @@ class AutocompleteNext extends PureComponent {
                 multiple={multiple}
                 options={presentedOptions}
                 value={this.resolvedValue}
+                open={open && !waitingForOptions}
                 onChange={this.onChange}
                 onInputChange={this.onInputChange}
                 onOpen={this.onOpen}
@@ -358,13 +364,15 @@ class AutocompleteNext extends PureComponent {
                 renderOption={this.renderOption}
                 renderValue={multiple ? this.renderValue : undefined}
                 renderInput={this.renderInput}
-                loading={!!isLoading || refreshingOptions}
+                loading={!!isLoading}
+                forcePopupIcon={showPersistentClear ? false : true}
                 disabled={disabled}
                 disableClearable={!clearable}
                 onHighlightChange={this.onHighlightChange}
                 openOnFocus
                 selectOnFocus
                 fullWidth
+                sx={showPersistentClear ? AutocompleteNext.PERSISTENT_CLEAR_SX : undefined}
                 slotProps={{
                     listbox: {
                         component: VirtualListbox,
