@@ -52,3 +52,21 @@ test('fetchData drives the open-time page load and selection (Lazy over Autocomp
     fireEvent.click(screen.getByText('Lisbon'));
     expect(onChange).toHaveBeenCalledWith({ target: { name: 'loc', value: PAGE[1] } });
 });
+
+test('a rejected fetchData still answers the open-time suggest (no stranded spinner)', async () => {
+    const fetchData = jest.fn().mockRejectedValue(new Error('backend down'));
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+        render(<AutocompleteLazy name="field" onChange={() => {}} fetchData={fetchData} value={null} />);
+        const input = screen.getByRole('combobox');
+        fireEvent.mouseDown(input);
+        fireEvent.focus(input);
+        fireEvent.keyDown(input, { key: 'ArrowDown' });
+        // the rejection is caught and an (empty, new-ref) options page is delivered,
+        // which ends the adapter's waiting window and opens the popup on its empty state
+        await waitFor(() => expect(screen.getByText('No options')).toBeInTheDocument());
+        expect(errorSpy).toHaveBeenCalledWith('AutocompleteLazy: fetchData failed', expect.any(Error));
+    } finally {
+        errorSpy.mockRestore();
+    }
+});

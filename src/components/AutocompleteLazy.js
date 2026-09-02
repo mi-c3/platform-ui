@@ -19,8 +19,17 @@ class AutocompleteLazy extends PureComponent {
 
     @bind
     async updateOptions(value) {
-        const options = await this.props.fetchData(value);
-        this.setState({ options });
+        // A failed fetch must still deliver an options array: the adapter holds the popup
+        // closed (field spinner) until the open-time suggest is answered, so a swallowed
+        // rejection would strand the field spinning forever.
+        let options = [];
+        try {
+            options = (await this.props.fetchData(value)) || [];
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('AutocompleteLazy: fetchData failed', error);
+        }
+        this.setState({ options: [...options] });
     }
 
     @bind
