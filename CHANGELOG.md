@@ -15,6 +15,11 @@ event — scrolling inside MUI's keydown dispatch corrupts its highlight bookkee
 separate implementation from platform-v1's tree virtualization seam and is internal to
 `AutocompleteNext` — no consumer API.
 
+Reopening an async `AutocompleteNext` after a filtered search no longer flashes the stale
+filtered rows before the fresh first page arrives: the adapter tracks the query its last
+`suggest` was fired with, and when the popup reopens with an empty query it presents the
+loading state until the parent delivers new options.
+
 ## 2.2.0
 
 ### Added

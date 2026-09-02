@@ -398,3 +398,52 @@ describe('scroll stability (regression: listbox snapped to top while scrolling)'
         expect(listbox.scrollTop).toBe(900);
     });
 });
+
+describe('reopen after filter (regression: stale filtered rows flashed before fresh page)', () => {
+    test('reopening with empty input shows loading, not the previous filtered options', () => {
+        jest.useFakeTimers();
+        try {
+            const FILTERED = [{ id: '9', name: 'Abx Result', uri: 'opt/9' }];
+            const suggest = jest.fn();
+            const { rerender } = renderNext({ suggest, options: USERS });
+            const input = screen.getByRole('combobox');
+            // open and type a filter
+            openPopup(input);
+            fireEvent.change(input, { target: { value: 'ab' } });
+            act(() => {
+                jest.advanceTimersByTime(400);
+            });
+            expect(suggest).toHaveBeenCalledWith({ target: { name: 'field', value: 'ab' } });
+            // parent delivers the filtered page
+            rerender(
+                <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} suggest={suggest} options={FILTERED} />
+            );
+            expect(screen.getByText('Abx Result')).toBeInTheDocument();
+            // close the popup
+            fireEvent.keyDown(input, { key: 'Escape' });
+            // reopen without any filter text
+            openPopup(input);
+            // stale filtered rows must NOT flash; the loading state shows instead
+            expect(screen.queryByText('Abx Result')).toBeNull();
+            expect(screen.getByText('Loading…')).toBeInTheDocument();
+            // fresh unfiltered page arrives
+            rerender(
+                <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} suggest={suggest} options={USERS} />
+            );
+            expect(screen.getByText('Alice')).toBeInTheDocument();
+            expect(screen.queryByText('Loading…')).toBeNull();
+        } finally {
+            jest.useRealTimers();
+        }
+    });
+
+    test('plain reopen without a prior filter never blanks the list', () => {
+        const suggest = jest.fn();
+        renderNext({ suggest, options: USERS });
+        const input = screen.getByRole('combobox');
+        openPopup(input);
+        fireEvent.keyDown(input, { key: 'Escape' });
+        openPopup(input);
+        expect(screen.getByText('Alice')).toBeInTheDocument();
+    });
+});

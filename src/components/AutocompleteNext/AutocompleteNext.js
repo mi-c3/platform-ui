@@ -83,11 +83,16 @@ class AutocompleteNext extends PureComponent {
         options: [],
     };
 
+    state = { refreshingOptions: false };
+
     constructor(props) {
         super(props);
         // Last selected option per stored value: keeps the visible label/adornment correct
         // while async options are replaced or cleared by unrelated store updates.
         this.selectedOptionCache = new Map();
+        // The query the most recent suggest() was fired with — used to detect that the
+        // options currently held by the parent belong to a previous (filtered) session.
+        this.lastSuggestQuery = null;
         // Filled by the VirtualListbox with { scrollToIndex } — MUI's own scroll-into-view
         // only finds options that are currently rendered.
         this.listboxScrollRef = React.createRef();
@@ -105,8 +110,16 @@ class AutocompleteNext extends PureComponent {
 
     suggestDebounced = debounceFunc(query => {
         const { suggest, name } = this.props;
+        this.lastSuggestQuery = query;
         suggest && suggest({ target: { name, value: query } });
     }, 300);
+
+    componentDidUpdate(prevProps) {
+        // A fresh options page (new array ref) or a completed load ends the refresh window.
+        if (this.state.refreshingOptions && (prevProps.options !== this.props.options || (prevProps.isLoading && !this.props.isLoading))) {
+            this.setState({ refreshingOptions: false });
+        }
+    }
 
     @bind
     getTemplate(option) {
@@ -171,7 +184,24 @@ class AutocompleteNext extends PureComponent {
         // suggest on focus). An empty query asks for the unfiltered first page — reopening a
         // field with a selection shows the full list instead of the legacy empty popper.
         const { suggest, name } = this.props;
-        suggest && suggest({ target: { name, value: '' } });
+        if (!suggest) {
+            return;
+        }
+        // The options the parent still holds were produced by a previous non-empty filter:
+        // showing them now would flash stale rows until the fresh page lands. Present the
+        // loading state instead (cleared in componentDidUpdate when new options arrive).
+        if (this.lastSuggestQuery) {
+            this.setState({ refreshingOptions: true });
+        }
+        this.lastSuggestQuery = '';
+        suggest({ target: { name, value: '' } });
+    }
+
+    @bind
+    onClose() {
+        if (this.state.refreshingOptions) {
+            this.setState({ refreshingOptions: false });
+        }
     }
 
     @bind
@@ -303,6 +333,8 @@ class AutocompleteNext extends PureComponent {
             isLoading,
             slotProps,
         } = this.props;
+        const { refreshingOptions } = this.state;
+        const presentedOptions = refreshingOptions ? [] : options || [];
 
         this.resolvedValue = multiple
             ? resolveOptions(value, options, this.selectedOptionCache, valueField)
@@ -312,11 +344,12 @@ class AutocompleteNext extends PureComponent {
             <MuiAutocomplete
                 className={className}
                 multiple={multiple}
-                options={options || []}
+                options={presentedOptions}
                 value={this.resolvedValue}
                 onChange={this.onChange}
                 onInputChange={this.onInputChange}
                 onOpen={this.onOpen}
+                onClose={this.onClose}
                 isOptionEqualToValue={this.isOptionEqualToValue}
                 getOptionKey={this.getOptionKey}
                 getOptionLabel={this.getOptionLabel}
@@ -325,7 +358,7 @@ class AutocompleteNext extends PureComponent {
                 renderOption={this.renderOption}
                 renderValue={multiple ? this.renderValue : undefined}
                 renderInput={this.renderInput}
-                loading={!!isLoading}
+                loading={!!isLoading || refreshingOptions}
                 disabled={disabled}
                 disableClearable={!clearable}
                 onHighlightChange={this.onHighlightChange}
