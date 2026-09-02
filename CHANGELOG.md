@@ -2,6 +2,20 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 3.0.0
+
+### Breaking
+
+`Autocomplete` is now the MUI v7 adapter (the component previously exported as
+`AutocompleteNext`); the legacy hand-rolled implementation is removed, together with the
+`react-tiny-virtual-list` peer/dev dependency. The consumer contract is unchanged
+(`onChange({target:{name,value}})`, `valueField`, `multiple`, async `suggest` +
+`options`/`isLoading`, `optionTemplate`, `VirtualListProps.itemSize`); legacy props with no
+consumers (`PopperProps`, `optionsOverflow`, `valueId`, `searchDelay`) are ignored with a
+one-time dev warning. `AutocompleteNext` remains as a deprecated alias until the next major.
+`AutocompleteLazy` is unchanged. 2.x remains published for consumers that still use the legacy
+implementation.
+
 ## 2.4.0
 
 ### Changed
