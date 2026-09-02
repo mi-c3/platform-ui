@@ -1,6 +1,6 @@
 # AutocompleteNext
 
-The modernized platform typeahead: a thin adapter over [MUI v7 Autocomplete](https://mui.com/material-ui/react-autocomplete/) rendered into the platform-ui `TextField`. MUI owns the popup lifecycle, selection, filtering, keyboard navigation, accessibility and touch handling; the adapter owns the platform value contract and option templating.
+The modernized platform typeahead: a thin adapter over [MUI v7 Autocomplete](https://mui.com/material-ui/react-autocomplete/) rendered into the platform-ui `TextField`. MUI owns the popup lifecycle, selection, filtering, keyboard navigation, accessibility and touch handling; the adapter owns the platform value contract and option templating. The listbox is always virtualized (TanStack Virtual, internal — no consumer API): only visible rows are in the DOM, rows are measured so mixed heights need no configuration, and keyboard highlights outside the rendered window are scrolled into range.
 
 Replaces `Autocomplete` (the hand-rolled Popper/ClickAwayListener implementation, which loses
 mobile taps to a touchend/click race and unmounts its popup when the options array changes).

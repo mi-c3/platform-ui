@@ -2,6 +2,19 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.3.0
+
+### Added
+
+`AutocompleteNext` now renders its options through a TanStack-virtualized listbox
+(`@tanstack/react-virtual`, bundled): only the visible rows exist in the DOM, so large option
+sets (entity types ~1.4k, the icon picker ~7k) open and scroll fluidly. Rows are measured, so
+mixed row heights need no configuration. Keyboard navigation keeps `aria-activedescendant`
+resolvable: highlights outside the rendered window scroll into range (deferred out of the key
+event — scrolling inside MUI's keydown dispatch corrupts its highlight bookkeeping). This is a
+separate implementation from platform-v1's tree virtualization seam and is internal to
+`AutocompleteNext` — no consumer API.
+
 ## 2.2.0
 
 ### Added

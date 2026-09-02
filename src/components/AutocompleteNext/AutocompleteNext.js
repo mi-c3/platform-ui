@@ -7,6 +7,7 @@ import Tooltip from '@mui/material/Tooltip';
 import styled from 'styled-components';
 
 import TextField from 'components/TextField';
+import VirtualListbox from 'components/AutocompleteNext/VirtualListbox';
 import { bind, debounceFunc } from 'utils/decorators/decoratorUtils';
 import {
     resolveOption,
@@ -86,6 +87,9 @@ class AutocompleteNext extends PureComponent {
         // Last selected option per stored value: keeps the visible label/adornment correct
         // while async options are replaced or cleared by unrelated store updates.
         this.selectedOptionCache = new Map();
+        // Filled by the VirtualListbox with { scrollToIndex } — MUI's own scroll-into-view
+        // only finds options that are currently rendered.
+        this.listboxScrollRef = React.createRef();
         if (process.env.NODE_ENV !== 'production') {
             DROPPED_PROPS.filter(prop => props[prop] !== undefined && !warned.has(prop)).forEach(prop => {
                 warned.add(prop);
@@ -183,13 +187,28 @@ class AutocompleteNext extends PureComponent {
     filterOptions(options, state) {
         // Server-filtered consumers pass `suggest`; filtering again locally would fight the
         // backend (and the input shows the selected label, which must not filter the list).
-        if (this.props.suggest) {
-            return options;
+        let filtered = options;
+        if (!this.props.suggest) {
+            if (!this.localFilter) {
+                this.localFilter = createFilterOptions({ stringify: this.getOptionLabel });
+            }
+            filtered = this.localFilter(options, state);
         }
-        if (!this.localFilter) {
-            this.localFilter = createFilterOptions({ stringify: this.getOptionLabel });
+        // the presented order, so onHighlightChange can map an option to its listbox index
+        this.presentedOptions = filtered;
+        return filtered;
+    }
+
+    @bind
+    onHighlightChange(event, option) {
+        const controller = this.listboxScrollRef.current;
+        if (!controller || option === null || option === undefined) {
+            return;
         }
-        return this.localFilter(options, state);
+        const index = (this.presentedOptions || []).indexOf(option);
+        if (index >= 0) {
+            controller.ensureIndexVisible(index);
+        }
     }
 
     @bind
@@ -305,11 +324,16 @@ class AutocompleteNext extends PureComponent {
                 loading={!!isLoading}
                 disabled={disabled}
                 disableClearable={!clearable}
+                onHighlightChange={this.onHighlightChange}
                 openOnFocus
                 selectOnFocus
                 fullWidth
                 slotProps={{
-                    listbox: { sx: { maxHeight: LISTBOX_MAX_HEIGHT } },
+                    listbox: {
+                        component: VirtualListbox,
+                        scrollControllerRef: this.listboxScrollRef,
+                        sx: { maxHeight: LISTBOX_MAX_HEIGHT },
+                    },
                     ...(slotProps || {}),
                 }}
             />

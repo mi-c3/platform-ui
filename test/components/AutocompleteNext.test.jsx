@@ -3,6 +3,54 @@ import { render, fireEvent, act, screen, within } from '@testing-library/react';
 
 import AutocompleteNext from '../../src/components/AutocompleteNext/AutocompleteNext';
 
+// ── jsdom geometry shim ─────────────────────────────────────────────────────────────────────
+// The virtualized listbox learns its viewport ONLY from ResizeObserver entries and element
+// rects; jsdom reports 0×0 for everything, which would leave every list permanently empty.
+// Same approach as platform-v1's useVirtualRows.test.js: report a browser-like first frame.
+const VIEWPORT = 400;
+const heightOf = el => Number(el.dataset?.vh ?? VIEWPORT);
+class ResizeObserverStub {
+    constructor(callback) {
+        this.callback = callback;
+    }
+    observe(element) {
+        const borderBoxSize = [{ inlineSize: element.clientWidth, blockSize: element.clientHeight }];
+        this.callback([{ target: element, borderBoxSize, contentRect: element.getBoundingClientRect() }], this);
+    }
+    unobserve() {}
+    disconnect() {}
+}
+const originals = {};
+beforeAll(() => {
+    originals.ResizeObserver = global.ResizeObserver;
+    originals.getBoundingClientRect = HTMLElement.prototype.getBoundingClientRect;
+    originals.scrollTo = HTMLElement.prototype.scrollTo;
+    global.ResizeObserver = ResizeObserverStub;
+    Object.defineProperty(HTMLElement.prototype, 'clientHeight', { configurable: true, get() { return heightOf(this); } });
+    Object.defineProperty(HTMLElement.prototype, 'clientWidth', { configurable: true, get: () => 400 });
+    Object.defineProperty(HTMLElement.prototype, 'scrollHeight', { configurable: true, get: () => 1e6 });
+    HTMLElement.prototype.getBoundingClientRect = function () {
+        const height = heightOf(this);
+        return { width: 400, height, top: 0, left: 0, right: 400, bottom: height, x: 0, y: 0, toJSON: () => {} };
+    };
+    HTMLElement.prototype.scrollTo = function (options, legacyTop) {
+        const top = typeof options === 'number' ? legacyTop : options?.top;
+        if (typeof top === 'number') {
+            this.scrollTop = top;
+            this.dispatchEvent(new Event('scroll'));
+        }
+    };
+});
+afterAll(() => {
+    global.ResizeObserver = originals.ResizeObserver;
+    delete HTMLElement.prototype.clientHeight;
+    delete HTMLElement.prototype.clientWidth;
+    delete HTMLElement.prototype.scrollHeight;
+    HTMLElement.prototype.getBoundingClientRect = originals.getBoundingClientRect;
+    HTMLElement.prototype.scrollTo = originals.scrollTo;
+});
+// ────────────────────────────────────────────────────────────────────────────────────────────
+
 const USERS = [
     { id: '1', name: 'Alice', uri: 'user/alice' },
     { id: '2', name: 'Bob', uri: 'user/bob' },
@@ -282,5 +330,54 @@ describe('rest-prop passthrough (legacy rest-spread parity)', () => {
         fireEvent.focus(input);
         expect(onFocus).toHaveBeenCalled();
         expect(document.querySelector('.MuiOutlinedInput-root')).not.toBeNull();
+    });
+});
+
+describe('virtualized listbox', () => {
+    const MANY = Array.from({ length: 1000 }, (unused, i) => ({ id: String(i), name: `Option ${i}`, uri: `opt/${i}` }));
+
+    test('renders only a subset of a 1000-option list', () => {
+        renderNext({ options: MANY });
+        openPopup(screen.getByRole('combobox'));
+        const rendered = screen.getAllByRole('option');
+        expect(rendered.length).toBeGreaterThan(0);
+        expect(rendered.length).toBeLessThan(100);
+    });
+
+    test('clicking a virtual row selects it', () => {
+        const onChange = jest.fn();
+        renderNext({ onChange, options: MANY, valueField: 'uri' });
+        openPopup(screen.getByRole('combobox'));
+        fireEvent.click(screen.getByText('Option 3'));
+        expect(onChange).toHaveBeenCalledWith({ target: { name: 'field', value: 'opt/3' } });
+    });
+
+    test('keyboard highlight far beyond the viewport scrolls it into range', () => {
+        jest.useFakeTimers();
+        try {
+            renderNext({ options: MANY });
+            const input = screen.getByRole('combobox');
+            openPopup(input);
+            // walk down 40 rows — far past the initially rendered window; the virtual scroll
+            // is deferred out of each keydown dispatch, so flush it as we go
+            for (let i = 0; i < 40; i += 1) {
+                fireEvent.keyDown(input, { key: 'ArrowDown' });
+                act(() => {
+                    jest.advanceTimersByTime(1);
+                });
+            }
+            // the highlighted option must be rendered (aria-activedescendant must resolve)
+            const activeId = input.getAttribute('aria-activedescendant');
+            expect(activeId).toBeTruthy();
+            expect(document.getElementById(activeId)).not.toBeNull();
+        } finally {
+            jest.useRealTimers();
+        }
+    });
+
+    test('empty list renders the no-options state, not a broken listbox', () => {
+        renderNext({ options: [], suggest: () => {} });
+        openPopup(screen.getByRole('combobox'));
+        expect(screen.getByText('No options')).toBeInTheDocument();
     });
 });
