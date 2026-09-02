@@ -31,10 +31,10 @@ import { Autocomplete } from '@mic3/platform-ui';
 | `error` / `helperText` / `label` / `placeholder` | — | — | Forwarded to the platform `TextField` (filled variant, shrunk label). |
 | `InputProps` | object | — | Merged into the input's `InputProps` (adornments). The popup/clear indicators and the loading spinner own the end adornment. |
 | `className` | string | — | Styling hook. |
+| `VirtualListProps` | `{ itemSize }` | `{ itemSize: 50 }` | Fixed row height for the virtualized listbox (legacy contract; 60 for avatar-heavy rows). Rows clip overflow. |
 
 Not supported (legacy props with zero verified consumers — passing them logs a one-time dev
-warning and is otherwise ignored): `VirtualListProps`, `PopperProps`, `optionsOverflow`,
-`valueId`, `searchDelay`.
+warning and is otherwise ignored): `PopperProps`, `optionsOverflow`, `valueId`, `searchDelay`.
 
 ## Intentional differences from the legacy `Autocomplete`
 

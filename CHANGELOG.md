@@ -16,6 +16,17 @@ one-time dev warning. `AutocompleteNext` remains as a deprecated alias until the
 `AutocompleteLazy` is unchanged. 2.x remains published for consumers that still use the legacy
 implementation.
 
+### Fixed
+
+- The closed-popup input text now always mirrors the `value` prop (legacy semantics): a
+  "picker" consumer that keeps `value` null and turns selections into its own chips no longer
+  strands the picked option's label in the input.
+- Blurring the field while the open-time `suggest('')` load is pending abandons the session —
+  the arriving options page no longer opens the popup detached from focus.
+- `AutocompleteLazy` catches a rejected `fetchData` and delivers an empty options page, so the
+  field spinner cannot be stranded by a failed request.
+
+
 ## 2.4.0
 
 ### Changed
