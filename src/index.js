@@ -117,6 +117,7 @@ import Avatar from './components/Avatar';
 import AvatarEditor from './components/AvatarEditor';
 import Autocomplete from './components/Autocomplete';
 import AutocompleteLazy from './components/AutocompleteLazy';
+import AutocompleteNext from './components/AutocompleteNext/AutocompleteNext';
 import Button from './components/Button';
 import CircularProgress from './components/CircularProgress';
 import CircularProgressStatic from './components/CircularProgressStatic';
@@ -168,6 +169,7 @@ export {
     // Platform overrides Material UI components
     Autocomplete,
     AutocompleteLazy,
+    AutocompleteNext,
     Avatar,
     Button,
     Checkbox,

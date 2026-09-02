@@ -2,6 +2,21 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.2.0
+
+### Added
+
+`AutocompleteNext` — the modernized typeahead: a thin adapter over MUI v7 `Autocomplete`
+rendered into the platform `TextField`, keeping the platform contract
+(`onChange({target:{name,value}})`, `valueField` primitive values, `multiple` arrays, async
+`suggest` + parent-owned `options`/`isLoading`, `optionTemplate`) while MUI owns the popup
+lifecycle, selection, filtering, keyboard and touch handling. Fixes the mobile typeahead
+selection loss: the legacy component closes its popper on `touchend` (click-away) and unmounts
+it when the options array changes, so the browser's synthesized click lands on the field behind
+the popup. A selected value's label now survives async options churn via an internal
+selected-option cache. See `docs/components/AutocompleteNext.md`; the legacy `Autocomplete`
+is unchanged.
+
 ## 2.1.5
 
 ### Fixed
