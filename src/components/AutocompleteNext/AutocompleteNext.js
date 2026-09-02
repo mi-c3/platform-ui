@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import MuiAutocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
 import InputAdornment from '@mui/material/InputAdornment';
+import Popper from '@mui/material/Popper';
+import Grow from '@mui/material/Grow';
 import CircularProgress from '@mui/material/CircularProgress';
 import Tooltip from '@mui/material/Tooltip';
 import styled from 'styled-components';
@@ -31,6 +33,35 @@ const ChipIconStyle = styled.div`
 `;
 
 const LISTBOX_MAX_HEIGHT = 224; // visual parity with the legacy popper cap
+
+/**
+ * Popper slot with the legacy Grow entrance/exit (timeout "auto": opacity ~289ms /
+ * transform ~192ms, origin at the anchored edge) — MUI v7's Autocomplete popper has no
+ * transition of its own. `$closing` (from the adapter, async consumers only) plays the exit
+ * animation before the adapter actually flips its controlled `open` off; `$onExited` tells
+ * it the exit finished.
+ */
+const GrowPopper = React.forwardRef(function GrowPopper(props, ref) {
+    const { children, open, $closing, $onExited, ...rest } = props;
+    return (
+        <Popper ref={ref} {...rest} open={open} transition>
+            {({ TransitionProps, placement }) => (
+                <Grow
+                    {...TransitionProps}
+                    in={TransitionProps.in && !$closing}
+                    onExited={() => {
+                        TransitionProps.onExited && TransitionProps.onExited();
+                        $onExited && $onExited();
+                    }}
+                    timeout="auto"
+                    style={{ transformOrigin: String(placement).startsWith('top') ? 'center bottom' : 'center top' }}
+                >
+                    <div>{children}</div>
+                </Grow>
+            )}
+        </Popper>
+    );
+});
 
 // Legacy multi-select field spacing: the chips block clears the shrunk label like the old
 // $multiple StyledTextField (padding-top 1.7rem on the filled root).
@@ -99,7 +130,7 @@ class AutocompleteNext extends PureComponent {
     // Keeps the clear (x) visible without hover/focus, like the legacy always-visible button.
     static PERSISTENT_CLEAR_SX = { '&& .MuiAutocomplete-clearIndicator': { visibility: 'visible' } };
 
-    state = { open: false, waitingForOptions: false };
+    state = { open: false, waitingForOptions: false, closing: false };
 
     constructor(props) {
         super(props);
@@ -210,7 +241,7 @@ class AutocompleteNext extends PureComponent {
         if (!suggest) {
             return;
         }
-        this.setState({ open: true, waitingForOptions: true });
+        this.setState({ open: true, waitingForOptions: true, closing: false });
         this.lastSuggestQuery = '';
         suggest({ target: { name, value: '' } });
     }
@@ -218,7 +249,33 @@ class AutocompleteNext extends PureComponent {
     @bind
     onClose() {
         if (this.props.suggest) {
-            this.setState({ open: false, waitingForOptions: false });
+            // Play the Grow exit before flipping the controlled open off; onPopperExited
+            // completes the close. A popup that never opened (waiting) closes immediately.
+            if (this.state.open && !this.state.waitingForOptions) {
+                this.setState({ closing: true });
+            } else {
+                this.setState({ open: false, waitingForOptions: false, closing: false });
+            }
+        }
+    }
+
+    @bind
+    reopenDuringClosing(event, original) {
+        // While the Grow exit plays, the controlled open prop is still true, so MUI ignores a
+        // fresh click/focus — reopen manually and go back through the waiting gate.
+        if (this.state.closing && this.props.suggest) {
+            const { suggest, name } = this.props;
+            this.setState({ closing: false, open: true, waitingForOptions: true });
+            this.lastSuggestQuery = '';
+            suggest({ target: { name, value: '' } });
+        }
+        original && original(event);
+    }
+
+    @bind
+    onPopperExited() {
+        if (this.state.closing) {
+            this.setState({ open: false, waitingForOptions: false, closing: false });
         }
     }
 
@@ -304,6 +361,10 @@ class AutocompleteNext extends PureComponent {
                 return acc;
             }, {});
         const inputProps = { ...params.InputProps, ...(InputProps || {}) };
+        const innerInputProps = {
+            ...params.inputProps,
+            onMouseDown: event => this.reopenDuringClosing(event, params.inputProps && params.inputProps.onMouseDown),
+        };
         if (!multiple && !inputProps.startAdornment) {
             const { startAdornment } = this.getTemplate(this.resolvedValue);
             if (startAdornment) {
@@ -318,6 +379,7 @@ class AutocompleteNext extends PureComponent {
             <TextField
                 {...params}
                 {...restProps}
+                inputProps={innerInputProps}
                 label={label}
                 placeholder={placeholder}
                 error={error}
@@ -346,7 +408,7 @@ class AutocompleteNext extends PureComponent {
             isLoading,
             slotProps,
         } = this.props;
-        const { open, waitingForOptions } = this.state;
+        const { open, waitingForOptions, closing } = this.state;
         const presentedOptions = waitingForOptions ? [] : options || [];
         // The loading spinner occupies the suggestion-opener slot, replacing the arrow —
         // exactly where the legacy component put it (15px, vertically centered at the right
@@ -395,7 +457,9 @@ class AutocompleteNext extends PureComponent {
                 selectOnFocus
                 fullWidth
                 sx={[multiple ? MULTIPLE_SX : null, showPersistentClear ? AutocompleteNext.PERSISTENT_CLEAR_SX : null]}
+                slots={{ popper: GrowPopper }}
                 slotProps={{
+                    popper: { $closing: closing, $onExited: this.onPopperExited },
                     listbox: {
                         component: VirtualListbox,
                         scrollControllerRef: this.listboxScrollRef,

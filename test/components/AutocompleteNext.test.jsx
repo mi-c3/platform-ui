@@ -485,8 +485,12 @@ describe('open/reopen waits for the fresh page (legacy parity: spinner in field,
             // close, reopen without filter text
             fireEvent.keyDown(input, { key: 'Escape' });
             openPopup(input);
-            // popup stays CLOSED while the page loads: no stale rows, no loading popup,
-            // spinner in the field instead
+            // the old rows only FADE OUT (Grow exit, like the legacy popper); once the exit
+            // completes the popup stays closed while the page loads — no stale rows, no
+            // loading popup, spinner in the field instead
+            act(() => {
+                jest.advanceTimersByTime(600);
+            });
             expect(screen.queryByText('Abx Result')).toBeNull();
             expect(screen.queryByRole('listbox')).toBeNull();
             expect(document.querySelector('.MuiCircularProgress-root')).not.toBeNull();
@@ -529,5 +533,38 @@ describe('open/reopen waits for the fresh page (legacy parity: spinner in field,
     test('unselected single-select keeps the popup arrow', () => {
         renderNext({});
         expect(screen.getByLabelText('Open')).toBeInTheDocument();
+    });
+});
+
+describe('popup animation (legacy Grow parity)', () => {
+    test('the popup enters through a Grow transition with the legacy easing profile', () => {
+        renderNext({});
+        openPopup(screen.getByRole('combobox'));
+        const paperWrap = document.querySelector('.MuiAutocomplete-popper > div');
+        expect(paperWrap).not.toBeNull();
+        // Grow (timeout auto) drives opacity+transform with the standard easing
+        expect(paperWrap.style.transition).toMatch(/opacity.*cubic-bezier\(0\.4, 0, 0\.2, 1\).*transform.*cubic-bezier\(0\.4, 0, 0\.2, 1\)/);
+        expect(paperWrap.style.transformOrigin).toBe('center top');
+    });
+
+    test('closing plays the Grow exit before the popup unmounts (async consumer)', () => {
+        jest.useFakeTimers();
+        try {
+            const suggest = jest.fn();
+            const { rerender } = renderNext({ suggest });
+            const input = screen.getByRole('combobox');
+            openPopup(input);
+            deliverOptions(rerender, { suggest });
+            expect(screen.getByRole('listbox')).toBeInTheDocument();
+            fireEvent.keyDown(input, { key: 'Escape' });
+            // still mounted: the exit animation is playing
+            expect(screen.queryByRole('listbox')).not.toBeNull();
+            act(() => {
+                jest.advanceTimersByTime(600);
+            });
+            expect(screen.queryByRole('listbox')).toBeNull();
+        } finally {
+            jest.useRealTimers();
+        }
     });
 });
