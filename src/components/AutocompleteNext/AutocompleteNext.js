@@ -199,12 +199,15 @@ class AutocompleteNext extends PureComponent {
     @bind
     onOpen() {
         // Async consumers load their first page on open (the legacy component fired its
-        // suggest on focus). The popup is held closed while the page loads — the user sees
+        // suggest on focus). Their popup is held closed while the page loads — the user sees
         // the field spinner, then the options, exactly like the legacy behavior; it also
         // means a reopen after a filtered search can never flash the stale filtered rows.
+        //
+        // Static (no-suggest) consumers stay fully MUI-uncontrolled: a controlled `open`
+        // commits one render late, and anything typed inside that window is wiped by MUI's
+        // open-time input reset.
         const { suggest, name } = this.props;
         if (!suggest) {
-            this.setState({ open: true });
             return;
         }
         this.setState({ open: true, waitingForOptions: true });
@@ -214,7 +217,9 @@ class AutocompleteNext extends PureComponent {
 
     @bind
     onClose() {
-        this.setState({ open: false, waitingForOptions: false });
+        if (this.props.suggest) {
+            this.setState({ open: false, waitingForOptions: false });
+        }
     }
 
     @bind
@@ -367,7 +372,7 @@ class AutocompleteNext extends PureComponent {
                 multiple={multiple}
                 options={presentedOptions}
                 value={this.resolvedValue}
-                open={open && !waitingForOptions}
+                open={this.props.suggest ? open && !waitingForOptions : undefined}
                 onChange={this.onChange}
                 onInputChange={this.onInputChange}
                 onOpen={this.onOpen}
