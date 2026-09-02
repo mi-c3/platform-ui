@@ -34,7 +34,12 @@ const LISTBOX_MAX_HEIGHT = 224; // visual parity with the legacy popper cap
 
 // Legacy multi-select field spacing: the chips block clears the shrunk label like the old
 // $multiple StyledTextField (padding-top 1.7rem on the filled root).
-const MULTIPLE_SX = { '&& .MuiFilledInput-root': { paddingTop: '1.7rem' } };
+const MULTIPLE_SX = {
+    '&& .MuiFilledInput-root': { paddingTop: '1.7rem' },
+    // legacy input sizing: the text input claims most of a row, so it wraps under the chips
+    // instead of squeezing next to them
+    '&& .MuiAutocomplete-input': { width: 'calc(100% - 80px)', flexGrow: 1 },
+};
 
 // Legacy-only props: verified to have zero consumers passing them (call-site extraction across
 // the platform-v1 repository); accepted and ignored during the migration window so a stray
