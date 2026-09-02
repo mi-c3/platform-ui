@@ -2,19 +2,34 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
-## 3.0.0
+## 2.2.0
 
-### Breaking
+### Changed
 
-`Autocomplete` is now the MUI v7 adapter (the component previously exported as
-`AutocompleteNext`); the legacy hand-rolled implementation is removed, together with the
-`react-tiny-virtual-list` peer/dev dependency. The consumer contract is unchanged
-(`onChange({target:{name,value}})`, `valueField`, `multiple`, async `suggest` +
-`options`/`isLoading`, `optionTemplate`, `VirtualListProps.itemSize`); legacy props with no
-consumers (`PopperProps`, `optionsOverflow`, `valueId`, `searchDelay`) are ignored with a
-one-time dev warning. `AutocompleteNext` remains as a deprecated alias until the next major.
-`AutocompleteLazy` is unchanged. 2.x remains published for consumers that still use the legacy
-implementation.
+`Autocomplete` is now a thin adapter over MUI v7's `Autocomplete` rendered into the platform
+`TextField`; the legacy hand-rolled Popper/ClickAwayListener implementation is removed. The
+consumer contract is unchanged (`onChange({target:{name,value}})`, `valueField` primitive
+values, `multiple` arrays, async `suggest` + parent-owned `options`/`isLoading`,
+`optionTemplate`, `VirtualListProps.itemSize`) and the legacy look and behavior were validated
+pixel-for-pixel against the live environment (spinner in the opener slot, wait-first popup,
+persistent clear, Grow animation, chip metrics, row density, horizontal overflow). MUI owns the
+popup lifecycle, selection, filtering, keyboard, touch and a11y — this fixes the mobile
+typeahead selection loss (the legacy popper closed on `touchend` click-away and unmounted on
+options churn, so the browser's synthesized click landed on the field behind) and stale
+filtered rows on reopen; options are rendered through a TanStack-virtualized listbox
+(`@tanstack/react-virtual`, bundled), so large sets (~7k icons) open and scroll fluidly with
+full `aria-activedescendant` keyboard support.
+
+Compatibility notes, despite the minor bump (same convention as the 2.1.0 router note):
+
+- Legacy props with zero verified consumers — `PopperProps`, `optionsOverflow`, `valueId`,
+  `searchDelay` (debounce fixed at 300 ms) — are accepted but ignored, with a one-time dev
+  warning. A consumer that passed them gets the default behavior, not a crash.
+- The `react-tiny-virtual-list` peer dependency is dropped (no consumer action needed).
+- `AutocompleteNext` is exported as a deprecated alias of `Autocomplete` for the migration
+  window; it will be removed in 3.0.0. `AutocompleteLazy` keeps its API; internal consumers
+  (`DateTimePickerRange`, `MdiIconSelect`, `GooglePlaceAutocomplete`) render through the new
+  implementation.
 
 ### Fixed
 
@@ -25,49 +40,6 @@ implementation.
   the arriving options page no longer opens the popup detached from focus.
 - `AutocompleteLazy` catches a rejected `fetchData` and delivers an empty options page, so the
   field spinner cannot be stranded by a failed request.
-
-
-## 2.4.0
-
-### Changed
-
-All internal consumers now use `AutocompleteNext`: `AutocompleteLazy` (the `fetchData` shim,
-API unchanged), `DateTimePickerRange` (Range/Unit selects), `MdiIconSelect` (~7k icons — now
-virtualized), and `GooglePlaceAutocomplete`. The legacy `Autocomplete` export remains published
-and unchanged; nothing imports it internally anymore. Its removal is the 3.0.0 cutover.
-
-## 2.3.0
-
-### Added
-
-`AutocompleteNext` now renders its options through a TanStack-virtualized listbox
-(`@tanstack/react-virtual`, bundled): only the visible rows exist in the DOM, so large option
-sets (entity types ~1.4k, the icon picker ~7k) open and scroll fluidly. Rows are measured, so
-mixed row heights need no configuration. Keyboard navigation keeps `aria-activedescendant`
-resolvable: highlights outside the rendered window scroll into range (deferred out of the key
-event — scrolling inside MUI's keydown dispatch corrupts its highlight bookkeeping). This is a
-separate implementation from platform-v1's tree virtualization seam and is internal to
-`AutocompleteNext` — no consumer API.
-
-Reopening an async `AutocompleteNext` after a filtered search no longer flashes the stale
-filtered rows before the fresh first page arrives: the adapter tracks the query its last
-`suggest` was fired with, and when the popup reopens with an empty query it presents the
-loading state until the parent delivers new options.
-
-## 2.2.0
-
-### Added
-
-`AutocompleteNext` — the modernized typeahead: a thin adapter over MUI v7 `Autocomplete`
-rendered into the platform `TextField`, keeping the platform contract
-(`onChange({target:{name,value}})`, `valueField` primitive values, `multiple` arrays, async
-`suggest` + parent-owned `options`/`isLoading`, `optionTemplate`) while MUI owns the popup
-lifecycle, selection, filtering, keyboard and touch handling. Fixes the mobile typeahead
-selection loss: the legacy component closes its popper on `touchend` (click-away) and unmounts
-it when the options array changes, so the browser's synthesized click lands on the field behind
-the popup. A selected value's label now survives async options churn via an internal
-selected-option cache. See `docs/components/AutocompleteNext.md`; the legacy `Autocomplete`
-is unchanged.
 
 ## 2.1.5
 

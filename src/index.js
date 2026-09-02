@@ -168,7 +168,7 @@ export {
     // Platform overrides Material UI components
     Autocomplete,
     AutocompleteLazy,
-    /** @deprecated 3.0.0 alias of `Autocomplete`; will be removed in the next major. */
+    /** @deprecated alias of `Autocomplete` (since 2.2.0); will be removed in 3.0.0. */
     Autocomplete as AutocompleteNext,
     Avatar,
     Button,
