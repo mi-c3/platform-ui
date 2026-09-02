@@ -38,7 +38,7 @@ const MULTIPLE_SX = {
     '&& .MuiFilledInput-root': { paddingTop: '1.7rem' },
     // legacy input sizing: the text input claims most of a row, so it wraps under the chips
     // instead of squeezing next to them
-    '&& .MuiAutocomplete-input': { width: 'calc(100% - 80px)', flexGrow: 1 },
+    '&& .MuiAutocomplete-input': { width: 'calc(100% - 80px)', flexGrow: 1, paddingTop: '25px', paddingBottom: '8px' },
 };
 
 // Legacy-only props: verified to have zero consumers passing them (call-site extraction across
