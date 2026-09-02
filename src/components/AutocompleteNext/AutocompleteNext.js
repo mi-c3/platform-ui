@@ -19,8 +19,11 @@ import {
 } from './valueCodec';
 
 const StyledChip = styled(Chip)`
-    margin: 5px 3px;
-    height: 24px;
+    && {
+        /* legacy chip metrics; && outranks MUI's .MuiAutocomplete-tag 3px margin */
+        margin: 5px 3px;
+        height: 24px;
+    }
 `;
 
 const ChipIconStyle = styled.div`
@@ -28,6 +31,10 @@ const ChipIconStyle = styled.div`
 `;
 
 const LISTBOX_MAX_HEIGHT = 224; // visual parity with the legacy popper cap
+
+// Legacy multi-select field spacing: the chips block clears the shrunk label like the old
+// $multiple StyledTextField (padding-top 1.7rem on the filled root).
+const MULTIPLE_SX = { '&& .MuiFilledInput-root': { paddingTop: '1.7rem' } };
 
 // Legacy-only props: verified to have zero consumers passing them (call-site extraction across
 // the platform-v1 repository); accepted and ignored during the migration window so a stray
@@ -377,7 +384,7 @@ class AutocompleteNext extends PureComponent {
                 openOnFocus
                 selectOnFocus
                 fullWidth
-                sx={showPersistentClear ? AutocompleteNext.PERSISTENT_CLEAR_SX : undefined}
+                sx={[multiple ? MULTIPLE_SX : null, showPersistentClear ? AutocompleteNext.PERSISTENT_CLEAR_SX : null]}
                 slotProps={{
                     listbox: {
                         component: VirtualListbox,
