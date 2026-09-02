@@ -1,7 +1,6 @@
 import React, { forwardRef, useCallback, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
-const ESTIMATED_ROW_HEIGHT = 50;
 const OVERSCAN = 8;
 
 /**
@@ -14,23 +13,30 @@ const OVERSCAN = 8;
  * `app/components/molecules/Virtualized/*` seam (same library, different repo/consumer): the
  * new Autocomplete architecture uses this one; nothing else should.
  *
- * The listbox element itself is the scroll container. Rows are absolutely positioned and
- * measured (`measureElement` + `data-index`), so mixed row heights (plain 50px rows vs 60px
- * avatar rows) need no configuration.
+ * Layout: the listbox element scrolls on BOTH axes. The virtual window is contiguous, so the
+ * rendered rows sit in normal flow inside one absolutely positioned rail translated to the
+ * first row's offset. The rail is `width: max-content; min-width: 100%`, so rows wider than
+ * the popup extend it and the user pans horizontally to read long content — the legacy
+ * behavior consumers like the graphic typeahead rely on — while every row shares the rail's
+ * width, keeping hover/selection backgrounds uniform.
  *
- * `scrollControllerRef` is filled with `{ scrollToIndex }` — AutocompleteNext calls it from
- * MUI's `onHighlightChange`, because MUI's own scroll-into-view can only find options that are
- * currently rendered.
+ * Rows are FIXED HEIGHT (`rowHeight`, the legacy `VirtualListProps.itemSize` contract:
+ * 50 default, 60 for avatar-heavy rows) and clip overflow, exactly like the legacy virtual
+ * list's row slots.
+ *
+ * `scrollControllerRef` is filled with `{ ensureIndexVisible }` — AutocompleteNext calls it
+ * from MUI's `onHighlightChange`, because MUI's own scroll-into-view can only find options
+ * that are currently rendered.
  */
 const VirtualListbox = forwardRef(function VirtualListbox(props, ref) {
-    const { children, scrollControllerRef, style, ...other } = props;
+    const { children, scrollControllerRef, rowHeight = 50, style, ...other } = props;
     const items = React.Children.toArray(children);
     const listRef = useRef(null);
 
     const virtualizer = useVirtualizer({
         count: items.length,
         getScrollElement: () => listRef.current,
-        estimateSize: () => ESTIMATED_ROW_HEIGHT,
+        estimateSize: () => rowHeight,
         overscan: OVERSCAN,
         // React 19: the default synchronous scroll flush warns when it lands inside an
         // in-progress render; TanStack documents disabling it (same setting as the
@@ -69,14 +75,8 @@ const VirtualListbox = forwardRef(function VirtualListbox(props, ref) {
         };
     }
 
-    const rowStyle = start => ({
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        boxSizing: 'border-box',
-        transform: `translateY(${start}px)`,
-    });
+    const virtualItems = virtualizer.getVirtualItems();
+    const railOffset = virtualItems.length ? virtualItems[0].start : 0;
 
     return (
         <ul
@@ -84,15 +84,33 @@ const VirtualListbox = forwardRef(function VirtualListbox(props, ref) {
             ref={setRefs}
             style={{ ...style, position: 'relative', padding: 0, margin: 0, overflow: 'auto' }}
         >
-            <li aria-hidden style={{ height: virtualizer.getTotalSize(), padding: 0, margin: 0, listStyle: 'none' }} />
-            {virtualizer.getVirtualItems().map(virtualItem => {
-                const item = items[virtualItem.index];
-                return React.cloneElement(item, {
-                    ref: virtualizer.measureElement,
-                    'data-index': virtualItem.index,
-                    style: { ...item.props.style, ...rowStyle(virtualItem.start) },
-                });
-            })}
+            <li aria-hidden style={{ height: virtualizer.getTotalSize(), width: 1, padding: 0, margin: 0, listStyle: 'none' }} />
+            <div
+                role="presentation"
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    minWidth: '100%',
+                    width: 'max-content',
+                    transform: `translateY(${railOffset}px)`,
+                }}
+            >
+                {virtualItems.map(virtualItem => {
+                    const item = items[virtualItem.index];
+                    return React.cloneElement(item, {
+                        'data-index': virtualItem.index,
+                        style: {
+                            ...item.props.style,
+                            height: rowHeight,
+                            overflow: 'hidden',
+                            boxSizing: 'border-box',
+                            minWidth: '100%',
+                            width: 'max-content',
+                        },
+                    });
+                })}
+            </div>
         </ul>
     );
 });

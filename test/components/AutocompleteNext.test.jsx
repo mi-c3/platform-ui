@@ -313,11 +313,55 @@ describe('states', () => {
 
     test('dropped legacy props warn once in dev and do not crash', () => {
         const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
-        renderNext({ VirtualListProps: { itemSize: 60 } });
+        renderNext({ PopperProps: { disablePortal: true } });
         expect(warn).toHaveBeenCalledTimes(1);
-        renderNext({ VirtualListProps: { itemSize: 60 } });
+        renderNext({ PopperProps: { disablePortal: true } });
         expect(warn).toHaveBeenCalledTimes(1);
         warn.mockRestore();
+    });
+
+    test('VirtualListProps.itemSize is supported (legacy density contract): rows are fixed to it', () => {
+        renderNext({ VirtualListProps: { itemSize: 60 } });
+        openPopup(screen.getByRole('combobox'));
+        const row = screen.getAllByRole('option')[0];
+        expect(row.style.height).toBe('60px');
+        expect(row.style.overflow).toBe('hidden');
+    });
+
+    test('rows default to the legacy 50px density without VirtualListProps', () => {
+        renderNext({});
+        openPopup(screen.getByRole('combobox'));
+        expect(screen.getAllByRole('option')[0].style.height).toBe('50px');
+    });
+
+    test('rows sit on a max-content rail so long content extends horizontally (legacy graphic behavior)', () => {
+        renderNext({});
+        openPopup(screen.getByRole('combobox'));
+        const row = screen.getAllByRole('option')[0];
+        const rail = row.parentElement;
+        // jsdom's CSSOM drops `width: max-content` (unsupported value) — the min-width half
+        // of the contract is asserted here, the max-content half in browser validation.
+        expect(rail.style.minWidth).toBe('100%');
+        expect(rail.style.position).toBe('absolute');
+        expect(row.style.minWidth).toBe('100%');
+        const listbox = screen.getByRole('listbox');
+        expect(listbox.style.overflow).toBe('auto');
+    });
+
+    test('loading spinner occupies the suggestion-opener slot and replaces the arrow (legacy parity)', () => {
+        renderNext({ suggest: () => {}, isLoading: true });
+        const opener = document.querySelector('.MuiAutocomplete-popupIndicator');
+        expect(opener).not.toBeNull();
+        expect(opener.querySelector('.MuiCircularProgress-root')).not.toBeNull();
+        expect(document.querySelector('[data-testid="ArrowDropDownIcon"]')).toBeNull();
+    });
+
+    test('spinner shows in the opener slot while waiting for the open-time page', () => {
+        renderNext({ suggest: () => {} });
+        openPopup(screen.getByRole('combobox'));
+        const opener = document.querySelector('.MuiAutocomplete-popupIndicator');
+        expect(opener.querySelector('.MuiCircularProgress-root')).not.toBeNull();
+        expect(document.querySelector('[data-testid="ArrowDropDownIcon"]')).toBeNull();
     });
 
     test('keyboard: ArrowDown + Enter selects the highlighted option', () => {

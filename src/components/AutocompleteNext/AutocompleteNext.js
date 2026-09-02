@@ -32,7 +32,7 @@ const LISTBOX_MAX_HEIGHT = 224; // visual parity with the legacy popper cap
 // Legacy-only props: verified to have zero consumers passing them (call-site extraction across
 // the platform-v1 repository); accepted and ignored during the migration window so a stray
 // spread cannot crash, with a one-time dev warning so it gets cleaned up.
-const DROPPED_PROPS = ['VirtualListProps', 'PopperProps', 'optionsOverflow', 'valueId', 'searchDelay'];
+const DROPPED_PROPS = ['PopperProps', 'optionsOverflow', 'valueId', 'searchDelay'];
 const warned = new Set();
 
 /**
@@ -63,6 +63,7 @@ class AutocompleteNext extends PureComponent {
         value: PropTypes.any,
         valueField: PropTypes.string,
         isLoading: PropTypes.bool,
+        VirtualListProps: PropTypes.shape({ itemSize: PropTypes.number }),
         label: PropTypes.node,
         placeholder: PropTypes.string,
         error: PropTypes.bool,
@@ -74,7 +75,7 @@ class AutocompleteNext extends PureComponent {
     static OWN_PROPS = [
         'className', 'clearable', 'disabled', 'InputProps', 'multiple', 'name', 'onChange',
         'options', 'optionTemplate', 'suggest', 'value', 'valueField', 'isLoading', 'label',
-        'placeholder', 'error', 'helperText', 'slotProps',
+        'placeholder', 'error', 'helperText', 'slotProps', 'VirtualListProps',
         ...DROPPED_PROPS,
     ];
 
@@ -278,7 +279,7 @@ class AutocompleteNext extends PureComponent {
 
     @bind
     renderInput(params) {
-        const { label, placeholder, error, helperText, name, isLoading, InputProps, multiple, disabled, value } = this.props;
+        const { label, placeholder, error, helperText, name, InputProps, multiple, disabled, value } = this.props;
         const restProps = Object.keys(this.props)
             .filter(key => !AutocompleteNext.OWN_PROPS.includes(key))
             .reduce((acc, key) => {
@@ -295,12 +296,7 @@ class AutocompleteNext extends PureComponent {
                 inputProps.startAdornment = <InputAdornment position="start">{startAdornment}</InputAdornment>;
             }
         }
-        inputProps.endAdornment = (
-            <React.Fragment>
-                {isLoading || this.state.waitingForOptions ? <CircularProgress size={16} /> : null}
-                {params.InputProps.endAdornment}
-            </React.Fragment>
-        );
+        inputProps.endAdornment = params.InputProps.endAdornment;
         return (
             <TextField
                 {...params}
@@ -335,6 +331,14 @@ class AutocompleteNext extends PureComponent {
         } = this.props;
         const { open, waitingForOptions } = this.state;
         const presentedOptions = waitingForOptions ? [] : options || [];
+        // The loading spinner occupies the suggestion-opener slot, replacing the arrow —
+        // exactly where the legacy component put it (15px, vertically centered at the right
+        // edge of the filled box).
+        const spinnerActive = !!isLoading || waitingForOptions;
+        // Legacy row density: consumers control it through VirtualListProps.itemSize
+        // (50 default, 60 for avatar-heavy rows); rows are fixed-height and clip, like the
+        // legacy virtual list.
+        const rowHeight = (this.props.VirtualListProps && this.props.VirtualListProps.itemSize) || 50;
 
         this.resolvedValue = multiple
             ? resolveOptions(value, options, this.selectedOptionCache, valueField)
@@ -365,7 +369,8 @@ class AutocompleteNext extends PureComponent {
                 renderValue={multiple ? this.renderValue : undefined}
                 renderInput={this.renderInput}
                 loading={!!isLoading}
-                forcePopupIcon={showPersistentClear ? false : true}
+                popupIcon={spinnerActive ? <CircularProgress size={15} /> : undefined}
+                forcePopupIcon={spinnerActive ? true : (showPersistentClear ? false : true)}
                 disabled={disabled}
                 disableClearable={!clearable}
                 onHighlightChange={this.onHighlightChange}
@@ -377,6 +382,7 @@ class AutocompleteNext extends PureComponent {
                     listbox: {
                         component: VirtualListbox,
                         scrollControllerRef: this.listboxScrollRef,
+                        rowHeight,
                         sx: { maxHeight: LISTBOX_MAX_HEIGHT },
                     },
                     ...(slotProps || {}),
