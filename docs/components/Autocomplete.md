@@ -36,6 +36,16 @@ import { Autocomplete } from '@mic3/platform-ui';
 Not supported (legacy props with zero verified consumers — passing them logs a one-time dev
 warning and is otherwise ignored): `PopperProps`, `optionsOverflow`, `valueId`, `searchDelay`.
 
+## Input text ownership
+
+While a search session is open (the user has typed), the typed query owns the input; the
+`value` prop owns it whenever the session is idle — the adapter derives the text from `value`
+(never from MUI's own reset proposals, so a selection the parent does not adopt cannot strand
+a label in the field). A session ends on selection, blur, or Escape/close, and the text then
+re-derives from `value`. The clear (×) button and a chip's delete icon pressed mid-search keep
+the session (the typed filter survives a chip delete; the × empties the query, keeps the popup
+open and reloads the first page — stock MUI behavior, chosen over the legacy close-on-clear).
+
 ## Intentional differences from the legacy `Autocomplete`
 
 1. Popup lifecycle is MUI-owned: taps on options cannot be lost to the touchend/click-away race, and replacing/emptying `options` while open shows `loadingText`/`noOptionsText` instead of unmounting the popup.

@@ -34,6 +34,9 @@ const ChipIconStyle = styled.div`
 
 const LISTBOX_MAX_HEIGHT = 224; // visual parity with the legacy popper cap
 
+// Stable empty-options ref: a new [] per render reads as an options change downstream.
+const EMPTY_OPTIONS = [];
+
 /**
  * Popper slot with the legacy Grow entrance/exit (timeout "auto": opacity ~289ms /
  * transform ~192ms, origin at the anchored edge) — MUI v7's Autocomplete popper has no
@@ -130,13 +133,21 @@ class AutocompleteNext extends PureComponent {
     // Keeps the clear (x) visible without hover/focus, like the legacy always-visible button.
     static PERSISTENT_CLEAR_SX = { '&& .MuiAutocomplete-clearIndicator': { visibility: 'visible' } };
 
-    state = { open: false, waitingForOptions: false, closing: false, inputValue: '' };
+    state = { open: false, waitingForOptions: false, closing: false, inputValue: '', searching: false };
 
     constructor(props) {
         super(props);
         // Last selected option per stored value: keeps the visible label/adornment correct
         // while async options are replaced or cleared by unrelated store updates.
         this.selectedOptionCache = new Map();
+        // Last (value, options, valueField, multiple) -> resolved. MUI compares its `value`
+        // prop BY REF and a changed ref bypasses its "don't reset the input while focused"
+        // guard, so handing it a fresh resolution per render wiped typing (multiple mode
+        // resolved to a new array every render). `selectedOptionCache` is deliberately not a
+        // key: an entry for value X is only written by selecting an option present in the
+        // CURRENT options prop, where the plain lookup already resolves X identically; the
+        // cache can only change a resolution after an options ref change, which recomputes.
+        this._resolveMemo = null;
         this.state.inputValue = this.displayText();
         // The query the most recent suggest() was fired with — used to detect that the
         // options currently held by the parent belong to a previous (filtered) session.
@@ -169,9 +180,12 @@ class AutocompleteNext extends PureComponent {
         if (this.state.waitingForOptions && (prevProps.options !== this.props.options || (prevProps.isLoading && !this.props.isLoading))) {
             this.setState({ waitingForOptions: false });
         }
-        // Only a `value`/`multiple` change re-derives the input text — an options change must
-        // not, or an async page landing mid-search would wipe what the user is typing.
-        if (prevProps.value !== this.props.value || prevProps.multiple !== this.props.multiple) {
+        // The value prop owns the input text only while no search session is open (legacy
+        // `openSuggestions ? query : label`). No ref-compare trigger: connected/designer
+        // parents recreate equal-but-new value refs on unrelated store activity, and a ref
+        // trigger wiped typing mid-search. The string inequality check prevents loops, and
+        // an options page arriving for a primitive value now improves the label too.
+        if (!this.state.searching) {
             const inputValue = this.displayText();
             if (inputValue !== this.state.inputValue) {
                 this.setState({ inputValue });
@@ -215,8 +229,14 @@ class AutocompleteNext extends PureComponent {
         }
     }
 
+    // Ends the search session: the value prop owns the input text again.
     @bind
-    onChange(event, selection) {
+    sessionEndState() {
+        return { searching: false, inputValue: this.displayText() };
+    }
+
+    @bind
+    onChange(event, selection, reason) {
         const { onChange, name, multiple, valueField } = this.props;
         let value;
         if (multiple) {
@@ -227,6 +247,31 @@ class AutocompleteNext extends PureComponent {
             value = fromOption(selection, valueField);
         }
         onChange && onChange({ target: { name, value } });
+        // Session bookkeeping only — the emission above is unconditional. A selection ends
+        // the session; 'clear' and 'removeOption' keep it: MUI fires onChange('clear') when
+        // TYPING empties a clearable single-select (ending there would resurrect the old
+        // label under the caret), and a chip-X delete mid-filter must not wipe the typed
+        // filter. Unknown future reasons end the session (safe default).
+        if (reason === 'selectOption') {
+            this.setState(this.sessionEndState());
+        } else if ((reason === 'clear' || reason === 'removeOption') && this.state.searching) {
+            // keep the session
+        } else if (this.state.searching) {
+            this.setState(this.sessionEndState());
+        }
+    }
+
+    // See the constructor note on `_resolveMemo` for why this must return a STABLE ref.
+    resolveValueMemo(value, options, valueField, multiple) {
+        const m = this._resolveMemo;
+        if (m && m.value === value && m.options === options && m.valueField === valueField && m.multiple === multiple) {
+            return m.resolved;
+        }
+        const resolved = multiple
+            ? resolveOptions(value, options, this.selectedOptionCache, valueField)
+            : resolveOption(value, options, this.selectedOptionCache, valueField);
+        this._resolveMemo = { value, options, valueField, multiple, resolved };
+        return resolved;
     }
 
     // The input text when the user is not typing: derived from the `value` PROP, like the
@@ -240,20 +285,37 @@ class AutocompleteNext extends PureComponent {
         if (multiple) {
             return '';
         }
-        const resolved = resolveOption(value, options || [], this.selectedOptionCache, valueField);
+        const resolved = this.resolveValueMemo(value, options || EMPTY_OPTIONS, valueField, false);
         return resolved === null || resolved === undefined ? '' : this.getOptionLabel(resolved);
     }
 
     @bind
     onInputChange(event, inputValue, reason) {
         if (reason === 'input') {
-            this.setState({ inputValue });
+            // Typing owns the input until the session ends (selection, blur, escape/close).
+            this.setState({ inputValue, searching: true });
             this.suggestDebounced(inputValue);
             return;
         }
-        // Every non-typing proposal from MUI (select/blur/clear resets) is replaced by the
-        // value-prop-derived text; a consumer that adopts the selection re-syncs through
-        // componentDidUpdate when the new `value` prop lands.
+        if (reason === 'clear' && this.state.searching) {
+            // The clear (x) button mid-search: MUI keeps the popup open, so accept the empty
+            // query and reload the first page — otherwise a suggest consumer's popup keeps
+            // showing the stale filtered rows under an empty input. (Typing-to-empty arrives
+            // as 'input'; this branch is x-button only. Owner decision: stock-MUI behavior,
+            // the legacy component closed the popup here instead.)
+            this.setState({ inputValue: '' });
+            this.suggestDebounced('');
+            return;
+        }
+        if (this.state.searching) {
+            // Mid-session, every other proposal ('reset' from MUI's value-ref effect,
+            // 'selectOption' which precedes onChange, 'blur') is ignored — the typed query
+            // owns the input; the session-end paths re-derive the text from the value prop.
+            return;
+        }
+        // Idle: the value prop owns the text; MUI's proposal is replaced by the value-derived
+        // text so a selection the parent does not adopt (picker pattern) cannot strand the
+        // picked option's label in the field.
         this.setState({ inputValue: this.displayText() });
     }
 
@@ -277,15 +339,28 @@ class AutocompleteNext extends PureComponent {
     }
 
     @bind
-    onClose() {
-        if (this.props.suggest) {
-            // Play the Grow exit before flipping the controlled open off; onPopperExited
-            // completes the close. A popup that never opened (waiting) closes immediately.
-            if (this.state.open && !this.state.waitingForOptions) {
-                this.setState({ closing: true });
-            } else {
-                this.setState({ open: false, waitingForOptions: false, closing: false });
+    onClose(event, reason) {
+        // A close that is not part of a selection ends the search session for BOTH consumer
+        // kinds ('selectOption'/'removeOption' closes are handled by onChange, which has
+        // already run — MUI resets the input, then commits the value, then closes). After
+        // commit, `closing === true` implies `searching === false`, so reopenDuringClosing
+        // needs no session handling.
+        const sessionEnd =
+            this.state.searching && (reason === 'escape' || reason === 'blur' || reason === 'toggleInput')
+                ? this.sessionEndState()
+                : null;
+        if (!this.props.suggest) {
+            if (sessionEnd) {
+                this.setState(sessionEnd);
             }
+            return;
+        }
+        // Play the Grow exit before flipping the controlled open off; onPopperExited
+        // completes the close. A popup that never opened (waiting) closes immediately.
+        if (this.state.open && !this.state.waitingForOptions) {
+            this.setState({ ...(sessionEnd || {}), closing: true });
+        } else {
+            this.setState({ ...(sessionEnd || {}), open: false, waitingForOptions: false, closing: false });
         }
     }
 
@@ -310,13 +385,18 @@ class AutocompleteNext extends PureComponent {
     }
 
     @bind
-    abandonWaitingOnBlur(event, original) {
+    onInputBlur(event, original) {
+        // Leaving the field ends the search session (the value prop owns the text again).
         // While the open-time load is pending the controlled `open` prop is false, so MUI's
-        // own blur→close path never runs (its handleClose bails on `!open`). Without this,
-        // leaving the field mid-load lets the options page open the popup later, detached
+        // own blur→close path never runs (its handleClose bails on `!open`) — abandon the
+        // waiting window too, or the arriving options page would open the popup detached
         // from focus. A popup that is actually visible keeps MUI's normal close handling.
+        const patch = this.state.searching ? this.sessionEndState() : {};
         if (this.state.waitingForOptions) {
-            this.setState({ open: false, waitingForOptions: false, closing: false });
+            Object.assign(patch, { open: false, waitingForOptions: false, closing: false });
+        }
+        if (Object.keys(patch).length) {
+            this.setState(patch);
         }
         original && original(event);
     }
@@ -406,7 +486,7 @@ class AutocompleteNext extends PureComponent {
         const innerInputProps = {
             ...params.inputProps,
             onMouseDown: event => this.reopenDuringClosing(event, params.inputProps && params.inputProps.onMouseDown),
-            onBlur: event => this.abandonWaitingOnBlur(event, params.inputProps && params.inputProps.onBlur),
+            onBlur: event => this.onInputBlur(event, params.inputProps && params.inputProps.onBlur),
         };
         if (!multiple && !inputProps.startAdornment) {
             const { startAdornment } = this.getTemplate(this.resolvedValue);
@@ -452,7 +532,7 @@ class AutocompleteNext extends PureComponent {
             slotProps,
         } = this.props;
         const { open, waitingForOptions, closing } = this.state;
-        const presentedOptions = waitingForOptions ? [] : options || [];
+        const presentedOptions = waitingForOptions ? EMPTY_OPTIONS : options || EMPTY_OPTIONS;
         // The loading spinner occupies the suggestion-opener slot, replacing the arrow —
         // exactly where the legacy component put it (15px, vertically centered at the right
         // edge of the filled box).
@@ -462,9 +542,7 @@ class AutocompleteNext extends PureComponent {
         // legacy virtual list.
         const rowHeight = (this.props.VirtualListProps && this.props.VirtualListProps.itemSize) || 50;
 
-        this.resolvedValue = multiple
-            ? resolveOptions(value, options, this.selectedOptionCache, valueField)
-            : resolveOption(value, options, this.selectedOptionCache, valueField);
+        this.resolvedValue = this.resolveValueMemo(value, options || EMPTY_OPTIONS, valueField, !!multiple);
 
         // Legacy clear affordance: a selected, clearable, enabled single-select shows the
         // always-visible clear (x) and no popup arrow; otherwise the arrow shows.

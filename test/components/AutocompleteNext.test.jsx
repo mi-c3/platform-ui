@@ -632,3 +632,164 @@ describe('waiting-window blur (regression: popup opened later, detached from foc
         expect(screen.queryByRole('listbox')).toBeNull();
     });
 });
+
+describe('search session survives prop churn (2.2.1 regression: typing wiped per keystroke)', () => {
+    // Root cause 1: render() resolved the value to a NEW ref every render; MUI's reset effect
+    // treats a value-ref change as a real change (bypasses its focused guard) and proposed a
+    // reset that the adapter turned into displayText() — '' for multiple.
+    test('multiple: typed text survives a rerender with new-ref value/options', () => {
+        const { rerender } = renderNext({ multiple: true, value: [] });
+        const input = screen.getByRole('combobox');
+        fireEvent.focus(input);
+        fireEvent.change(input, { target: { value: 'al' } });
+        expect(input).toHaveValue('al');
+        rerender(
+            <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} options={USERS.map(u => ({ ...u }))} multiple value={[]} />
+        );
+        expect(input).toHaveValue('al');
+    });
+
+    // Root cause 2: componentDidUpdate synced the input from the value prop on REF change —
+    // parents recreate equal-but-new refs on unrelated store activity. Same options ref
+    // isolates this defect (the resolution stays ref-stable).
+    test('single: typed text survives a rerender with an equal-but-new value ref', () => {
+        const { rerender } = renderNext({ value: USERS[1] });
+        const input = screen.getByRole('combobox');
+        fireEvent.focus(input);
+        fireEvent.change(input, { target: { value: 'car' } });
+        expect(input).toHaveValue('car');
+        rerender(
+            <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} options={USERS} value={{ ...USERS[1] }} />
+        );
+        expect(input).toHaveValue('car');
+    });
+
+    // The Sort-by shape: primitive value has no ref — the churn is the OPTIONS array; the
+    // re-resolved option is a new object ref, so MUI's effect sees a value change while
+    // focused (deep-copied elements are required: reused element refs resolve identically
+    // and hide the defect).
+    test('static select shape: typed char survives an options-array churn', () => {
+        const { rerender } = renderNext({ valueField: 'uri', value: 'user/bob' });
+        const input = screen.getByRole('combobox');
+        fireEvent.focus(input);
+        fireEvent.change(input, { target: { value: 's' } });
+        expect(input).toHaveValue('s');
+        rerender(
+            <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} options={USERS.map(u => ({ ...u }))} valueField="uri" value="user/bob" />
+        );
+        expect(input).toHaveValue('s');
+    });
+
+    test('async flow: typed text survives a page landing with new option refs and a churned adopted value', () => {
+        const { rerender } = render(
+            <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} suggest={() => {}} options={USERS} value={USERS[0]} />
+        );
+        const input = screen.getByRole('combobox');
+        fireEvent.focus(input);
+        fireEvent.change(input, { target: { value: 'al' } });
+        expect(input).toHaveValue('al');
+        deliverOptions(rerender, { options: USERS.map(u => ({ ...u })), value: { ...USERS[0] } });
+        expect(input).toHaveValue('al');
+    });
+
+    test('escape ends the session: input reverts to the value label, and reopening shows the full list (static)', () => {
+        renderNext({ value: USERS[1] });
+        const input = screen.getByRole('combobox');
+        openPopup(input);
+        fireEvent.change(input, { target: { value: 'xy' } });
+        expect(input).toHaveValue('xy');
+        fireEvent.keyDown(input, { key: 'Escape' });
+        expect(input).toHaveValue('Bob');
+        openPopup(input);
+        expect(screen.getAllByRole('option')).toHaveLength(USERS.length);
+    });
+
+    test('escape ends the session on a suggest consumer too', () => {
+        const { rerender } = render(
+            <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} suggest={() => {}} options={USERS} value={USERS[1]} />
+        );
+        const input = screen.getByRole('combobox');
+        openPopup(input);
+        // the wait-first gate holds the popup closed until the parent answers — MUI only
+        // handles Escape while the popup is open, so deliver the page first
+        deliverOptions(rerender, { options: USERS, value: USERS[1] });
+        fireEvent.change(input, { target: { value: 'xy' } });
+        expect(input).toHaveValue('xy');
+        fireEvent.keyDown(input, { key: 'Escape' });
+        expect(input).toHaveValue('Bob');
+    });
+
+    test('clear (x) mid-search empties the query and re-suggests the first page', () => {
+        jest.useFakeTimers();
+        try {
+            const suggest = jest.fn();
+            const onChange = jest.fn();
+            const { rerender } = render(
+                <AutocompleteNext name="field" onChange={onChange} optionTemplate={template} suggest={suggest} options={USERS} value={USERS[1]} />
+            );
+            const input = screen.getByRole('combobox');
+            fireEvent.mouseDown(input);
+            fireEvent.focus(input);
+            fireEvent.keyDown(input, { key: 'ArrowDown' });
+            deliverOptions(rerender, { suggest, onChange, options: USERS, value: USERS[1] });
+            fireEvent.change(input, { target: { value: 'car' } });
+            expect(input).toHaveValue('car');
+            fireEvent.click(screen.getByLabelText('Clear'));
+            expect(input).toHaveValue('');
+            expect(onChange).toHaveBeenCalledWith({ target: { name: 'field', value: null } });
+            act(() => {
+                jest.advanceTimersByTime(400);
+            });
+            expect(suggest).toHaveBeenCalledWith({ target: { name: 'field', value: '' } });
+        } finally {
+            jest.useRealTimers();
+        }
+    });
+});
+
+describe('search session end points (fix guards)', () => {
+    test('blur ends the session: input reverts to the value label', () => {
+        renderNext({ value: USERS[1] });
+        const input = screen.getByRole('combobox');
+        fireEvent.focus(input);
+        fireEvent.change(input, { target: { value: 'xy' } });
+        expect(input).toHaveValue('xy');
+        fireEvent.blur(input);
+        expect(input).toHaveValue('Bob');
+    });
+
+    test('typing after a selection starts a fresh session', () => {
+        const { rerender } = renderNext({ value: null });
+        const input = screen.getByRole('combobox');
+        openPopup(input);
+        fireEvent.click(screen.getByText('Bob'));
+        rerender(
+            <AutocompleteNext name="field" onChange={() => {}} optionTemplate={template} options={USERS} value={USERS[1]} />
+        );
+        expect(input).toHaveValue('Bob');
+        fireEvent.change(input, { target: { value: 'ali' } });
+        expect(input).toHaveValue('ali');
+    });
+
+    test('typing back to empty does not resurrect the label', () => {
+        renderNext({ value: USERS[1], clearable: true });
+        const input = screen.getByRole('combobox');
+        fireEvent.focus(input);
+        fireEvent.change(input, { target: { value: 'x' } });
+        fireEvent.change(input, { target: { value: '' } });
+        expect(input).toHaveValue('');
+    });
+
+    test('chip-x delete mid-filter keeps the typed filter', () => {
+        const onChange = jest.fn();
+        renderNext({ onChange, valueField: 'uri', multiple: true, value: ['user/alice', 'user/carol'] });
+        const input = screen.getByRole('combobox');
+        fireEvent.focus(input);
+        fireEvent.change(input, { target: { value: 'bo' } });
+        expect(input).toHaveValue('bo');
+        const aliceChip = screen.getByText('Alice').closest('.MuiChip-root');
+        fireEvent.click(within(aliceChip).getByTestId('CancelIcon'));
+        expect(onChange).toHaveBeenCalledWith({ target: { name: 'field', value: ['user/carol'] } });
+        expect(input).toHaveValue('bo');
+    });
+});
