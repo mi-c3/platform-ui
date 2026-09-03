@@ -138,6 +138,18 @@ class ColorPicker extends PureComponent {
     }
 
     @bind
+    handleClickAway(event) {
+        // A click on the field itself already toggles through the FormControl's onClick —
+        // without this guard the click-away ALSO fired for it (the field is outside the
+        // palette), and the two toggles cancelled out, so the field could never close its
+        // own palette.
+        if (this.wrapperRef.current && event.target && this.wrapperRef.current.contains(event.target)) {
+            return;
+        }
+        this.setState({ displayColorPicker: false });
+    }
+
+    @bind
     buildEndAdornment(value, clearable, disabled) {
         if (value && clearable && !disabled) {
             return (
@@ -173,15 +185,25 @@ class ColorPicker extends PureComponent {
                 </StyledPaper>
                 {!disabled && displayColorPicker && (
                     <BorderWrapper style={{ width: wrapperWidth }}>
-                        <ClickAwayListener onClickAway={this.handleSwatches}>
-                            <SwatchesPickerStyled
-                                {...restProps}
-                                width={wrapperWidth}
-                                name={name}
-                                color={value || ''}
-                                colors={materialColorPalette || this.defaultColors}
-                                onChange={this.onChange}
-                            />
+                        <ClickAwayListener onClickAway={this.handleClickAway}>
+                            {/* Host wrapper is load-bearing: react-color's SwatchesPicker is a
+                                class component that neither forwards a DOM ref nor spreads
+                                props, so ClickAwayListener (v5+ has no findDOMNode) could
+                                never resolve its child node — EVERY tap, including on a
+                                swatch, read as "away". On touch the palette then unmounted on
+                                touchend and the browser's compat click landed on the field
+                                behind it. The div gives the listener a real node and working
+                                inside-tree markers. */}
+                            <div>
+                                <SwatchesPickerStyled
+                                    {...restProps}
+                                    width={wrapperWidth}
+                                    name={name}
+                                    color={value || ''}
+                                    colors={materialColorPalette || this.defaultColors}
+                                    onChange={this.onChange}
+                                />
+                            </div>
                         </ClickAwayListener>
                     </BorderWrapper>
                 )}
