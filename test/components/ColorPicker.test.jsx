@@ -86,3 +86,19 @@ describe('ColorPicker palette interaction (mobile tap-race regression)', () => {
         expect(container.querySelector('.swatches-picker')).toBeNull();
     });
 });
+
+describe('field tap on a touch device (guard regression)', () => {
+    // touchend (document click-away) and the browser's compat click (FormControl toggle) are
+    // separate dispatches on a real device — without the wrapperRef guard they double-fire
+    // and the field can never close its own palette.
+    test('touch tap on the field, then its compat click, closes the palette', async () => {
+        const { container } = renderPicker();
+        await openPalette(container);
+        const field = container.querySelector('.MuiFormControl-root');
+        fireEvent.touchStart(field);
+        fireEvent.touchEnd(field);
+        fireEvent.click(field);
+        await act(async () => new Promise(resolve => setTimeout(resolve, 20)));
+        expect(container.querySelector('.swatches-picker')).toBeNull();
+    });
+});
