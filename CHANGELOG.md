@@ -2,6 +2,21 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.2.2
+
+### Fixed
+
+`Autocomplete`: typed search queries survive again. Since 2.2.0's controlled input, typing was
+wiped per keystroke wherever parent props churn (all designer-form typeaheads; multiple mode
+always): the per-render re-resolution of `value` made MUI see a value-ref change on every
+render (which bypasses its don't-reset-while-focused guard), and the adapter's own
+value-prop sync keyed on ref inequality. The resolved value is now memoized on
+`(value, options, valueField, multiple)`, and a search session owns the input text from the
+first typed character until selection, blur, or Escape/close — the value prop owns it only
+while idle (the legacy `openSuggestions ? query : label` rule). Mid-search, a chip's delete
+icon keeps the typed filter, and the clear (×) empties the query, keeps the popup open and
+reloads the first page (stock-MUI behavior, chosen over the legacy close-on-clear).
+
 ## 2.2.1
 
 ### Fixed
