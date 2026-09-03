@@ -2,6 +2,18 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.2.1
+
+### Fixed
+
+- `ColorPicker`: selecting a color on a touch device works again. react-color's
+  `SwatchesPicker` is a class component with no DOM ref, so MUI v5+'s `ClickAwayListener`
+  (which no longer has `findDOMNode`) read every tap — including taps on a swatch — as
+  "away": the palette unmounted on `touchend` and the browser's compat click landed on the
+  field behind it (on desktop the color applied but the palette closed after every pick).
+  The palette is now wrapped in a host `<div>`, and a click on the picker's own field no
+  longer double-fires (click-away + toggle), so the field can close its palette again.
+
 ## 2.2.0
 
 ### Changed
@@ -40,13 +52,6 @@ Compatibility notes, despite the minor bump (same convention as the 2.1.0 router
   the arriving options page no longer opens the popup detached from focus.
 - `AutocompleteLazy` catches a rejected `fetchData` and delivers an empty options page, so the
   field spinner cannot be stranded by a failed request.
-- `ColorPicker`: selecting a color on a touch device works again. react-color's
-  `SwatchesPicker` is a class component with no DOM ref, so MUI v5+'s `ClickAwayListener`
-  (which no longer has `findDOMNode`) read every tap — including taps on a swatch — as
-  "away": the palette unmounted on `touchend` and the browser's compat click landed on the
-  field behind it (on desktop the color applied but the palette closed after every pick).
-  The palette is now wrapped in a host `<div>`, and a click on the picker's own field no
-  longer double-fires (click-away + toggle), so the field can close its palette again.
 
 ## 2.1.5
 
