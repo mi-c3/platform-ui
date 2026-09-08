@@ -2,6 +2,26 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.2.3
+
+### Fixed
+
+The modal date/time pickers (`DatePicker`, `TimePicker`, `DateTimePicker` and the
+`DateTimePickerRange` modal) get two v3 details back:
+
+- The field's clear (×) is drawn at the size every other clear adornment in the library uses —
+  `TextField`, `UploadFileField`, `UploadFiles`, `DateTimePickerRange`: a 48px button around a
+  24px icon, 24px in from the input's right edge, which is what 1.x drew here too. It had been a
+  `size="small" edge="end"` button around a 20px icon, 3px further right and out of line with the
+  fields above and below it in a form.
+- The action bar's own action sits at the left edge again, with `Cancel`/`OK` at the right. v3 gave
+  such a bar a `MuiPickersModal-withAdditionalAction` class (`justify-content: flex-start` plus
+  `margin-right: auto` on its first child); v8's `DialogActions` packs everything right, which
+  bunched `Clear` up against `Cancel`. The auto margin is applied as `sx` on our own `Button`, not
+  as CSS against MUI's internal DOM. As in v3, only the bar's *first* action is pinned, so a bar
+  carrying both `Clear` and `Today` leaves `Today` with `Cancel`/`OK`, and a `Cancel`/`OK`-only bar
+  stays packed right.
+
 ## 2.2.2
 
 ### Fixed
