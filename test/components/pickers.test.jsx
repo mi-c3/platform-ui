@@ -146,6 +146,58 @@ describe.each([
         expect(dialogButton('Clear')).toBeDefined();
     });
 
+    /*
+     * v3's action bar put the bar's OWN action ("Clear", "Today") against the left edge and left
+     * Cancel/OK at the right: `@material-ui/pickers` gave that bar a second class,
+     * `MuiPickersModal-withAdditionalAction`, whose rule is `justify-content: flex-start` plus
+     * `margin-right: auto` on the first child. Measured on staging, Clear sits 8px from the bar's
+     * left edge with a resolved 78.6px right margin. MUI v8's `DialogActions` packs everything at
+     * the right instead, which bunched Clear up against Cancel.
+     */
+    test('pushes the action bar\'s own action to the left edge, leaving Cancel/OK at the right', () => {
+        renderPicker({ clearable: true });
+        fireEvent.click(screen.getByRole('textbox'));
+
+        expect(getComputedStyle(dialogButton('Clear')).marginRight).toBe('auto');
+        expect(getComputedStyle(dialogButton('Cancel')).marginRight).toBe('0px');
+        expect(getComputedStyle(dialogButton('OK')).marginRight).toBe('0px');
+    });
+
+    // v3 added that class only for a bar that HAS an extra action; a plain Cancel/OK bar stayed
+    // packed at the right, and pushing Cancel left would be a new layout, not the restored one.
+    test('leaves a Cancel/OK-only bar packed at the right', () => {
+        renderPicker();
+        fireEvent.click(screen.getByRole('textbox'));
+
+        expect(getComputedStyle(dialogButton('Cancel')).marginRight).toBe('0px');
+        expect(getComputedStyle(dialogButton('OK')).marginRight).toBe('0px');
+    });
+
+    /*
+     * v3's rule is `> :first-child`, not "every action that isn't Cancel/OK": a bar carrying BOTH
+     * puts Clear on the left and leaves Today packed with Cancel/OK on the right. Kept as v3 had it
+     * rather than grouping the two on the left, which would be a new layout.
+     */
+    test('pins only the first action when the bar carries both Clear and Today', () => {
+        renderPicker({ clearable: true, showTodayButton: true });
+        fireEvent.click(screen.getByRole('textbox'));
+
+        expect(dialogButton('Clear')).toBeDefined();
+        expect(dialogButton('Today')).toBeDefined();
+        expect(getComputedStyle(dialogButton('Clear')).marginRight).toBe('auto');
+        expect(getComputedStyle(dialogButton('Today')).marginRight).toBe('0px');
+        expect(getComputedStyle(dialogButton('Cancel')).marginRight).toBe('0px');
+        expect(getComputedStyle(dialogButton('OK')).marginRight).toBe('0px');
+    });
+
+    test('treats Today the same way when it is the bar\'s leading action', () => {
+        renderPicker({ showTodayButton: true });
+        fireEvent.click(screen.getByRole('textbox'));
+
+        expect(getComputedStyle(dialogButton('Today')).marginRight).toBe('auto');
+        expect(getComputedStyle(dialogButton('Cancel')).marginRight).toBe('0px');
+    });
+
     test('keyboardInput opts back into the editable v8 field in a popper', () => {
         renderPicker({ keyboardInput: true });
 
@@ -388,6 +440,23 @@ describe.each([
 
     test('renders none when the picker is read-only or disabled', () => {
         expect(renderPicker({ clearable: true, readOnly: true }).clear()).not.toBeInTheDocument();
+    });
+
+    /*
+     * The size the rest of the library draws a clear adornment at: `TextField`, `UploadFileField`,
+     * `UploadFiles` and `DateTimePickerRange` all render `IconButton size="large"` around a
+     * default-size `MdiIcon`, which is a 48px box holding a 24px icon, 24px in from the input's
+     * right edge. platform-ui 1.x drew the picker's clear the same way — MUI v4's default `medium`
+     * carried the same 12px padding — which is what the application still renders on staging.
+     */
+    test('draws the clear at the size every other field in the library uses', () => {
+        const button = renderPicker({ clearable: true }).clear();
+
+        expect(button).toHaveClass('MuiIconButton-sizeLarge');
+        // `edge="end"` pulls the button 3px further right than an unedged one, which is what took
+        // it out of line with the fields above and below it.
+        expect(button).not.toHaveClass('MuiIconButton-edgeEnd');
+        expect(button.querySelector('.mdi-close')).toHaveStyle({ fontSize: '24px', width: '24px', height: '24px' });
     });
 
     test('publishes an empty value and leaves the dialog shut', () => {

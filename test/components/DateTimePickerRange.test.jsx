@@ -90,6 +90,24 @@ describe('the modal pickers', () => {
         expect(actions.map((button) => button.textContent)).toEqual(['Today', 'Cancel', 'OK']);
     });
 
+    /*
+     * The range modal hardcodes its own `['today', 'cancel', 'accept']` rather than going through
+     * `v3ModalActions`, so the leading-action layout is asserted here too: v3 pinned Today to the
+     * left edge of the bar and left Cancel/OK at the right.
+     */
+    test('pins Today to the left of the action bar, leaving Cancel/OK at the right', () => {
+        renderRange({ variant: 'standard' });
+        openModal();
+        openPicker(0);
+
+        const actions = Array.from(document.querySelectorAll('.MuiPickersLayout-actionBar button'));
+        const byLabel = (label) => actions.find((button) => button.textContent === label);
+
+        expect(getComputedStyle(byLabel('Today')).marginRight).toBe('auto');
+        expect(getComputedStyle(byLabel('Cancel')).marginRight).toBe('0px');
+        expect(getComputedStyle(byLabel('OK')).marginRight).toBe('0px');
+    });
+
     test('keep the v3 toolbar and analog clock rather than the v8 defaults', () => {
         renderRange({ variant: 'standard' });
         openModal();

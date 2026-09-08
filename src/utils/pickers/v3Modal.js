@@ -55,6 +55,13 @@ export const ModalPickerField = ({ displayValue, onClick, showClearAdornment, on
      * `stopPropagation`, or clearing would also open the dialog through the field's own onClick.
      * `onClearValue` is the action bar's commit path: while the picker holds a draft, `clearValue`
      * alone would only empty that draft, and the consumer would never hear about it.
+     *
+     * `size="large"` around a default-size `MdiIcon` is the size every clear adornment in the
+     * library is drawn at — `TextField`, `UploadFileField`, `UploadFiles`, `DateTimePickerRange` —
+     * and it is what platform-ui 1.x drew here too, where MUI v4's default `medium` carried the
+     * same 12px padding. That is a 48px box holding a 24px icon, 24px in from the input's right
+     * edge; a smaller one, or an `edge="end"` that pulls it 3px further right, leaves the picker
+     * out of line with the fields above and below it in a form.
      */
     const handleClear = (event) => {
         event.stopPropagation();
@@ -68,8 +75,8 @@ export const ModalPickerField = ({ displayValue, onClick, showClearAdornment, on
             endAdornment: (
                 <>
                     <InputAdornment position="end">
-                        <IconButton aria-label="Clear input" size="small" edge="end" onClick={handleClear}>
-                            <MdiIcon name="close" size={20} />
+                        <IconButton aria-label="Clear input" size="large" onClick={handleClear}>
+                            <MdiIcon name="close" />
                         </IconButton>
                     </InputAdornment>
                     {InputProps?.endAdornment}
@@ -87,6 +94,26 @@ ModalPickerField.propTypes = {
     onClearValue: PropTypes.func,
     InputProps: PropTypes.object,
 };
+
+/*
+ * The bar's OWN actions, as opposed to the Cancel/OK pair that closes it. v3 gave a bar carrying one
+ * of these a second class, `MuiPickersModal-withAdditionalAction`, whose two rules — read off
+ * staging, where @material-ui/pickers 3.2.10 still injects them — are exactly:
+ *
+ *     .MuiPickersModal-withAdditionalAction { justify-content: flex-start; }
+ *     .MuiPickersModal-withAdditionalAction > :first-child { margin-right: auto; }
+ *
+ * So the FIRST child is pinned left and everything after it packs right; a bar of only Cancel/OK
+ * never got the class and stayed packed right. `> :first-child`, not "every leading action", is why
+ * a bar carrying both puts Clear on the left and leaves Today with Cancel/OK — v3's behaviour, kept
+ * deliberately rather than redesigned.
+ *
+ * The auto margin is applied here as a prop on our own Button rather than as CSS against MUI's
+ * internal DOM: it eats the free space, which reproduces v3's geometry (measured identical at 8px
+ * in from each end) while leaving `DialogActions` on its own default `justify-content`.
+ */
+const LEADING_ACTIONS = ['clear', 'today'];
+const LEADING_ACTION_SX = { marginRight: 'auto' };
 
 /**
  * The action bar, rendering v8's own actions but taking the accept for itself when the picker holds
@@ -122,10 +149,17 @@ export const V3ModalActionBar = ({ actions = [], onAcceptValue, className }) => 
         cancel: translations.cancelButtonLabel,
         accept: translations.okButtonLabel,
     };
+    const shown = actions.filter((action) => handlers[action]);
     return (
         <DialogActions className={className}>
-            {actions.filter((action) => handlers[action]).map((action) => (
-                <Button key={action} onClick={handlers[action]}>{labels[action]}</Button>
+            {shown.map((action, index) => (
+                <Button
+                    key={action}
+                    onClick={handlers[action]}
+                    sx={index === 0 && LEADING_ACTIONS.includes(action) ? LEADING_ACTION_SX : undefined}
+                >
+                    {labels[action]}
+                </Button>
             ))}
         </DialogActions>
     );
