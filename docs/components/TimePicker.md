@@ -53,7 +53,10 @@ The picker renders what `@material-ui/pickers` v3 did, which is what the applica
   action bar's **OK**. **Cancel** discards the draft and leaves the value exactly as it was.
 - The action bar is `Clear` (when `clearable`) / `Today` (when `showTodayButton`) / `Cancel` / `OK`,
   and a `clearable` picker also carries a clear (×) button in the field itself. Clearing from the
-  field publishes straight away and does not open the dialog.
+  field publishes straight away and does not open the dialog. The bar's own leading action — the
+  `Clear`, or the `Today` when there is no `Clear` — sits against the left edge with `Cancel`/`OK`
+  at the right, as v3's `withAdditionalAction` bar did. A bar carrying both leaves `Today` on the
+  right (v3 pinned its `:first-child` only), and a `Cancel`/`OK`-only bar stays packed right.
 - **OK with nothing selected commits the value the dialog opened on** — and an empty field opens on
   the current time, so one click fills it in. v3 did both (`usePickerState` fell back to
   `initialFocusedDate ?? now`); v8 opens on nothing and commits nothing. A caller driving `open`
