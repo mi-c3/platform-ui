@@ -34,12 +34,21 @@ export const findOption = (options, value, valueField) =>
  * `{ value: '', label: 'Always latest version' }`) is the selection. Only when nothing holds it
  * are they the empty state. `undefined` is always empty — an option lacking `valueField` reads
  * as `undefined` and must not match.
+ * `null` — an unset field, what the clear (x) emits, or a picked `''` option once a form stores
+ * it (platform-v1's FormField turns `''` into `null`) — also selects the option holding `''`
+ * when no option holds `null`, as 1.x did (its null match was loose): the "no specific value"
+ * entry, e.g. "Always latest version", shows instead of an empty field, and clearing a field that
+ * has one lands on it rather than blanking and re-filling. Only `''` stands in for `null` —
+ * `false` and `0` options do not, although 1.x's loose match would have taken them too.
  */
 export const resolveOption = (value, options, cache, valueField) => {
     if (value === undefined) {
         return null;
     }
-    const found = findOption(options, value, valueField);
+    let found = findOption(options, value, valueField);
+    if (found === undefined && value === null && valueField) {
+        found = findOption(options, '', valueField);
+    }
     if (found !== undefined) {
         return found;
     }

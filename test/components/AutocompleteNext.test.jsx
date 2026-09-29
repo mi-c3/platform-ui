@@ -199,6 +199,43 @@ describe('value display', () => {
             expect(screen.queryByLabelText('Clear')).toBeNull();
             expect(screen.getByLabelText('Open')).toBeInTheDocument();
         });
+
+        // A field whose empty value has an option (a default): null — an unset field, or what the
+        // clear (x) emits — shows that option, as in 1.x.
+        test('a stored null shows the empty-string option when none holds null', () => {
+            renderSentinel({ value: null });
+            expect(screen.getByRole('combobox')).toHaveValue('Always latest version');
+        });
+
+        // The parent adopts what the field emits, as FormField does before its consumer writes back.
+        const Adopting = ({ initial }) => {
+            const [value, setValue] = React.useState(initial);
+            return <AutocompleteNext name="version" valueField="value" options={VERSIONS} value={value} onChange={e => setValue(e.target.value)} />;
+        };
+
+        test('clearing a pinned version lands on the default instead of an empty field', () => {
+            render(<Adopting initial={1} />);
+            const input = screen.getByRole('combobox');
+            expect(input).toHaveValue('Version 1');
+            fireEvent.click(screen.getByLabelText('Clear'));
+            expect(input).toHaveValue('Always latest version');
+        });
+
+        test('clearing the default keeps it: the clear (x) removes nothing', () => {
+            render(<Adopting initial="" />);
+            const input = screen.getByRole('combobox');
+            fireEvent.click(screen.getByLabelText('Clear'));
+            expect(input).toHaveValue('Always latest version');
+        });
+
+        test('a field without a default still clears to empty', () => {
+            const onChange = jest.fn();
+            const { rerender } = renderNext({ onChange, valueField: 'uri', value: 'user/bob' });
+            fireEvent.click(screen.getByLabelText('Clear'));
+            expect(onChange).toHaveBeenCalledWith({ target: { name: 'field', value: null } });
+            rerender(<AutocompleteNext name="field" onChange={onChange} optionTemplate={template} options={USERS} valueField="uri" value={null} />);
+            expect(screen.getByRole('combobox')).toHaveValue('');
+        });
     });
 
     test('multiple renders chips with labels', () => {

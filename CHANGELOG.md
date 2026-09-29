@@ -2,6 +2,27 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.2.5
+
+### Fixed
+
+`Autocomplete`: `null` selects the option holding `''` again when no option holds `null`, as in
+1.x — the "no specific value" entry such as `{ value: '', label: 'Always latest version' }`.
+platform-v1's forms store `null` for a field that was never set, for a clear (×), and even for that
+option once it is picked: their form layer turns `''` into `null`. 1.x matched `null` loosely
+(`!a && !b`) and showed the entry; 2.2.x compares exactly, so the field went blank. 2.2.4 only fixed
+a stored `''`, which the Process Designer gets back from its XML.
+
+- The Background Job dialog's Script version reads "Always latest version" once a script is picked,
+  and keeps it when it is picked again — it had gone blank both times.
+- Clearing a pinned version lands straight on "Always latest version", and the clear (×) on it
+  changes nothing. The Process Designer used to blank the field for about a second, until it wrote
+  `''` back into the XML.
+- Every other `''` option in a platform-v1 form keeps its label once picked too, e.g. Admin >
+  Identity Providers' "Unspecified" and "empty".
+- Fields without such an option still clear to empty. Only `''` stands in for `null`: a `false` or
+  `0` option is never selected by it, which 1.x's loose match would have done.
+
 ## 2.2.4
 
 ### Fixed
