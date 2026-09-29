@@ -153,6 +153,54 @@ describe('value display', () => {
         expect(screen.getByRole('combobox')).toHaveValue('user/ghost');
     });
 
+    describe('sentinel options holding an empty string or null (1.x parity)', () => {
+        const VERSIONS = [
+            { value: '', label: 'Always latest version' },
+            { value: 2, label: 'Version 2' },
+            { value: 1, label: 'Version 1' },
+        ];
+        const ANY = [{ value: null, label: 'Any' }, { value: 'open', label: 'Open' }];
+        const renderSentinel = (props = {}) =>
+            render(<AutocompleteNext name="version" onChange={() => {}} valueField="value" options={VERSIONS} {...props} />);
+
+        test('selecting the empty-string option emits it, and its label stays once the value prop lands', () => {
+            const onChange = jest.fn();
+            const { rerender } = renderSentinel({ onChange, value: 2 });
+            const input = screen.getByRole('combobox');
+            openPopup(input);
+            fireEvent.click(screen.getByText('Always latest version'));
+            expect(onChange).toHaveBeenCalledWith({ target: { name: 'version', value: '' } });
+            rerender(<AutocompleteNext name="version" onChange={onChange} valueField="value" options={VERSIONS} value="" />);
+            expect(input).toHaveValue('Always latest version');
+        });
+
+        test('a stored empty string displays its option once the async options load', () => {
+            const { rerender } = renderSentinel({ value: '', options: [] });
+            expect(screen.getByRole('combobox')).toHaveValue('');
+            rerender(<AutocompleteNext name="version" onChange={() => {}} valueField="value" options={VERSIONS} value="" />);
+            expect(screen.getByRole('combobox')).toHaveValue('Always latest version');
+        });
+
+        test('a stored null displays the option whose value is null', () => {
+            renderSentinel({ value: null, options: ANY });
+            expect(screen.getByRole('combobox')).toHaveValue('Any');
+        });
+
+        test('clearing a sentinel selection emits null', () => {
+            const onChange = jest.fn();
+            renderSentinel({ onChange, value: '' });
+            fireEvent.click(screen.getByLabelText('Clear'));
+            expect(onChange).toHaveBeenCalledWith({ target: { name: 'version', value: null } });
+        });
+
+        test('an unmatched empty string is still the empty state: no label, no clear, the popup arrow', () => {
+            renderSentinel({ value: '', options: VERSIONS.slice(1) });
+            expect(screen.getByRole('combobox')).toHaveValue('');
+            expect(screen.queryByLabelText('Clear')).toBeNull();
+            expect(screen.getByLabelText('Open')).toBeInTheDocument();
+        });
+    });
+
     test('multiple renders chips with labels', () => {
         renderNext({ valueField: 'uri', multiple: true, value: ['user/alice', 'user/carol'] });
         expect(screen.getByText('Alice')).toBeInTheDocument();

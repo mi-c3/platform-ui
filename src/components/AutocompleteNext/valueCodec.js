@@ -30,9 +30,13 @@ export const findOption = (options, value, valueField) =>
  * (an object value is already option-shaped; a primitive falls back to a placeholder the
  * option template may resolve, exactly as the legacy component handed unmatched values to
  * `optionTemplate`).
+ * `''` and `null` are looked up like any other value, as 1.x did: an option holding one (e.g.
+ * `{ value: '', label: 'Always latest version' }`) is the selection. Only when nothing holds it
+ * are they the empty state. `undefined` is always empty — an option lacking `valueField` reads
+ * as `undefined` and must not match.
  */
 export const resolveOption = (value, options, cache, valueField) => {
-    if (value === null || value === undefined || value === '') {
+    if (value === undefined) {
         return null;
     }
     const found = findOption(options, value, valueField);
@@ -42,7 +46,7 @@ export const resolveOption = (value, options, cache, valueField) => {
     if (valueField && cache && cache.has(value)) {
         return cache.get(value);
     }
-    return value;
+    return value === null || value === '' ? null : value;
 };
 
 /** Resolve a multi-select stored value (array) to MUI's option array. */
