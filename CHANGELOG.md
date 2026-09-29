@@ -2,6 +2,18 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.2.4
+
+### Fixed
+
+`Autocomplete`: an option whose `valueField` holds `''` or `null` can be selected and shown again,
+as in 1.x — e.g. `{ value: '', label: 'Always latest version' }` or `{ value: null, label: 'Any' }`.
+Since 2.2.0 the adapter treated a stored `''`/`null` as "nothing selected" before looking at the
+options. The value was emitted and saved, but the field went blank as soon as it came back. A
+stored `''` or `null` now resolves to the option that holds it; with no such option it is still
+the empty state, and `undefined` always is. Such a selection is a real selection, so a clearable
+field shows its clear (×), which emits `null` as for any other value.
+
 ## 2.2.3
 
 ### Fixed

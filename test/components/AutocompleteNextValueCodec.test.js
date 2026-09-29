@@ -44,6 +44,38 @@ describe('resolveOption', () => {
         expect(resolveOption(undefined, OPTIONS, null, 'name')).toBeNull();
         expect(resolveOption('', OPTIONS, null, 'name')).toBeNull();
     });
+    // 1.x parity: a stored '' / null is looked up like any other value, so an option that
+    // holds it (e.g. `{ value: '', label: 'Always latest version' }`) is the selection.
+    describe('sentinel options holding an empty value', () => {
+        const SENTINELS = [
+            { value: '', label: 'Latest' },
+            { value: null, label: 'Any' },
+            { value: 'v1', label: 'Version 1' },
+        ];
+        test('an empty string resolves to the option whose field is an empty string', () => {
+            expect(resolveOption('', SENTINELS, new Map(), 'value')).toBe(SENTINELS[0]);
+        });
+        test('null resolves to the option whose field is null', () => {
+            expect(resolveOption(null, SENTINELS, new Map(), 'value')).toBe(SENTINELS[1]);
+        });
+        test('undefined stays empty even though options lacking the field read as undefined', () => {
+            expect(resolveOption(undefined, [{ label: 'no value field' }], new Map(), 'value')).toBeNull();
+        });
+        test('an unmatched empty string or null resolves to null, not to a placeholder', () => {
+            expect(resolveOption('', OPTIONS, new Map(), 'name')).toBeNull();
+            expect(resolveOption(null, OPTIONS, new Map(), 'name')).toBeNull();
+        });
+        test('a selected empty-string option survives options churn through the cache, like any value', () => {
+            const cache = new Map([['', SENTINELS[0]]]);
+            expect(resolveOption('', [], cache, 'value')).toBe(SENTINELS[0]);
+        });
+        test('normal values still resolve alongside sentinels', () => {
+            expect(resolveOption('v1', SENTINELS, new Map(), 'value')).toBe(SENTINELS[2]);
+        });
+        test('multiple: an array holding a sentinel resolves it', () => {
+            expect(resolveOptions(['', 'v1'], SENTINELS, new Map(), 'value')).toEqual([SENTINELS[0], SENTINELS[2]]);
+        });
+    });
     test('prefers the matching option from the current list', () => {
         expect(resolveOption('Alice', OPTIONS, new Map(), 'name')).toBe(OPTIONS[0]);
     });

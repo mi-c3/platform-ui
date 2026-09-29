@@ -24,7 +24,7 @@ import { Autocomplete } from '@mic3/platform-ui';
 | `multiple` | bool | — | Multi-select; values render as chips (tooltip, avatar/icon, delete). Selected options are hidden from the list. |
 | `clearable` | bool | `true` | Always-visible clear (×) replacing the popup arrow when a single value is selected (legacy parity). |
 | `disabled` | bool | — | Disable the input. An empty disabled single-select hides the input box (legacy parity). |
-| `valueField` | string | — | Path within the option object used as the stored value (e.g. `'value'`, `'uri'`, `'name'`). |
+| `valueField` | string | — | Path within the option object used as the stored value (e.g. `'value'`, `'uri'`, `'name'`). A stored `''` or `null` selects the option holding it (e.g. `{ value: null, label: 'Any' }`); with no such option it is the empty state. |
 | `optionTemplate` | func | — | `(option) => ({ label, option, startAdornment, ChipProps })`. Receives placeholder primitives for values with no matching option, like the legacy component. Defaults to `option.label`/`option.name`. |
 | `suggest` | func | — | Async loading hook. Called with `{ target: { name, value: query } }` — immediately with `''` when the popup opens (first page), and debounced 300 ms as the user types. Update `options`/`isLoading` in response. |
 | `isLoading` | bool | — | Spinner in the input + `loadingText` in the open popup. The popup stays open while options reload. |
