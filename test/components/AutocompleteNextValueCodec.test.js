@@ -75,6 +75,27 @@ describe('resolveOption', () => {
         test('multiple: an array holding a sentinel resolves it', () => {
             expect(resolveOptions(['', 'v1'], SENTINELS, new Map(), 'value')).toEqual([SENTINELS[0], SENTINELS[2]]);
         });
+        // 1.x parity: a cleared field emits null, and 1.x let null select the option holding ''
+        // (its null test was loose — `!a && !b`), so a version typeahead read "Always latest version".
+        describe('null standing in for the empty-string option', () => {
+            const VERSIONS = [{ value: '', label: 'Always latest version' }, { value: 1, label: 'Version 1' }];
+            test('null selects the empty-string option when no option holds null', () => {
+                expect(resolveOption(null, VERSIONS, new Map(), 'value')).toBe(VERSIONS[0]);
+            });
+            test('an option holding null still wins over the empty-string one', () => {
+                expect(resolveOption(null, SENTINELS, new Map(), 'value')).toBe(SENTINELS[1]);
+            });
+            test('null does not select a false or 0 option: only the empty string stands in for it', () => {
+                const FLAGS = [{ value: false, label: 'Inactive' }, { value: 0, label: 'None' }, { value: true, label: 'Active' }];
+                expect(resolveOption(null, FLAGS, new Map(), 'value')).toBeNull();
+            });
+            test('undefined stays empty', () => {
+                expect(resolveOption(undefined, VERSIONS, new Map(), 'value')).toBeNull();
+            });
+            test('without a valueField null stays empty, as in 1.x', () => {
+                expect(resolveOption(null, ['', 'a'], new Map())).toBeNull();
+            });
+        });
     });
     test('prefers the matching option from the current list', () => {
         expect(resolveOption('Alice', OPTIONS, new Map(), 'name')).toBe(OPTIONS[0]);
