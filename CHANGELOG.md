@@ -16,6 +16,15 @@ API changes. Security finding IS-13.
 Versions published before 2.2.6, including the frozen 1.x line on public npmjs.org, still contain
 the key: this release stops shipping it but does not revoke it.
 
+### Fixed
+
+The bundled `dompurify`, which `markdown` uses to sanitize its input, is now 3.4.17 (was 3.4.14).
+`npm audit` rates 3.4.14 critical: GHSA-cg2g-xh64-v4q7 (critical), GHSA-mrv2-3pqr-j5jr (high) and
+three low-severity advisories, all fixed by 3.4.17. It failed the first `v2.2.6` tag pipeline at
+`npm audit --omit=dev --audit-level=high`, before anything was published. By their titles none of
+the advisories applies to the default `sanitize` config `markdown` uses (they need `IN_PLACE`,
+`SAFE_FOR_TEMPLATES` or an XHTML parser type). Lockfile only: the `^3.2.5` range is unchanged.
+
 ## 2.2.5
 
 ### Fixed
