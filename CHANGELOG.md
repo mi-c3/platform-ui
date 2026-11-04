@@ -2,6 +2,20 @@
 
 Notable changes per released version. Use these entries as the GitLab tag release notes.
 
+## 2.2.6
+
+### Removed
+
+The unused browser-side Google geocoding helpers (`fromLatLong`, `fromAddress` and the `handleUrl`
+behind them) and the Google API key they carried. The key was hardcoded in the internal
+`utils/maps/geocodeUtils.js` and so shipped in every consumer's bundle; the published bundle no
+longer contains it. The helpers were never exported from the package, `LocationForm` used only
+`getCurrentLocation` (browser geolocation, no key), and platform-v1 geocodes server-side. No public
+API changes. Security finding IS-13.
+
+Versions published before 2.2.6, including the frozen 1.x line on public npmjs.org, still contain
+the key: this release stops shipping it but does not revoke it.
+
 ## 2.2.5
 
 ### Fixed

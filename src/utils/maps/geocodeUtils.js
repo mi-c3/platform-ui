@@ -1,67 +1,8 @@
-import { isDefined } from '../utils';
-
-const API_KEY = 'AIzaSyAGa4L1t68r0Kbsgp4UAUb9_K2mdyF2qGk';
-const GOOGLE_API = 'https://maps.google.com/maps/api/geocode/json';
 /* eslint-disable camelcase */
 /**
  *
  */
 class GeoCoding {
-    /**
-     * async fromLatLng - description
-     *
-     * @param  {type} lat    description
-     * @param  {type} lng    description
-     * @param  {type} apiKey description
-     * @return {type}        description
-     */
-    fromLatLong = async (lat, lng, apiKey = API_KEY) => {
-        if (!isDefined(lat) || !isDefined(lng)) {
-            return Promise.reject(new Error('Provided coordinates are invalid'));
-        }
-
-        const latLng = `${lat},${lng}`;
-        let url = `${GOOGLE_API}?latlng=${encodeURI(latLng)}`;
-        url += `&key=${apiKey}`;
-        return this.handleUrl(url);
-    };
-
-    /**
-     * async fromAddress - description
-     *
-     * @param  {type} address description
-     * @param  {type} apiKey  description
-     * @return {type}         description
-     */
-    fromAddress = async (address, apiKey = API_KEY) => {
-        if (!address) {
-            return Promise.reject(new Error('Provided address is invalid'));
-        }
-
-        let url = `${GOOGLE_API}?address=${encodeURI(address)}`;
-        url += `&key=${apiKey}`;
-        return this.handleUrl(url);
-    };
-
-    /**
-     * async handleUrl - description
-     *
-     * @param  {type} url description
-     * @return {type}             description
-     */
-    handleUrl = async (url) => {
-        const response = await fetch(url).catch(() => Promise.reject(new Error('Error fetching data')));
-
-        const json = await response.json().catch(() => {
-            return Promise.reject(new Error('Error parsing server response'));
-        });
-
-        if (json.status === 'OK') {
-            return json;
-        }
-        return Promise.reject(new Error(`Server returned status code ${json.status}`));
-    };
-
     /**
      * show the user current position
      */
